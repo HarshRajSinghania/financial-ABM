@@ -74,6 +74,18 @@ def test_corrupt_saved_run_does_not_break_listing(tmp_path, document):
     assert registry.list_runs() == []
 
 
+def test_saved_failure_is_not_reported_as_completed(tmp_path):
+    path = tmp_path / 'failed'
+    path.mkdir()
+    (path / 'config.json').write_text('{}', encoding='utf-8')
+    (path / 'summary.json').write_text('{"trading_days":4,"fingerprint":"partial"}', encoding='utf-8')
+    (path / 'run_manifest.json').write_text('{"failures":["archive failed"]}', encoding='utf-8')
+    record, = RunRegistry(tmp_path).list_runs()
+    assert record['state'] == 'failed'
+    assert record['fingerprint'] is None
+    assert record['error'] == 'archive failed'
+
+
 def test_dead_worker_is_not_reported_as_running(tmp_path):
     config = replace(load_stage1_config(ROOT / 'configs/stage1.json'),
                      population_size=10, trading_days=4, burn_in_days=0, announcements=())

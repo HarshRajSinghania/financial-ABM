@@ -158,19 +158,22 @@ class RunRegistry:
                 config = json.loads(config_path.read_text(encoding="utf-8"))
                 if not isinstance(summary, dict) or not isinstance(config, dict):
                     continue
+                manifest_path = child / "run_manifest.json"
+                failures = (json.loads(manifest_path.read_text(encoding="utf-8")).get("failures", [])
+                            if manifest_path.is_file() else [])
                 records[child.name] = {
                     "id": child.name,
-                    "state": "completed",
+                    "state": "failed" if failures else "completed",
                     "active": False,
                     "current_day": int(summary.get("trading_days", 0)),
                     "trading_days": int(summary.get("trading_days", 0)),
                     "seed": int(config.get("seed", 0)),
                     "population_size": int(config.get("population_size", 0)),
                     "latest_sequence_no": int(summary.get("telemetry_events", 0)),
-                    "fingerprint": summary.get("fingerprint"),
+                    "fingerprint": None if failures else summary.get("fingerprint"),
                     "published_frames": int(summary.get("telemetry_events", 0)),
                     "dropped_frames": 0,
-                    "error": None,
+                    "error": "; ".join(failures) if failures else None,
                 }
             except (OSError, ValueError, TypeError):
                 continue

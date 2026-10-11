@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import shutil
 from collections import deque
 from dataclasses import dataclass, fields, replace
 from datetime import datetime, timedelta, timezone
@@ -158,7 +159,12 @@ class Stage2Result(SimulationResult):
         )
         journal = destination.parent / f".{destination.name}.events.jsonl"
         if journal.is_file():
-            journal.replace(destination / "events.jsonl")
+            try:
+                journal.replace(destination / "events.jsonl")
+            except PermissionError:
+                archive = destination / ".events.jsonl"
+                shutil.copyfile(journal, archive)
+                archive.replace(destination / "events.jsonl")
         return destination
 
 

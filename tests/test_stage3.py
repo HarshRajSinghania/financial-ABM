@@ -195,7 +195,8 @@ def test_stage3_full_queue_drops_display_only_and_replay_matches(tmp_path):
     assert sink.dropped_count == config.trading_days - 1
     assert result.fingerprint() == Stage3Harness(config).run().fingerprint()
     assert read_telemetry(output) == result.telemetry_events
-    result.write(output, config)
+    with journal.open(encoding="utf-8"):
+        result.write(output, config)
     assert read_telemetry(output) == result.telemetry_events
     persisted = tuple(json.loads(line) for line in (output / "events.jsonl").read_text(encoding="utf-8").splitlines())
     assert persisted == tuple(event.to_dict() for event in result.telemetry_events)
