@@ -15,6 +15,7 @@ import numpy as np
 from .config import STRATEGY_NAMES, Stage1Config, load_stage1_config
 from .harness import MarketHarness
 from .mechanism_validation import MechanismProtocol, build_scenarios, result_metrics
+from .platform_tuning import disable_power_throttling
 from .runner import resolve_code_revision
 from .population import VALUE_STRATEGY
 
@@ -214,7 +215,7 @@ def run_diagnostics(
         ],
     }
     _write_json(output / "checkpoint.json", checkpoint)
-    with ProcessPoolExecutor(max_workers=workers) as executor:
+    with ProcessPoolExecutor(max_workers=workers, initializer=disable_power_throttling) as executor:
         futures = {
             executor.submit(_run_diagnostic, *task): (task[0], task[1].seed)
             for task in tasks
@@ -881,7 +882,7 @@ def run_price_discovery(config: Stage1Config, protocol: MechanismProtocol, outpu
                 if len(matching) != 1:
                     raise ValueError(f"missing or duplicate source metrics: {name}/{item.seed}")
                 expected[(name, item.seed)] = {"metrics": {metric: float(value) for metric, value in matching[0].items() if metric not in ("scenario", "seed")}}
-        with ProcessPoolExecutor(max_workers=workers) as executor:
+        with ProcessPoolExecutor(max_workers=workers, initializer=disable_power_throttling) as executor:
             futures = {executor.submit(_run_price_discovery, *task): (task[0], task[1].seed) for task in tasks}
             try:
                 for future in as_completed(futures):
@@ -1085,7 +1086,7 @@ def run_value_direction(config: Stage1Config, protocol: MechanismProtocol, outpu
             if reference["scenario"] != "full" or reference["seed"] != seed:
                 raise ValueError("source baseline result identity mismatch")
             references[seed] = reference
-        with ProcessPoolExecutor(max_workers=workers) as executor:
+        with ProcessPoolExecutor(max_workers=workers, initializer=disable_power_throttling) as executor:
             futures = {executor.submit(_run_value_direction, *task): (task[0], task[1].seed) for task in tasks}
             try:
                 for future in as_completed(futures):
@@ -1219,7 +1220,7 @@ def run_value_budget(config: Stage1Config, protocol: MechanismProtocol, output: 
                 if reference["scenario"] != old_name or reference["seed"] != seed:
                     raise ValueError("source result identity mismatch")
                 references[key] = reference
-        with ProcessPoolExecutor(max_workers=workers) as executor:
+        with ProcessPoolExecutor(max_workers=workers, initializer=disable_power_throttling) as executor:
             futures = {executor.submit(_run_value_budget, *task): (task[0], task[1].seed) for task in tasks}
             try:
                 for future in as_completed(futures):
@@ -1301,6 +1302,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--mode", choices=("paired", "price-discovery", "value-direction", "value-budget"), default="paired")
     parser.add_argument("--source", type=Path)
     args = parser.parse_args(argv)
+    disable_power_throttling()
     config = load_stage1_config(args.config)
     protocol = MechanismProtocol.from_json(args.protocol)
     if args.mode in ("price-discovery", "value-direction", "value-budget"):

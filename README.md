@@ -90,7 +90,7 @@ flowchart LR
 python -m venv .venv
 # Windows PowerShell: .\.venv\Scripts\Activate.ps1
 # macOS / Linux: source .venv/bin/activate
-python -m pip install -c requirements-lock.txt -e ".[dev]"
+python -m pip install -c requirements-lock.txt -e ".[all,dev]"
 cd web
 npm ci
 npm run build

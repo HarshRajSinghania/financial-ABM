@@ -263,6 +263,33 @@ def test_formal_protocol_requires_unseal_and_freeze_manifest(tmp_path) -> None:
         mechanism_main([*arguments, "--unseal-formal"])
 
 
+def test_validation_missing_plot_dependency_fails_before_creating_output(tmp_path, monkeypatch) -> None:
+    import builtins
+
+    original_import = builtins.__import__
+
+    def import_without_matplotlib(name, *args, **kwargs):
+        if name == "matplotlib.pyplot":
+            raise ModuleNotFoundError("No module named 'matplotlib'")
+        return original_import(name, *args, **kwargs)
+
+    monkeypatch.setattr(builtins, "__import__", import_without_matplotlib)
+    protocol_path = tmp_path / "protocol.json"
+    protocol_path.write_text(json.dumps({
+        "version": "test", "purpose": "test", "seeds": [1],
+        "excluded_development_seeds": [2], "criteria": {},
+    }), encoding="utf-8")
+    output = tmp_path / "output"
+
+    with pytest.raises(ImportError, match=r"auditable-market-abm\[plot\]"):
+        mechanism_main([
+            "--config", str(CONFIG_PATH), "--protocol", str(protocol_path),
+            "--output", str(output),
+        ])
+
+    assert not output.exists()
+
+
 def test_run_protocol_checkpoint_resumes_without_duplicate_tasks(tmp_path) -> None:
     config = replace(
         load_stage1_config(CONFIG_PATH),

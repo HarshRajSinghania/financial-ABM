@@ -46,7 +46,7 @@
 ```powershell
 Set-Location C:\Users\kanzaler\Desktop\ABM
 python -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -e ".[dev]"
+.\.venv\Scripts\python.exe -m pip install -e ".[all,dev]"
 ```
 
 如果 `.venv` 已经存在，不要重复创建；只需在代码或依赖变化后重新执行最后一条安装命令。
@@ -394,7 +394,7 @@ burn-in、随机种子 `20260729`。快速试跑请改用
 | 现象                        | 原因与处理                                                           |
 | --------------------------- | -------------------------------------------------------------------- |
 | 提示输出目录已经存在        | `live` 和 `batch` 不覆盖结果；换一个新的 `run-dir`             |
-| 找不到`abm-desktop.exe`   | 重新执行`.\.venv\Scripts\python.exe -m pip install -e ".[dev]"`    |
+| 找不到`abm-desktop.exe`   | 重新执行`.\.venv\Scripts\python.exe -m pip install -e ".[all,dev]"`    |
 | `replay` 提示缺少遥测文件 | 传入包含`telemetry.duckdb` 或 `telemetry.parquet` 的完整运行目录 |
 | PowerShell 当前不在项目目录 | 先执行`Set-Location C:\Users\kanzaler\Desktop\ABM`                 |
 
@@ -513,4 +513,4 @@ runs/<run-name>/
 
 ## 许可证
 
-当前项目在 `pyproject.toml` 中标记为 `Proprietary`，具体使用范围以项目所有者的授权为准。
+当前项目采用 MIT 许可证，具体条款见 [LICENSE](LICENSE)。

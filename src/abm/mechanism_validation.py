@@ -14,13 +14,13 @@ from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Callable, Mapping, Sequence
 
-import matplotlib.pyplot as plt
 import numpy as np
 from numpy.typing import NDArray
 
 from .config import Stage1Config, load_stage1_config
 from .harness import SimulationResult, run_stage1
 from .manifest import canonical_json_bytes, sha256_file
+from .platform_tuning import disable_power_throttling
 from .runner import resolve_code_revision
 from .stage1_freeze import verify_freeze_manifest
 
@@ -1083,6 +1083,8 @@ def _write_figure(
     path: Path,
     rows: Sequence[Mapping[str, float | int | str]],
 ) -> None:
+    import matplotlib.pyplot as plt
+
     scenarios = tuple(dict.fromkeys(str(row["scenario"]) for row in rows))
     displayed = (
         "full",
@@ -1421,7 +1423,7 @@ def run_protocol(
         for task in tasks:
             record(_run_metric_task(task))
     else:
-        with ProcessPoolExecutor(max_workers=workers) as executor:
+        with ProcessPoolExecutor(max_workers=workers, initializer=disable_power_throttling) as executor:
             futures = {
                 executor.submit(_run_metric_task, task): task
                 for task in tasks
@@ -1475,6 +1477,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
+    disable_power_throttling()
     if args.output.exists() and not args.resume:
         raise FileExistsError(args.output)
     if args.resume and not args.output.is_dir():
@@ -1499,6 +1502,13 @@ def main(argv: Sequence[str] | None = None) -> int:
         raise ValueError(
             "formal unseal options cannot be used with a development protocol"
         )
+    try:
+        import matplotlib.pyplot
+    except ImportError as exc:
+        raise ImportError(
+            "Stage 1 validation requires plotting dependencies; "
+            "install auditable-market-abm[plot] before running validation"
+        ) from exc
     args.output.mkdir(parents=True, exist_ok=args.resume)
     checkpoint_path = args.output / "checkpoint.json"
     rows, summary, gate = run_protocol(
