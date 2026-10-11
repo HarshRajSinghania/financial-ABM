@@ -2,6 +2,7 @@
 
 这是一个面向研究用途的人工金融市场（Agent-Based Model，ABM）项目。
 当前包含一阶段市场基准，以及二阶段的信息图、投资者 Bandit 和企业表格 Q-learning。
+三阶段增加真实 SEC 文件快照、信息因子、归档重建和情景比较；数据接入与验证边界见下文。
 一阶段配置默认关闭 Logit；二阶段保持偏好和类型不变，只学习行动策略。
 
 > **2026-09-26：Stage 1 正式验收 22/22 PASS；Stage 2 合成机制与工程验收通过。**
@@ -153,6 +154,56 @@ Web 中选择这两个配置即可运行；`Agents & information` 提供日志�
 这支持日志恢复，不是继续训练的状态检查点。每次新运行须使用新目录名。
 完整方法、测试边界和结果指纹见[二阶段验收报告](reports/stage2_20260926/analysis.md)。
 
+## 三阶段真实事件与情景比较
+
+`configs/stage3.json` 使用 500 个规则 Agent、252 个日频会话和一份已归档的真实 SEC 8-K。
+默认关闭 Bandit 和企业 Q-learning，保留信息图。运行和从归档重建：
+
+```powershell
+.\.venv\Scripts\python.exe -m abm.runner --config configs/stage3.json --output runs/my_stage3
+.\.venv\Scripts\python.exe -m abm.runner --rebuild runs/my_stage3 --output runs/my_stage3_rebuilt
+```
+
+重建先核验配置、全部输入和源码哈希，然后核对结果指纹；原始输入目录缺失时仍可使用
+运行目录内的 `inputs/`。当前源码不同则拒绝执行，应在独立工作目录恢复归档源码后重建。
+`source/` 和 `reproducibility.json` 保存源文件及映射；Manifest 保存种子、运行起止时间和失败记录。
+这是同一数值环境下的重建验证，不保证不同 NumPy/平台的原始浮点字节完全一致。
+
+| 开关 | 三阶段行为 |
+| --- | --- |
+| `stage3_enabled=false` | 回到对应二阶段/一阶段执行路径 |
+| `rules_enabled=false` | 不提交交易者订单，信息传播和已启用的学习更新仍运行 |
+| `bandit_enabled=false` | 交易者使用固定规则，不更新 Bandit |
+| `company_learning_enabled=false` | 企业维持现状，不更新 Q 表 |
+| `graph_enabled=false` | 当日可用的信息直接广播 |
+| `factors_enabled=false` | 在同一会话日历下移除外部因子，恢复空因子市场路径 |
+| `stage2_enabled=false` | 关闭 Bandit、企业学习和图，保留规则与直接广播的因子 |
+
+Bandit 的动作仍由已有规则执行，因此关闭规则也会抑制 Bandit 选中动作产生的订单。
+关闭因子可以恢复市场路径；配置和数据身份不同，整个运行 ID 不会相同。
+
+示例文件在 2024-08-01 16:33:57（UTC−04:00）被 EDGAR 接受，晚于示例 20:00 UTC 的
+会话截止点，因此在下一会话进入市场。`available_at` 保存来源时间，`session_available_at`
+保存实际进入仿真的时间。接受时间是公开可用时间的代理，没有独立测量网页传播延迟。
+`log_change=0.01` 是明确给定的情景冲击，未从文件内容估计，也不代表该公司的真实价格反应。
+
+默认日历只跳过周末，使用固定 UTC 偏移，标记为 `synthetic_weekdays_fixed_offset`；
+252 个会话是模拟年度，不是已验证的交易所年度。真实假日、夏令时和提前收市需在
+`session_dates` 中逐项指定带时区的截止时刻。首个插件只实现信息渠道，其他渠道会明确报错。
+
+Web 的 **Analysis / 分析** 页面可勾选多个已完成运行，共用仿真天数和数值坐标，按指标、
+日期区间和回放截止点比较。可导出 PNG、SVG 动画和筛选后的 CSV/JSON；数据导出包含
+种子、完整配置和结果指纹。SVG 动画可在浏览器中独立打开，循环揭示筛选后的曲线。
+
+数据接入使用 `.\.venv\Scripts\python.exe -m abm.data_sources --help`。
+SEC submissions/companyfacts、8-K/10-Q/10-K、13F，FRED/ALFRED 历史版本和 Alpha Vantage
+日线均有独立快照/解析入口。新快照目录不可覆盖，记录来源、下载时间、范围、版本和哈希。
+SEC 请求需提供自己的 `SEC_USER_AGENT`；FRED 和 Alpha Vantage 分别读取外部环境变量
+`FRED_API_KEY`、`ALPHA_VANTAGE_API_KEY`，不会把密钥写入快照。
+13F 只生成机构—证券持股记录；FRED 的日期级 vintage 不自动充当盘中发布时间。
+真实下载成功与仅夹具验证的接口分别列于[三阶段验证报告](reports/stage3_20261003/analysis.md)。
+CRSP/WRDS 授权数据和可选 EPA 尚未接入，PPO 启用条件未满足。
+
 ## 当前模型边界
 
 当前版本只包含一个资产和一个聚合做市商，采用日频批次决策。Agent 异步产生目标仓位增量，
@@ -161,7 +212,7 @@ Web 中选择这两个配置即可运行；`Agents & information` 提供日志�
 当前版本暂不包含：
 
 - 多资产市场和真实社交网络校准；
-- PPO、LLM Agent 和第三阶段真实事件/因子接入；
+- PPO、LLM Agent 和真实事件冲击幅度的经济校准；
 - 实时交易、逐笔连续限价订单簿和生产级公网服务（现有 Web 仅为 loopback 研究工具）。
 
 Kenneth French 49 数据和旧 29/10/10 协议保留为数量级与风格事实诊断，

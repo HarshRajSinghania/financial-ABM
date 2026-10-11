@@ -1,0 +1,38 @@
+........................                                                 [100%]
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\kanzaler\Desktop\ABM\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+tests/test_ui.py::test_run_path_traversal_and_unknown_artifact_are_rejected
+  C:\Users\kanzaler\Desktop\ABM\.venv\Lib\site-packages\fastapi\routing.py:352: StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+    return await dependant.call(**values)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=================================== PASSES ====================================
+=========================== short test summary info ===========================
+PASSED tests/test_tools.py::test_frozen_calibration_protocol_has_disjoint_29_10_10_seeds
+PASSED tests/test_tools.py::test_simulation_group_and_iqr_comparison_are_deterministic
+PASSED tests/test_tools.py::test_protocol_rejects_overlapping_seeds
+PASSED tests/test_tools.py::test_unseal_test_requires_explicit_cli_flag
+PASSED tests/test_tools.py::test_french49_parser_reads_value_weighted_daily_table
+PASSED tests/test_tools.py::test_deterministic_split_and_report_keep_test_metrics_sealed
+PASSED tests/test_tools.py::test_manifest_is_deterministic_across_mapping_order
+PASSED tests/test_tools.py::test_manifest_identity_changes_when_data_changes
+PASSED tests/test_tools.py::test_stage0_scenario_loads_all_contracts
+PASSED tests/test_tools.py::test_stage0_market_dates_are_weekdays
+PASSED tests/test_tools.py::test_frozen_fixture_matches_immutable_data_manifest
+PASSED tests/test_ui.py::test_replay_window_renders_all_stage1_metrics
+PASSED tests/test_ui.py::test_spawned_live_worker_survives_detached_full_display_queue
+PASSED tests/test_ui.py::test_stage1_visualizations_are_exported_as_png_and_svg
+PASSED tests/test_ui.py::test_telemetry_round_trip_through_duckdb_and_parquet
+PASSED tests/test_ui.py::test_display_queue_full_drops_frames_without_blocking
+PASSED tests/test_ui.py::test_visualizer_sink_does_not_change_simulation_hash
+PASSED tests/test_ui.py::test_live_and_replay_models_have_identical_daily_metrics
+PASSED tests/test_ui.py::test_replay_controller_supports_pause_resume_step_and_speed
+PASSED tests/test_ui.py::test_health_and_api_authentication
+PASSED tests/test_ui.py::test_config_discovery_excludes_non_stage1_protocols
+PASSED tests/test_ui.py::test_run_path_traversal_and_unknown_artifact_are_rejected
+PASSED tests/test_ui.py::test_reports_distinguish_superseded_and_formal_status
+PASSED tests/test_ui.py::test_small_web_run_completes_and_replays_events
+24 passed, 2 warnings in 58.08s

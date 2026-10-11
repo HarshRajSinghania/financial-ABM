@@ -1,0 +1,24 @@
+
+> web@0.0.0 test
+> node --experimental-strip-types --test tests/*.test.mjs
+
+✔ concurrent startup requests share one session request (54.4661ms)
+✔ stale tokens are renewed once after a server restart (2.4779ms)
+✔ repeated authorization failure does not loop forever (2.3537ms)
+✔ replay fetches all pages instead of truncating after 10000 days (3.7766ms)
+✔ a broken pagination cursor fails instead of spinning forever (5.1236ms)
+✔ replay requests propagate cancellation when switching runs (1.2218ms)
+✔ stream handles split frames and stops at the complete event (5.7829ms)
+✔ comparison aligns inclusive actual simulation days across sparse runs (0.9217ms)
+✔ missing observations and future replay days remain gaps (0.1882ms)
+✔ filtered JSON keeps exact configuration and only the metric, date range and replay cutoff (0.1984ms)
+✔ nonfinite observations export as missing and never become zero (0.1393ms)
+✔ CSV preserves configuration escaping and uses the same filters as JSON (0.2267ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 164.2734

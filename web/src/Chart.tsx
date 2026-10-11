@@ -19,9 +19,10 @@ interface ChartProps {
   valueFormatter?: (value: number) => string
   secondaryLabel?: string
   toolbar?: ReactNode
+  yRange?: [number, number]
 }
 
-export function Chart({ title, rows, series, yLabel, valueFormatter, secondaryLabel, toolbar }: ChartProps) {
+export function Chart({ title, rows, series, yLabel, valueFormatter, secondaryLabel, toolbar, yRange }: ChartProps) {
   const { t, format } = useLanguage()
   const root = useRef<HTMLDivElement>(null)
   const instance = useRef<echarts.ECharts | null>(null)
@@ -52,8 +53,10 @@ export function Chart({ title, rows, series, yLabel, valueFormatter, secondaryLa
       type: 'value',
       name: yLabel,
       scale: true,
+      min: yRange?.[0],
+      max: yRange?.[1],
       nameTextStyle: { color: '#7085a9' },
-      axisLabel: { color: '#7085a9' },
+      axisLabel: { color: '#7085a9', formatter: yRange ? (value: number) => format(value, 4) : undefined },
       splitLine: { lineStyle: { color: 'rgba(144, 171, 216, .15)', width: 1 } },
     }, ...(secondaryLabel ? [{ type: 'value' as const, name: secondaryLabel, min: 0,
       max: (extent: { max: number }) => extent.max * 4,
@@ -70,7 +73,7 @@ export function Chart({ title, rows, series, yLabel, valueFormatter, secondaryLa
       z: item.type === 'bar' ? 0 : 2,
       emphasis: { focus: 'series' },
     })),
-  }), [rows, series, valueFormatter, yLabel, secondaryLabel, t, format])
+  }), [rows, series, valueFormatter, yLabel, secondaryLabel, yRange, t, format])
 
   useEffect(() => {
     if (showTable || !root.current) return

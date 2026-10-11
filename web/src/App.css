@@ -178,6 +178,22 @@ select, input { min-width: 80px; padding: 8px 10px; border: 1px solid var(--grid
 .stage2-panel .replay-slider input { flex: 1; }
 .stage2-panel svg { width: 100%; max-height: 420px; }
 .stage2-panel pre { max-height: 400px; overflow: auto; padding: 0 20px; font-size: 12px; line-height: 1.6; }
+.comparison-panel { min-width: 0; margin-bottom: 25px; }
+.comparison-settings { padding: 18px; }
+.comparison-settings header p, .comparison-note { margin: 8px 0; color: var(--muted); font-size: 12px; line-height: 1.6; }
+.comparison-selector { display: flex; flex-wrap: wrap; gap: 10px; max-height: 180px; overflow: auto; margin-top: 18px; }
+.comparison-selector label { display: flex; align-items: center; gap: 8px; max-width: 100%; padding: 9px; border: 1px solid var(--gridline); border-radius: 7px; font-size: 12px; overflow-wrap: anywhere; }
+.comparison-selector input { min-width: 0; }
+.comparison-selector small { display: block; margin-top: 4px; color: var(--muted); }
+.comparison-filters { min-width: 0; margin: 0; padding: 0; border: 0; }
+.comparison-filters .controls input { width: 105px; }
+.comparison-filters .controls select { max-width: 100%; }
+.comparison-panel .replay-slider { display: flex; align-items: center; gap: 12px; font-size: 12px; color: var(--text-secondary); }
+.comparison-panel .replay-slider input { flex: 1; min-width: 0; }
+.comparison-context { padding: 10px 15px; font-size: 12px; overflow-wrap: anywhere; }
+.comparison-context p { margin: 5px 0 10px; color: var(--muted); }
+.comparison-context pre { max-height: 280px; overflow: auto; white-space: pre-wrap; }
+.comparison-grid > article { min-width: 0; }
 .stage2-panel .chart-card > h3, .stage2-panel .chart-card > p { margin: 15px 17px; }
 .stage2-panel .chart-card > p { color: var(--muted); font-size: 12px; }
 .stage2-panel .chart-card > table { width: calc(100% - 30px); margin: 15px; font-size: 11px; }

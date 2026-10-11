@@ -1,0 +1,58 @@
+{
+  "task": "abm_stage1_stage2_20260922",
+  "iteration": 1,
+  "plan_revision": 2,
+  "development_seeds": [
+    20261101,
+    20261102,
+    20261103,
+    20261104,
+    20261105,
+    20261106,
+    20261107,
+    20261108,
+    20261109,
+    20261110,
+    20261111,
+    20261112,
+    20261113,
+    20261114,
+    20261115,
+    20261116,
+    20261117,
+    20261118,
+    20261119,
+    20261120
+  ],
+  "trading_days": 3500,
+  "burn_in_days": 1000,
+  "evaluation_days": 2500,
+  "structural_combinations": [
+    [
+      "shares",
+      "shares"
+    ],
+    [
+      "notional",
+      "shares"
+    ],
+    [
+      "shares",
+      "notional"
+    ],
+    [
+      "notional",
+      "notional"
+    ]
+  ],
+  "fixed_liquidity_controls": [
+    "shares/shares",
+    "notional/notional"
+  ],
+  "diagnostic_runs": 120,
+  "development_runs": 320,
+  "unchanged_numeric_config": "configs/stage1_structural_dev_v6.json",
+  "unchanged_criteria": "configs/stage1_mechanism_acceptance_v13.json",
+  "new_random_draws": 0,
+  "formal_or_holdout_runs": 0
+}

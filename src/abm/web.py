@@ -295,7 +295,7 @@ def create_app(
         authorize(authorization)
         path = json_file(config_root, name)
         try:
-            return load_stage1_config(path).to_dict()
+            return load_simulation_config(path).to_dict()
         except (TypeError, ValueError, KeyError) as exc:
             raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, str(exc)) from exc
 

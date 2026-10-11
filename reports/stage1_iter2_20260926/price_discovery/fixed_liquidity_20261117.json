@@ -1,0 +1,725 @@
+{
+  "daily_file": "daily\\fixed_liquidity_20261117.csv",
+  "fingerprint": "0add7bb71ee2d0292c56348eb17d7e861c65fe1ca2d27d6277b84762a9be0f0c",
+  "maximum_position_change_error": 1.7763568394002505e-15,
+  "maximum_price_decomposition_error": 1.682681771697503e-16,
+  "metrics": {
+    "absolute_return_acf_1": 0.10411210351545522,
+    "absolute_return_acf_20": -0.0007595434700988426,
+    "absolute_return_acf_5": 0.014001332699491274,
+    "absolute_return_acf_50": -0.02402009394815876,
+    "bubble_day_fraction": 0.0,
+    "crash_day_fraction": 0.0028,
+    "daily_volatility": 0.017701417229928736,
+    "excess_kurtosis": 0.09377782338173546,
+    "final_wealth_gini": 0.19972078991943443,
+    "learning_fitness_alignment": 1.0,
+    "leverage_correlation": 0.03538626518228909,
+    "maximum_absolute_return_acf_1_20": 0.12338644316705566,
+    "maximum_cash_relative_error": 6.2313946810635656e-15,
+    "maximum_drawdown": 0.27780622530654286,
+    "maximum_share_relative_error": 1.8520619381557813e-15,
+    "mean_absolute_log_price_gap": 0.16643750808916857,
+    "mean_absolute_return_acf_1_20": 0.02797280373102959,
+    "mean_depth": 4387.993116399735,
+    "mean_return": 0.0006603117067321612,
+    "mean_spread_bps": 5.669979956752487,
+    "order_flow_imbalance_acf_1": 0.43637337163381124,
+    "order_flow_imbalance_return_correlation": 0.5796059507965637,
+    "price_cap_hits": 0.0,
+    "return_acf_1": -0.017386937221597527,
+    "return_skewness": 0.004579650337951474,
+    "strategy_turnover": 0.0,
+    "three_sigma_tail_fraction": 0.0024,
+    "volume_absolute_return_correlation": 0.12076897961972634,
+    "volume_acf_1": 0.8807460551810581
+  },
+  "probes": [
+    {
+      "baseline_orders_exact": true,
+      "copies_settled": false,
+      "day": 1,
+      "fixed_state_local_only": true,
+      "in_band_value_agents": 191,
+      "interventions": {
+        "baseline": {
+          "noise": {
+            "buy_notional": 3499.037062641,
+            "buy_shares": 34.99037062641,
+            "net_notional": -56463.08886211975,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": -564.6308886211975,
+            "sell_notional": 59962.12592476075,
+            "sell_shares": 599.6212592476076
+          },
+          "trend": {
+            "buy_notional": 21318.24899937534,
+            "buy_shares": 213.18248999375342,
+            "net_notional": 18610.19848822969,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": 186.1019848822969,
+            "sell_notional": 2708.0505111456546,
+            "sell_shares": 27.080505111456546
+          },
+          "value": {
+            "buy_notional": 2374.165173777125,
+            "buy_shares": 23.74165173777125,
+            "net_notional": 1827.179358203238,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": 18.27179358203238,
+            "sell_notional": 546.9858155738867,
+            "sell_shares": 5.4698581557388675
+          }
+        },
+        "cancel_in_band_target_backlog": {
+          "noise": {
+            "buy_notional": 3499.037062641,
+            "buy_shares": 34.99037062641,
+            "net_notional": -56463.08886211975,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": -564.6308886211975,
+            "sell_notional": 59962.12592476075,
+            "sell_shares": 599.6212592476076
+          },
+          "trend": {
+            "buy_notional": 21318.24899937534,
+            "buy_shares": 213.18248999375342,
+            "net_notional": 18610.19848822969,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": 186.1019848822969,
+            "sell_notional": 2708.0505111456546,
+            "sell_shares": 27.080505111456546
+          },
+          "value": {
+            "buy_notional": 2374.165173777125,
+            "buy_shares": 23.74165173777125,
+            "net_notional": 1827.179358203238,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": 18.27179358203238,
+            "sell_notional": 546.9858155738867,
+            "sell_shares": 5.4698581557388675
+          }
+        },
+        "value_sensitivity_zero": {
+          "noise": {
+            "buy_notional": 3499.037062641,
+            "buy_shares": 34.99037062641,
+            "net_notional": -56463.08886211975,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": -564.6308886211975,
+            "sell_notional": 59962.12592476075,
+            "sell_shares": 599.6212592476076
+          },
+          "trend": {
+            "buy_notional": 21318.24899937534,
+            "buy_shares": 213.18248999375342,
+            "net_notional": 18610.19848822969,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": 186.1019848822969,
+            "sell_notional": 2708.0505111456546,
+            "sell_shares": 27.080505111456546
+          },
+          "value": {
+            "buy_notional": 1546.0904944585068,
+            "buy_shares": 15.460904944585067,
+            "net_notional": 587.4419640888391,
+            "net_notional_delta_from_baseline": -1239.737394114399,
+            "net_shares": 5.874419640888391,
+            "sell_notional": 958.6485303696677,
+            "sell_shares": 9.586485303696676
+          }
+        }
+      },
+      "notional_valuation": "opening_price"
+    },
+    {
+      "baseline_orders_exact": true,
+      "copies_settled": false,
+      "day": 1001,
+      "fixed_state_local_only": true,
+      "in_band_value_agents": 1,
+      "interventions": {
+        "baseline": {
+          "noise": {
+            "buy_notional": 65005.1088567257,
+            "buy_shares": 343.04451324812607,
+            "net_notional": 63953.98946309923,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": 337.4975532153847,
+            "sell_notional": 1051.1193936264763,
+            "sell_shares": 5.546960032741377
+          },
+          "trend": {
+            "buy_notional": 22636.40774431319,
+            "buy_shares": 119.45669521835742,
+            "net_notional": 19723.700178591404,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": 104.0857748908579,
+            "sell_notional": 2912.707565721784,
+            "sell_shares": 15.370920327499508
+          },
+          "value": {
+            "buy_notional": 1194.8696215768327,
+            "buy_shares": 6.305557746733745,
+            "net_notional": -3179.4919320948256,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": -16.77879295034769,
+            "sell_notional": 4374.361553671659,
+            "sell_shares": 23.084350697081437
+          }
+        },
+        "cancel_in_band_target_backlog": {
+          "noise": {
+            "buy_notional": 65005.1088567257,
+            "buy_shares": 343.04451324812607,
+            "net_notional": 63953.98946309923,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": 337.4975532153847,
+            "sell_notional": 1051.1193936264763,
+            "sell_shares": 5.546960032741377
+          },
+          "trend": {
+            "buy_notional": 22636.40774431319,
+            "buy_shares": 119.45669521835742,
+            "net_notional": 19723.700178591404,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": 104.0857748908579,
+            "sell_notional": 2912.707565721784,
+            "sell_shares": 15.370920327499508
+          },
+          "value": {
+            "buy_notional": 1194.8696215768327,
+            "buy_shares": 6.305557746733745,
+            "net_notional": -3179.4919320948256,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": -16.77879295034769,
+            "sell_notional": 4374.361553671659,
+            "sell_shares": 23.084350697081437
+          }
+        },
+        "value_sensitivity_zero": {
+          "noise": {
+            "buy_notional": 65005.1088567257,
+            "buy_shares": 343.04451324812607,
+            "net_notional": 63953.98946309923,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": 337.4975532153847,
+            "sell_notional": 1051.1193936264763,
+            "sell_shares": 5.546960032741377
+          },
+          "trend": {
+            "buy_notional": 22636.40774431319,
+            "buy_shares": 119.45669521835742,
+            "net_notional": 19723.700178591404,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": 104.0857748908579,
+            "sell_notional": 2912.707565721784,
+            "sell_shares": 15.370920327499508
+          },
+          "value": {
+            "buy_notional": 50.25078215782345,
+            "buy_shares": 0.2651830818968719,
+            "net_notional": -12644.548653102793,
+            "net_notional_delta_from_baseline": -9465.056721007968,
+            "net_shares": -66.72772516243705,
+            "sell_notional": 12694.799435260617,
+            "sell_shares": 66.99290824433393
+          }
+        }
+      },
+      "notional_valuation": "opening_price"
+    },
+    {
+      "baseline_orders_exact": true,
+      "copies_settled": false,
+      "day": 1501,
+      "fixed_state_local_only": true,
+      "in_band_value_agents": 0,
+      "interventions": {
+        "baseline": {
+          "noise": {
+            "buy_notional": 10077.059456132318,
+            "buy_shares": 31.707298310677686,
+            "net_notional": -29065.892778329166,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": -91.45534339661178,
+            "sell_notional": 39142.95223446149,
+            "sell_shares": 123.16264170728948
+          },
+          "trend": {
+            "buy_notional": 1604.9938648688167,
+            "buy_shares": 5.050086236142464,
+            "net_notional": -26066.929252692935,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": -82.0191550378814,
+            "sell_notional": 27671.923117561753,
+            "sell_shares": 87.06924127402388
+          },
+          "value": {
+            "buy_notional": 1038.1707389803612,
+            "buy_shares": 3.266586791669197,
+            "net_notional": 462.7718956120753,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": 1.4561039961950977,
+            "sell_notional": 575.398843368286,
+            "sell_shares": 1.8104827954740994
+          }
+        },
+        "cancel_in_band_target_backlog": {
+          "noise": {
+            "buy_notional": 10077.059456132318,
+            "buy_shares": 31.707298310677686,
+            "net_notional": -29065.892778329166,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": -91.45534339661178,
+            "sell_notional": 39142.95223446149,
+            "sell_shares": 123.16264170728948
+          },
+          "trend": {
+            "buy_notional": 1604.9938648688167,
+            "buy_shares": 5.050086236142464,
+            "net_notional": -26066.929252692935,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": -82.0191550378814,
+            "sell_notional": 27671.923117561753,
+            "sell_shares": 87.06924127402388
+          },
+          "value": {
+            "buy_notional": 1038.1707389803612,
+            "buy_shares": 3.266586791669197,
+            "net_notional": 462.7718956120753,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": 1.4561039961950977,
+            "sell_notional": 575.398843368286,
+            "sell_shares": 1.8104827954740994
+          }
+        },
+        "value_sensitivity_zero": {
+          "noise": {
+            "buy_notional": 10077.059456132318,
+            "buy_shares": 31.707298310677686,
+            "net_notional": -29065.892778329166,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": -91.45534339661178,
+            "sell_notional": 39142.95223446149,
+            "sell_shares": 123.16264170728948
+          },
+          "trend": {
+            "buy_notional": 1604.9938648688167,
+            "buy_shares": 5.050086236142464,
+            "net_notional": -26066.929252692935,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": -82.0191550378814,
+            "sell_notional": 27671.923117561753,
+            "sell_shares": 87.06924127402388
+          },
+          "value": {
+            "buy_notional": 15.912585855595687,
+            "buy_shares": 0.050068684105124106,
+            "net_notional": -10549.285677720018,
+            "net_notional_delta_from_baseline": -11012.057573332093,
+            "net_shares": -33.193150184747324,
+            "sell_notional": 10565.198263575612,
+            "sell_shares": 33.243218868852445
+          }
+        }
+      },
+      "notional_valuation": "opening_price"
+    },
+    {
+      "baseline_orders_exact": true,
+      "copies_settled": false,
+      "day": 2001,
+      "fixed_state_local_only": true,
+      "in_band_value_agents": 0,
+      "interventions": {
+        "baseline": {
+          "noise": {
+            "buy_notional": 61551.44032861187,
+            "buy_shares": 157.82243790434546,
+            "net_notional": 59797.65166799408,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": 153.3255942803786,
+            "sell_notional": 1753.7886606177829,
+            "sell_shares": 4.496843623966865
+          },
+          "trend": {
+            "buy_notional": 3299.1817617543047,
+            "buy_shares": 8.459345645687192,
+            "net_notional": -19923.269964533156,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": -51.08473530500659,
+            "sell_notional": 23222.45172628746,
+            "sell_shares": 59.54408095069378
+          },
+          "value": {
+            "buy_notional": 116.1114763293858,
+            "buy_shares": 0.29771839887324436,
+            "net_notional": -519.7094390173521,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": -1.3325733765078258,
+            "sell_notional": 635.8209153467379,
+            "sell_shares": 1.6302917753810702
+          }
+        },
+        "cancel_in_band_target_backlog": {
+          "noise": {
+            "buy_notional": 61551.44032861187,
+            "buy_shares": 157.82243790434546,
+            "net_notional": 59797.65166799408,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": 153.3255942803786,
+            "sell_notional": 1753.7886606177829,
+            "sell_shares": 4.496843623966865
+          },
+          "trend": {
+            "buy_notional": 3299.1817617543047,
+            "buy_shares": 8.459345645687192,
+            "net_notional": -19923.269964533156,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": -51.08473530500659,
+            "sell_notional": 23222.45172628746,
+            "sell_shares": 59.54408095069378
+          },
+          "value": {
+            "buy_notional": 116.1114763293858,
+            "buy_shares": 0.29771839887324436,
+            "net_notional": -519.7094390173521,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": -1.3325733765078258,
+            "sell_notional": 635.8209153467379,
+            "sell_shares": 1.6302917753810702
+          }
+        },
+        "value_sensitivity_zero": {
+          "noise": {
+            "buy_notional": 61551.44032861187,
+            "buy_shares": 157.82243790434546,
+            "net_notional": 59797.65166799408,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": 153.3255942803786,
+            "sell_notional": 1753.7886606177829,
+            "sell_shares": 4.496843623966865
+          },
+          "trend": {
+            "buy_notional": 3299.1817617543047,
+            "buy_shares": 8.459345645687192,
+            "net_notional": -19923.269964533156,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": -51.08473530500659,
+            "sell_notional": 23222.45172628746,
+            "sell_shares": 59.54408095069378
+          },
+          "value": {
+            "buy_notional": 0.0,
+            "buy_shares": 0.0,
+            "net_notional": -13648.482807116592,
+            "net_notional_delta_from_baseline": -13128.77336809924,
+            "net_shares": -34.9957177088737,
+            "sell_notional": 13648.482807116592,
+            "sell_shares": 34.9957177088737
+          }
+        }
+      },
+      "notional_valuation": "opening_price"
+    },
+    {
+      "baseline_orders_exact": true,
+      "copies_settled": false,
+      "day": 2501,
+      "fixed_state_local_only": true,
+      "in_band_value_agents": 0,
+      "interventions": {
+        "baseline": {
+          "noise": {
+            "buy_notional": 70379.99524215671,
+            "buy_shares": 168.5808862192117,
+            "net_notional": 67720.5148206257,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": 162.21064472087477,
+            "sell_notional": 2659.4804215310164,
+            "sell_shares": 6.370241498336916
+          },
+          "trend": {
+            "buy_notional": 9000.89477636096,
+            "buy_shares": 21.55980279543857,
+            "net_notional": -5608.61612305209,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": -13.434292986725508,
+            "sell_notional": 14609.51089941305,
+            "sell_shares": 34.99409578216408
+          },
+          "value": {
+            "buy_notional": 0.0,
+            "buy_shares": 0.0,
+            "net_notional": -3866.1539997238965,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": -9.260581295734568,
+            "sell_notional": 3866.1539997238965,
+            "sell_shares": 9.260581295734568
+          }
+        },
+        "cancel_in_band_target_backlog": {
+          "noise": {
+            "buy_notional": 70379.99524215671,
+            "buy_shares": 168.5808862192117,
+            "net_notional": 67720.5148206257,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": 162.21064472087477,
+            "sell_notional": 2659.4804215310164,
+            "sell_shares": 6.370241498336916
+          },
+          "trend": {
+            "buy_notional": 9000.89477636096,
+            "buy_shares": 21.55980279543857,
+            "net_notional": -5608.61612305209,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": -13.434292986725508,
+            "sell_notional": 14609.51089941305,
+            "sell_shares": 34.99409578216408
+          },
+          "value": {
+            "buy_notional": 0.0,
+            "buy_shares": 0.0,
+            "net_notional": -3866.1539997238965,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": -9.260581295734568,
+            "sell_notional": 3866.1539997238965,
+            "sell_shares": 9.260581295734568
+          }
+        },
+        "value_sensitivity_zero": {
+          "noise": {
+            "buy_notional": 70379.99524215671,
+            "buy_shares": 168.5808862192117,
+            "net_notional": 67720.5148206257,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": 162.21064472087477,
+            "sell_notional": 2659.4804215310164,
+            "sell_shares": 6.370241498336916
+          },
+          "trend": {
+            "buy_notional": 9000.89477636096,
+            "buy_shares": 21.55980279543857,
+            "net_notional": -5608.61612305209,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": -13.434292986725508,
+            "sell_notional": 14609.51089941305,
+            "sell_shares": 34.99409578216408
+          },
+          "value": {
+            "buy_notional": 0.0,
+            "buy_shares": 0.0,
+            "net_notional": -29390.39551128787,
+            "net_notional_delta_from_baseline": -25524.24151156397,
+            "net_shares": -70.39868224739908,
+            "sell_notional": 29390.39551128787,
+            "sell_shares": 70.39868224739908
+          }
+        }
+      },
+      "notional_valuation": "opening_price"
+    },
+    {
+      "baseline_orders_exact": true,
+      "copies_settled": false,
+      "day": 3001,
+      "fixed_state_local_only": true,
+      "in_band_value_agents": 0,
+      "interventions": {
+        "baseline": {
+          "noise": {
+            "buy_notional": 32032.78670292235,
+            "buy_shares": 61.57721991823591,
+            "net_notional": 20487.201878068376,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": 39.38292809972794,
+            "sell_notional": 11545.584824853975,
+            "sell_shares": 22.19429181850797
+          },
+          "trend": {
+            "buy_notional": 20710.515955400664,
+            "buy_shares": 39.812208891881866,
+            "net_notional": 16674.366675701986,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": 32.05344428224017,
+            "sell_notional": 4036.149279698673,
+            "sell_shares": 7.758764609641684
+          },
+          "value": {
+            "buy_notional": 3.585747787368658,
+            "buy_shares": 0.006892949468364051,
+            "net_notional": -1672.1537437651164,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": -3.2144121512703867,
+            "sell_notional": 1675.7394915524849,
+            "sell_shares": 3.2213051007387508
+          }
+        },
+        "cancel_in_band_target_backlog": {
+          "noise": {
+            "buy_notional": 32032.78670292235,
+            "buy_shares": 61.57721991823591,
+            "net_notional": 20487.201878068376,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": 39.38292809972794,
+            "sell_notional": 11545.584824853975,
+            "sell_shares": 22.19429181850797
+          },
+          "trend": {
+            "buy_notional": 20710.515955400664,
+            "buy_shares": 39.812208891881866,
+            "net_notional": 16674.366675701986,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": 32.05344428224017,
+            "sell_notional": 4036.149279698673,
+            "sell_shares": 7.758764609641684
+          },
+          "value": {
+            "buy_notional": 3.585747787368658,
+            "buy_shares": 0.006892949468364051,
+            "net_notional": -1672.1537437651164,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": -3.2144121512703867,
+            "sell_notional": 1675.7394915524849,
+            "sell_shares": 3.2213051007387508
+          }
+        },
+        "value_sensitivity_zero": {
+          "noise": {
+            "buy_notional": 32032.78670292235,
+            "buy_shares": 61.57721991823591,
+            "net_notional": 20487.201878068376,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": 39.38292809972794,
+            "sell_notional": 11545.584824853975,
+            "sell_shares": 22.19429181850797
+          },
+          "trend": {
+            "buy_notional": 20710.515955400664,
+            "buy_shares": 39.812208891881866,
+            "net_notional": 16674.366675701986,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": 32.05344428224017,
+            "sell_notional": 4036.149279698673,
+            "sell_shares": 7.758764609641684
+          },
+          "value": {
+            "buy_notional": 0.0,
+            "buy_shares": 0.0,
+            "net_notional": -17077.52103520671,
+            "net_notional_delta_from_baseline": -15405.367291441595,
+            "net_shares": -32.828435383902686,
+            "sell_notional": 17077.52103520671,
+            "sell_shares": 32.828435383902686
+          }
+        }
+      },
+      "notional_valuation": "opening_price"
+    },
+    {
+      "baseline_orders_exact": true,
+      "copies_settled": false,
+      "day": 3500,
+      "fixed_state_local_only": true,
+      "in_band_value_agents": 0,
+      "interventions": {
+        "baseline": {
+          "noise": {
+            "buy_notional": 10107.992881548016,
+            "buy_shares": 10.073192927153023,
+            "net_notional": -21937.135281741674,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": -21.86160977274028,
+            "sell_notional": 32045.128163289686,
+            "sell_shares": 31.9348026998933
+          },
+          "trend": {
+            "buy_notional": 8600.839287729239,
+            "buy_shares": 8.571228185062356,
+            "net_notional": 2466.951217237018,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": 2.4584579593904246,
+            "sell_notional": 6133.888070492219,
+            "sell_shares": 6.11277022567193
+          },
+          "value": {
+            "buy_notional": 0.0,
+            "buy_shares": 0.0,
+            "net_notional": -3130.4913859538133,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": -3.1197136817407465,
+            "sell_notional": 3130.4913859538133,
+            "sell_shares": 3.1197136817407465
+          }
+        },
+        "cancel_in_band_target_backlog": {
+          "noise": {
+            "buy_notional": 10107.992881548016,
+            "buy_shares": 10.073192927153023,
+            "net_notional": -21937.135281741674,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": -21.86160977274028,
+            "sell_notional": 32045.128163289686,
+            "sell_shares": 31.9348026998933
+          },
+          "trend": {
+            "buy_notional": 8600.839287729239,
+            "buy_shares": 8.571228185062356,
+            "net_notional": 2466.951217237018,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": 2.4584579593904246,
+            "sell_notional": 6133.888070492219,
+            "sell_shares": 6.11277022567193
+          },
+          "value": {
+            "buy_notional": 0.0,
+            "buy_shares": 0.0,
+            "net_notional": -3130.4913859538133,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": -3.1197136817407465,
+            "sell_notional": 3130.4913859538133,
+            "sell_shares": 3.1197136817407465
+          }
+        },
+        "value_sensitivity_zero": {
+          "noise": {
+            "buy_notional": 10107.992881548016,
+            "buy_shares": 10.073192927153023,
+            "net_notional": -21937.135281741674,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": -21.86160977274028,
+            "sell_notional": 32045.128163289686,
+            "sell_shares": 31.9348026998933
+          },
+          "trend": {
+            "buy_notional": 8600.839287729239,
+            "buy_shares": 8.571228185062356,
+            "net_notional": 2466.951217237018,
+            "net_notional_delta_from_baseline": 0.0,
+            "net_shares": 2.4584579593904246,
+            "sell_notional": 6133.888070492219,
+            "sell_shares": 6.11277022567193
+          },
+          "value": {
+            "buy_notional": 0.0,
+            "buy_shares": 0.0,
+            "net_notional": -21346.906674106183,
+            "net_notional_delta_from_baseline": -18216.41528815237,
+            "net_shares": -21.273413213293686,
+            "sell_notional": 21346.906674106183,
+            "sell_shares": 21.273413213293686
+          }
+        }
+      },
+      "notional_valuation": "opening_price"
+    }
+  ],
+  "scenario": "fixed_liquidity",
+  "seed": 20261117,
+  "source_verification": {
+    "all_metrics_exact": true,
+    "fingerprint_exact": true,
+    "original_daily_columns_exact": true
+  }
+}

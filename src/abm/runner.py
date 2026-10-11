@@ -32,12 +32,14 @@ def resolve_code_revision() -> str:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument(
+    source = parser.add_mutually_exclusive_group()
+    source.add_argument(
         "--config",
         type=Path,
         default=Path("configs/stage1.json"),
-        help="Stage 1 or Stage 2 JSON configuration",
+        help="Stage 1, Stage 2 or Stage 3 JSON configuration",
     )
+    source.add_argument("--rebuild", type=Path, help="verify and reconstruct a saved Stage 3 run")
     parser.add_argument(
         "--output",
         type=Path,
@@ -51,11 +53,24 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     if args.output.exists():
         raise FileExistsError(args.output)
+    if args.rebuild is not None:
+        from .reproduction import rebuild_run
+
+        result = rebuild_run(args.rebuild, args.output)
+        print(json.dumps(result.summary(), ensure_ascii=False, sort_keys=True))
+        return 0
     config = load_simulation_config(args.config)
     revision = resolve_code_revision()
     journal = args.output.parent / f".{args.output.name}.events.jsonl"
-    result = create_market_harness(config, event_log=journal, code_revision=revision).run()
-    result.write(args.output, config, code_revision=revision)
+    harness = create_market_harness(config, event_log=journal, code_revision=revision)
+    try:
+        result = harness.run()
+        result.write(args.output, config, code_revision=revision)
+    except Exception as exc:
+        from .reproduction import record_run_failure
+
+        record_run_failure(harness, config, args.output, exc)
+        raise
     print(json.dumps(result.summary(), ensure_ascii=False, sort_keys=True))
     return 0
 

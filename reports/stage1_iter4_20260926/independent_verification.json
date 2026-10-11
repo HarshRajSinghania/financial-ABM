@@ -1,0 +1,193 @@
+{
+  "consistency": {
+    "candidate_metrics_to_development_full": 20,
+    "noise_only_to_iteration3_development": 20,
+    "trend_only_to_iteration3_development": 20
+  },
+  "development": {
+    "checkpoint_rows_exact": true,
+    "checks": {
+      "ablations_avoid_pathological_return_predictability": false,
+      "agent_information_channel_has_paired_price_response": false,
+      "cash_conservation": true,
+      "empty_information_baseline_is_weakest_discovery": true,
+      "endogenous_liquidity_feedback_increases_tail_weight": true,
+      "fixed_population_has_no_strategy_turnover": true,
+      "full_heavier_than_gaussian": true,
+      "full_price_discovery_bounded": false,
+      "full_return_autocorrelation_near_zero_across_lags": false,
+      "full_runs_without_price_cap": true,
+      "full_volatility_clustering_has_decay": true,
+      "full_volatility_in_daily_range": true,
+      "full_volume_volatility_relation_positive": true,
+      "garch_control_is_labelled_exogenous": true,
+      "liquidity_stress_increases_clustering": true,
+      "logit_imitation_fires_and_tracks_fitness": true,
+      "logit_market_remains_active_and_bounded": true,
+      "persistent_order_flow_is_observable": true,
+      "public_news_channel_has_paired_price_response": true,
+      "share_conservation": true,
+      "single_strategy_markets_remain_active": true,
+      "spread_and_depth_are_finite": true
+    },
+    "exit_interpretation": "Statistical FAIL after complete output",
+    "expected_statistical_exit_code": 1,
+    "failed_checks": [
+      "full_return_autocorrelation_near_zero_across_lags",
+      "full_price_discovery_bounded",
+      "agent_information_channel_has_paired_price_response",
+      "ablations_avoid_pathological_return_predictability"
+    ],
+    "full_price_discovery_failed_seeds": [
+      20261101,
+      20261102,
+      20261104,
+      20261106,
+      20261107,
+      20261113,
+      20261115,
+      20261116,
+      20261117,
+      20261118
+    ],
+    "full_price_discovery_passed": 10,
+    "gate_recomputed_exact": true,
+    "observed_exit_code": 1,
+    "passed_checks": 18,
+    "registered_matrix_exact": true,
+    "registered_rows": 320,
+    "rows": 320,
+    "scenarios": {
+      "concentrated_wealth": 20,
+      "fixed_liquidity": 20,
+      "fixed_participation": 20,
+      "full": 20,
+      "garch_t_control": 20,
+      "independent_signals": 20,
+      "liquidity_stress": 20,
+      "logit_learning": 20,
+      "no_activity_persistence": 20,
+      "no_agent_information": 20,
+      "no_direct_news": 20,
+      "no_information_channels": 20,
+      "no_logit": 20,
+      "noise_only": 20,
+      "trend_only": 20,
+      "value_only": 20
+    },
+    "seeds": [
+      20261101,
+      20261102,
+      20261103,
+      20261104,
+      20261105,
+      20261106,
+      20261107,
+      20261108,
+      20261109,
+      20261110,
+      20261111,
+      20261112,
+      20261113,
+      20261114,
+      20261115,
+      20261116,
+      20261117,
+      20261118,
+      20261119,
+      20261120
+    ],
+    "summary_recomputed_exact": true,
+    "total_checks": 22,
+    "unique_rows": 320
+  },
+  "diagnostics": {
+    "completed_runs": 80,
+    "errors": [],
+    "price_discovery": {
+      "baseline": {
+        "failed_seeds": [
+          20261102,
+          20261104,
+          20261106,
+          20261107,
+          20261113,
+          20261115,
+          20261116,
+          20261117
+        ],
+        "passed": 12,
+        "total": 20
+      },
+      "budget_only": {
+        "failed_seeds": [
+          20261102,
+          20261104,
+          20261106,
+          20261107,
+          20261113,
+          20261115,
+          20261116,
+          20261117
+        ],
+        "passed": 12,
+        "total": 20
+      },
+      "candidate": {
+        "failed_seeds": [
+          20261101,
+          20261102,
+          20261104,
+          20261106,
+          20261107,
+          20261113,
+          20261115,
+          20261116,
+          20261117,
+          20261118
+        ],
+        "passed": 10,
+        "total": 20
+      },
+      "direction_only": {
+        "failed_seeds": [
+          20261101,
+          20261102,
+          20261104,
+          20261107,
+          20261115
+        ],
+        "passed": 15,
+        "total": 20
+      }
+    },
+    "status": "COMPLETE",
+    "unfinished_runs": []
+  },
+  "engineering_audit_passed": true,
+  "engineering_errors": [],
+  "formal_or_holdout_runs": 0,
+  "hashes": {
+    "implementation_sha256": {
+      "checked": 32,
+      "matched": 32,
+      "mismatches": []
+    },
+    "input_sha256": {
+      "checked": 49,
+      "matched": 49,
+      "mismatches": []
+    },
+    "protected_source_sha256": {
+      "checked": 6,
+      "matched": 6,
+      "mismatches": []
+    }
+  },
+  "may_enter_stage2": false,
+  "metric_mismatches": [],
+  "schema_version": "1.0.0",
+  "scope": "Independent read-only audit of completed fixed development outputs; no simulation or gate thresholds changed.",
+  "stage1_complete": false,
+  "verified_at_utc": "2026-09-26T08:54:08.253878+00:00"
+}

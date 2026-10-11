@@ -1,0 +1,626 @@
+{
+  "source": "value_direction/diagnostics.json and value_direction/daily/*.csv",
+  "evaluation_days": [
+    1001,
+    3500
+  ],
+  "share_tolerance": 1e-09,
+  "positive_excess_formula": "actual_position_before_shares - position_limit_shares + buy_position_capacity_shares; max(raw,0) * opening price",
+  "interpretation": "Group total above soft target limits, not number of traders or hard risk violations. Source path comparisons include all 3500 days.",
+  "exact_news_pairs": 20,
+  "exact_fundamental_pairs": 20,
+  "summary": {
+    "baseline": {
+      "mean_positive_excess_notional": 6452.059035858504,
+      "mean_positive_excess_to_target_ratio": 0.00586550821441682,
+      "maximum_positive_excess_to_target_ratio": 0.1926619710773527,
+      "fraction_days_with_positive_excess_above_tolerance": 0.29748,
+      "maximum_group_mean_holding_per_agent": 3279.820420462719
+    },
+    "candidate": {
+      "mean_positive_excess_notional": 181020.56744496178,
+      "mean_positive_excess_to_target_ratio": 0.1645641522226925,
+      "maximum_positive_excess_to_target_ratio": 2.138028365885169,
+      "fraction_days_with_positive_excess_above_tolerance": 0.5706800000000001,
+      "maximum_group_mean_holding_per_agent": 8629.578006184214
+    }
+  },
+  "per_seed": [
+    {
+      "seed": 20261101,
+      "baseline": {
+        "minimum_raw_excess_shares": -2.7284841053187847e-12,
+        "mean_positive_excess_notional": 1594.0775650553574,
+        "maximum_positive_excess_notional": 36977.816206652315,
+        "mean_positive_excess_to_target_ratio": 0.0014491614227775977,
+        "maximum_positive_excess_to_target_ratio": 0.033616196551502095,
+        "fraction_days_with_positive_excess_above_tolerance": 0.3732,
+        "mean_actual_net_to_target_ratio": 0.841468019791564,
+        "maximum_actual_net_to_target_ratio": 1.0181496664043554,
+        "maximum_group_mean_holding_per_agent": 2799.9115826119773,
+        "maximum_excess_day": 2220
+      },
+      "candidate": {
+        "minimum_raw_excess_shares": -2.5011104298755527e-12,
+        "mean_positive_excess_notional": 123391.07897680125,
+        "maximum_positive_excess_notional": 580803.0691212175,
+        "mean_positive_excess_to_target_ratio": 0.11217370816072841,
+        "maximum_positive_excess_to_target_ratio": 0.5280027901101976,
+        "fraction_days_with_positive_excess_above_tolerance": 0.9368,
+        "mean_actual_net_to_target_ratio": 1.085707043326742,
+        "maximum_actual_net_to_target_ratio": 1.5280027901101978,
+        "maximum_group_mean_holding_per_agent": 4202.007672803044,
+        "maximum_excess_day": 3386
+      },
+      "public_news_path_exact": true,
+      "fundamental_path_exact": true
+    },
+    {
+      "seed": 20261102,
+      "baseline": {
+        "minimum_raw_excess_shares": -1.8189894035458565e-12,
+        "mean_positive_excess_notional": 13784.354584671646,
+        "maximum_positive_excess_notional": 179012.43542270482,
+        "mean_positive_excess_to_target_ratio": 0.012531231440610587,
+        "maximum_positive_excess_to_target_ratio": 0.1627385776570044,
+        "fraction_days_with_positive_excess_above_tolerance": 0.5152,
+        "mean_actual_net_to_target_ratio": 0.9058153968369974,
+        "maximum_actual_net_to_target_ratio": 1.1627385776570045,
+        "maximum_group_mean_holding_per_agent": 3197.5310885567624,
+        "maximum_excess_day": 3440
+      },
+      "candidate": {
+        "minimum_raw_excess_shares": -1.8189894035458565e-12,
+        "mean_positive_excess_notional": 533405.1873164803,
+        "maximum_positive_excess_notional": 2197785.537313154,
+        "mean_positive_excess_to_target_ratio": 0.4849138066513458,
+        "maximum_positive_excess_to_target_ratio": 1.9979868521028668,
+        "fraction_days_with_positive_excess_above_tolerance": 0.9072,
+        "mean_actual_net_to_target_ratio": 1.4381641726980932,
+        "maximum_actual_net_to_target_ratio": 2.997986852102867,
+        "maximum_group_mean_holding_per_agent": 8244.463843282887,
+        "maximum_excess_day": 3440
+      },
+      "public_news_path_exact": true,
+      "fundamental_path_exact": true
+    },
+    {
+      "seed": 20261103,
+      "baseline": {
+        "minimum_raw_excess_shares": -3.637978807091713e-12,
+        "mean_positive_excess_notional": 8.281261317444372e-11,
+        "maximum_positive_excess_notional": 5.641983196157295e-10,
+        "mean_positive_excess_to_target_ratio": 7.528419379494886e-17,
+        "maximum_positive_excess_to_target_ratio": 5.12907563287027e-16,
+        "fraction_days_with_positive_excess_above_tolerance": 0.0,
+        "mean_actual_net_to_target_ratio": 0.47064016511227075,
+        "maximum_actual_net_to_target_ratio": 0.7452225940237297,
+        "maximum_group_mean_holding_per_agent": 2049.3621335652565,
+        "maximum_excess_day": 3132
+      },
+      "candidate": {
+        "minimum_raw_excess_shares": -3.637978807091713e-12,
+        "mean_positive_excess_notional": 454.02823823353697,
+        "maximum_positive_excess_notional": 38914.61364145361,
+        "mean_positive_excess_to_target_ratio": 0.00041275294384867,
+        "maximum_positive_excess_to_target_ratio": 0.03537692149223055,
+        "fraction_days_with_positive_excess_above_tolerance": 0.0996,
+        "mean_actual_net_to_target_ratio": 0.5926187872004209,
+        "maximum_actual_net_to_target_ratio": 0.9846669758198544,
+        "maximum_group_mean_holding_per_agent": 2707.8341835046,
+        "maximum_excess_day": 3272
+      },
+      "public_news_path_exact": true,
+      "fundamental_path_exact": true
+    },
+    {
+      "seed": 20261104,
+      "baseline": {
+        "minimum_raw_excess_shares": -2.7284841053187847e-12,
+        "mean_positive_excess_notional": 7189.969484460774,
+        "maximum_positive_excess_notional": 143127.4799525019,
+        "mean_positive_excess_to_target_ratio": 0.0065363358949643395,
+        "maximum_positive_excess_to_target_ratio": 0.1301158908659108,
+        "fraction_days_with_positive_excess_above_tolerance": 0.4924,
+        "mean_actual_net_to_target_ratio": 0.9171554509460599,
+        "maximum_actual_net_to_target_ratio": 1.1301158908659108,
+        "maximum_group_mean_holding_per_agent": 3107.8186998812544,
+        "maximum_excess_day": 3026
+      },
+      "candidate": {
+        "minimum_raw_excess_shares": -2.7284841053187847e-12,
+        "mean_positive_excess_notional": 239194.25476327457,
+        "maximum_positive_excess_notional": 821961.2414702151,
+        "mean_positive_excess_to_target_ratio": 0.21744932251206778,
+        "maximum_positive_excess_to_target_ratio": 0.7472374922456502,
+        "fraction_days_with_positive_excess_above_tolerance": 0.9608,
+        "mean_actual_net_to_target_ratio": 1.1899085241670377,
+        "maximum_actual_net_to_target_ratio": 1.7472374922456502,
+        "maximum_group_mean_holding_per_agent": 4804.903103675538,
+        "maximum_excess_day": 2620
+      },
+      "public_news_path_exact": true,
+      "fundamental_path_exact": true
+    },
+    {
+      "seed": 20261105,
+      "baseline": {
+        "minimum_raw_excess_shares": -7.275957614183426e-12,
+        "mean_positive_excess_notional": 9.059053767750867e-11,
+        "maximum_positive_excess_notional": 5.757578277536162e-10,
+        "mean_positive_excess_to_target_ratio": 8.235503425228063e-17,
+        "maximum_positive_excess_to_target_ratio": 5.234162070487423e-16,
+        "fraction_days_with_positive_excess_above_tolerance": 0.0,
+        "mean_actual_net_to_target_ratio": 0.18631602757874788,
+        "maximum_actual_net_to_target_ratio": 0.6873459438152388,
+        "maximum_group_mean_holding_per_agent": 1890.2013454919072,
+        "maximum_excess_day": 2356
+      },
+      "candidate": {
+        "minimum_raw_excess_shares": -5.4569682106375694e-12,
+        "mean_positive_excess_notional": 9.524984281692233e-11,
+        "maximum_positive_excess_notional": 7.239942524945823e-10,
+        "mean_positive_excess_to_target_ratio": 8.659076619720215e-17,
+        "maximum_positive_excess_to_target_ratio": 6.581765931768933e-16,
+        "fraction_days_with_positive_excess_above_tolerance": 0.0,
+        "mean_actual_net_to_target_ratio": 0.19444393298169357,
+        "maximum_actual_net_to_target_ratio": 0.7682489522781623,
+        "maximum_group_mean_holding_per_agent": 2112.6846187649458,
+        "maximum_excess_day": 1551
+      },
+      "public_news_path_exact": true,
+      "fundamental_path_exact": true
+    },
+    {
+      "seed": 20261106,
+      "baseline": {
+        "minimum_raw_excess_shares": -2.7284841053187847e-12,
+        "mean_positive_excess_notional": 10778.54276307427,
+        "maximum_positive_excess_notional": 168594.4906631391,
+        "mean_positive_excess_to_target_ratio": 0.009798675239158427,
+        "maximum_positive_excess_to_target_ratio": 0.15326771878467194,
+        "fraction_days_with_positive_excess_above_tolerance": 0.4228,
+        "mean_actual_net_to_target_ratio": 0.8621607839254204,
+        "maximum_actual_net_to_target_ratio": 1.153267718784672,
+        "maximum_group_mean_holding_per_agent": 3171.4862266578475,
+        "maximum_excess_day": 3149
+      },
+      "candidate": {
+        "minimum_raw_excess_shares": -3.183231456205249e-12,
+        "mean_positive_excess_notional": 178930.17956874165,
+        "maximum_positive_excess_notional": 1182281.5074568721,
+        "mean_positive_excess_to_target_ratio": 0.16266379960794694,
+        "maximum_positive_excess_to_target_ratio": 1.0748013704153385,
+        "fraction_days_with_positive_excess_above_tolerance": 0.7456,
+        "mean_actual_net_to_target_ratio": 1.0490393045384843,
+        "maximum_actual_net_to_target_ratio": 2.0748013704153387,
+        "maximum_group_mean_holding_per_agent": 5705.70376864218,
+        "maximum_excess_day": 3290
+      },
+      "public_news_path_exact": true,
+      "fundamental_path_exact": true
+    },
+    {
+      "seed": 20261107,
+      "baseline": {
+        "minimum_raw_excess_shares": -3.296918293926865e-12,
+        "mean_positive_excess_notional": 22479.996626565226,
+        "maximum_positive_excess_notional": 198412.41504251558,
+        "mean_positive_excess_to_target_ratio": 0.020436360569604753,
+        "maximum_positive_excess_to_target_ratio": 0.1803749227659232,
+        "fraction_days_with_positive_excess_above_tolerance": 0.5904,
+        "mean_actual_net_to_target_ratio": 0.9955560610548942,
+        "maximum_actual_net_to_target_ratio": 1.1803749227659233,
+        "maximum_group_mean_holding_per_agent": 3246.03103760629,
+        "maximum_excess_day": 3239
+      },
+      "candidate": {
+        "minimum_raw_excess_shares": 0.2380095179107684,
+        "mean_positive_excess_notional": 885359.05059236,
+        "maximum_positive_excess_notional": 2351831.202473686,
+        "mean_positive_excess_to_target_ratio": 0.8048718641748727,
+        "maximum_positive_excess_to_target_ratio": 2.138028365885169,
+        "fraction_days_with_positive_excess_above_tolerance": 1.0,
+        "mean_actual_net_to_target_ratio": 1.8019261393279278,
+        "maximum_actual_net_to_target_ratio": 3.1380283658851686,
+        "maximum_group_mean_holding_per_agent": 8629.578006184214,
+        "maximum_excess_day": 3276
+      },
+      "public_news_path_exact": true,
+      "fundamental_path_exact": true
+    },
+    {
+      "seed": 20261108,
+      "baseline": {
+        "minimum_raw_excess_shares": -7.275957614183426e-12,
+        "mean_positive_excess_notional": 8.524867742166499e-11,
+        "maximum_positive_excess_notional": 6.432255081598425e-10,
+        "mean_positive_excess_to_target_ratio": 7.74987976560591e-17,
+        "maximum_positive_excess_to_target_ratio": 5.847504619634934e-16,
+        "fraction_days_with_positive_excess_above_tolerance": 0.0,
+        "mean_actual_net_to_target_ratio": 0.0016266589412209213,
+        "maximum_actual_net_to_target_ratio": 0.5844247156079868,
+        "maximum_group_mean_holding_per_agent": 1607.167967921964,
+        "maximum_excess_day": 3308
+      },
+      "candidate": {
+        "minimum_raw_excess_shares": -7.275957614183426e-12,
+        "mean_positive_excess_notional": 8.431444814541075e-11,
+        "maximum_positive_excess_notional": 6.287073246383573e-10,
+        "mean_positive_excess_to_target_ratio": 7.664949831400978e-17,
+        "maximum_positive_excess_to_target_ratio": 5.715521133075977e-16,
+        "fraction_days_with_positive_excess_above_tolerance": 0.0,
+        "mean_actual_net_to_target_ratio": 0.0032057696421562924,
+        "maximum_actual_net_to_target_ratio": 0.5828025169502203,
+        "maximum_group_mean_holding_per_agent": 1602.7069216131058,
+        "maximum_excess_day": 3310
+      },
+      "public_news_path_exact": true,
+      "fundamental_path_exact": true
+    },
+    {
+      "seed": 20261109,
+      "baseline": {
+        "minimum_raw_excess_shares": -3.637978807091713e-12,
+        "mean_positive_excess_notional": 8.759353604713767e-11,
+        "maximum_positive_excess_notional": 6.286219376410353e-10,
+        "mean_positive_excess_to_target_ratio": 7.963048731557971e-17,
+        "maximum_positive_excess_to_target_ratio": 5.714744887645776e-16,
+        "fraction_days_with_positive_excess_above_tolerance": 0.0,
+        "mean_actual_net_to_target_ratio": 0.3717398346196689,
+        "maximum_actual_net_to_target_ratio": 0.6377760182084935,
+        "maximum_group_mean_holding_per_agent": 1753.884050073357,
+        "maximum_excess_day": 1997
+      },
+      "candidate": {
+        "minimum_raw_excess_shares": -3.637978807091713e-12,
+        "mean_positive_excess_notional": 8.400797589140354e-11,
+        "maximum_positive_excess_notional": 6.510563748921826e-10,
+        "mean_positive_excess_to_target_ratio": 7.637088717400323e-17,
+        "maximum_positive_excess_to_target_ratio": 5.918694317201662e-16,
+        "fraction_days_with_positive_excess_above_tolerance": 0.0,
+        "mean_actual_net_to_target_ratio": 0.2806954990070328,
+        "maximum_actual_net_to_target_ratio": 0.5953188403669905,
+        "maximum_group_mean_holding_per_agent": 1637.126811009224,
+        "maximum_excess_day": 2010
+      },
+      "public_news_path_exact": true,
+      "fundamental_path_exact": true
+    },
+    {
+      "seed": 20261110,
+      "baseline": {
+        "minimum_raw_excess_shares": -5.4569682106375694e-12,
+        "mean_positive_excess_notional": 7.868095828692012,
+        "maximum_positive_excess_notional": 3031.2247977678826,
+        "mean_positive_excess_to_target_ratio": 7.152814389720011e-06,
+        "maximum_positive_excess_to_target_ratio": 0.0027556589070617116,
+        "fraction_days_with_positive_excess_above_tolerance": 0.0288,
+        "mean_actual_net_to_target_ratio": 0.43782256559765126,
+        "maximum_actual_net_to_target_ratio": 0.898831224477336,
+        "maximum_group_mean_holding_per_agent": 2471.785867312673,
+        "maximum_excess_day": 3488
+      },
+      "candidate": {
+        "minimum_raw_excess_shares": -7.275957614183426e-12,
+        "mean_positive_excess_notional": 4113.622556736955,
+        "maximum_positive_excess_notional": 110318.1302084732,
+        "mean_positive_excess_to_target_ratio": 0.003739656869760868,
+        "maximum_positive_excess_to_target_ratio": 0.10028920928043018,
+        "fraction_days_with_positive_excess_above_tolerance": 0.244,
+        "mean_actual_net_to_target_ratio": 0.5771182843048961,
+        "maximum_actual_net_to_target_ratio": 1.0641999009218464,
+        "maximum_group_mean_holding_per_agent": 2926.5497275350767,
+        "maximum_excess_day": 3216
+      },
+      "public_news_path_exact": true,
+      "fundamental_path_exact": true
+    },
+    {
+      "seed": 20261111,
+      "baseline": {
+        "minimum_raw_excess_shares": -5.4569682106375694e-12,
+        "mean_positive_excess_notional": 393.18296120780036,
+        "maximum_positive_excess_notional": 18307.3549061709,
+        "mean_positive_excess_to_target_ratio": 0.0003574390556434549,
+        "maximum_positive_excess_to_target_ratio": 0.016643049914700826,
+        "fraction_days_with_positive_excess_above_tolerance": 0.148,
+        "mean_actual_net_to_target_ratio": 0.6548499609283164,
+        "maximum_actual_net_to_target_ratio": 0.962162312323049,
+        "maximum_group_mean_holding_per_agent": 2645.9463588883855,
+        "maximum_excess_day": 3467
+      },
+      "candidate": {
+        "minimum_raw_excess_shares": -7.275957614183426e-12,
+        "mean_positive_excess_notional": 1491.4976170729053,
+        "maximum_positive_excess_notional": 59433.779524036734,
+        "mean_positive_excess_to_target_ratio": 0.0013559069246117318,
+        "maximum_positive_excess_to_target_ratio": 0.054030708658215215,
+        "fraction_days_with_positive_excess_above_tolerance": 0.34,
+        "mean_actual_net_to_target_ratio": 0.6475895230358346,
+        "maximum_actual_net_to_target_ratio": 1.021840176729284,
+        "maximum_group_mean_holding_per_agent": 2810.0604860055305,
+        "maximum_excess_day": 3483
+      },
+      "public_news_path_exact": true,
+      "fundamental_path_exact": true
+    },
+    {
+      "seed": 20261112,
+      "baseline": {
+        "minimum_raw_excess_shares": -7.275957614183426e-12,
+        "mean_positive_excess_notional": 9.730400650519288e-11,
+        "maximum_positive_excess_notional": 6.221142939875181e-10,
+        "mean_positive_excess_to_target_ratio": 8.845818773199356e-17,
+        "maximum_positive_excess_to_target_ratio": 5.655584490795621e-16,
+        "fraction_days_with_positive_excess_above_tolerance": 0.0,
+        "mean_actual_net_to_target_ratio": -0.1773510951753449,
+        "maximum_actual_net_to_target_ratio": 0.17119684512197308,
+        "maximum_group_mean_holding_per_agent": 470.7913240854261,
+        "maximum_excess_day": 2712
+      },
+      "candidate": {
+        "minimum_raw_excess_shares": -1.0913936421275139e-11,
+        "mean_positive_excess_notional": 1.0218791231229067e-10,
+        "maximum_positive_excess_notional": 7.488331880693536e-10,
+        "mean_positive_excess_to_target_ratio": 9.289810210208246e-17,
+        "maximum_positive_excess_to_target_ratio": 6.807574436994126e-16,
+        "fraction_days_with_positive_excess_above_tolerance": 0.0,
+        "mean_actual_net_to_target_ratio": -0.2547613911851283,
+        "maximum_actual_net_to_target_ratio": 0.0882525347565789,
+        "maximum_group_mean_holding_per_agent": 242.69447058059194,
+        "maximum_excess_day": 2933
+      },
+      "public_news_path_exact": true,
+      "fundamental_path_exact": true
+    },
+    {
+      "seed": 20261113,
+      "baseline": {
+        "minimum_raw_excess_shares": -3.296918293926865e-12,
+        "mean_positive_excess_notional": 7998.468143195143,
+        "maximum_positive_excess_notional": 128976.09944863382,
+        "mean_positive_excess_to_target_ratio": 0.007271334675631948,
+        "maximum_positive_excess_to_target_ratio": 0.11725099949875799,
+        "fraction_days_with_positive_excess_above_tolerance": 0.4668,
+        "mean_actual_net_to_target_ratio": 0.9286933547157363,
+        "maximum_actual_net_to_target_ratio": 1.117250999498758,
+        "maximum_group_mean_holding_per_agent": 3072.4402486215854,
+        "maximum_excess_day": 1037
+      },
+      "candidate": {
+        "minimum_raw_excess_shares": -3.183231456205249e-12,
+        "mean_positive_excess_notional": 192245.46605195428,
+        "maximum_positive_excess_notional": 781849.6438747748,
+        "mean_positive_excess_to_target_ratio": 0.1747686055017766,
+        "maximum_positive_excess_to_target_ratio": 0.7107724035225227,
+        "fraction_days_with_positive_excess_above_tolerance": 0.9728,
+        "mean_actual_net_to_target_ratio": 1.1450822444884037,
+        "maximum_actual_net_to_target_ratio": 1.710772403522523,
+        "maximum_group_mean_holding_per_agent": 4704.624109686937,
+        "maximum_excess_day": 1117
+      },
+      "public_news_path_exact": true,
+      "fundamental_path_exact": true
+    },
+    {
+      "seed": 20261114,
+      "baseline": {
+        "minimum_raw_excess_shares": -4.547473508864641e-12,
+        "mean_positive_excess_notional": 3485.8275607452238,
+        "maximum_positive_excess_notional": 108762.31320667989,
+        "mean_positive_excess_to_target_ratio": 0.0031689341461320214,
+        "maximum_positive_excess_to_target_ratio": 0.09887483018789082,
+        "fraction_days_with_positive_excess_above_tolerance": 0.2856,
+        "mean_actual_net_to_target_ratio": 0.7682387155124154,
+        "maximum_actual_net_to_target_ratio": 1.098353384525987,
+        "maximum_group_mean_holding_per_agent": 3020.4718074464636,
+        "maximum_excess_day": 2769
+      },
+      "candidate": {
+        "minimum_raw_excess_shares": -5.4569682106375694e-12,
+        "mean_positive_excess_notional": 184605.90198764717,
+        "maximum_positive_excess_notional": 932019.466663367,
+        "mean_positive_excess_to_target_ratio": 0.16782354726149745,
+        "maximum_positive_excess_to_target_ratio": 0.8472904242394246,
+        "fraction_days_with_positive_excess_above_tolerance": 0.5688,
+        "mean_actual_net_to_target_ratio": 1.0334880988700244,
+        "maximum_actual_net_to_target_ratio": 1.8472904242394244,
+        "maximum_group_mean_holding_per_agent": 5080.0486666584175,
+        "maximum_excess_day": 2806
+      },
+      "public_news_path_exact": true,
+      "fundamental_path_exact": true
+    },
+    {
+      "seed": 20261115,
+      "baseline": {
+        "minimum_raw_excess_shares": -2.9558577807620168e-12,
+        "mean_positive_excess_notional": 19658.48551749184,
+        "maximum_positive_excess_notional": 168497.2280850281,
+        "mean_positive_excess_to_target_ratio": 0.01787135047044713,
+        "maximum_positive_excess_to_target_ratio": 0.15317929825911647,
+        "fraction_days_with_positive_excess_above_tolerance": 0.6004,
+        "mean_actual_net_to_target_ratio": 0.9733250674376035,
+        "maximum_actual_net_to_target_ratio": 1.1531792982591167,
+        "maximum_group_mean_holding_per_agent": 3171.24307021257,
+        "maximum_excess_day": 3376
+      },
+      "candidate": {
+        "minimum_raw_excess_shares": -1.8189894035458565e-12,
+        "mean_positive_excess_notional": 350531.5266614918,
+        "maximum_positive_excess_notional": 1900333.6778183356,
+        "mean_positive_excess_to_target_ratio": 0.31866502423771975,
+        "maximum_positive_excess_to_target_ratio": 1.7275760707439407,
+        "fraction_days_with_positive_excess_above_tolerance": 0.9964,
+        "mean_actual_net_to_target_ratio": 1.302301603143014,
+        "maximum_actual_net_to_target_ratio": 2.727576070743941,
+        "maximum_group_mean_holding_per_agent": 7500.834194545841,
+        "maximum_excess_day": 3473
+      },
+      "public_news_path_exact": true,
+      "fundamental_path_exact": true
+    },
+    {
+      "seed": 20261116,
+      "baseline": {
+        "minimum_raw_excess_shares": -3.183231456205249e-12,
+        "mean_positive_excess_notional": 15476.078131705957,
+        "maximum_positive_excess_notional": 211928.1681850879,
+        "mean_positive_excess_to_target_ratio": 0.014069161937914507,
+        "maximum_positive_excess_to_target_ratio": 0.1926619710773527,
+        "fraction_days_with_positive_excess_above_tolerance": 0.5188,
+        "mean_actual_net_to_target_ratio": 0.9142006453278849,
+        "maximum_actual_net_to_target_ratio": 1.1926619710773527,
+        "maximum_group_mean_holding_per_agent": 3279.820420462719,
+        "maximum_excess_day": 3236
+      },
+      "candidate": {
+        "minimum_raw_excess_shares": -2.7284841053187847e-12,
+        "mean_positive_excess_notional": 307145.7939639181,
+        "maximum_positive_excess_notional": 2085392.42775488,
+        "mean_positive_excess_to_target_ratio": 0.2792234490581074,
+        "maximum_positive_excess_to_target_ratio": 1.895811297958982,
+        "fraction_days_with_positive_excess_above_tolerance": 0.9016,
+        "mean_actual_net_to_target_ratio": 1.2189106771628335,
+        "maximum_actual_net_to_target_ratio": 2.8958112979589825,
+        "maximum_group_mean_holding_per_agent": 7963.4810693872,
+        "maximum_excess_day": 3500
+      },
+      "public_news_path_exact": true,
+      "fundamental_path_exact": true
+    },
+    {
+      "seed": 20261117,
+      "baseline": {
+        "minimum_raw_excess_shares": -2.7284841053187847e-12,
+        "mean_positive_excess_notional": 13266.43180092328,
+        "maximum_positive_excess_notional": 186545.28042849494,
+        "mean_positive_excess_to_target_ratio": 0.012060392546293888,
+        "maximum_positive_excess_to_target_ratio": 0.16958661857135904,
+        "fraction_days_with_positive_excess_above_tolerance": 0.5924,
+        "mean_actual_net_to_target_ratio": 0.9234699367136946,
+        "maximum_actual_net_to_target_ratio": 1.1695866185713588,
+        "maximum_group_mean_holding_per_agent": 3216.363201071237,
+        "maximum_excess_day": 3204
+      },
+      "candidate": {
+        "minimum_raw_excess_shares": -1.3642420526593924e-12,
+        "mean_positive_excess_notional": 387486.890949017,
+        "maximum_positive_excess_notional": 2065931.1905569537,
+        "mean_positive_excess_to_target_ratio": 0.3522608099536519,
+        "maximum_positive_excess_to_target_ratio": 1.8781192641426856,
+        "fraction_days_with_positive_excess_above_tolerance": 0.9852,
+        "mean_actual_net_to_target_ratio": 1.3063090097559489,
+        "maximum_actual_net_to_target_ratio": 2.878119264142686,
+        "maximum_group_mean_holding_per_agent": 7914.827976392384,
+        "maximum_excess_day": 3500
+      },
+      "public_news_path_exact": true,
+      "fundamental_path_exact": true
+    },
+    {
+      "seed": 20261118,
+      "baseline": {
+        "minimum_raw_excess_shares": -5.4569682106375694e-12,
+        "mean_positive_excess_notional": 3226.1005195783055,
+        "maximum_positive_excess_notional": 101089.93911110808,
+        "mean_positive_excess_to_target_ratio": 0.002932818654162095,
+        "maximum_positive_excess_to_target_ratio": 0.09189994464646188,
+        "fraction_days_with_positive_excess_above_tolerance": 0.304,
+        "mean_actual_net_to_target_ratio": 0.7487551427344319,
+        "maximum_actual_net_to_target_ratio": 1.0881397265932633,
+        "maximum_group_mean_holding_per_agent": 2992.384248131474,
+        "maximum_excess_day": 2657
+      },
+      "candidate": {
+        "minimum_raw_excess_shares": -5.4569682106375694e-12,
+        "mean_positive_excess_notional": 63450.36881882165,
+        "maximum_positive_excess_notional": 453014.88096602383,
+        "mean_positive_excess_to_target_ratio": 0.057682153471656054,
+        "maximum_positive_excess_to_target_ratio": 0.4118317099691125,
+        "fraction_days_with_positive_excess_above_tolerance": 0.7004,
+        "mean_actual_net_to_target_ratio": 0.8782799716423669,
+        "maximum_actual_net_to_target_ratio": 1.4118317099691124,
+        "maximum_group_mean_holding_per_agent": 3882.53720241506,
+        "maximum_excess_day": 2973
+      },
+      "public_news_path_exact": true,
+      "fundamental_path_exact": true
+    },
+    {
+      "seed": 20261119,
+      "baseline": {
+        "minimum_raw_excess_shares": -2.7284841053187847e-12,
+        "mean_positive_excess_notional": 8041.39815881593,
+        "maximum_positive_excess_notional": 116982.35372868046,
+        "mean_positive_excess_to_target_ratio": 0.007310361962559935,
+        "maximum_positive_excess_to_target_ratio": 0.1063475942988004,
+        "fraction_days_with_positive_excess_above_tolerance": 0.3404,
+        "mean_actual_net_to_target_ratio": 0.7268853922993701,
+        "maximum_actual_net_to_target_ratio": 1.1063475942988004,
+        "maximum_group_mean_holding_per_agent": 3042.4558843217014,
+        "maximum_excess_day": 3088
+      },
+      "candidate": {
+        "minimum_raw_excess_shares": -3.637978807091713e-12,
+        "mean_positive_excess_notional": 153199.30995235618,
+        "maximum_positive_excess_notional": 1083228.5632121135,
+        "mean_positive_excess_to_target_ratio": 0.1392720999566874,
+        "maximum_positive_excess_to_target_ratio": 0.9847532392837397,
+        "fraction_days_with_positive_excess_above_tolerance": 0.4592,
+        "mean_actual_net_to_target_ratio": 0.8357168333767125,
+        "maximum_actual_net_to_target_ratio": 1.9847532392837395,
+        "maximum_group_mean_holding_per_agent": 5458.071408030282,
+        "maximum_excess_day": 3460
+      },
+      "public_news_path_exact": true,
+      "fundamental_path_exact": true
+    },
+    {
+      "seed": 20261120,
+      "baseline": {
+        "minimum_raw_excess_shares": -4.547473508864641e-12,
+        "mean_positive_excess_notional": 1660.3988038501755,
+        "maximum_positive_excess_notional": 96653.76862072185,
+        "mean_positive_excess_to_target_ratio": 0.001509453458045614,
+        "maximum_positive_excess_to_target_ratio": 0.08786706238247441,
+        "fraction_days_with_positive_excess_above_tolerance": 0.2704,
+        "mean_actual_net_to_target_ratio": 0.7707186811161071,
+        "maximum_actual_net_to_target_ratio": 1.0815930008022534,
+        "maximum_group_mean_holding_per_agent": 2974.3807522061966,
+        "maximum_excess_day": 1481
+      },
+      "candidate": {
+        "minimum_raw_excess_shares": -4.547473508864641e-12,
+        "mean_positive_excess_notional": 15407.190884327101,
+        "maximum_positive_excess_notional": 212559.47715860006,
+        "mean_positive_excess_to_target_ratio": 0.014006537167570093,
+        "maximum_positive_excess_to_target_ratio": 0.19323588832600005,
+        "fraction_days_with_positive_excess_above_tolerance": 0.5952,
+        "mean_actual_net_to_target_ratio": 0.8154357366724515,
+        "maximum_actual_net_to_target_ratio": 1.1928187913361792,
+        "maximum_group_mean_holding_per_agent": 3280.2516761744932,
+        "maximum_excess_day": 1665
+      },
+      "public_news_path_exact": true,
+      "fundamental_path_exact": true
+    }
+  ],
+  "candidate_peak_day_accounting": {
+    "seed": 20261107,
+    "day": 3276.0,
+    "price_before": 515.4828648864474,
+    "value_actual_position_before_shares": 6696.306390774151,
+    "value_position_limit_shares": 2133.9215615679336,
+    "value_buy_position_capacity_shares": 0.0,
+    "value_actual_net_notional_before": 3451831.2024736856,
+    "value_actual_gross_notional_before": 3451831.2024736856,
+    "value_agent_count": 400.0,
+    "target_total_notional": 1100000.0,
+    "positive_excess_notional": 2351831.202473686,
+    "positive_excess_to_target_ratio": 2.138028365885169,
+    "actual_net_to_target_ratio": 3.1380283658851686,
+    "actual_gross_per_agent": 8629.578006184214
+  }
+}

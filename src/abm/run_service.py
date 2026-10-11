@@ -72,6 +72,7 @@ def controlled_run_worker(
 ) -> None:
     """Run one simulation without allowing observers to affect its state."""
     sink = NonBlockingQueueSink(telemetry_queue)
+    harness = None
     try:
         destination = Path(output_dir)
         if destination.exists():
@@ -159,13 +160,21 @@ def controlled_run_worker(
         if status_queue is not None:
             _publish_status(status_queue, status.to_dict())
     except Exception as exc:
+        error = f"{type(exc).__name__}: {exc}"
+        if harness is not None:
+            from .reproduction import record_run_failure
+
+            try:
+                record_run_failure(harness, config, output_dir, exc)
+            except Exception as archive_error:
+                error += f"; failure manifest: {type(archive_error).__name__}: {archive_error}"
         failure = RunStatus(
             "failed",
-            0,
+            harness.next_day_index if harness is not None else 0,
             int(config_payload.get("trading_days", 0)),
             published_frames=sink.published_count,
             dropped_frames=sink.dropped_count,
-            error=f"{type(exc).__name__}: {exc}",
+            error=error,
         ).to_dict()
         completion_queue.put(failure)
         if status_queue is not None:

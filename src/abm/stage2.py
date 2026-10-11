@@ -79,6 +79,9 @@ class Stage2Config(Stage1Config):
 
 
 def simulation_config_from_dict(payload: Mapping[str, Any]) -> Stage1Config:
+    if "stage3_enabled" in payload:
+        from .stage3 import Stage3Config
+        return Stage3Config.from_dict(payload)
     return (Stage2Config if "stage2_enabled" in payload else Stage1Config).from_dict(payload)
 
 
@@ -214,15 +217,13 @@ class Stage2Harness(MarketHarness):
         self.graph = self._build_graph()
         initial_graph = {"nodes": list(self.graph.nodes), "edges": [e.to_dict() for e in self.graph.edges]}
         graph_version = hashlib.sha256(canonical_json_bytes(initial_graph)).hexdigest()
-        sources = {f"source:{p.name}": p for p in Path(__file__).parent.glob("*.py")}
-        if config.graph_fixture:
-            sources["graph_fixture"] = Path(config.graph_fixture)
         self.manifest = build_run_manifest(
-            config=config.to_dict(), data_files=sources, random_seed=config.seed,
+            config=config.to_dict(), data_files=self._manifest_data_files(), random_seed=config.seed,
             code_revision=code_revision, schema_version=config.schema_version,
             graph_version=graph_version if config.graph_enabled else None,
             agent_models={"traders": "contextual_bandit_v1" if config.bandit_enabled else "fixed_rules",
                           "companies": "tabular_q_v1" if config.company_learning_enabled else "fixed_maintain"},
+            enabled_plugins=self._enabled_plugins(),
         )
         self.run_id = self.manifest.run_id
         self.trade_history: deque[np.ndarray] = deque(maxlen=20)
@@ -232,10 +233,31 @@ class Stage2Harness(MarketHarness):
         self.policy = Stage2Policy(self)
         self.last_stage2_frame: dict[str, Any] = {}
 
+    def _input_path(self, path: str | Path) -> Path:
+        return Path(path)
+
+    def _manifest_data_files(self) -> dict[str, Path]:
+        sources = {f"source:{p.name}": p for p in Path(__file__).parent.glob("*.py")}
+        if self.config.graph_fixture:
+            sources["graph_fixture"] = self._input_path(self.config.graph_fixture)
+        return sources
+
+    def _enabled_plugins(self) -> tuple[str, ...]:
+        return ()
+
+    def _simulation_time(self, day_index: int) -> datetime:
+        return EPOCH + timedelta(days=day_index)
+
+    def _additional_messages(self, day: int, now: datetime) -> list[Message]:
+        return []
+
+    def _frame_extra(self, day: int, now: datetime) -> dict[str, Any]:
+        return {}
+
     def _build_graph(self) -> InformationGraph:
         nodes = self.company_ids + self.trader_ids
         if self.config.graph_fixture:
-            fixture = json.loads(Path(self.config.graph_fixture).read_text(encoding="utf-8"))
+            fixture = json.loads(self._input_path(self.config.graph_fixture).read_text(encoding="utf-8"))
             if set(fixture["nodes"]) != set(nodes):
                 raise ValueError("graph fixture nodes must match the company and trader population")
             return InformationGraph(tuple(fixture["nodes"]), tuple(Edge.from_dict(e) for e in fixture["edges"]))
@@ -326,7 +348,7 @@ class Stage2Harness(MarketHarness):
     def step(self, day_index: int):
         if day_index != self.next_day_index or day_index >= self.config.trading_days:
             raise RuntimeError("Stage 2 days must be settled exactly once in sequence")
-        day, now = day_index + 1, EPOCH + timedelta(days=day_index)
+        day, now = day_index + 1, self._simulation_time(day_index)
         price_before = float(self.prices[day_index])
         wealth_before = self.population.wealth(price_before)
         self.trader_features, current_states = self._trader_context()
@@ -341,6 +363,7 @@ class Stage2Harness(MarketHarness):
                 self.trader_probabilities = self.bandit.probabilities(self.trader_types, self.trader_states)
                 self.trader_actions = self.bandit.choose(self.trader_types, self.trader_states, self.bandit_rng)
         messages = self._company_day(day, now, price_before)
+        messages.extend(self._additional_messages(day, now))
         self.macro_news = float(np.log(float(self.macro_fundamentals[day]) / float(self.macro_fundamentals[day - 1])))
         self.book_news = self.macro_news + sum(float(m.payload["log_change"]) for m in messages)
         self.fundamentals[day] = self.macro_fundamentals[day] * float(np.exp(np.dot(self.company_weights, np.log(self.company_performance))))
@@ -427,6 +450,7 @@ class Stage2Harness(MarketHarness):
             "messages": [m.to_dict() for m in messages], "arrivals": arrival_records, "graph_updates": list(graph_updates),
             "company_cash_error": company_cash_error,
         }
+        frame.update(self._frame_extra(day, now))
         self.last_stage2_frame = frame
         original = self.telemetry_events[-1]
         payload = dict(original.payload)
@@ -467,6 +491,11 @@ class Stage2Harness(MarketHarness):
 
 def create_market_harness(config: Stage1Config, telemetry_sink: TelemetrySink | None = None,
                           *, event_log: str | Path | None = None, code_revision: str = "working-tree") -> MarketHarness:
+    if hasattr(config, "stage3_enabled"):
+        from .stage3 import Stage3Harness
+        if config.stage3_enabled:
+            return Stage3Harness(config, telemetry_sink, event_log=event_log, code_revision=code_revision)
+        config = config.stage2_config()
     if isinstance(config, Stage2Config):
         if config.active:
             return Stage2Harness(config, telemetry_sink, event_log=event_log, code_revision=code_revision)

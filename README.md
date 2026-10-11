@@ -77,6 +77,7 @@ flowchart LR
 | 策略实验 | value / trend / noise，固定人口基线；Logit 学习作为单独场景 |
 | 机制验证 | 多种子消融、配对对照、预热期、检查点与冻结机制 |
 | Stage 2 | 信息图传播、投资者 Bandit、企业表格 Q-learning；合成五节点与 1000 人试跑 |
+| Stage 3 | 真实 SEC 8-K 快照、按会话截止时间进入的信息因子、归档重建、情景比较与 PNG/SVG 动画/数据导出；[验证与限制](reports/stage3_20261003/analysis.md) |
 | 观察界面 | 本地 Web / 桌面 live、replay、batch；独立的 GitHub 只读展厅 |
 
 当前不是多资产市场、逐笔连续限价订单簿或已校准的真实投资者社交网络；不提供真实交易、PPO、LLM Agent 或公网仿真服务。后续路线以[三阶段开发计划](docs/ABM三阶段开发计划_渐进式学习版.md)为准。

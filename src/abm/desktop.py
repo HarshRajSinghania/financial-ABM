@@ -544,15 +544,18 @@ def main(argv: Sequence[str] | None = None) -> int:
             raise FileExistsError(args.run_dir)
         config = load_simulation_config(args.config)
         revision = resolve_code_revision()
-        result = create_market_harness(
+        harness = create_market_harness(
             config, event_log=args.run_dir.parent / f".{args.run_dir.name}.events.jsonl",
             code_revision=revision,
-        ).run()
-        result.write(
-            args.run_dir,
-            config,
-            code_revision=revision,
         )
+        try:
+            result = harness.run()
+            result.write(args.run_dir, config, code_revision=revision)
+        except Exception as exc:
+            from .reproduction import record_run_failure
+
+            record_run_failure(harness, config, args.run_dir, exc)
+            raise
         print(json.dumps(result.summary(), ensure_ascii=False, sort_keys=True))
         return 0
     if args.mode == "replay":
