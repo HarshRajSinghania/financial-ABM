@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "purpose": "fixed_design_mathematical_diagnostic",
+  "action_fractions": [0.01, 0.02, 0.04, 0.08, 0.16, 0.32, 0.64, 1.0],
+  "max_change_per_period_sd": 0.25,
+  "decision_interval_days": 60,
+  "trading_days_per_year": 252,
+  "natural_decay_sd_per_year": 0.2,
+  "quadratic_cost_coefficient": 0.05,
+  "points_per_interval": 2001,
+  "report_capacity_counterexample": {
+    "report_capacity_sd": 0.03,
+    "real_value_per_sd": 0.006,
+    "displaced_real_value_per_sd": 0.0,
+    "subsidy_per_sd": 0.0
+  },
+  "selection_rule": "The supplied action grid is fixed; no candidate changes or parameter selection from diagnostic outcomes.",
+  "market_runs": 0
+}

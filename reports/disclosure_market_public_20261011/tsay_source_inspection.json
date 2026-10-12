@@ -1,0 +1,215 @@
+{
+  "checked_at_utc": "2026-10-11T07:55:17.542463+00:00",
+  "author_page": "https://faculty.chicagobooth.edu/ruey-s-tsay/research/analysis-of-financial-time-series-3rd-edition",
+  "publisher_excerpt": "https://catalogimages.wiley.com/images/db/pdf/9780470414354.excerpt.pdf",
+  "fetch_script_sha256": "c7b12f9ae1ba12395cf47011f8911f5d46b4c2ad1add992626854a53d7852d99",
+  "selection": "Exactly the five individual stocks in Tsay (2010) Chapter 1 Table 1.2, in table order; no outcome-based selection. Market-index columns are excluded from the individual-stock panel.",
+  "return_definition_evidence": "Publisher excerpt printed p.19, section 1.2.5 states CRSP returns used in this section include dividend payments. Table 1.2 printed p.11 and Example 1.2 explicitly identify the daily stock series and d-ibm3dx7008.txt; raw counts and numerical summaries checked below.",
+  "license": {
+    "public_author_download": true,
+    "account_required_for_these_urls": false,
+    "explicit_open_data_license_found": false,
+    "status": "Public author-published teaching data for local research inspection; no blanket right to redistribute or republish CRSP raw data established. University site and Wiley excerpt retain copyright; no license is inferred from anonymous HTTP access."
+  },
+  "files": [
+    {
+      "url": "https://faculty.chicagobooth.edu/-/media/faculty/ruey-s-tsay/teaching/fts3/d-ibm3dx7008.txt",
+      "final_url": "https://faculty.chicagobooth.edu/-/media/faculty/ruey-s-tsay/teaching/fts3/d-ibm3dx7008.txt",
+      "path": "data/raw/disclosure_market_public_20261011/d-ibm3dx7008.txt",
+      "sha256": "3c86fad53a40c0686c4d676687ec92d54b4917712bafbb13ca8af7626a861ced",
+      "bytes": 461042,
+      "content_type": "text/plain",
+      "fetched_this_invocation": true,
+      "retrieved_at_utc": "2026-10-11T07:55:23.812451+00:00",
+      "author_label": "IBM",
+      "raw_header": [
+        "Date",
+        "rtn",
+        "vwretd",
+        "ewretd",
+        "sprtrn"
+      ],
+      "selected_column": "rtn",
+      "observations": 9845,
+      "first_date": "1970-01-02",
+      "last_date": "2008-12-31",
+      "checks": {
+        "count_matches_publisher_table": true,
+        "dates_unique": true,
+        "dates_strictly_increasing": true,
+        "all_returns_finite": true,
+        "all_returns_at_least_minus_one": true
+      },
+      "mean_simple_return": 0.00040161259522600306,
+      "daily_volatility": 0.016925440841695717,
+      "excess_kurtosis": 9.918983830076398,
+      "minimum_return": -0.22963,
+      "maximum_return": 0.131636,
+      "zero_return_observations": 284,
+      "missing_rows_imputed": 0,
+      "units": "Decimal simple daily total returns, already including dividends per cited chapter; do not multiply by .01 or add dividends again."
+    },
+    {
+      "url": "https://faculty.chicagobooth.edu/-/media/faculty/ruey-s-tsay/teaching/fts3/d-intc7208.txt",
+      "final_url": "https://faculty.chicagobooth.edu/-/media/faculty/ruey-s-tsay/teaching/fts3/d-intc7208.txt",
+      "path": "data/raw/disclosure_market_public_20261011/d-intc7208.txt",
+      "sha256": "8056237f2f1f516ef68112848c2fcae28cc1c503daa90d17a92dce82a902b977",
+      "bytes": 218319,
+      "content_type": "text/plain",
+      "fetched_this_invocation": true,
+      "retrieved_at_utc": "2026-10-11T07:55:27.103011+00:00",
+      "author_label": "Intel",
+      "raw_header": [
+        "date",
+        "rtn"
+      ],
+      "selected_column": "rtn",
+      "observations": 9096,
+      "first_date": "1972-12-15",
+      "last_date": "2008-12-31",
+      "checks": {
+        "count_matches_publisher_table": true,
+        "dates_unique": true,
+        "dates_strictly_increasing": true,
+        "all_returns_finite": true,
+        "all_returns_at_least_minus_one": true
+      },
+      "mean_simple_return": 0.0010771137862796835,
+      "daily_volatility": 0.028911958936731246,
+      "excess_kurtosis": 6.130262576121348,
+      "minimum_return": -0.29572,
+      "maximum_return": 0.26378,
+      "zero_return_observations": 643,
+      "missing_rows_imputed": 0,
+      "units": "Decimal simple daily total returns, already including dividends per cited chapter; do not multiply by .01 or add dividends again."
+    },
+    {
+      "url": "https://faculty.chicagobooth.edu/-/media/faculty/ruey-s-tsay/teaching/fts3/d-3m7008.txt",
+      "final_url": "https://faculty.chicagobooth.edu/-/media/faculty/ruey-s-tsay/teaching/fts3/d-3m7008.txt",
+      "path": "data/raw/disclosure_market_public_20261011/d-3m7008.txt",
+      "sha256": "9a2c264e4f89d90da03cee02bb4a75064361a9591236ad4289b45d41ade727ce",
+      "bytes": 236299,
+      "content_type": "text/plain",
+      "fetched_this_invocation": true,
+      "retrieved_at_utc": "2026-10-11T07:55:30.756583+00:00",
+      "author_label": "3M",
+      "raw_header": [
+        "date",
+        "rtn"
+      ],
+      "selected_column": "rtn",
+      "observations": 9845,
+      "first_date": "1970-01-02",
+      "last_date": "2008-12-31",
+      "checks": {
+        "count_matches_publisher_table": true,
+        "dates_unique": true,
+        "dates_strictly_increasing": true,
+        "all_returns_finite": true,
+        "all_returns_at_least_minus_one": true
+      },
+      "mean_simple_return": 0.0004486490604367699,
+      "daily_volatility": 0.014818597399144979,
+      "excess_kurtosis": 13.344176510902056,
+      "minimum_return": -0.259786,
+      "maximum_return": 0.115385,
+      "zero_return_observations": 505,
+      "missing_rows_imputed": 0,
+      "units": "Decimal simple daily total returns, already including dividends per cited chapter; do not multiply by .01 or add dividends again."
+    },
+    {
+      "url": "https://faculty.chicagobooth.edu/-/media/faculty/ruey-s-tsay/teaching/fts3/d-msft8608.txt",
+      "final_url": "https://faculty.chicagobooth.edu/-/media/faculty/ruey-s-tsay/teaching/fts3/d-msft8608.txt",
+      "path": "data/raw/disclosure_market_public_20261011/d-msft8608.txt",
+      "sha256": "07436b60642d87a49682b9a96a900f8280b2aa1750b9763f5dc7dfbb32084dc3",
+      "bytes": 138067,
+      "content_type": "text/plain",
+      "fetched_this_invocation": true,
+      "retrieved_at_utc": "2026-10-11T07:55:33.203885+00:00",
+      "author_label": "Microsoft",
+      "raw_header": [
+        "date",
+        "rtn"
+      ],
+      "selected_column": "rtn",
+      "observations": 5752,
+      "first_date": "1986-03-14",
+      "last_date": "2008-12-31",
+      "checks": {
+        "count_matches_publisher_table": true,
+        "dates_unique": true,
+        "dates_strictly_increasing": true,
+        "all_returns_finite": true,
+        "all_returns_at_least_minus_one": true
+      },
+      "mean_simple_return": 0.001231768776077886,
+      "daily_volatility": 0.023594430939897274,
+      "excess_kurtosis": 9.923291074699154,
+      "minimum_return": -0.301158,
+      "maximum_return": 0.195652,
+      "zero_return_observations": 179,
+      "missing_rows_imputed": 0,
+      "units": "Decimal simple daily total returns, already including dividends per cited chapter; do not multiply by .01 or add dividends again."
+    },
+    {
+      "url": "https://faculty.chicagobooth.edu/-/media/faculty/ruey-s-tsay/teaching/fts3/d-c8608.txt",
+      "final_url": "https://faculty.chicagobooth.edu/-/media/faculty/ruey-s-tsay/teaching/fts3/d-c8608.txt",
+      "path": "data/raw/disclosure_market_public_20261011/d-c8608.txt",
+      "sha256": "207428f07f6a4a501611feef970ad296373ec9d5d17ff46f04c07fae7a87179b",
+      "bytes": 134228,
+      "content_type": "text/plain",
+      "fetched_this_invocation": true,
+      "retrieved_at_utc": "2026-10-11T07:55:36.167427+00:00",
+      "author_label": "Citigroup",
+      "raw_header": [
+        "date",
+        "rtn"
+      ],
+      "selected_column": "rtn",
+      "observations": 5592,
+      "first_date": "1986-10-30",
+      "last_date": "2008-12-31",
+      "checks": {
+        "count_matches_publisher_table": true,
+        "dates_unique": true,
+        "dates_strictly_increasing": true,
+        "all_returns_finite": true,
+        "all_returns_at_least_minus_one": true
+      },
+      "mean_simple_return": 0.0006662106580829758,
+      "daily_volatility": 0.026021730329551834,
+      "excess_kurtosis": 55.26728256018413,
+      "minimum_return": -0.264062,
+      "maximum_return": 0.578249,
+      "zero_return_observations": 280,
+      "missing_rows_imputed": 0,
+      "units": "Decimal simple daily total returns, already including dividends per cited chapter; do not multiply by .01 or add dividends again."
+    }
+  ],
+  "status": "completed_source_inspection",
+  "publisher_evidence_file": {
+    "url": "https://catalogimages.wiley.com/images/db/pdf/9780470414354.excerpt.pdf",
+    "final_url": "https://catalogimages.wiley.com/images/db/pdf/9780470414354.excerpt.pdf",
+    "path": "data/raw/disclosure_market_public_20261011/tsay_2010_publisher_chapter1_excerpt.pdf",
+    "sha256": "ef66606d78311d36d5539275b1d78214299c6c1953df93773ee33d6596ff2600",
+    "bytes": 660270,
+    "content_type": "application/pdf",
+    "fetched_this_invocation": true,
+    "retrieved_at_utc": "2026-10-11T07:55:39.434896+00:00"
+  },
+  "company_count": 5,
+  "company_day_rows": 40130,
+  "transformed_panel": {
+    "path": "data/processed/disclosure_market_public_20261011/tsay_five_company_daily_returns.csv",
+    "sha256": "01482fe9c5e7201f145e14ef7091253f4d0c120429dd102465c68287c6286b61",
+    "processing": "Keep original second-column decimal return strings and observed dates; discard index columns; no interpolation, winsorization, split adjustment, duplicate removal or dividend addition."
+  },
+  "identity_limits": "Author company labels are not verified permanent security identifiers; corporate histories and delisting-return coverage are not separately documented.",
+  "sampling_limits": [
+    "Author-selected five teaching examples, not random or a representative firm panel. Large and long-lived listed firms are overrepresented; sector, size and survivorship selection cannot be estimated from five series.",
+    "Different start dates, all ending 2008-12-31, unlike the 2000-2025 French training target. Calendar overlap is not a new held-out target.",
+    "No population snapshot, firm-entry/exit coverage, underlying quotes/dividends, permanent IDs or independent audit of adjustments. Provider return convention accepted from primary-source chapter, not reconstructed.",
+    "Series and descriptive statistics are now inspected development data. They must never later be described as unseen evaluation data."
+  ],
+  "empirical_calibration": "pending_not_attempted"
+}

@@ -1,0 +1,16 @@
+screen 16/128 best J=204.12
+screen 32/128 best J=85.17
+screen 48/128 best J=85.17
+screen 64/128 best J=85.17
+screen 80/128 best J=85.17
+screen 96/128 best J=85.17
+screen 112/128 best J=85.17
+screen 128/128 best J=85.17
+refine 1/2 J=32.12
+refine 2/2 J=41.87
+minutes 14.7
+best theta {'noise_flow_scale': np.float64(0.002), 'noise_common_correlation': np.float64(0.7991), 'liquidity_volatility_sensitivity': np.float64(3.0302), 'fundamental_volatility': np.float64(0.159), 'transient_impact_decay': np.float64(0.9737), 'permanent_impact_fraction': np.float64(0.4861), 'noise_volatility_exponent': np.float64(1.7697)}
+calibration-seed J 32.12 t [ 0.16 -0.68 -5.43  1.14 -0.31 -0.04 -0.8  -0.29 -0.13]
+fresh-seed J 41.19 t [-0.21 -0.97 -6.13  0.79 -1.12 -0.71 -0.11 -0.49  0.19]
+sim {'daily_volatility': np.float64(0.0164), 'excess_kurtosis': np.float64(5.7247), 'return_acf_1': np.float64(-0.1758), 'abs_return_acf_1': np.float64(0.2927), 'abs_return_acf_5': np.float64(0.2358), 'abs_return_acf_20': np.float64(0.187), 'quantile_01': np.float64(-0.0456), 'quantile_99': np.float64(0.0434), 'hill_tail_index': np.float64(3.291)}
+target {'daily_volatility': np.float64(0.0165), 'excess_kurtosis': np.float64(8.7065), 'return_acf_1': np.float64(-0.0275), 'abs_return_acf_1': np.float64(0.2622), 'abs_return_acf_5': np.float64(0.2736), 'abs_return_acf_20': np.float64(0.2003), 'quantile_01': np.float64(-0.0452), 'quantile_99': np.float64(0.0449), 'hill_tail_index': np.float64(3.2224)}

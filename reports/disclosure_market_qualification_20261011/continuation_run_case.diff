@@ -1,0 +1,23 @@
+diff --git "a/C:\\Users\\kanzaler\\Desktop\\ABM\\reports\\disclosure_market_qualification_20261011\\.old_run_case.txt" "b/C:\\Users\\kanzaler\\Desktop\\ABM\\reports\\disclosure_market_qualification_20261011\\.new_run_case.txt"
+index 909498c..3b8dc84 100644
+--- "a/C:\\Users\\kanzaler\\Desktop\\ABM\\reports\\disclosure_market_qualification_20261011\\.old_run_case.txt"
++++ "b/C:\\Users\\kanzaler\\Desktop\\ABM\\reports\\disclosure_market_qualification_20261011\\.new_run_case.txt"
+@@ -32,6 +32,9 @@ def run_case(case, contract):
+         record["market_run_wall_seconds_including_telemetry"] = time.perf_counter() - run_started
+         statistics_started = time.perf_counter()
+         validation = validate_market(result, market.config)
++        initial_share_error = float(np.max(np.abs(recorder.data["share_error"][0])))
++        validation["mechanical"]["checks"]["initial_share_conservation"] = bool(np.isfinite(initial_share_error) and initial_share_error <= base.harness.CONSERVATION_TOLERANCE)
++        validation["mechanical"]["status"] = "PASS" if all(validation["mechanical"]["checks"].values()) else "FAIL"
+         moments["price"] = np.array([[row["moments"][name] for name in MOMENT_NAMES] for row in validation["moments_per_asset"]], dtype=float)
+         price_returns = np.expm1(np.diff(np.log(result.prices), axis=0))
+         total_returns = price_returns + market.config.cash_flow_yield * result.intrinsic_values[1:] / TRADING_DAYS_PER_YEAR / result.prices[:-1]
+@@ -43,7 +46,7 @@ def run_case(case, contract):
+                     pass
+         require(np.array_equal(recorder.data["cap"].sum(axis=1), result.price_cap_hits), "Daily cap counts differ")
+         require(np.all(recorder.data["step_completed"][1:]), "Completed world has incomplete telemetry")
+-        require(np.allclose(np.abs(recorder.data["share_error"]).max(axis=1), result.maximum_share_error, rtol=0, atol=1e-15), "Per-asset share record differs")
++        require(np.allclose(np.abs(recorder.data["share_error"][1:]).max(axis=1), result.maximum_share_error[1:], rtol=0, atol=1e-15), "Per-asset share record differs")
+         require(np.allclose(np.diff(np.log(result.prices), axis=0), recorder.data["log_moves"][1:], rtol=0, atol=2e-12), "Price/move paths differ")
+         record.update(status="completed", validation=validation, result_fingerprint=result.fingerprint(),
+                       intrinsic_value_path_sha256=array_sha(result.intrinsic_values),

@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-10-12T10:54:27.342104+00:00",
+  "status": "prepared_not_executed",
+  "market_initializations": 0,
+  "market_runs": 0,
+  "files": {
+    "freeze.json": "1aa742c4b46f66b2d4895b4d201e126d4c473ba2065addafdb42f798abeb70ae",
+    "run_frozen.py": "70636beaaec0ad7af1d320fe687ec47d56e7b41f5f98a4183e42ffad19f46293"
+  },
+  "draft_predecessors": {
+    "freeze.json": "70708211bac26973b39a5ed3dc632f6965c57f438837cd4c2d9e63b978e46864",
+    "run_frozen.py": "662bab4725c4cf9820053bbf5a4fca9006ef83063f9059ecfe5b01acfb722a60"
+  },
+  "review_changes": [
+    "freeze.json: filled the 60 cases in parent order with original JSON/NPZ paths and hashes (cross-checked against audit_validation.json input_hashes), original status, original mechanical status and audited mechanical status; no other field changed (file re-serialized with indent=2).",
+    "run_frozen.py: holder-total moment recomputation now mirrors the original guard (all-finite check and ValueError -> NaN) so bitwise comparison is not falsely failed; added parent verify_sources() per world to confirm abm imports resolve to the hash-bound isolated sources; carried audited_mechanical_status into per-world rows/summary.",
+    "Reviewed source order: archived market.py computes (1-rho)*flow_impact/depth_fraction left to right, i.e. ((1-rho)*u)/d, identical to the offline recursion; no change needed."
+  ]
+}

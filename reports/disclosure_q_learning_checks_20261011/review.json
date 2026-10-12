@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-11",
+  "review_type": "read_only_implementation_contract",
+  "conclusion": "no_unresolved_blocking_code_defect_found",
+  "research_acceptance": "not_established",
+  "market_initializations": 0,
+  "market_runs": 0,
+  "independent_check_count": 4,
+  "independent_check_status": "PASS",
+  "source_evidence": {
+    "path": "checks.json",
+    "sha256": "00cc0ea95585760a04358a7a89a131e100ac135d84fa5676aae8e3947b3712c2",
+    "source_unchanged_during_checks": true,
+    "source_matches_at_report": true
+  },
+  "reviewed_paths": [
+    "docs/disclosure_q_learning_design.md",
+    "src/abm/disclosure/game.py",
+    "src/abm/disclosure/config.py",
+    "src/abm/disclosure/learning.py",
+    "src/abm/disclosure/runner.py",
+    "src/abm/disclosure/training.py"
+  ],
+  "resolved_items": [
+    {
+      "path": "src/abm/disclosure/runner.py",
+      "line": 244,
+      "issue": "checkpoint secondary exception could prevent original failure from being archived",
+      "verification": "current exception branch independently inspected; owner failure-injection test not rerun"
+    },
+    {
+      "path": "src/abm/disclosure/training.py",
+      "line": 114,
+      "issue": "aggregate validation omitted return_acf and cross_asset_correlation status",
+      "verification": "both gates retained in current source"
+    }
+  ],
+  "scope_limits": [
+    {
+      "name": "aggregate_event_provenance",
+      "basis": "game.py:489-556 and runner.py:121-160",
+      "meaning": "(run,period,firm,reason) indexes totals; audit fine belongs to current audit of aggregate stock, not a uniquely identified wash project"
+    },
+    {
+      "name": "scenario_conditioned_training",
+      "basis": "game.py:593-612 and training.py:163-174",
+      "meaning": "policy-specific pretrained Q values may anticipate policy through bootstrap; pre-policy paths need not match across scenario-specific tables"
+    },
+    {
+      "name": "action_amplitude_feasibility",
+      "basis": "learning.py:21,56; game.py:109; frozen smoke domain/config",
+      "candidate_fraction": 0.01,
+      "cap_sd": 0.25,
+      "decision_days": 60,
+      "maximum_improvement_sd_per_decision": 0.0025,
+      "maximum_long_run_improvement_sd_per_year": 0.0105,
+      "natural_decay_sd_per_year": 0.2,
+      "maximum_share_of_natural_decay_offset": 0.0525,
+      "interior_net_change_upper_bound_sd_per_year": -0.1895,
+      "exceptions": [
+        "lower-bound decay truncation",
+        "finite-window timing and implementation delay"
+      ],
+      "implication": "compare algorithms under the common discrete feasible set; cannot infer learning effect from differences against continuous NPV or test reversal of interior decay with this amplitude",
+      "next_step": "justify a substantively feasible common amplitude or multi-amplitude action contract before freezing a new development budget; do not tune for the desired sign"
+    }
+  ],
+  "smoke_archive_observation": {
+    "path": "reports/disclosure_q_learning_smoke_20261011_v1/summary.json",
+    "sha256": "19327efa59c79b1f563ae0a5ee205bcbda09d126f65d25b0475c49ba09db2413",
+    "status": "complete",
+    "records": 8,
+    "m4_status": "pending",
+    "claim_support": "pending",
+    "gates": {
+      "mechanical": "PASS",
+      "stylized": "PASS",
+      "return_acf": "pending",
+      "cross_asset_correlation": "pending",
+      "empirical_calibration": "pending",
+      "coverage": "FAIL"
+    },
+    "verification_scope": "summary read only; no trajectory, table or cash ledger re-audit"
+  },
+  "owner_reported_checks_not_independently_rerun": {
+    "suite_passed": 628,
+    "old_npv_1800_day_bitwise_paths": 3
+  },
+  "unverified_research_items": [
+    "sufficient-budget convergence",
+    "actual frozen-validation coverage",
+    "formal-scale training and transfer",
+    "all policy scenarios",
+    "rare tail liabilities",
+    "full Markov state or equilibrium optimality"
+  ]
+}

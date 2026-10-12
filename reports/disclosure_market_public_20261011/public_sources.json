@@ -1,0 +1,109 @@
+{
+  "checked_on": "2026-10-11",
+  "purpose": "Public availability and observation-unit inspection, no empirical calibration",
+  "decision": "Implement a frozen anonymous synthetic-basket operator for the already-used French training summary; separately preserve five university-author-published individual daily total-return examples for development inspection. Neither route establishes representative firm-level empirical calibration.",
+  "sources": [
+    {
+      "name": "Kenneth French 49 Industry Portfolios",
+      "urls": [
+        "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/Data_Library/det_49_ind_port.html",
+        "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html"
+      ],
+      "verified": "NYSE/AMEX/NASDAQ stocks assigned annually to industries using four-digit SIC. Existing cached target is 29 training industry value-weighted daily-return series, not individual companies.",
+      "local_use": "Read only reports/msm_v1_20261011/target_train.json. No raw French download, validation target or sealed test accessed by this task.",
+      "license": "Public download; site retains copyright. A blanket open-data or underlying CRSP redistribution license was not established.",
+      "limitations": "Synthetic baskets have only 6-7 companies and no sector structure, SIC assignment, real sector membership sizes or annual reconstitution. Aggregation does not make them real industries. Original target already used to fit defaults. French source histories can be revised; cached target hash is authoritative for this diagnostic.",
+      "status": "existing_training_summary_only"
+    },
+    {
+      "name": "Ruey S. Tsay official university book companion data",
+      "urls": [
+        "https://faculty.chicagobooth.edu/ruey-s-tsay/research/analysis-of-financial-time-series-3rd-edition",
+        "https://catalogimages.wiley.com/images/db/pdf/9780470414354.excerpt.pdf"
+      ],
+      "verified": "Five individual daily simple-return examples in Table 1.2: IBM, Intel, 3M, Microsoft, Citigroup. Publisher excerpt section 1.2.5 states the CRSP returns include dividends. Table counts and IBM numerical summaries match downloaded data.",
+      "local_use": "Five original text files and publisher excerpt in data/raw/disclosure_market_public_20261011; exact dates/returns extracted to a five-company panel in the matching processed directory. No parameter fit or simulation against this panel.",
+      "manifest": "data/raw/disclosure_market_public_20261011/tsay_download_manifest.json",
+      "license": "Confirmed anonymous public author download. No explicit open data redistribution license found. Local research snapshot is not a claim of permission to republish original CRSP data or the copyrighted chapter.",
+      "limitations": "Author-selected teaching examples, long-lived large firms overrepresented, only five companies and history ending 2008. No permanent IDs, comprehensive entry/exit/delisting coverage or original price/dividend reconstruction. Descriptive data now inspected and cannot later be called untouched evaluation data.",
+      "status": "downloaded_and_inspected_limited_company_total_return_sample"
+    },
+    {
+      "name": "SEC MIDAS individual-security metrics",
+      "urls": [
+        "https://www.sec.gov/featured-topics/market-structure-analytics/market-activity-report-methodology",
+        "https://catalog.data.gov/dataset/metrics-by-individual-security"
+      ],
+      "verified": "Official methodology includes a CRSP closing-price variable as well as trading metrics and describes ticker/day/exchange download records. This is not evidence that SEC has no daily price data.",
+      "local_use": "Methodology/catalog inspection only; no bulk security files downloaded.",
+      "license": "Government-hosted publication; rights and adjustments of any embedded third-party CRSP price variables not established by this inspection.",
+      "limitations": "Actual bulk fields, split adjustment, cash dividends, delisting-return treatment and construction of company total returns remain unverified.",
+      "status": "potential_price_source_total_return_pending"
+    },
+    {
+      "name": "Nasdaq historical quotes",
+      "urls": [
+        "https://www.nasdaq.com/market-activity/quotes/historical"
+      ],
+      "verified": "Public historical quote page offers daily price/volume histories for individual securities.",
+      "local_use": "Availability inspection only; no equity quote panel fetched.",
+      "license": "No blanket open-data redistribution permission established.",
+      "limitations": "Full historical universe, dividend/split adjustments, delisted firms and automated bulk retrieval not verified. Selecting today's popular tickers would introduce convenience and survivorship bias.",
+      "status": "not_adopted_as_total_return_panel"
+    },
+    {
+      "name": "Nasdaq Data Link SHARADAR SEP",
+      "urls": [
+        "https://data.nasdaq.com/databases/SEP/documentation?anchor=sample-data",
+        "https://data.nasdaq.com/terms"
+      ],
+      "verified": "Commercial equity-price database with a restricted free sample; full histories are a premium product.",
+      "local_use": "Documentation/terms inspection only; no account created, credential used or data downloaded.",
+      "license": "Product and third-party terms apply; not treated as unrestricted open data.",
+      "limitations": "A short selected free sample does not provide a representative no-account historical total-return universe.",
+      "status": "not_adopted"
+    },
+    {
+      "name": "FINC585 university course repository",
+      "urls": [
+        "https://github.com/joseparreiras/finc585"
+      ],
+      "verified": "Despite the CRSP Daily Stock Data heading, the README identifies crsp_q_stock.dsi with date, vwretd and ewretd. These are market indexes, not individual stock returns.",
+      "local_use": "Repository README inspected, no dataset downloaded.",
+      "license": "No applicable raw-data license established; not needed after the unit mismatch was identified.",
+      "limitations": "Does not solve company-level observation-unit matching.",
+      "status": "rejected_wrong_observation_unit"
+    },
+    {
+      "name": "Jensen, Kelly and Pedersen Global Factor Data",
+      "urls": [
+        "https://jkpfactors.com/data",
+        "https://jkpfactors.com/ctf/dataset-access",
+        "https://jkpfactors.com/release-notes"
+      ],
+      "verified": "Authors document individual daily stock-return outputs. The public CTF access guide requires a WRDS account with CRSP daily/monthly stock and Compustat permissions. Public factor downloads have a different observation unit.",
+      "local_use": "Author documentation inspection only; no credentials or proprietary retrieval.",
+      "license": "Website states code MIT and distributed data CC BY-NC 4.0. This does not remove the documented WRDS and underlying database access requirements for stock-level series.",
+      "limitations": "Not verified as a full no-account public daily company-return panel.",
+      "status": "stock_level_access_requires_account"
+    },
+    {
+      "name": "Xiong, Zhang and Chen hog-firm event-study replication package",
+      "urls": [
+        "https://data.mendeley.com/datasets/tn56tsgpnh/3",
+        "https://doi.org/10.17632/tn56tsgpnh.3"
+      ],
+      "verified": "Author dataset description identifies 25 selected listed hog firms from China and eight exporting countries, with Yahoo daily stock-price data and an event-study design.",
+      "local_use": "Public landing page inspected. Anonymous public file-list endpoint returned HTTP 403; no package data downloaded and no attempt to bypass access restrictions.",
+      "license": "Version-2 public landing page states CC BY 4.0. Exact version-3 file license and third-party price adjustment/rights still require inspection.",
+      "limitations": "Strong sector/event/country selection, short episode; file columns, adjusted-close or dividend-inclusive definition not verified. No fabricated file or missing return substituted.",
+      "status": "replication_lead_not_yet_usable"
+    }
+  ],
+  "no_account_actions": true,
+  "market_attempts": 1,
+  "formal_seeds_used": false,
+  "sealed_empirical_test_used": false,
+  "source_code_or_defaults_changed": false,
+  "empirical_calibration": "pending"
+}

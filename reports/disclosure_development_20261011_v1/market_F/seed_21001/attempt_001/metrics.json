@@ -1,0 +1,126 @@
+{
+  "window": {
+    "start_day": 600,
+    "end_day": 1800,
+    "elapsed_days": 1200,
+    "state_observations": 1201,
+    "decision_observations": 20,
+    "decision_days": [
+      660,
+      720,
+      780,
+      840,
+      900,
+      960,
+      1020,
+      1080,
+      1140,
+      1200,
+      1260,
+      1320,
+      1380,
+      1440,
+      1500,
+      1560,
+      1620,
+      1680,
+      1740,
+      1800
+    ],
+    "cost_basis": "Commitments in (start_day, end_day] at decision-day prices; applied the following day.",
+    "interpretation": "Descriptive changes include delayed pre-window actions, not causal returns on in-window decisions."
+  },
+  "true_change": {
+    "equal_weight_sd": 0.3236295902868718,
+    "equal_weight_raw": 4.854443854303077,
+    "fixed_start_cap_weight_sd": 0.4462303061869991,
+    "fixed_start_cap_weight_raw": 6.693454592804987,
+    "end_cap_weight_sd": 0.4545912792052691,
+    "end_cap_weight_raw": 6.818869188079036
+  },
+  "full_period_change": {
+    "equal_weight_sd": 0.7356512988847022,
+    "equal_weight_raw": 11.034769483270532
+  },
+  "terminal_year": {
+    "start_day": 1549,
+    "observations": 252,
+    "complete_year": true,
+    "change_from_initial_sd": 0.7108203929218941,
+    "inflation_mean_sd": 0.08255680132267086
+  },
+  "decay_adjusted_gain": {
+    "equal_weight_sd": 1.276010542667824,
+    "equal_weight_raw": 19.140158140017366,
+    "fixed_start_cap_weight_sd": 1.398611258567951,
+    "fixed_start_cap_weight_raw": 20.979168878519268,
+    "end_cap_weight_sd": 1.4069722315862214,
+    "end_cap_weight_raw": 21.104583473793326
+  },
+  "size": {
+    "large": {
+      "count": 3,
+      "change_sd": 0.557194760491965,
+      "change_raw": 8.357921407379475,
+      "decay_adjusted_gain_sd": 1.5095757128729173
+    },
+    "mid": {
+      "count": 9,
+      "change_sd": 0.41486170186895766,
+      "change_raw": 6.222925528034365,
+      "decay_adjusted_gain_sd": 1.3672426542499099
+    },
+    "small": {
+      "count": 18,
+      "change_sd": 0.23908600612831332,
+      "change_raw": 3.5862900919247,
+      "decay_adjusted_gain_sd": 1.1914669585092657
+    },
+    "large_minus_small_sd": 0.3181087543636517,
+    "large_minus_small_raw": 4.771631315454775
+  },
+  "inflation": {
+    "initial_mean_sd": 0.06589013465600421,
+    "final_mean_sd": 0.08255680132267088,
+    "mean_sd": 0.08935669030407527,
+    "mean_absolute_raw_gap": 1.3403503545611288,
+    "final_absolute_raw_gap": 1.2383520198400622,
+    "mean_range_fraction": 0.013403503545611288
+  },
+  "impact": {
+    "initial_share": 0.36,
+    "final_share": 0.36,
+    "initial_wealth_share": 0.296710058262813,
+    "final_wealth_share": 0.2981388776632292
+  },
+  "pricing_slope": {
+    "mean": 0.0023156890428591556,
+    "observations": 20
+  },
+  "costs": {
+    "initial_market_cap": 30.00000000000001,
+    "resource_cost": 0.20735866179955698,
+    "real_improvement_cost": 0.20735866179955698,
+    "washing_cost": 0.0,
+    "fine_transfer": 0.08367631681784442,
+    "subsidy_transfer": 0.0,
+    "private_net_outflow": 0.2910349786174014,
+    "resource_cost_fraction_initial_cap": 0.0069119553933185635,
+    "private_net_outflow_fraction_initial_cap": 0.009701165953913377,
+    "fine_transfer_fraction_initial_cap": 0.002789210560594813,
+    "subsidy_transfer_fraction_initial_cap": 0.0,
+    "carry_in_resource_cost": 0.018093784862226566,
+    "unapplied_final_day_resource_cost": 0.008487411552435748
+  },
+  "efficiency": {
+    "decay_adjusted_sd_per_resource_cost": 184.60919812955945,
+    "beneficial_raw_gain_per_resource_cost": 2769.1379719433917,
+    "undefined_reason": null
+  },
+  "diagnostics": {
+    "status": "ok",
+    "missing_size_classes": [],
+    "pricing_slope_missing_observations": 0,
+    "finite_metrics": true
+  }
+}

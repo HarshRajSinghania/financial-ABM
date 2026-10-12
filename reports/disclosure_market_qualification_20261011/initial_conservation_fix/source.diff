@@ -1,0 +1,24 @@
+--- before/src/abm/disclosure/harness.py
++++ after/src/abm/disclosure/harness.py
+@@ -120,6 +120,7 @@
+         self.total_cash = np.empty(days + 1)
+         self.maximum_share_error = np.zeros(days + 1)
+         self._record(0)
++        self._check_conservation(0)
+         self.next_day_index = 0
+ 
+     def _total_cash(self) -> float:
+--- before/tests/test_disclosure_market.py
++++ after/tests/test_disclosure_market.py
+@@ -40,7 +40,11 @@
+ 
+ def test_shares_and_cash_are_conserved_with_dividends():
+     market = CrossSectionMarket(SMALL_MARKET)
++    initial_shares = market.investors.holdings.sum(axis=0) + market.noise_holdings + market.market_maker_inventory
++    initial_share_error = float(np.max(np.abs(initial_shares - 1.0)))
++    assert market.maximum_share_error[0] == initial_share_error
+     result = market.run()
++    assert result.maximum_share_error[0] == initial_share_error
+     assert result.maximum_share_error.max() < 1e-10
+     expected = market.initial_total_cash + market.dividends_paid
+     assert result.total_cash[-1] == pytest.approx(expected, rel=1e-10)

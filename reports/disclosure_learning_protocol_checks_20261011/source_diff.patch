@@ -1,0 +1,570 @@
+--- archived/abm/disclosure/game.py
++++ current/abm/disclosure/game.py
+@@ -240,6 +240,8 @@
+     learning_transition: NDArray[np.bool_] | None = None
+     unvisited_state: NDArray[np.bool_] | None = None
+     learning_choices: IntArray | None = None
++    coverage_forced: NDArray[np.bool_] | None = None
++    learning_update: NDArray[np.bool_] | None = None
+ 
+     def fingerprint(self) -> str:
+         digest = hashlib.sha256(self.market.fingerprint().encode("ascii"))
+@@ -253,7 +255,7 @@
+             self.applied_resource_cost, self.applied_fine, self.applied_subsidy,
+             self.learning_states, self.learning_groups, self.valid_actions,
+             self.learning_rewards, self.learning_transition, self.unvisited_state,
+-            self.learning_choices,
++            self.learning_choices, self.coverage_forced, self.learning_update,
+         ):
+             if array is None:
+                 continue
+@@ -266,11 +268,20 @@
+ class DisclosureMarket(CrossSectionMarket):
+     def __init__(
+         self, config: MarketConfig, domain: DomainSpec, policy: PolicySchedule | None = None,
+-        *, learner: CompanyQLearner | None = None, training: bool = False,
++        *, learner: CompanyQLearner | None = None, training: bool = False, coverage_target: int = 0,
++        common_prepolicy_sha256: str | None = None,
+     ):
+         policy = policy or PolicySchedule.constant(domain)
+         if type(training) is not bool:
+             raise ValueError("training must be boolean")
++        if type(coverage_target) is not int or coverage_target < 0:
++            raise ValueError("coverage_target must be a nonnegative integer")
++        if common_prepolicy_sha256 is not None:
++            if (not isinstance(common_prepolicy_sha256, str) or len(common_prepolicy_sha256) != 64
++                    or any(char not in "0123456789abcdef" for char in common_prepolicy_sha256)):
++                raise ValueError("common_prepolicy_sha256 must be a SHA256 digest")
++            if policy.intervention is None or not 0 < policy.start_day <= config.trading_days:
++                raise ValueError("common pre-policy deployment requires an explicit policy switch")
+         if config.firm_policy == "q_learning":
+             if not isinstance(learner, CompanyQLearner):
+                 raise ValueError("q_learning requires an explicit CompanyQLearner")
+@@ -286,13 +297,15 @@
+                 raise ValueError("training requires a writable learner")
+             if not training and (learner.epsilon != 0 or learner.values.flags.writeable or learner.counts.flags.writeable):
+                 raise ValueError("evaluation requires readonly values/counts and epsilon zero")
+-        elif learner is not None or training:
++        elif learner is not None or training or coverage_target or common_prepolicy_sha256 is not None:
+             raise ValueError("learner and training are only valid for q_learning")
+         super().__init__(config)
+         self.domain = domain
+         self.policy = policy
+         self.learner = learner
+         self.training = training
++        self.coverage_target = coverage_target
++        self.common_prepolicy_sha256 = common_prepolicy_sha256
+         identity = {
+             "config": config.to_dict(), "domain": domain.to_dict(), "policy": asdict(self.policy),
+         }
+@@ -300,6 +313,11 @@
+             identity["learning"] = {"training": training, "table_fingerprint": table_fingerprint(learner),
+                                     "epsilon": learner.epsilon, "learning_rate": learner.learning_rate,
+                                     "discount": learner.discount}
++            if coverage_target:
++                identity["learning"]["coverage_target"] = coverage_target
++            if common_prepolicy_sha256 is not None:
++                identity["learning"]["common_prepolicy_sha256"] = common_prepolicy_sha256
++                identity["learning"]["prepolicy_protocol"] = "frozen_baseline_greedy_prefix_post_zero_v1"
+         self.run_id = hashlib.sha256(canonical_json_bytes(identity)).hexdigest()
+         attribute_seed, audit_seed, learning_seed, signal_seed, firm_seed = np.random.SeedSequence([config.seed, 1]).spawn(5)
+         self.attribute_rng = np.random.default_rng(attribute_seed)
+@@ -356,6 +374,8 @@
+         self.learning_transition_history = None
+         self.unvisited_state_history = None
+         self.choice_history = None
++        self.coverage_forced_history = None
++        self.learning_update_history = None
+         if config.firm_policy != "npv":
+             self.pending_resource_cost = np.zeros(firms)
+             self.pending_fine = np.zeros(firms)
+@@ -371,6 +391,10 @@
+             self.learning_transition_history = np.zeros((decisions, firms), dtype=bool)
+             if learner is not None:
+                 self.unvisited_state_history = np.zeros((decisions, firms), dtype=bool)
++                if training and coverage_target:
++                    self.coverage_forced_history = np.zeros((decisions, firms), dtype=bool)
++                if common_prepolicy_sha256 is not None:
++                    self.learning_update_history = np.zeros((decisions, firms), dtype=bool)
+         self.signal_day = -1
+         self._prepare_signals(0)
+         self._record_attributes(0)
+@@ -622,19 +646,33 @@
+             self.learning_reward_history[period] = rewards
+             self.learning_transition_history[period] = True
+             if self.training:
+-                batch_update(
+-                    self.learner, np.arange(cfg.n_firms), self.learning_group_history[period - 1],
+-                    self.learning_state_history[period - 1], self.choice_history[period - 1], rewards,
+-                    groups, states, candidates.valid_actions, elapsed_days=cfg.firm_decision_interval,
+-                    annual_discount_rate=cfg.firm_discount_rate, terminated=np.zeros(cfg.n_firms, dtype=bool),
+-                )
++                if self.common_prepolicy_sha256 is None:
++                    batch_update(
++                        self.learner, np.arange(cfg.n_firms), self.learning_group_history[period - 1],
++                        self.learning_state_history[period - 1], self.choice_history[period - 1], rewards,
++                        groups, states, candidates.valid_actions, elapsed_days=cfg.firm_decision_interval,
++                        annual_discount_rate=cfg.firm_discount_rate, terminated=np.zeros(cfg.n_firms, dtype=bool),
++                    )
++                else:
++                    update = self.learning_group_history[period - 1] >= 3
++                    self.learning_update_history[period] = update
++                    if update.any():
++                        batch_update(
++                            self.learner, np.arange(cfg.n_firms)[update], self.learning_group_history[period - 1, update],
++                            self.learning_state_history[period - 1, update], self.choice_history[period - 1, update], rewards[update],
++                            groups[update], states[update], candidates.valid_actions[update], elapsed_days=cfg.firm_decision_interval,
++                            annual_discount_rate=cfg.firm_discount_rate, terminated=np.zeros(int(update.sum()), dtype=bool),
++                        )
+         if self.learner is None:
+             actions = npv_discrete(candidates, MINIMUM_NPV)
+             values = candidates.values[np.arange(cfg.n_firms), actions]
+         else:
+             self.unvisited_state_history[period] = self.learner.counts[groups, states].sum(axis=1) == 0
++            training = self.training and (self.common_prepolicy_sha256 is None or epoch == 1)
+             actions = choose_actions(self.learner, groups, states, candidates.valid_actions,
+-                                     self.firm_rng if self.training else None, training=self.training)
++                                     self.firm_rng if training else None, training=training,
++                                     coverage_target=self.coverage_target if day + cfg.firm_decision_interval <= cfg.trading_days else 0,
++                                     forced_choices=None if self.coverage_forced_history is None else self.coverage_forced_history[period])
+             values = np.zeros(cfg.n_firms)
+         rows = np.arange(cfg.n_firms)
+         self.choice_history[period] = actions
+@@ -704,6 +742,8 @@
+                 ("learning_transition", self.learning_transition_history),
+                 ("unvisited_state", self.unvisited_state_history),
+                 ("learning_choices", self.choice_history if len(self.config.firm_action_fractions) > 1 else None),
++                ("coverage_forced", self.coverage_forced_history),
++                ("learning_update", self.learning_update_history),
+             )},
+         )
+ 
+
+--- archived/abm/disclosure/learning.py
++++ current/abm/disclosure/learning.py
+@@ -166,9 +166,17 @@
+ 
+ def choose_actions(
+     learner: CompanyQLearner, groups: IntArray, states: IntArray, valid_actions: NDArray[np.bool_],
+-    rng: np.random.Generator | None, *, training: bool,
++    rng: np.random.Generator | None, *, training: bool, coverage_target: int = 0,
++    forced_choices: NDArray[np.bool_] | None = None,
+ ) -> IntArray:
++    if type(coverage_target) is not int or coverage_target < 0:
++        raise ValueError("coverage_target must be a nonnegative integer")
+     groups, states = _indices(learner, groups, states)
++    if forced_choices is not None:
++        if (forced_choices.dtype != np.bool_ or forced_choices.shape != groups.shape
++                or not forced_choices.flags.writeable):
++            raise ValueError("forced choices must be a writable boolean vector matching groups")
++        forced_choices[:] = False
+     action_count = learner.values.shape[2]
+     kinds = action_kinds(action_count)
+     valid = _mask(valid_actions, groups.size, action_count)
+@@ -188,7 +196,22 @@
+     else:
+         probabilities = learner.epsilon * _kind_probabilities(valid, kinds) + (1 - learner.epsilon) * _kind_probabilities(best, kinds)
+     last_legal = np.where(valid, np.arange(action_count), -1).max(axis=1)
+-    return np.minimum((rng.random(groups.size)[:, None] >= probabilities.cumsum(axis=1)).sum(axis=1), last_legal)
++    draws = rng.random(groups.size)
++    actions = np.minimum((draws[:, None] >= probabilities.cumsum(axis=1)).sum(axis=1), last_legal)
++    if coverage_target:
++        reservations = np.zeros_like(learner.counts)
++        for row, (group, state) in enumerate(zip(groups, states)):
++            counts = learner.counts[group, state] + reservations[group, state]
++            deficient = valid[row] & (counts < coverage_target)
++            if deficient.any():
++                deficient &= counts == counts[deficient].min()
++                probability = _kind_probabilities(deficient[None, :], kinds)[0]
++                actions[row] = min(int((draws[row] >= probability.cumsum()).sum()),
++                                   int(np.flatnonzero(deficient)[-1]))
++                if forced_choices is not None:
++                    forced_choices[row] = True
++            reservations[group, state, actions[row]] += 1
++    return actions
+ 
+ 
+ def batch_update(
+@@ -221,9 +244,9 @@
+         learner.counts[address] += count
+ 
+ 
+-def table_fingerprint(learner: CompanyQLearner) -> str:
++def table_fingerprint(learner: CompanyQLearner, *, prefix_groups: int | None = None) -> str:
+     digest = hashlib.sha256()
+-    for value in (learner.values, learner.counts):
++    for value in (learner.values[:prefix_groups], learner.counts[:prefix_groups]):
+         array = np.ascontiguousarray(value)
+         digest.update(str((array.dtype.str, array.shape)).encode("ascii"))
+         digest.update(array.tobytes())
+
+--- archived/abm/disclosure/runner.py
++++ current/abm/disclosure/runner.py
+@@ -33,11 +33,16 @@
+             for path in sorted(package.rglob("*.py"))}
+ 
+ 
+-def learning_contract(config: MarketConfig, domain: DomainSpec, policy: PolicySchedule) -> dict[str, Any]:
++def learning_contract(
++    config: MarketConfig, domain: DomainSpec, policy: PolicySchedule, *, coverage_target: int = 0,
++    common_prepolicy_sha256: str | None = None,
++) -> dict[str, Any]:
++    if type(coverage_target) is not int or coverage_target < 0:
++        raise ValueError("coverage_target must be a nonnegative integer")
+     environment = config.to_dict()
+     environment.pop("seed")
+     environment.pop("firm_policy")
+-    return {
++    contract = {
+         "version": 2, "candidate_fractions": list(config.firm_action_fractions),
+         "choice_kinds": action_kinds(2 * len(config.firm_action_fractions) + 1).tolist(),
+         "exploration": "uniform_legal_kind_then_uniform_legal_amplitude",
+@@ -46,6 +51,55 @@
+         "policy": asdict(policy), "source_hashes": source_hashes(),
+         "python_version": platform.python_version(), "numpy_version": np.__version__,
+     }
++    if coverage_target:
++        contract.update({"coverage_target": coverage_target,
++                         "coverage_exploration": "minimum_completed_td_plus_input_row_reservations_then_kind_amplitude_v1"})
++    if common_prepolicy_sha256 is not None:
++        if (not isinstance(common_prepolicy_sha256, str) or len(common_prepolicy_sha256) != 64
++                or any(char not in "0123456789abcdef" for char in common_prepolicy_sha256)):
++            raise ValueError("common_prepolicy_sha256 must be a SHA256 digest")
++        if policy.intervention is None or not 0 < policy.start_day <= config.trading_days:
++            raise ValueError("common pre-policy deployment requires an explicit policy switch")
++        contract.update({"common_prepolicy_sha256": common_prepolicy_sha256,
++                         "prepolicy_protocol": "frozen_baseline_greedy_prefix_post_zero_v1"})
++    return contract
++
++
++def load_common_prepolicy(
++    path: str | Path, expected_sha256: str, config: MarketConfig, domain: DomainSpec,
++    policy: PolicySchedule, *, coverage_target: int = 0,
++) -> tuple[CompanyQLearner, dict[str, Any]]:
++    source, metadata = load_frozen(path, expected_sha256=expected_sha256)
++    expected = learning_contract(config, domain, PolicySchedule(policy.baseline), coverage_target=coverage_target)
++    budget = metadata.get("budget", {})
++    seeds = {}
++    for name in ("training_seeds", "validation_seeds", "reserved_seeds"):
++        values = budget.get(name, [])
++        if (not isinstance(values, list) or (name != "reserved_seeds" and not values)
++                or any(type(seed) is not int or seed < 0 for seed in values)
++                or len(set(values)) != len(values)):
++            raise ValueError("common pre-policy source has invalid seed lineage")
++        seeds[name] = values
++    if (set(seeds["training_seeds"]) & set(seeds["validation_seeds"])
++            or set(seeds["training_seeds"] + seeds["validation_seeds"]) & set(seeds["reserved_seeds"])):
++        raise ValueError("common pre-policy source has overlapping seed lineage")
++    shape = [6, 81, 2 * len(config.firm_action_fractions) + 1]
++    initial = {"shape": shape, "values": 0.0, "counts": 0,
++               "values_dtype": "float64", "counts_dtype": "int64"}
++    expected_samples = config.n_firms * max(config.trading_days // config.firm_decision_interval - 1, 0) * len(seeds["training_seeds"])
++    if (metadata.get("phase") != "frozen" or metadata.get("contract") != expected
++            or "common_prepolicy" in metadata or metadata.get("completed_training_seeds") != seeds["training_seeds"]
++            or metadata.get("initial_table") != initial or budget.get("initial_table") != initial
++            or budget.get("training_worlds") != len(seeds["training_seeds"])
++            or budget.get("learning_rate") != source.learning_rate or source.learning_rate != .1 or source.discount != .9
++            or list(source.values.shape) != shape or source.values.dtype != np.float64 or source.counts.dtype != np.int64
++            or np.any(source.values[3:] != 0) or np.any(source.counts[3:] != 0)
++            or int(source.counts.sum()) != expected_samples):
++        raise ValueError("common pre-policy source must be a complete independent frozen baseline training")
++    origin = {"model_path": str(Path(path).resolve()), "sha256": expected_sha256,
++              "table_fingerprint": table_fingerprint(source, prefix_groups=3),
++              **seeds, "source_experiment_id": metadata.get("experiment_id"), "source_contract": expected}
++    return source, origin
+ 
+ 
+ def run_identity(
+@@ -98,6 +152,7 @@
+ 
+ def learning_report(
+     result: DisclosureResult, config: MarketConfig, learner: CompanyQLearner | None, *, training: bool,
++    coverage_target: int = 0,
+ ) -> dict[str, Any]:
+     visits = np.zeros((6, 81), dtype=np.int64)
+     kinds = action_kinds(2 * len(config.firm_action_fractions) + 1)
+@@ -166,7 +221,7 @@
+                             ("subsidy", result.subsidy_fraction)):
+         amount = fractions[-1] * result.market.prices[-1] if last_decision == last else np.zeros(config.n_firms)
+         unapplied[name] = amount.tolist()
+-    return {
++    report = {
+         "firm_policy": config.firm_policy, "training": training,
+         "coverage": {
+             "visits": visits.tolist(), "legal_action_visits": legal_visits.tolist(),
+@@ -192,6 +247,26 @@
+             "outstanding_inflation": result.inflation[-1].tolist(),
+         },
+     }
++    updates = result.learning_update
++    if updates is None:
++        updates = result.learning_transition if training else np.zeros_like(result.learning_transition)
++    else:
++        report["conditional_deployment"] = {
++            "scope": "Frozen baseline greedy prefix followed by a separately trained conditional strategy; not from-zero online policy learning.",
++            "updated_transition_samples": int(updates.sum()),
++            "excluded_completed_transition_samples": int((result.learning_transition & ~updates).sum()),
++        }
++    if coverage_target:
++        forced = np.zeros_like(result.learning_transition) if result.coverage_forced is None else result.coverage_forced
++        completed_forced = int((forced[:-1] & updates[1:]).sum())
++        report["quota_exploration"] = {
++            "target": coverage_target, "forced_decisions": int(forced.sum()),
++            "completed_forced_transitions": completed_forced,
++            "unsettled_forced_decisions": int(forced.sum()) - completed_forced,
++            "updated_transition_samples": int(updates.sum()),
++            "flag_definition": "Quota branch executed, including choices equal to the unforced sample.",
++        }
++    return report
+ 
+ 
+ def run_and_archive(
+@@ -204,14 +279,19 @@
+     learner: CompanyQLearner | None = None,
+     training: bool = False,
+     learning_metadata: dict[str, Any] | None = None,
++    coverage_target: int = 0,
++    common_prepolicy_sha256: str | None = None,
+ ) -> dict[str, Any]:
+     """Save inputs and source before running; completion requires a result hash."""
++    if type(coverage_target) is not int or coverage_target < 0:
++        raise ValueError("coverage_target must be a nonnegative integer")
+     policy = policy or PolicySchedule.constant(domain)
++    common_options = {"common_prepolicy_sha256": common_prepolicy_sha256} if common_prepolicy_sha256 is not None else {}
+     learning = None
+     if config.firm_policy == "q_learning":
+         if learner is None or learning_metadata is None:
+             raise ValueError("Q-learning requires an explicit learner and frozen learning metadata")
+-        if learning_metadata.get("contract") != learning_contract(config, domain, policy):
++        if learning_metadata.get("contract") != learning_contract(config, domain, policy, coverage_target=coverage_target, **common_options):
+             raise ValueError("learning contract mismatch")
+         if (learner.values.shape != (6, 81, 2 * len(config.firm_action_fractions) + 1)
+                 or learner.counts.shape != learner.values.shape):
+@@ -220,10 +300,30 @@
+             raise ValueError("training requires writable tables; evaluation requires frozen tables")
+         if not training and (learner.values.flags.writeable or learner.counts.flags.writeable or learner.epsilon != 0):
+             raise ValueError("evaluation requires frozen tables and zero epsilon")
++        if common_prepolicy_sha256 is not None:
++            origin = learning_metadata.get("common_prepolicy", {})
++            if not origin.get("model_path"):
++                raise ValueError("common pre-policy deployment requires its source model")
++            source, expected_origin = load_common_prepolicy(origin["model_path"], common_prepolicy_sha256,
++                                                           config, domain, policy, coverage_target=coverage_target)
++            if (origin != expected_origin or table_fingerprint(learner, prefix_groups=3) != origin["table_fingerprint"]
++                    or learner.learning_rate != source.learning_rate or learner.discount != source.discount):
++                raise ValueError("common pre-policy table or provenance mismatch")
++            used = set(origin["training_seeds"] + origin["validation_seeds"])
++            current = learning_metadata.get("budget", {})
++            if (config.seed in used | set(origin["reserved_seeds"])
++                    or used & set(current.get("training_seeds", []) + current.get("validation_seeds", []) + current.get("reserved_seeds", []))
++                    or set(origin["reserved_seeds"]) & set(current.get("training_seeds", []) + current.get("validation_seeds", []))):
++                raise ValueError("common pre-policy seed lineage overlaps the current budget")
+         learning = {"training": training, "metadata": learning_metadata,
+                     "initial_table_fingerprint": table_fingerprint(learner), "epsilon": learner.epsilon,
+                     "learning_rate": learner.learning_rate, "discount": learner.discount}
+-    elif learner is not None or training or learning_metadata is not None:
++        if coverage_target:
++            learning["coverage_target"] = coverage_target
++        if common_prepolicy_sha256 is not None:
++            learning.update(common_options)
++            learning["prepolicy_protocol"] = "frozen_baseline_greedy_prefix_post_zero_v1"
++    elif learner is not None or training or learning_metadata is not None or coverage_target or common_prepolicy_sha256 is not None:
+         raise ValueError("learning arguments require the q_learning firm policy")
+     destination = Path(output)
+     destination.mkdir(parents=True, exist_ok=False)
+@@ -243,16 +343,20 @@
+                 archive.write(package_parent / relative, relative)
+         if source_hashes() != identity["source_hashes"]:
+             raise RuntimeError("source changed while archiving the run")
+-        market = DisclosureMarket(config, domain, policy, learner=learner, training=training)
++        market = DisclosureMarket(config, domain, policy, learner=learner, training=training,
++                                  coverage_target=coverage_target, **common_options)
+         result = market.run()
+         if learner is not None:
+             final_fingerprint = table_fingerprint(learner)
++            if common_prepolicy_sha256 is not None and (table_fingerprint(learner, prefix_groups=3) != origin["table_fingerprint"]
++                                                        or sha256_file(origin["model_path"]) != common_prepolicy_sha256):
++                raise RuntimeError("conditional deployment changed the frozen pre-policy table")
+             if not training and final_fingerprint != learning["initial_table_fingerprint"]:
+                 raise RuntimeError("evaluation changed the frozen learning table")
+             save_frozen(destination / "output_model.npz", learner, learning_metadata)
+             model_artifacts.append("output_model.npz")
+         if config.firm_policy != "npv":
+-            report = learning_report(result, config, learner, training=training)
++            report = learning_report(result, config, learner, training=training, coverage_target=coverage_target)
+             if learner is not None:
+                 report.update({"initial_table_fingerprint": learning["initial_table_fingerprint"],
+                                "final_table_fingerprint": final_fingerprint,
+@@ -339,6 +443,8 @@
+     parser.add_argument("--policy", type=Path)
+     parser.add_argument("--model", type=Path, help="Frozen Q table for evaluation")
+     parser.add_argument("--model-sha256")
++    parser.add_argument("--coverage-target", type=int, default=0)
++    parser.add_argument("--common-prepolicy-sha256")
+     parser.add_argument("--output", type=Path, required=True)
+     parser.add_argument("--render-only", action="store_true")
+     args = parser.parse_args(argv)
+@@ -354,7 +460,9 @@
+     if args.model_sha256 and args.model is None:
+         parser.error("--model-sha256 requires --model")
+     learner, metadata = load_frozen(args.model, expected_sha256=args.model_sha256) if args.model else (None, None)
+-    result = run_and_archive(config, domain, args.output, policy, learner=learner, learning_metadata=metadata)
++    result = run_and_archive(config, domain, args.output, policy, learner=learner, learning_metadata=metadata,
++                             coverage_target=args.coverage_target,
++                             **({"common_prepolicy_sha256": args.common_prepolicy_sha256} if args.common_prepolicy_sha256 is not None else {}))
+     print(json.dumps({"run_id": result["run_id"], "status": result["status"], "output": str(args.output)}))
+     return 0
+ 
+
+--- archived/abm/disclosure/training.py
++++ current/abm/disclosure/training.py
+@@ -174,8 +174,12 @@
+ def train_and_evaluate(
+     config: MarketConfig, domain: DomainSpec, policy: PolicySchedule | None, output: str | Path, *,
+     training_seeds: Iterable[int], validation_seeds: Iterable[int], reserved_seeds: Iterable[int] = (),
++    coverage_target: int = 0,
++    common_prepolicy_model: str | Path | None = None, common_prepolicy_sha256: str | None = None,
+ ) -> dict:
+     """Run a fixed development budget; refuse overwrite and automatic resume."""
++    if type(coverage_target) is not int or coverage_target < 0:
++        raise ValueError("coverage_target must be a nonnegative integer")
+     train_seeds, valid_seeds = _seeds(training_seeds, "training_seeds"), _seeds(validation_seeds, "validation_seeds")
+     if set(train_seeds) & set(valid_seeds):
+         raise ValueError("training and validation seeds must not overlap")
+@@ -185,11 +189,30 @@
+     if set(train_seeds + valid_seeds) & set(reserved):
+         raise ValueError("training or validation seeds overlap reserved_seeds")
+     policy = policy or PolicySchedule.constant(domain)
+-    contract = runner.learning_contract(config, domain, policy)
++    learning_options = {"coverage_target": coverage_target} if coverage_target else {}
++    if (common_prepolicy_model is None) != (common_prepolicy_sha256 is None):
++        raise ValueError("common pre-policy model and SHA256 must be supplied together")
++    common_source, common_origin = None, None
++    if common_prepolicy_sha256 is not None:
++        learning_options["common_prepolicy_sha256"] = common_prepolicy_sha256
++    contract = runner.learning_contract(config, domain, policy, **learning_options)
++    if common_prepolicy_model is not None:
++        common_source, common_origin = runner.load_common_prepolicy(common_prepolicy_model, common_prepolicy_sha256,
++                                                                   config, domain, policy, coverage_target=coverage_target)
++        used = set(common_origin["training_seeds"] + common_origin["validation_seeds"])
++        if (used & set(train_seeds + valid_seeds + reserved)
++                or set(common_origin["reserved_seeds"]) & set(train_seeds + valid_seeds)):
++            raise ValueError("common pre-policy seed lineage overlaps the current budget")
+     epsilon = np.linspace(1.0, .1, len(train_seeds)).tolist()
+     choice_count = 2 * len(config.firm_action_fractions) + 1
+     initial_table = {"shape": [6, 81, choice_count], "values": 0.0, "counts": 0,
+                      "values_dtype": "float64", "counts_dtype": "int64"}
++    if common_origin is not None:
++        initial_table = {"shape": [6, 81, choice_count], "prefix_groups": [0, 1, 2],
++                         "prefix_source_sha256": common_origin["sha256"],
++                         "prefix_table_fingerprint": common_origin["table_fingerprint"],
++                         "post_groups": [3, 4, 5], "post_values": 0.0, "post_counts": 0,
++                         "values_dtype": "float64", "counts_dtype": "int64"}
+     budget = {"training_seeds": train_seeds, "validation_seeds": valid_seeds,
+               "reserved_seeds": reserved,
+               "training_worlds": len(train_seeds), "validation_worlds_per_rule": len(valid_seeds),
+@@ -199,20 +222,29 @@
+                            "common_state_share_threshold": .01, "minimum_action_count": 20,
+                            "group_scope": "each_observed_size_policy_epoch_group",
+                            "group_common_state_share_threshold": .01, "unobserved_group_status": "not_observed"}}
++    if coverage_target:
++        budget["coverage_target"] = coverage_target
+     spec = {"schema_version": 1, "purpose": "development", "contract": contract,
+             "config": config.to_dict(), "domain": domain.to_dict(), "policy": asdict(policy), "budget": budget,
+             "comparison_scope": "within_scenario_algorithm_comparison",
+             "discount_rule": "exp(-firm_discount_rate * elapsed_days / 252); learner.discount is unused",
+             "resumable": False}
++    if common_origin is not None:
++        spec.update({"common_prepolicy": common_origin, "comparison_scope": "conditional_strategy_deployment"})
+     experiment_id = hashlib.sha256(canonical_json_bytes(spec)).hexdigest()
+     destination = Path(output)
+     destination.mkdir(parents=True, exist_ok=False)
+     runner.write_json(destination / "experiment.json", {**spec, "experiment_id": experiment_id})
+     learner = CompanyQLearner(groups=6, actions=choice_count, epsilon=1.0, learning_rate=.1)
++    if common_source is not None:
++        learner.values[:3] = common_source.values[:3]
++        learner.counts[:3] = common_source.counts[:3]
+     completed, records = [], []
+     metadata = {"contract": contract, "budget": budget, "initial_table": initial_table,
+                 "completed_training_seeds": completed.copy(), "experiment_id": experiment_id,
+                 "discount_rule": spec["discount_rule"]}
++    if common_origin is not None:
++        metadata["common_prepolicy"] = common_origin
+     summary = {"experiment_id": experiment_id, "purpose": "development", "status": "running",
+                "phase": "training", "claim_support": "pending", "m4_status": "pending",
+                "comparison_scope": spec["comparison_scope"], "contract": contract, "budget": budget,
+@@ -223,6 +255,12 @@
+                    "Across-scenario policy causality requires a common pre-policy table and switch protocol.",
+                    "Observed private ledger rewards and unfinished liabilities are not lifetime profit or social welfare.",
+                ]}
++    if common_origin is not None:
++        summary["common_prepolicy"] = common_origin
++        summary["limitations"][1:3] = [
++            "This benchmark deploys a separately trained conditional strategy after a frozen greedy baseline prefix; it is not from-zero online policy learning.",
++            "Cross-scenario pre-policy pairing requires the same independently trained baseline model SHA256, environment and switch calendar.",
++        ]
+     summary_path = destination / "summary.json"
+     runner.write_json(summary_path, summary)
+     planned_runs = len(train_seeds) + 3 * len(valid_seeds)
+@@ -231,7 +269,7 @@
+         summary["initial_model_sha256"] = save_frozen(destination / "initial_model.npz", learner, metadata)
+         runner.write_json(summary_path, summary)
+         for index, seed in enumerate(train_seeds):
+-            if runner.learning_contract(config, domain, policy) != contract:
++            if runner.learning_contract(config, domain, policy, **learning_options) != contract:
+                 raise RuntimeError("learning contract changed during the training budget")
+             learner.epsilon = epsilon[index]
+             folder = destination / "training" / f"seed_{seed}"
+@@ -240,7 +278,7 @@
+             try:
+                 runner.run_and_archive(replace(config, seed=seed, firm_policy="q_learning"), domain, folder,
+                                        policy, purpose="development", learner=learner, training=True,
+-                                       learning_metadata=run_metadata)
++                                       learning_metadata=run_metadata, **learning_options)
+                 record = _run_record(folder, destination, seed, "q_learning", "training")
+             except BaseException as error:
+                 record = _failed_record(folder, destination, seed, "q_learning", "training", error)
+@@ -264,10 +302,10 @@
+                 raise RuntimeError("evaluation model is not frozen")
+             before = table_fingerprint(frozen)
+             for mode in budget["validation_rules"]:
+-                if runner.learning_contract(config, domain, policy) != contract:
++                if runner.learning_contract(config, domain, policy, **learning_options) != contract:
+                     raise RuntimeError("learning contract changed during validation")
+                 folder = destination / "validation" / f"seed_{seed}" / mode
+-                kwargs = {"learner": frozen, "learning_metadata": restored_metadata} if mode == "q_learning" else {}
++                kwargs = {"learner": frozen, "learning_metadata": restored_metadata, **learning_options} if mode == "q_learning" else {}
+                 try:
+                     runner.run_and_archive(replace(config, seed=seed, firm_policy=mode), domain, folder,
+                                            policy, purpose="development", **kwargs)
+@@ -283,7 +321,7 @@
+                         or sha256_file(frozen_path) != frozen_hash):
+                     raise RuntimeError("evaluation changed the frozen learning table")
+                 runner.write_json(summary_path, summary)
+-        if runner.learning_contract(config, domain, policy) != contract:
++        if runner.learning_contract(config, domain, policy, **learning_options) != contract:
+             raise RuntimeError("learning contract changed during validation")
+         summary.update({"status": "complete" if all(row["status"] == "complete" for row in records) else "incomplete",
+                         "phase": "finished", "validation": _validation(records, planned_runs)})
+@@ -317,13 +355,20 @@
+     parser.add_argument("--training-seeds", type=int, nargs="+", required=True)
+     parser.add_argument("--validation-seeds", type=int, nargs="+", required=True)
+     parser.add_argument("--reserved-seeds", type=int, nargs="*", default=())
++    parser.add_argument("--coverage-target", type=int, default=0)
++    parser.add_argument("--common-prepolicy-model", type=Path)
++    parser.add_argument("--common-prepolicy-sha256")
+     args = parser.parse_args(argv)
+     config = load_market_config(args.config) if args.config else MarketConfig()
+     domain = load_domain(args.domain)
+     policy = runner.load_policy(args.policy, domain) if args.policy else None
+     summary = train_and_evaluate(config, domain, policy, args.output,
+                                  training_seeds=args.training_seeds, validation_seeds=args.validation_seeds,
+-                                 reserved_seeds=args.reserved_seeds)
++                                 reserved_seeds=args.reserved_seeds,
++                                 **({"coverage_target": args.coverage_target} if args.coverage_target else {}),
++                                 **({"common_prepolicy_model": args.common_prepolicy_model,
++                                     "common_prepolicy_sha256": args.common_prepolicy_sha256}
++                                    if args.common_prepolicy_model is not None or args.common_prepolicy_sha256 is not None else {}))
+     print(json.dumps({"status": summary["status"], "summary": str(args.output / "summary.json"),
+                       "coverage": summary["validation"]["coverage"]["status"]}))
+     return 0 if summary["status"] == "complete" else 1

@@ -1,0 +1,65 @@
+{
+  "purpose": "small_environment_mechanism_acceptance",
+  "interpretation": "Exploratory hypothetical fixtures establish operation and timing, not a policy ranking or empirical effect.",
+  "runs": 4,
+  "days": 90,
+  "firms": 6,
+  "seed": 31701,
+  "checks": [
+    {
+      "instrument": "noise",
+      "prepolicy_prices_bitwise_equal": true,
+      "prepolicy_signals_bitwise_equal": true,
+      "audit_selection_equal_full_run": true,
+      "max_absolute_price_difference_after_policy": 0.01819731921773915,
+      "max_absolute_public_signal_difference_after_policy": 1.0032665722569316,
+      "max_absolute_decision_amount_difference_after_policy": 0.00040020401118493924,
+      "baseline_first_new_wash_due_days": [
+        40,
+        40
+      ],
+      "scenario_first_new_wash_due_days": [
+        40,
+        40,
+        40
+      ],
+      "publications": 0
+    },
+    {
+      "instrument": "delay",
+      "prepolicy_prices_bitwise_equal": true,
+      "prepolicy_signals_bitwise_equal": true,
+      "audit_selection_equal_full_run": true,
+      "max_absolute_price_difference_after_policy": 3.776630753460353e-05,
+      "max_absolute_public_signal_difference_after_policy": 0.006564324023383694,
+      "max_absolute_decision_amount_difference_after_policy": 5.313156260546015e-07,
+      "baseline_first_new_wash_due_days": [
+        40,
+        40
+      ],
+      "scenario_first_new_wash_due_days": [
+        37,
+        37
+      ],
+      "publications": 0
+    },
+    {
+      "instrument": "publication",
+      "prepolicy_prices_bitwise_equal": true,
+      "prepolicy_signals_bitwise_equal": true,
+      "audit_selection_equal_full_run": true,
+      "max_absolute_price_difference_after_policy": 0.01602464422324823,
+      "max_absolute_public_signal_difference_after_policy": 1.0032665722569316,
+      "max_absolute_decision_amount_difference_after_policy": 0.003758186653388273,
+      "baseline_first_new_wash_due_days": [
+        40,
+        40
+      ],
+      "scenario_first_new_wash_due_days": [
+        40,
+        40
+      ],
+      "publications": 30
+    }
+  ]
+}

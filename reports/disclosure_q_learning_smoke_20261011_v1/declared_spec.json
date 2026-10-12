@@ -1,0 +1,59 @@
+{
+  "name": "disclosure_q_learning_smoke_v1",
+  "purpose": "development",
+  "_note": "Fixed integration budget for one baseline scenario. No model selection, empirical calibration, policy ranking or full M4 acceptance. Training and validation retain all failures and unfinished liabilities.",
+  "domain": "domains/esg.json",
+  "market": {
+    "n_investors": 150,
+    "n_firms": 30,
+    "trading_days": 1800,
+    "burn_in_days": 600,
+    "initial_impact_share": 0.2,
+    "taste_median": 0.02,
+    "financing_exposure_fraction": 0.5,
+    "financing_spread": 0.05,
+    "financing_repricing_interval": 60,
+    "financing_horizon_days": 1260,
+    "firm_discount_rate": 0.05
+  },
+  "training_seeds": [
+    25001,
+    25002
+  ],
+  "validation_seeds": [
+    25101,
+    25102
+  ],
+  "reserved_seeds": [
+    20261101,
+    20261102,
+    20261103,
+    20261104,
+    20261105,
+    20261106,
+    20261107,
+    20261108,
+    20261109,
+    20261110,
+    20261111,
+    20261112,
+    20261113,
+    20261114,
+    20261115,
+    20261116,
+    20261117,
+    20261118,
+    20261119,
+    20261120,
+    20261121,
+    20261122,
+    20261123,
+    20261124,
+    20261125,
+    20261126,
+    20261127,
+    20261128,
+    20261129,
+    20261130
+  ]
+}

@@ -1,0 +1,965 @@
+{
+  "purpose": "Archive-only interpretation; zero new market runs, no selection or threshold changes.",
+  "script_sha256": "0e89eb91cefa89870b0d35efe7d5eb21cff82b83457e647a0acf0e05d2ea65af",
+  "contract": {
+    "spec_sha256": "085d18fc1cd54a89158fda647b31015b6370d0a18988f56fd560e3e8c38bea6e",
+    "launcher_sha256": "13c074918dd5474368affa867674ed9a46b7463746d269f2c7f572d6f3565097",
+    "source_zip_sha256": "0763385ed37592e88ef18c41f6ddb3bb76d8ee7df6430071b80429c6beac2ed7",
+    "python_version": "3.12.9",
+    "numpy_version": "2.5.1"
+  },
+  "summary_sha256": "51856e5a4af021ad2fae29454556ba62465ba660ae37d87760559f7ad6b7ac8a",
+  "audit_sha256": "b585d2b23a4ecbadfa5c6bf5e3eba758028458c47bbb642513f74629fafb57c1",
+  "arm_diagnostics": {
+    "current": {
+      "worlds": 3,
+      "completed": 3,
+      "mechanical_pass_worlds": 0,
+      "price_stylized_pass_worlds": 3,
+      "holder_stylized_pass_worlds": 3,
+      "caps": 10.0,
+      "burn_caps": 4.0,
+      "measured_caps": 6.0,
+      "nonpositive_kurtosis_company_worlds": 0.0,
+      "nonpositive_absacf1_company_worlds": 0.0,
+      "maximum_absolute_raw_quote": 0.33952134943738554,
+      "mean_depth": 0.8333074876108332,
+      "depth_at_most_031_assetday_fraction": 0.12031481481481482,
+      "noise_amplification_below_one_assetday_fraction": 0.7978518518518518,
+      "noise_amplification_above_one_assetday_fraction": 0.20159259259259257,
+      "maximum_noise_amplification": 6.728349073712348,
+      "mean_fast_variance": 0.0004779806831509627,
+      "mean_reference_variance": 0.00047227474064815274,
+      "mean_cross_asset_correlation": 0.622271809043987,
+      "holder_volatility_change_percent": 0.0,
+      "holder_kurtosis_change_percent": 0.0,
+      "holder_absacf1_change_percent": 0.0
+    },
+    "no_noise_volatility_feedback": {
+      "worlds": 3,
+      "completed": 3,
+      "mechanical_pass_worlds": 3,
+      "price_stylized_pass_worlds": 3,
+      "holder_stylized_pass_worlds": 3,
+      "caps": 0.0,
+      "burn_caps": 0.0,
+      "measured_caps": 0.0,
+      "nonpositive_kurtosis_company_worlds": 0.0,
+      "nonpositive_absacf1_company_worlds": 0.0,
+      "maximum_absolute_raw_quote": 0.13841381391333613,
+      "mean_depth": 0.6797016118156364,
+      "depth_at_most_031_assetday_fraction": 0.07612962962962963,
+      "noise_amplification_below_one_assetday_fraction": 0.0,
+      "noise_amplification_above_one_assetday_fraction": 0.0,
+      "maximum_noise_amplification": 1.0,
+      "mean_fast_variance": 0.00023174552084188608,
+      "mean_reference_variance": 0.00023637555275162113,
+      "mean_cross_asset_correlation": 0.666940473673292,
+      "holder_volatility_change_percent": -24.292720868578023,
+      "holder_kurtosis_change_percent": -89.97596093447969,
+      "holder_absacf1_change_percent": -73.45170824422344
+    },
+    "no_depth_volatility_feedback": {
+      "worlds": 3,
+      "completed": 3,
+      "mechanical_pass_worlds": 3,
+      "price_stylized_pass_worlds": 0,
+      "holder_stylized_pass_worlds": 0,
+      "caps": 0.0,
+      "burn_caps": 0.0,
+      "measured_caps": 0.0,
+      "nonpositive_kurtosis_company_worlds": 14.0,
+      "nonpositive_absacf1_company_worlds": 2.0,
+      "maximum_absolute_raw_quote": 0.06769292831416844,
+      "mean_depth": 1.0,
+      "depth_at_most_031_assetday_fraction": 0.0,
+      "noise_amplification_below_one_assetday_fraction": 0.6374753086419753,
+      "noise_amplification_above_one_assetday_fraction": 0.3619691358024692,
+      "maximum_noise_amplification": 2.7078650876291035,
+      "mean_fast_variance": 0.00015976245350702442,
+      "mean_reference_variance": 0.00017216640995402696,
+      "mean_cross_asset_correlation": 0.6212789053322824,
+      "holder_volatility_change_percent": -37.08192771573785,
+      "holder_kurtosis_change_percent": -98.69254004027509,
+      "holder_absacf1_change_percent": -86.77258128999688
+    },
+    "neither_volatility_feedback": {
+      "worlds": 3,
+      "completed": 3,
+      "mechanical_pass_worlds": 3,
+      "price_stylized_pass_worlds": 0,
+      "holder_stylized_pass_worlds": 0,
+      "caps": 0.0,
+      "burn_caps": 0.0,
+      "measured_caps": 0.0,
+      "nonpositive_kurtosis_company_worlds": 15.0,
+      "nonpositive_absacf1_company_worlds": 12.0,
+      "maximum_absolute_raw_quote": 0.07122518762204888,
+      "mean_depth": 1.0,
+      "depth_at_most_031_assetday_fraction": 0.0,
+      "noise_amplification_below_one_assetday_fraction": 0.0,
+      "noise_amplification_above_one_assetday_fraction": 0.0,
+      "maximum_noise_amplification": 1.0,
+      "mean_fast_variance": 0.00016119601921456747,
+      "mean_reference_variance": 0.00017390618975292546,
+      "mean_cross_asset_correlation": 0.6266803672560992,
+      "holder_volatility_change_percent": -37.36708267312899,
+      "holder_kurtosis_change_percent": -98.77995713793486,
+      "holder_absacf1_change_percent": -91.86935535245779
+    }
+  },
+  "paired_company_moment_changes": {
+    "no_noise_volatility_feedback": {
+      "price": {
+        "daily_volatility": {
+          "count": 90,
+          "mean": -0.004909475846673142,
+          "minimum": -0.008768358705344459,
+          "maximum": -0.001953797165238448,
+          "negative_count": 90,
+          "zero_count": 0,
+          "positive_count": 0
+        },
+        "excess_kurtosis": {
+          "count": 90,
+          "mean": -12.458188828807208,
+          "minimum": -29.801034488208323,
+          "maximum": -0.6942146889801659,
+          "negative_count": 90,
+          "zero_count": 0,
+          "positive_count": 0
+        },
+        "return_acf_1": {
+          "count": 90,
+          "mean": -0.03619591797050911,
+          "minimum": -0.18116528759552983,
+          "maximum": 0.0671471021079725,
+          "negative_count": 71,
+          "zero_count": 0,
+          "positive_count": 19
+        },
+        "abs_return_acf_1": {
+          "count": 90,
+          "mean": -0.28118161870581976,
+          "minimum": -0.40573226937596235,
+          "maximum": -0.11731048160280586,
+          "negative_count": 90,
+          "zero_count": 0,
+          "positive_count": 0
+        },
+        "abs_return_acf_5": {
+          "count": 90,
+          "mean": -0.2702610157687303,
+          "minimum": -0.4394236441653049,
+          "maximum": -0.10084701989429945,
+          "negative_count": 90,
+          "zero_count": 0,
+          "positive_count": 0
+        },
+        "abs_return_acf_20": {
+          "count": 90,
+          "mean": -0.24807336749385558,
+          "minimum": -0.41452530790773656,
+          "maximum": -0.13230118732450113,
+          "negative_count": 90,
+          "zero_count": 0,
+          "positive_count": 0
+        },
+        "quantile_01": {
+          "count": 90,
+          "mean": 0.026930912586904134,
+          "minimum": 0.004129814913713434,
+          "maximum": 0.05113647736403495,
+          "negative_count": 0,
+          "zero_count": 0,
+          "positive_count": 90
+        },
+        "quantile_99": {
+          "count": 90,
+          "mean": -0.018785710671294878,
+          "minimum": -0.03578201237299841,
+          "maximum": -0.005529516380862055,
+          "negative_count": 90,
+          "zero_count": 0,
+          "positive_count": 0
+        },
+        "hill_tail_index": {
+          "count": 90,
+          "mean": 2.2155829769578026,
+          "minimum": -0.4271916407523335,
+          "maximum": 5.429946035770529,
+          "negative_count": 3,
+          "zero_count": 0,
+          "positive_count": 87
+        }
+      },
+      "holder_total": {
+        "daily_volatility": {
+          "count": 90,
+          "mean": -0.004911370502509045,
+          "minimum": -0.008770602033534925,
+          "maximum": -0.0019539876127403037,
+          "negative_count": 90,
+          "zero_count": 0,
+          "positive_count": 0
+        },
+        "excess_kurtosis": {
+          "count": 90,
+          "mean": -12.44632911189549,
+          "minimum": -29.774248443414372,
+          "maximum": -0.6949840198380306,
+          "negative_count": 90,
+          "zero_count": 0,
+          "positive_count": 0
+        },
+        "return_acf_1": {
+          "count": 90,
+          "mean": -0.03630436439401061,
+          "minimum": -0.18125035683870735,
+          "maximum": 0.06702979310763463,
+          "negative_count": 71,
+          "zero_count": 0,
+          "positive_count": 19
+        },
+        "abs_return_acf_1": {
+          "count": 90,
+          "mean": -0.28029860661769374,
+          "minimum": -0.40519255876918014,
+          "maximum": -0.11770624992557815,
+          "negative_count": 90,
+          "zero_count": 0,
+          "positive_count": 0
+        },
+        "abs_return_acf_5": {
+          "count": 90,
+          "mean": -0.2697933578684121,
+          "minimum": -0.44017437826212147,
+          "maximum": -0.10120151821371924,
+          "negative_count": 90,
+          "zero_count": 0,
+          "positive_count": 0
+        },
+        "abs_return_acf_20": {
+          "count": 90,
+          "mean": -0.24775980465718123,
+          "minimum": -0.4151324318488601,
+          "maximum": -0.1318822366296458,
+          "negative_count": 90,
+          "zero_count": 0,
+          "positive_count": 0
+        },
+        "quantile_01": {
+          "count": 90,
+          "mean": 0.02687564754775734,
+          "minimum": 0.004093533564691075,
+          "maximum": 0.05113737842959157,
+          "negative_count": 0,
+          "zero_count": 0,
+          "positive_count": 90
+        },
+        "quantile_99": {
+          "count": 90,
+          "mean": -0.018853640573756922,
+          "minimum": -0.035757591239429586,
+          "maximum": -0.005569331817505206,
+          "negative_count": 90,
+          "zero_count": 0,
+          "positive_count": 0
+        },
+        "hill_tail_index": {
+          "count": 90,
+          "mean": 2.2141393103139038,
+          "minimum": -0.44513982525161744,
+          "maximum": 5.424811682022119,
+          "negative_count": 4,
+          "zero_count": 0,
+          "positive_count": 86
+        }
+      }
+    },
+    "no_depth_volatility_feedback": {
+      "price": {
+        "daily_volatility": {
+          "count": 90,
+          "mean": -0.007494868389865742,
+          "minimum": -0.011417225595631601,
+          "maximum": -0.0044163477371660185,
+          "negative_count": 90,
+          "zero_count": 0,
+          "positive_count": 0
+        },
+        "excess_kurtosis": {
+          "count": 90,
+          "mean": -13.665194702473269,
+          "minimum": -32.95616250936948,
+          "maximum": -2.0939534876478656,
+          "negative_count": 90,
+          "zero_count": 0,
+          "positive_count": 0
+        },
+        "return_acf_1": {
+          "count": 90,
+          "mean": 0.04128220863617796,
+          "minimum": -0.09131048916105844,
+          "maximum": 0.14753591437424565,
+          "negative_count": 17,
+          "zero_count": 0,
+          "positive_count": 73
+        },
+        "abs_return_acf_1": {
+          "count": 90,
+          "mean": -0.3317816503684566,
+          "minimum": -0.4871786175958557,
+          "maximum": -0.17515395293438218,
+          "negative_count": 90,
+          "zero_count": 0,
+          "positive_count": 0
+        },
+        "abs_return_acf_5": {
+          "count": 90,
+          "mean": -0.30580545139538046,
+          "minimum": -0.45381704305201276,
+          "maximum": -0.13188212799621135,
+          "negative_count": 90,
+          "zero_count": 0,
+          "positive_count": 0
+        },
+        "abs_return_acf_20": {
+          "count": 90,
+          "mean": -0.2972048973295584,
+          "minimum": -0.45247694158640045,
+          "maximum": -0.14568512307483078,
+          "negative_count": 90,
+          "zero_count": 0,
+          "positive_count": 0
+        },
+        "quantile_01": {
+          "count": 90,
+          "mean": 0.03550153509695447,
+          "minimum": 0.014865961976496839,
+          "maximum": 0.06196744236582054,
+          "negative_count": 0,
+          "zero_count": 0,
+          "positive_count": 90
+        },
+        "quantile_99": {
+          "count": 90,
+          "mean": -0.02473882728460318,
+          "minimum": -0.042911992154516396,
+          "maximum": -0.010314348787877112,
+          "negative_count": 90,
+          "zero_count": 0,
+          "positive_count": 0
+        },
+        "hill_tail_index": {
+          "count": 90,
+          "mean": 3.7366660970272125,
+          "minimum": 0.699659004157632,
+          "maximum": 7.4093454659579265,
+          "negative_count": 0,
+          "zero_count": 0,
+          "positive_count": 90
+        }
+      },
+      "holder_total": {
+        "daily_volatility": {
+          "count": 90,
+          "mean": -0.007497022953687278,
+          "minimum": -0.01141982881386444,
+          "maximum": -0.004417538296134824,
+          "negative_count": 90,
+          "zero_count": 0,
+          "positive_count": 0
+        },
+        "excess_kurtosis": {
+          "count": 90,
+          "mean": -13.652089085491141,
+          "minimum": -32.92545109303898,
+          "maximum": -2.0931041578717826,
+          "negative_count": 90,
+          "zero_count": 0,
+          "positive_count": 0
+        },
+        "return_acf_1": {
+          "count": 90,
+          "mean": 0.041181393947449914,
+          "minimum": -0.09142440515330469,
+          "maximum": 0.1472609566098484,
+          "negative_count": 17,
+          "zero_count": 0,
+          "positive_count": 73
+        },
+        "abs_return_acf_1": {
+          "count": 90,
+          "mean": -0.33113230732955057,
+          "minimum": -0.4881023616059811,
+          "maximum": -0.17507522041216206,
+          "negative_count": 90,
+          "zero_count": 0,
+          "positive_count": 0
+        },
+        "abs_return_acf_5": {
+          "count": 90,
+          "mean": -0.30537341658954775,
+          "minimum": -0.45481883223458414,
+          "maximum": -0.1316019792842587,
+          "negative_count": 90,
+          "zero_count": 0,
+          "positive_count": 0
+        },
+        "abs_return_acf_20": {
+          "count": 90,
+          "mean": -0.2967613153267246,
+          "minimum": -0.4534512080873867,
+          "maximum": -0.14474533987735,
+          "negative_count": 90,
+          "zero_count": 0,
+          "positive_count": 0
+        },
+        "quantile_01": {
+          "count": 90,
+          "mean": 0.0354267819858047,
+          "minimum": 0.014849269321857487,
+          "maximum": 0.06196237243341446,
+          "negative_count": 0,
+          "zero_count": 0,
+          "positive_count": 90
+        },
+        "quantile_99": {
+          "count": 90,
+          "mean": -0.024829618927733207,
+          "minimum": -0.04290334000612377,
+          "maximum": -0.010305781000286472,
+          "negative_count": 90,
+          "zero_count": 0,
+          "positive_count": 0
+        },
+        "hill_tail_index": {
+          "count": 90,
+          "mean": 3.7345332919707315,
+          "minimum": 0.6862300983235485,
+          "maximum": 7.412398241176694,
+          "negative_count": 0,
+          "zero_count": 0,
+          "positive_count": 90
+        }
+      }
+    },
+    "neither_volatility_feedback": {
+      "price": {
+        "daily_volatility": {
+          "count": 90,
+          "mean": -0.007552526206245496,
+          "minimum": -0.011543600252182758,
+          "maximum": -0.0044480832081488005,
+          "negative_count": 90,
+          "zero_count": 0,
+          "positive_count": 0
+        },
+        "excess_kurtosis": {
+          "count": 90,
+          "mean": -13.677296933324405,
+          "minimum": -32.92989871975353,
+          "maximum": -2.034263204025088,
+          "negative_count": 90,
+          "zero_count": 0,
+          "positive_count": 0
+        },
+        "return_acf_1": {
+          "count": 90,
+          "mean": 0.032997411303378514,
+          "minimum": -0.10573733108377488,
+          "maximum": 0.14095290947752886,
+          "negative_count": 20,
+          "zero_count": 0,
+          "positive_count": 70
+        },
+        "abs_return_acf_1": {
+          "count": 90,
+          "mean": -0.35142696045871324,
+          "minimum": -0.5007470869760581,
+          "maximum": -0.21138915517977763,
+          "negative_count": 90,
+          "zero_count": 0,
+          "positive_count": 0
+        },
+        "abs_return_acf_5": {
+          "count": 90,
+          "mean": -0.32538108781490954,
+          "minimum": -0.47144817728011834,
+          "maximum": -0.14438246047643286,
+          "negative_count": 90,
+          "zero_count": 0,
+          "positive_count": 0
+        },
+        "abs_return_acf_20": {
+          "count": 90,
+          "mean": -0.3048801819791738,
+          "minimum": -0.4737140927257115,
+          "maximum": -0.15350801064184483,
+          "negative_count": 90,
+          "zero_count": 0,
+          "positive_count": 0
+        },
+        "quantile_01": {
+          "count": 90,
+          "mean": 0.03590411585314485,
+          "minimum": 0.01600183225792355,
+          "maximum": 0.06171127777409469,
+          "negative_count": 0,
+          "zero_count": 0,
+          "positive_count": 90
+        },
+        "quantile_99": {
+          "count": 90,
+          "mean": -0.024981796778520804,
+          "minimum": -0.043038207593600025,
+          "maximum": -0.010604186541474277,
+          "negative_count": 90,
+          "zero_count": 0,
+          "positive_count": 0
+        },
+        "hill_tail_index": {
+          "count": 90,
+          "mean": 3.597157684344435,
+          "minimum": 0.42683434514092333,
+          "maximum": 7.135472593721628,
+          "negative_count": 0,
+          "zero_count": 0,
+          "positive_count": 90
+        }
+      },
+      "holder_total": {
+        "daily_volatility": {
+          "count": 90,
+          "mean": -0.00755467403583455,
+          "minimum": -0.011546168062240588,
+          "maximum": -0.004449261881801964,
+          "negative_count": 90,
+          "zero_count": 0,
+          "positive_count": 0
+        },
+        "excess_kurtosis": {
+          "count": 90,
+          "mean": -13.664181448342063,
+          "minimum": -32.899193322520176,
+          "maximum": -2.03340579260533,
+          "negative_count": 90,
+          "zero_count": 0,
+          "positive_count": 0
+        },
+        "return_acf_1": {
+          "count": 90,
+          "mean": 0.0328990572459911,
+          "minimum": -0.10569299402734612,
+          "maximum": 0.14068912375664613,
+          "negative_count": 20,
+          "zero_count": 0,
+          "positive_count": 70
+        },
+        "abs_return_acf_1": {
+          "count": 90,
+          "mean": -0.35058207510354034,
+          "minimum": -0.50161379080664,
+          "maximum": -0.20938220397978644,
+          "negative_count": 90,
+          "zero_count": 0,
+          "positive_count": 0
+        },
+        "abs_return_acf_5": {
+          "count": 90,
+          "mean": -0.32483735801323915,
+          "minimum": -0.47137979943209546,
+          "maximum": -0.14322050187452132,
+          "negative_count": 90,
+          "zero_count": 0,
+          "positive_count": 0
+        },
+        "abs_return_acf_20": {
+          "count": 90,
+          "mean": -0.30445501647028167,
+          "minimum": -0.4743553177976931,
+          "maximum": -0.15296532177360148,
+          "negative_count": 90,
+          "zero_count": 0,
+          "positive_count": 0
+        },
+        "quantile_01": {
+          "count": 90,
+          "mean": 0.03583017841768494,
+          "minimum": 0.015978504851131406,
+          "maximum": 0.06170623122253481,
+          "negative_count": 0,
+          "zero_count": 0,
+          "positive_count": 90
+        },
+        "quantile_99": {
+          "count": 90,
+          "mean": -0.025073134790073965,
+          "minimum": -0.0430406021810707,
+          "maximum": -0.01060523335095824,
+          "negative_count": 90,
+          "zero_count": 0,
+          "positive_count": 0
+        },
+        "hill_tail_index": {
+          "count": 90,
+          "mean": 3.594773044945953,
+          "minimum": 0.4267021328169367,
+          "maximum": 7.129713975056761,
+          "negative_count": 0,
+          "zero_count": 0,
+          "positive_count": 90
+        }
+      }
+    }
+  },
+  "factorial_interaction_neither_minus_nonoise_minus_nodepth_plus_current": {
+    "price": {
+      "daily_volatility": {
+        "count": 90,
+        "mean": 0.004851818030293383,
+        "minimum": 0.0018959522728387752,
+        "maximum": 0.008665987863580834,
+        "negative_count": 0,
+        "zero_count": 0,
+        "positive_count": 90
+      },
+      "excess_kurtosis": {
+        "count": 90,
+        "mean": 12.446086597956072,
+        "minimum": 0.629647606981576,
+        "maximum": 29.827298277824276,
+        "negative_count": 0,
+        "zero_count": 0,
+        "positive_count": 90
+      },
+      "return_acf_1": {
+        "count": 90,
+        "mean": 0.027911120637709654,
+        "minimum": -0.0802922584865984,
+        "maximum": 0.16839518691633715,
+        "negative_count": 26,
+        "zero_count": 0,
+        "positive_count": 64
+      },
+      "abs_return_acf_1": {
+        "count": 90,
+        "mean": 0.2615363086155633,
+        "minimum": 0.05666124446231802,
+        "maximum": 0.3962351394678444,
+        "negative_count": 0,
+        "zero_count": 0,
+        "positive_count": 90
+      },
+      "abs_return_acf_5": {
+        "count": 90,
+        "mean": 0.250685379349201,
+        "minimum": 0.07997072057798918,
+        "maximum": 0.4217925099371993,
+        "negative_count": 0,
+        "zero_count": 0,
+        "positive_count": 90
+      },
+      "abs_return_acf_20": {
+        "count": 90,
+        "mean": 0.24039808284424033,
+        "minimum": 0.10928003119972807,
+        "maximum": 0.3932881567684255,
+        "negative_count": 0,
+        "zero_count": 0,
+        "positive_count": 90
+      },
+      "quantile_01": {
+        "count": 90,
+        "mean": -0.02652833183071377,
+        "minimum": -0.05139264195576079,
+        "maximum": -0.003388717186978314,
+        "negative_count": 90,
+        "zero_count": 0,
+        "positive_count": 0
+      },
+      "quantile_99": {
+        "count": 90,
+        "mean": 0.01854274117737723,
+        "minimum": 0.0035596171707972246,
+        "maximum": 0.03565579693391479,
+        "negative_count": 0,
+        "zero_count": 0,
+        "positive_count": 90
+      },
+      "hill_tail_index": {
+        "count": 90,
+        "mean": -2.355091389640582,
+        "minimum": -5.846076366310574,
+        "maximum": 0.6710621182756111,
+        "negative_count": 86,
+        "zero_count": 0,
+        "positive_count": 4
+      }
+    },
+    "holder_total": {
+      "daily_volatility": {
+        "count": 90,
+        "mean": 0.004853719420361772,
+        "minimum": 0.0018961375596622428,
+        "maximum": 0.008668851161277446,
+        "negative_count": 0,
+        "zero_count": 0,
+        "positive_count": 90
+      },
+      "excess_kurtosis": {
+        "count": 90,
+        "mean": 12.434236749044572,
+        "minimum": 0.6303719423292886,
+        "maximum": 29.80050621393318,
+        "negative_count": 0,
+        "zero_count": 0,
+        "positive_count": 90
+      },
+      "return_acf_1": {
+        "count": 90,
+        "mean": 0.02802202769255181,
+        "minimum": -0.08018012199382057,
+        "maximum": 0.16848615264412944,
+        "negative_count": 26,
+        "zero_count": 0,
+        "positive_count": 64
+      },
+      "abs_return_acf_1": {
+        "count": 90,
+        "mean": 0.2608488388437039,
+        "minimum": 0.05791988648861965,
+        "maximum": 0.39581856220235034,
+        "negative_count": 0,
+        "zero_count": 0,
+        "positive_count": 90
+      },
+      "abs_return_acf_5": {
+        "count": 90,
+        "mean": 0.2503294164447207,
+        "minimum": 0.08081463973899307,
+        "maximum": 0.42361341106461015,
+        "negative_count": 0,
+        "zero_count": 0,
+        "positive_count": 90
+      },
+      "abs_return_acf_20": {
+        "count": 90,
+        "mean": 0.24006610351362426,
+        "minimum": 0.11120812678578473,
+        "maximum": 0.3942283221385537,
+        "negative_count": 0,
+        "zero_count": 0,
+        "positive_count": 90
+      },
+      "quantile_01": {
+        "count": 90,
+        "mean": -0.02647225111587709,
+        "minimum": -0.051393519640471216,
+        "maximum": -0.003345506417026245,
+        "negative_count": 90,
+        "zero_count": 0,
+        "positive_count": 0
+      },
+      "quantile_99": {
+        "count": 90,
+        "mean": 0.01861012471141615,
+        "minimum": 0.003598652202618513,
+        "maximum": 0.03562032906448266,
+        "negative_count": 0,
+        "zero_count": 0,
+        "positive_count": 90
+      },
+      "hill_tail_index": {
+        "count": 90,
+        "mean": -2.353899557338683,
+        "minimum": -5.84468447762611,
+        "maximum": 0.6762948164727858,
+        "negative_count": 86,
+        "zero_count": 0,
+        "positive_count": 4
+      }
+    }
+  },
+  "cap_events": [
+    {
+      "case": "current_27001",
+      "day": 275,
+      "asset": 9,
+      "raw": 0.3386832429838734,
+      "news": 0.013754116839992664,
+      "permanent": 0.06213375726294242,
+      "transient_change": 0.26339920114918414,
+      "inventory": -0.0006038322682458114,
+      "depth": 0.31052749357050013,
+      "noise_amplification": 5.5134283607601065,
+      "investor_submitted": 0.03197130798495753,
+      "noise_submitted": 0.006382863165006919,
+      "investor_executed": 0.03197130798495753,
+      "noise_executed": 0.006382863165006919,
+      "submitted_executed_net_difference": 0.0
+    },
+    {
+      "case": "current_27304",
+      "day": 344,
+      "asset": 8,
+      "raw": -0.3260863696177964,
+      "news": -0.001805925435247596,
+      "permanent": -0.07154629218435836,
+      "transient_change": -0.2503222436060512,
+      "inventory": -0.0024119083921392416,
+      "depth": 0.30092624945041707,
+      "noise_amplification": 4.440483259470353,
+      "investor_submitted": -0.03801210733254604,
+      "noise_submitted": -0.006152270559033203,
+      "investor_executed": -0.03801210733254604,
+      "noise_executed": -0.006152270559033203,
+      "submitted_executed_net_difference": 0.0
+    },
+    {
+      "case": "current_27304",
+      "day": 344,
+      "asset": 9,
+      "raw": -0.3352445811266831,
+      "news": -0.006417200147213431,
+      "permanent": -0.07263104354437945,
+      "transient_change": -0.2539036050272743,
+      "inventory": -0.0022927324078158453,
+      "depth": 0.3001848092708147,
+      "noise_amplification": 4.658279115836557,
+      "investor_submitted": -0.03735522840937113,
+      "noise_submitted": -0.007478749087159391,
+      "investor_executed": -0.03735522840937113,
+      "noise_executed": -0.007478749087159391,
+      "submitted_executed_net_difference": 0.0
+    },
+    {
+      "case": "current_27304",
+      "day": 344,
+      "asset": 24,
+      "raw": -0.33837964105300405,
+      "news": -0.0021163724831102697,
+      "permanent": -0.07533842553293017,
+      "transient_change": -0.25887457346668974,
+      "inventory": -0.0020502695702739014,
+      "depth": 0.30043545915410586,
+      "noise_amplification": 4.356264040303001,
+      "investor_submitted": -0.038183164912069176,
+      "noise_submitted": -0.008322036034184025,
+      "investor_executed": -0.038183164912069176,
+      "noise_executed": -0.008322036034184025,
+      "submitted_executed_net_difference": 0.0
+    },
+    {
+      "case": "current_27304",
+      "day": 1069,
+      "asset": 4,
+      "raw": -0.31281722808947715,
+      "news": -0.0061512695066524275,
+      "permanent": -0.0740887208172493,
+      "transient_change": -0.23130295243247373,
+      "inventory": -0.0012742853331017207,
+      "depth": 0.30026112331242716,
+      "noise_amplification": 4.868222302374818,
+      "investor_submitted": -0.04575441600462703,
+      "noise_submitted": 2.0637722374377166E-05,
+      "investor_executed": -0.04575441600462703,
+      "noise_executed": 2.0637722374377166E-05,
+      "submitted_executed_net_difference": 0.0
+    },
+    {
+      "case": "current_27304",
+      "day": 1069,
+      "asset": 9,
+      "raw": -0.30674139692534425,
+      "news": -0.00522141221489236,
+      "permanent": -0.07159259019846201,
+      "transient_change": -0.2280932405006294,
+      "inventory": -0.001834154011360506,
+      "depth": 0.3000592611736958,
+      "noise_amplification": 3.8481296520953627,
+      "investor_submitted": -0.044199528584620514,
+      "noise_submitted": 6.571671989645843E-06,
+      "investor_executed": -0.044199528584620514,
+      "noise_executed": 6.571671989645843E-06,
+      "submitted_executed_net_difference": 0.0
+    },
+    {
+      "case": "current_27304",
+      "day": 1069,
+      "asset": 21,
+      "raw": -0.3028770581295356,
+      "news": -0.003956571816354173,
+      "permanent": -0.07396038741306521,
+      "transient_change": -0.2232975330407075,
+      "inventory": -0.0016625658594086668,
+      "depth": 0.30004350014334424,
+      "noise_amplification": 3.928982655255661,
+      "investor_submitted": -0.04567830306413729,
+      "noise_submitted": 2.3742932615553317E-05,
+      "investor_executed": -0.04567830306413729,
+      "noise_executed": 2.3742932615553317E-05,
+      "submitted_executed_net_difference": 0.0
+    },
+    {
+      "case": "current_27304",
+      "day": 1069,
+      "asset": 28,
+      "raw": -0.3040945658033455,
+      "news": -0.009907437626089265,
+      "permanent": -0.07403102237525079,
+      "transient_change": -0.2178548264639662,
+      "inventory": -0.0023012793380392175,
+      "depth": 0.3000580932503928,
+      "noise_amplification": 3.8366872681696615,
+      "investor_submitted": -0.04573259649673144,
+      "noise_submitted": 3.44345367000851E-05,
+      "investor_executed": -0.04573259649673144,
+      "noise_executed": 3.44345367000851E-05,
+      "submitted_executed_net_difference": 0.0
+    },
+    {
+      "case": "current_27305",
+      "day": 1457,
+      "asset": 4,
+      "raw": -0.3219549582461398,
+      "news": 0.009131332116037286,
+      "permanent": -0.08349386219085148,
+      "transient_change": -0.24641155551837182,
+      "inventory": -0.0011808726529537778,
+      "depth": 0.3001882036386281,
+      "noise_amplification": 4.845419722682659,
+      "investor_submitted": -0.02439173684456098,
+      "noise_submitted": -0.02714768426090289,
+      "investor_executed": -0.02439173684456098,
+      "noise_executed": -0.02714768426090289,
+      "submitted_executed_net_difference": 0.0
+    },
+    {
+      "case": "current_27305",
+      "day": 1457,
+      "asset": 10,
+      "raw": -0.33952134943738554,
+      "news": -0.0047067308249292925,
+      "permanent": -0.08077848605658888,
+      "transient_change": -0.2530268482547067,
+      "inventory": -0.001009284301160624,
+      "depth": 0.30020349102015725,
+      "noise_amplification": 5.090218786517945,
+      "investor_submitted": -0.025585077771849388,
+      "noise_submitted": -0.024278185226044986,
+      "investor_executed": -0.025585077771849388,
+      "noise_executed": -0.024278185226044986,
+      "submitted_executed_net_difference": 0.0
+    }
+  ],
+  "automatic_winner": null,
+  "limits": [
+    "The 90 company-world contrasts within an arm are correlated observations nested in only three already-seen seeds; no inferential confidence interval or holdout claim.",
+    "Factorial contrasts include all endogenous path responses; individual quote terms are accounting decompositions, not separately identified path effects.",
+    "Exponent zero removes both high-volatility amplification and low-volatility suppression; sensitivity zero fixes depth at its initial value of one.",
+    "Bare results do not address disclosure cash-flow costs or the separate nine large corporate-cost/news cap cases.",
+    "All original gates and failed worlds remain unchanged; empirical, return-ACF and cross-correlation acceptance remain pending."
+  ]
+}

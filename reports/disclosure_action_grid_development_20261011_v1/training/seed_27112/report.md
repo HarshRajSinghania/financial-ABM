@@ -1,0 +1,658 @@
+# Disclosure-market run
+
+Purpose: development
+Domain: esg
+Seed: 27112
+Run ID: `7f14df0beeef306ba153f3753fce9f3368448044b6ec8b9dbcaf6b21e317c0b3`
+Result fingerprint: `87857d66df210aee2548a4848afc4f84a7ed341fda027aea33b809d575d77af4`
+
+A completed simulation is not evidence of empirical calibration or a policy ranking.
+
+## Metrics
+
+```json
+{
+  "window": {
+    "start_day": 600,
+    "end_day": 1800,
+    "elapsed_days": 1200,
+    "state_observations": 1201,
+    "decision_observations": 20,
+    "decision_days": [
+      660,
+      720,
+      780,
+      840,
+      900,
+      960,
+      1020,
+      1080,
+      1140,
+      1200,
+      1260,
+      1320,
+      1380,
+      1440,
+      1500,
+      1560,
+      1620,
+      1680,
+      1740,
+      1800
+    ],
+    "cost_basis": "Commitments in (start_day, end_day] at decision-day prices; applied the following day.",
+    "interpretation": "Descriptive changes include delayed pre-window actions, not causal returns on in-window decisions."
+  },
+  "true_change": {
+    "equal_weight_sd": -0.5246839263741393,
+    "equal_weight_raw": -7.870258895612088,
+    "fixed_start_cap_weight_sd": -0.48712952526731795,
+    "fixed_start_cap_weight_raw": -7.306942879009768,
+    "end_cap_weight_sd": -0.5027039846031945,
+    "end_cap_weight_raw": -7.540559769047917
+  },
+  "full_period_change": {
+    "equal_weight_sd": -0.9172910692312806,
+    "equal_weight_raw": -13.759366038469208
+  },
+  "terminal_year": {
+    "start_day": 1549,
+    "observations": 252,
+    "complete_year": true,
+    "change_from_initial_sd": -0.8733408771173983,
+    "inflation_mean_sd": 0.6889619708994709
+  },
+  "decay_adjusted_gain": {
+    "equal_weight_sd": 0.4007897118226527,
+    "equal_weight_raw": 6.01184567733979,
+    "fixed_start_cap_weight_sd": 0.4391685929052206,
+    "fixed_start_cap_weight_raw": 6.58752889357831,
+    "end_cap_weight_sd": 0.420800063825499,
+    "end_cap_weight_raw": 6.312000957382483
+  },
+  "size": {
+    "large": {
+      "count": 3,
+      "change_sd": -0.4515476190476157,
+      "change_raw": -6.773214285714236,
+      "decay_adjusted_gain_sd": 0.5008333333333367
+    },
+    "mid": {
+      "count": 9,
+      "change_sd": -0.3978353101360271,
+      "change_raw": -5.967529652040406,
+      "decay_adjusted_gain_sd": 0.5035846560846591
+    },
+    "small": {
+      "count": 18,
+      "change_sd": -0.6002976190476159,
+      "change_raw": -9.004464285714239,
+      "decay_adjusted_gain_sd": 0.3327183027732022
+    },
+    "large_minus_small_sd": 0.14875000000000022,
+    "large_minus_small_raw": 2.2312500000000033
+  },
+  "inflation": {
+    "initial_mean_sd": 0.28533333333333327,
+    "final_mean_sd": 0.7190000000000001,
+    "mean_sd": 0.5190888148764918,
+    "mean_absolute_raw_gap": 7.786332223147377,
+    "final_absolute_raw_gap": 10.785,
+    "mean_range_fraction": 0.07786332223147377
+  },
+  "impact": {
+    "initial_share": 0.22666666666666666,
+    "final_share": 0.28,
+    "initial_wealth_share": 0.20366377231183444,
+    "final_wealth_share": 0.26404506049823945
+  },
+  "pricing_slope": {
+    "mean": -0.0011442645098157333,
+    "observations": 20
+  },
+  "costs": {
+    "initial_market_cap": 30.0,
+    "resource_cost": 0.2620107041928556,
+    "real_improvement_cost": 0.23950489665954783,
+    "washing_cost": 0.0225058075333078,
+    "fine_transfer": 0.01942528660597663,
+    "subsidy_transfer": 0.0,
+    "private_net_outflow": 0.28143599079883225,
+    "resource_cost_fraction_initial_cap": 0.008733690139761854,
+    "private_net_outflow_fraction_initial_cap": 0.009381199693294408,
+    "fine_transfer_fraction_initial_cap": 0.0006475095535325543,
+    "subsidy_transfer_fraction_initial_cap": 0.0,
+    "carry_in_resource_cost": 0.007053934946583021,
+    "unapplied_final_day_resource_cost": 0.0009441117273866988
+  },
+  "efficiency": {
+    "decay_adjusted_sd_per_resource_cost": 45.890076864300255,
+    "beneficial_raw_gain_per_resource_cost": 688.3511529645039,
+    "undefined_reason": null
+  },
+  "diagnostics": {
+    "status": "ok",
+    "missing_size_classes": [],
+    "pricing_slope_missing_observations": 0,
+    "finite_metrics": true
+  },
+  "financing": {
+    "status": "modeled_accrual",
+    "interpretation": "Accrued financing fees, not payments or cash-solvency evidence; value adjustment is relative to the initial contract.",
+    "fixed_exposure": 15.0,
+    "accrued_cost": 3.375628643658212,
+    "baseline_accrued_cost": 2.9761904761904767,
+    "value_adjustment": -0.39943816746773503,
+    "accrued_cost_fraction_initial_cap": 0.11252095478860706,
+    "mean_contract_rate": 0.04595271682149805,
+    "maximum_ledger_error": 7.453889935837843e-20
+  }
+}
+```
+
+## Validation
+
+```json
+{
+  "n_assets": 30,
+  "observations": 1200,
+  "burn_in_days": 600,
+  "mechanical": {
+    "status": "PASS",
+    "checks": {
+      "finite_positive_prices": true,
+      "finite_positive_intrinsic_values": true,
+      "no_price_caps": true,
+      "cash_conservation": true,
+      "share_conservation": true
+    },
+    "price_cap_hits": 0,
+    "maximum_relative_cash_error": 1.6428941902919935e-15,
+    "maximum_absolute_share_error": 1.7763568394002505e-15,
+    "conservation_tolerance": 1e-08,
+    "cash_error_measure": "relative to expected cash; absolute if expected cash is zero",
+    "share_error_measure": "daily maximum absolute error across all assets"
+  },
+  "stylized": {
+    "status": "PASS",
+    "checks": {
+      "all_assets_have_finite_moments": true,
+      "all_assets_positive_excess_kurtosis": true,
+      "all_assets_positive_abs_return_acf_1": true
+    },
+    "failed_assets": {
+      "nonfinite_moments": [],
+      "nonpositive_excess_kurtosis": [],
+      "nonpositive_abs_return_acf_1": []
+    }
+  },
+  "return_acf": {
+    "status": "pending",
+    "statistics": {
+      "finite_count": 30,
+      "minimum": -0.18941985886890245,
+      "maximum": -0.020518495960747514,
+      "mean": -0.09861722689695278,
+      "median": -0.0984941137360836,
+      "quantile_05": -0.14563725420394638,
+      "quantile_95": -0.0375418493312774
+    },
+    "target": null,
+    "tolerance": null,
+    "threshold_source": null,
+    "deviation_statistics": null,
+    "failed_assets": null
+  },
+  "cross_asset_correlation": {
+    "status": "pending",
+    "statistics": {
+      "finite_count": 435,
+      "minimum": 0.2373702954016269,
+      "maximum": 0.7729449421959431,
+      "mean": 0.5067304020340578,
+      "median": 0.5080834990424724,
+      "quantile_05": 0.2699922195384831,
+      "quantile_95": 0.7442111871235805
+    },
+    "pair_count": 435,
+    "bounds": null,
+    "threshold_source": null,
+    "violating_pair_count": null
+  },
+  "moments_per_asset": [
+    {
+      "asset": 0,
+      "moments": {
+        "daily_volatility": 0.018094826487339497,
+        "excess_kurtosis": 11.5126252728532,
+        "return_acf_1": -0.09539227551421874,
+        "abs_return_acf_1": 0.39497481872377915,
+        "abs_return_acf_5": 0.3511860075899027,
+        "abs_return_acf_20": 0.25425684822091976,
+        "quantile_01": -0.05711019017743204,
+        "quantile_99": 0.039566646201539456,
+        "hill_tail_index": 2.052530085748595
+      }
+    },
+    {
+      "asset": 1,
+      "moments": {
+        "daily_volatility": 0.01849301659751469,
+        "excess_kurtosis": 11.017480166256815,
+        "return_acf_1": -0.09781840575981036,
+        "abs_return_acf_1": 0.38198860470390167,
+        "abs_return_acf_5": 0.29356245039707046,
+        "abs_return_acf_20": 0.2886674451682537,
+        "quantile_01": -0.05875378015824926,
+        "quantile_99": 0.04914855219198031,
+        "hill_tail_index": 2.4149008179671005
+      }
+    },
+    {
+      "asset": 2,
+      "moments": {
+        "daily_volatility": 0.019419249906610758,
+        "excess_kurtosis": 2.313783920713301,
+        "return_acf_1": -0.10784964727808191,
+        "abs_return_acf_1": 0.28792907022428643,
+        "abs_return_acf_5": 0.23108809712011386,
+        "abs_return_acf_20": 0.2366527314044403,
+        "quantile_01": -0.05384658284142426,
+        "quantile_99": 0.049749674719930546,
+        "hill_tail_index": 4.394074126876205
+      }
+    },
+    {
+      "asset": 3,
+      "moments": {
+        "daily_volatility": 0.020134695599923157,
+        "excess_kurtosis": 4.823509365940499,
+        "return_acf_1": -0.18941985886890245,
+        "abs_return_acf_1": 0.33330114841755243,
+        "abs_return_acf_5": 0.3381451904138706,
+        "abs_return_acf_20": 0.31157483511178713,
+        "quantile_01": -0.06031578271796616,
+        "quantile_99": 0.052634788429550765,
+        "hill_tail_index": 3.6214992633939604
+      }
+    },
+    {
+      "asset": 4,
+      "moments": {
+        "daily_volatility": 0.024434434339241622,
+        "excess_kurtosis": 10.67364876986996,
+        "return_acf_1": -0.12950336267837917,
+        "abs_return_acf_1": 0.45622999099326655,
+        "abs_return_acf_5": 0.4759652718668112,
+        "abs_return_acf_20": 0.3653428505623179,
+        "quantile_01": -0.09257098027617884,
+        "quantile_99": 0.09083037978432024,
+        "hill_tail_index": 4.922894678140416
+      }
+    },
+    {
+      "asset": 5,
+      "moments": {
+        "daily_volatility": 0.017533863042869198,
+        "excess_kurtosis": 10.448844099834309,
+        "return_acf_1": -0.11275461760584633,
+        "abs_return_acf_1": 0.2903598424763735,
+        "abs_return_acf_5": 0.27407029159678736,
+        "abs_return_acf_20": 0.26618169854822693,
+        "quantile_01": -0.06029384549519648,
+        "quantile_99": 0.0452072511191455,
+        "hill_tail_index": 2.320648825059738
+      }
+    },
+    {
+      "asset": 6,
+      "moments": {
+        "daily_volatility": 0.017555824182220788,
+        "excess_kurtosis": 9.385936764969486,
+        "return_acf_1": -0.09916982171235685,
+        "abs_return_acf_1": 0.3285759780042037,
+        "abs_return_acf_5": 0.2734645589152546,
+        "abs_return_acf_20": 0.2568869887219661,
+        "quantile_01": -0.05579554043669032,
+        "quantile_99": 0.040960954826040924,
+        "hill_tail_index": 2.087953195819518
+      }
+    },
+    {
+      "asset": 7,
+      "moments": {
+        "daily_volatility": 0.017002946513092202,
+        "excess_kurtosis": 10.956390814927266,
+        "return_acf_1": -0.020518495960747514,
+        "abs_return_acf_1": 0.3160732088432629,
+        "abs_return_acf_5": 0.28558881843067285,
+        "abs_return_acf_20": 0.21963512275949157,
+        "quantile_01": -0.056057637017948955,
+        "quantile_99": 0.04148358837841427,
+        "hill_tail_index": 2.1116333430854475
+      }
+    },
+    {
+      "asset": 8,
+      "moments": {
+        "daily_volatility": 0.01642881359749513,
+        "excess_kurtosis": 9.181201602785732,
+        "return_acf_1": -0.09302168003506203,
+        "abs_return_acf_1": 0.3320269625710336,
+        "abs_return_acf_5": 0.2591967256781815,
+        "abs_return_acf_20": 0.23633144739118017,
+        "quantile_01": -0.051655152070571655,
+        "quantile_99": 0.038116296751691967,
+        "hill_tail_index": 2.409303771588391
+      }
+    },
+    {
+      "asset": 9,
+      "moments": {
+        "daily_volatility": 0.022589272132044258,
+        "excess_kurtosis": 5.466296685881707,
+        "return_acf_1": -0.09594373637240057,
+        "abs_return_acf_1": 0.3875267063051103,
+        "abs_return_acf_5": 0.41022261301203405,
+        "abs_return_acf_20": 0.34730778908967713,
+        "quantile_01": -0.06990351188754511,
+        "quantile_99": 0.07149125739711217,
+        "hill_tail_index": 4.229643135104053
+      }
+    },
+    {
+      "asset": 10,
+      "moments": {
+        "daily_volatility": 0.018572454726433846,
+        "excess_kurtosis": 9.11673239256331,
+        "return_acf_1": -0.08768077469943987,
+        "abs_return_acf_1": 0.3044246645097259,
+        "abs_return_acf_5": 0.3966728502046411,
+        "abs_return_acf_20": 0.22379125897130941,
+        "quantile_01": -0.06067068483919775,
+        "quantile_99": 0.04021509990469601,
+        "hill_tail_index": 2.296260925000867
+      }
+    },
+    {
+      "asset": 11,
+      "moments": {
+        "daily_volatility": 0.02034804987348672,
+        "excess_kurtosis": 5.855361840232543,
+        "return_acf_1": -0.07587521205587436,
+        "abs_return_acf_1": 0.35726996974851977,
+        "abs_return_acf_5": 0.359910531216591,
+        "abs_return_acf_20": 0.25918560130491697,
+        "quantile_01": -0.06109844770689026,
+        "quantile_99": 0.05412944616071048,
+        "hill_tail_index": 3.5436932383330872
+      }
+    },
+    {
+      "asset": 12,
+      "moments": {
+        "daily_volatility": 0.019128605052901784,
+        "excess_kurtosis": 11.18824857916692,
+        "return_acf_1": -0.121080091322176,
+        "abs_return_acf_1": 0.3858706204519988,
+        "abs_return_acf_5": 0.2990587005230295,
+        "abs_return_acf_20": 0.2565640119970158,
+        "quantile_01": -0.057850945327465354,
+        "quantile_99": 0.05536718552726809,
+        "hill_tail_index": 3.355518891892695
+      }
+    },
+    {
+      "asset": 13,
+      "moments": {
+        "daily_volatility": 0.018535009504288442,
+        "excess_kurtosis": 7.3796014072205125,
+        "return_acf_1": -0.08511750698453939,
+        "abs_return_acf_1": 0.31239961051332976,
+        "abs_return_acf_5": 0.24064755265184448,
+        "abs_return_acf_20": 0.21356627574061718,
+        "quantile_01": -0.05944845026942709,
+        "quantile_99": 0.04908498687376065,
+        "hill_tail_index": 2.954564830174286
+      }
+    },
+    {
+      "asset": 14,
+      "moments": {
+        "daily_volatility": 0.01919608516284083,
+        "excess_kurtosis": 15.311312473834175,
+        "return_acf_1": -0.07571447492580113,
+        "abs_return_acf_1": 0.4462684251269345,
+        "abs_return_acf_5": 0.44771005824997734,
+        "abs_return_acf_20": 0.2570372955175501,
+        "quantile_01": -0.066227220513292,
+        "quantile_99": 0.050681301214771025,
+        "hill_tail_index": 2.2052813874218486
+      }
+    },
+    {
+      "asset": 15,
+      "moments": {
+        "daily_volatility": 0.017829575270828953,
+        "excess_kurtosis": 4.018476464751408,
+        "return_acf_1": -0.11961059606604103,
+        "abs_return_acf_1": 0.28150900785375244,
+        "abs_return_acf_5": 0.23990971759166618,
+        "abs_return_acf_20": 0.19394457914808058,
+        "quantile_01": -0.054022553508584675,
+        "quantile_99": 0.04548219782022363,
+        "hill_tail_index": 4.1462727966772
+      }
+    },
+    {
+      "asset": 16,
+      "moments": {
+        "daily_volatility": 0.023996380215335296,
+        "excess_kurtosis": 13.144871363971365,
+        "return_acf_1": -0.09413534811537491,
+        "abs_return_acf_1": 0.44033621337506984,
+        "abs_return_acf_5": 0.4757346365493695,
+        "abs_return_acf_20": 0.32501814757127406,
+        "quantile_01": -0.07346560221305863,
+        "quantile_99": 0.07451125714673318,
+        "hill_tail_index": 2.8866711627907877
+      }
+    },
+    {
+      "asset": 17,
+      "moments": {
+        "daily_volatility": 0.02432604136557002,
+        "excess_kurtosis": 8.91233731377663,
+        "return_acf_1": -0.023257410689625068,
+        "abs_return_acf_1": 0.42793554453581106,
+        "abs_return_acf_5": 0.4306216737774024,
+        "abs_return_acf_20": 0.3548694488493158,
+        "quantile_01": -0.08122243930400036,
+        "quantile_99": 0.07185631480381176,
+        "hill_tail_index": 3.2781887651576014
+      }
+    },
+    {
+      "asset": 18,
+      "moments": {
+        "daily_volatility": 0.02276457637497901,
+        "excess_kurtosis": 6.002463417276006,
+        "return_acf_1": -0.06439158885254442,
+        "abs_return_acf_1": 0.41847266283949464,
+        "abs_return_acf_5": 0.5022777153307355,
+        "abs_return_acf_20": 0.4002548783264534,
+        "quantile_01": -0.07891794955205286,
+        "quantile_99": 0.07254602645389303,
+        "hill_tail_index": 3.6133569650520254
+      }
+    },
+    {
+      "asset": 19,
+      "moments": {
+        "daily_volatility": 0.019220764797452983,
+        "excess_kurtosis": 7.830134731432013,
+        "return_acf_1": -0.10329042176077202,
+        "abs_return_acf_1": 0.33145209298135664,
+        "abs_return_acf_5": 0.33280196635242004,
+        "abs_return_acf_20": 0.2776312792533236,
+        "quantile_01": -0.0674907550011797,
+        "quantile_99": 0.0490659772157175,
+        "hill_tail_index": 2.9098832614770527
+      }
+    },
+    {
+      "asset": 20,
+      "moments": {
+        "daily_volatility": 0.01946897064238637,
+        "excess_kurtosis": 4.3313102512866015,
+        "return_acf_1": -0.127496597573874,
+        "abs_return_acf_1": 0.3629230613182445,
+        "abs_return_acf_5": 0.3361709493191508,
+        "abs_return_acf_20": 0.3159677727569153,
+        "quantile_01": -0.06512802138212291,
+        "quantile_99": 0.0465996514763998,
+        "hill_tail_index": 3.284076832316586
+      }
+    },
+    {
+      "asset": 21,
+      "moments": {
+        "daily_volatility": 0.020034842598650095,
+        "excess_kurtosis": 9.276034450780758,
+        "return_acf_1": -0.10318197487210416,
+        "abs_return_acf_1": 0.38314257621557574,
+        "abs_return_acf_5": 0.33605558155707044,
+        "abs_return_acf_20": 0.320409280478342,
+        "quantile_01": -0.07259510680133224,
+        "quantile_99": 0.055668336500414195,
+        "hill_tail_index": 3.452325607050185
+      }
+    },
+    {
+      "asset": 22,
+      "moments": {
+        "daily_volatility": 0.01775283707224858,
+        "excess_kurtosis": 11.260940075714124,
+        "return_acf_1": -0.07397834204906807,
+        "abs_return_acf_1": 0.3751256696446233,
+        "abs_return_acf_5": 0.36105432043464813,
+        "abs_return_acf_20": 0.315827350167686,
+        "quantile_01": -0.05719178477259846,
+        "quantile_99": 0.03791717799294676,
+        "hill_tail_index": 2.748501276944062
+      }
+    },
+    {
+      "asset": 23,
+      "moments": {
+        "daily_volatility": 0.023152620223525943,
+        "excess_kurtosis": 6.331414446653103,
+        "return_acf_1": -0.12169428294734094,
+        "abs_return_acf_1": 0.4060844737682585,
+        "abs_return_acf_5": 0.5094002122749648,
+        "abs_return_acf_20": 0.3811696237243132,
+        "quantile_01": -0.0799240070234389,
+        "quantile_99": 0.07477871129779184,
+        "hill_tail_index": 4.873647868514465
+      }
+    },
+    {
+      "asset": 24,
+      "moments": {
+        "daily_volatility": 0.018749731473141962,
+        "excess_kurtosis": 11.452375002383612,
+        "return_acf_1": -0.1360505897696787,
+        "abs_return_acf_1": 0.33263310971597554,
+        "abs_return_acf_5": 0.23042822179859065,
+        "abs_return_acf_20": 0.24070690803651365,
+        "quantile_01": -0.058923173128882525,
+        "quantile_99": 0.04155058234757367,
+        "hill_tail_index": 2.361469660148017
+      }
+    },
+    {
+      "asset": 25,
+      "moments": {
+        "daily_volatility": 0.017329132047290582,
+        "excess_kurtosis": 9.53744782871074,
+        "return_acf_1": -0.07883868523422534,
+        "abs_return_acf_1": 0.3490416526028519,
+        "abs_return_acf_5": 0.29921501231565567,
+        "abs_return_acf_20": 0.2803806205011971,
+        "quantile_01": -0.059342531950928416,
+        "quantile_99": 0.039784121356898135,
+        "hill_tail_index": 2.4576899895618887
+      }
+    },
+    {
+      "asset": 26,
+      "moments": {
+        "daily_volatility": 0.019719525930624555,
+        "excess_kurtosis": 4.098443646029862,
+        "return_acf_1": -0.09957033834415072,
+        "abs_return_acf_1": 0.3765835718799757,
+        "abs_return_acf_5": 0.30222645037349355,
+        "abs_return_acf_20": 0.3524367070291753,
+        "quantile_01": -0.058375573940885536,
+        "quantile_99": 0.05304685674765219,
+        "hill_tail_index": 4.230204271416413
+      }
+    },
+    {
+      "asset": 27,
+      "moments": {
+        "daily_volatility": 0.018628836470937517,
+        "excess_kurtosis": 9.274243258387171,
+        "return_acf_1": -0.05500060767107448,
+        "abs_return_acf_1": 0.3396549213144587,
+        "abs_return_acf_5": 0.3425854559031061,
+        "abs_return_acf_20": 0.26588670865421765,
+        "quantile_01": -0.06318281482541797,
+        "quantile_99": 0.04960510110859012,
+        "hill_tail_index": 2.751946637129391
+      }
+    },
+    {
+      "asset": 28,
+      "moments": {
+        "daily_volatility": 0.018419597002553207,
+        "excess_kurtosis": 6.374091164474764,
+        "return_acf_1": -0.11767917244799804,
+        "abs_return_acf_1": 0.3045909110652383,
+        "abs_return_acf_5": 0.2875475737457966,
+        "abs_return_acf_20": 0.22704816150906712,
+        "quantile_01": -0.0636496400053797,
+        "quantile_99": 0.04967636005311781,
+        "hill_tail_index": 2.9397417014987273
+      }
+    },
+    {
+      "asset": 29,
+      "moments": {
+        "daily_volatility": 0.019416341509626008,
+        "excess_kurtosis": 6.499423454231341,
+        "return_acf_1": -0.15348088874107446,
+        "abs_return_acf_1": 0.3566481319506765,
+        "abs_return_acf_5": 0.2679076810539993,
+        "abs_return_acf_20": 0.3061333347553899,
+        "quantile_01": -0.05878021605839928,
+        "quantile_99": 0.05303266028564806,
+        "hill_tail_index": 4.28278728361854
+      }
+    }
+  ],
+  "empirical_calibration": {
+    "status": "pending",
+    "reason": "This validator does not evaluate held-out empirical targets."
+  }
+}
+```
+
+## Learning diagnostics
+
+Firm policy: q_learning
+Training: True
+Coverage status: not_applicable
+Unseen state share: 0.0
+Unclosed decisions: 30
+Ledger, coverage counts and pending liabilities: [learning.json](learning.json).

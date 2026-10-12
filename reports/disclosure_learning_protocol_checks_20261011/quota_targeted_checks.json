@@ -1,0 +1,39 @@
+{
+  "stage": "quota_only",
+  "created_utc": "2026-10-11T11:22:29.410763+00:00",
+  "test_execution": {
+    "status": "PASS",
+    "exit_code": 0,
+    "exec_session_id": 63384,
+    "test_files": [
+      "test_disclosure_action_grid.py",
+      "test_disclosure_learning.py",
+      "test_disclosure_q_market.py",
+      "test_disclosure_q_runner.py",
+      "test_disclosure_training.py",
+      "test_disclosure_group_coverage.py",
+      "test_disclosure_runner.py"
+    ],
+    "collection_output": "tests/test_disclosure_action_grid.py: 42\ntests/test_disclosure_group_coverage.py: 13\ntests/test_disclosure_learning.py: 14\ntests/test_disclosure_q_market.py: 22\ntests/test_disclosure_q_runner.py: 7\ntests/test_disclosure_runner.py: 6\ntests/test_disclosure_training.py: 31\n\n",
+    "evidence": "Root executed the seven test files before this record; the collection below does not rerun them."
+  },
+  "source_sha256": {
+    "learning.py": "00c59bda4f64c83c4489972c8f5f66ebaaa57ffc67adbe6a1474d8e1938e8f94",
+    "game.py": "500b485e1dfa1ca1a15694ce563ffdee1b78e9abbd12c1b1efe9f5a9fa0e1ada",
+    "runner.py": "c07ebf07734e5b3804275b556099219cc5e7c5dd4e1a84ddbcb417d58d471499",
+    "training.py": "ef939d063baf84f1e6b7166eb6ac62003457eac16b2c0341b4c3af7c5b3a009e"
+  },
+  "tests_sha256": {
+    "test_disclosure_action_grid.py": "19e93410f5a7d29f0d118443d16646f5db443c11d850ca1332bff427b6ed044a",
+    "test_disclosure_learning.py": "0c454153b84c865ce92af86209713bd9851bb20e06fcad2ccc069abb9cb2c481",
+    "test_disclosure_q_market.py": "99ed8d07eea97c96c62cd1cccc67f54b609589e4f76e06c30174f149a0261bc4",
+    "test_disclosure_q_runner.py": "ec52dc5ba3bc8f7af826f4903241e97cb5a7345f9864562c0c015f00495c646d",
+    "test_disclosure_training.py": "d53245479f8e9ee6749c52d46fbe403145463821b1df90782b81b08dcd983395",
+    "test_disclosure_group_coverage.py": "a5146074fbe2472bc095d5fd2afd3397336c6cd1b27dea7fe497185d03a17c94",
+    "test_disclosure_runner.py": "527699c953804a61ce19f0d86e81b40ab0e7f9c0f46453e361e65d99e956014c"
+  },
+  "limitations": [
+    "No budget training or 1800-day compatibility replay in this quota-only stage.",
+    "Common pre-policy protocol not yet implemented."
+  ]
+}

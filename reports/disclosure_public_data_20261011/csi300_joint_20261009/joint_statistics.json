@@ -1,0 +1,159 @@
+{
+  "cohort": "CSI300_20261009",
+  "n_joint": 300,
+  "exclusions": {},
+  "score_date_counts": {
+    "2026/09/24": 300
+  },
+  "score_round_counts": {
+    "snapshot_20261011": 120,
+    "resume_20261012": 180
+  },
+  "company_type_counts": {
+    "3": 24,
+    "4": 252,
+    "1": 19,
+    "2": 5
+  },
+  "notice_after_cutoff": [],
+  "updated_after_cutoff": [],
+  "not_trading_20261009": [
+    "601059.SH"
+  ],
+  "score": {
+    "n": 300,
+    "mean": 87.536,
+    "population_sd": 7.235673477062565,
+    "min": 52.3,
+    "median": 88.75,
+    "max": 100.0
+  },
+  "log_common_book": {
+    "n": 300,
+    "mean": 24.699505399917072,
+    "population_sd": 1.2984286951303177,
+    "min": 21.554547957373938,
+    "median": 24.549087083061202,
+    "max": 29.007852847249776
+  },
+  "log_market_cap": {
+    "n": 300,
+    "mean": 25.517464034489016,
+    "population_sd": 0.9151544344205937,
+    "min": 24.08208875424253,
+    "median": 25.32881011347444,
+    "max": 28.705907297823487
+  },
+  "log_market_to_common_book": {
+    "n": 300,
+    "mean": 0.8179586345719432,
+    "population_sd": 0.9544181646892793,
+    "min": -1.3335491475389247,
+    "median": 0.7938092214521841,
+    "max": 3.8221112634311716
+  },
+  "spearman": {
+    "score_vs_log_market_cap": 0.1689631685618552,
+    "score_vs_log_common_book": 0.16811068907064805,
+    "log_market_cap_vs_log_common_book": 0.573429482549806
+  },
+  "spearman_excluding_financial_templates": {
+    "n": 252,
+    "score_vs_log_market_cap": 0.13580846606973487,
+    "score_vs_log_common_book": 0.09599084832106286
+  },
+  "vendor_pb_consistency": {
+    "parent": {
+      "definition": "(close*totalShare/TOTAL_PARENT_EQUITY) / BaoStock pbMRQ",
+      "n": 300,
+      "median": 0.9999999091261688,
+      "share_within_2pct": 0.75,
+      "outside_5pct": [
+        "000001.SZ",
+        "000100.SZ",
+        "000776.SZ",
+        "001965.SZ",
+        "002142.SZ",
+        "002202.SZ",
+        "002475.SZ",
+        "002594.SZ",
+        "002736.SZ",
+        "300308.SZ",
+        "300803.SZ",
+        "300866.SZ",
+        "301308.SZ",
+        "600000.SH",
+        "600011.SH",
+        "600015.SH",
+        "600016.SH",
+        "600025.SH",
+        "600027.SH",
+        "600030.SH",
+        "600036.SH",
+        "600089.SH",
+        "600115.SH",
+        "600188.SH",
+        "600426.SH",
+        "600547.SH",
+        "600886.SH",
+        "600918.SH",
+        "600919.SH",
+        "600926.SH",
+        "600930.SH",
+        "600999.SH",
+        "601009.SH",
+        "601059.SH",
+        "601066.SH",
+        "601136.SH",
+        "601166.SH",
+        "601169.SH",
+        "601186.SH",
+        "601211.SH",
+        "601288.SH",
+        "601328.SH",
+        "601377.SH",
+        "601390.SH",
+        "601398.SH",
+        "601618.SH",
+        "601658.SH",
+        "601669.SH",
+        "601688.SH",
+        "601788.SH",
+        "601800.SH",
+        "601818.SH",
+        "601838.SH",
+        "601868.SH",
+        "601881.SH",
+        "601916.SH",
+        "601939.SH",
+        "601988.SH",
+        "601995.SH",
+        "601998.SH",
+        "688009.SH"
+      ]
+    },
+    "common": {
+      "definition": "(close*totalShare/common_book_equity) / BaoStock pbMRQ",
+      "n": 300,
+      "median": 1.0000000039949157,
+      "share_within_2pct": 0.96,
+      "outside_5pct": [
+        "000100.SZ",
+        "002475.SZ",
+        "300308.SZ",
+        "300803.SZ",
+        "300866.SZ",
+        "301308.SZ",
+        "600030.SH",
+        "600426.SH"
+      ]
+    }
+  },
+  "vendor_pb_note": "The vendor PB denominator matches common equity (parent minus preferred/perpetual instruments) far better than parent equity. Remaining common-basis gaps are consistent with share-count changes after 2026-06-30 (the carried-share assumption) and are flagged, not adjusted.",
+  "interpretation_limits": [
+    "Score date labels are native vendor labels, not proven first-publication dates.",
+    "Book equity is an accounting proxy for latent value; market cap is a size measure; neither is identified true value.",
+    "The current model draws attribute and value independently; a nonzero score-size rank correlation means that independence is an approximation to be disclosed, not that a joint initialization has been fitted.",
+    "Current constituents are not a historical or survivorship-free population."
+  ]
+}

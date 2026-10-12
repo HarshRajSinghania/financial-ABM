@@ -1,0 +1,6844 @@
+{
+  "schema_version": 1,
+  "experiment_id": "310726bd1b41a3232c9a764b0f156c89fbc19a719e32d3f50faa1fd9830cd8c0",
+  "purpose": "development",
+  "claim_support": "pending",
+  "rules": {
+    "version": 1,
+    "taste_medians": [
+      0,
+      0.01,
+      0.02,
+      0.04
+    ],
+    "initial_impact_probabilities": [
+      0,
+      0.2,
+      0.5,
+      0.8
+    ],
+    "g_thresholds": [
+      0.125,
+      0.25,
+      0.5
+    ],
+    "w_thresholds": [
+      0.125,
+      0.25,
+      0.5
+    ],
+    "terminal_observations": 252,
+    "dominant_fraction": 0.8,
+    "confirmatory_min_seeds": 30,
+    "G_metric": "terminal_year.change_from_initial_sd",
+    "W_metric": "terminal_year.inflation_mean_sd",
+    "G_reference": "Last 252 state-day mean true level minus day-0 mean; initial SD.",
+    "W_reference": "Last 252 state-day mean inflation; initial SD, without transparency weighting.",
+    "classes": {
+      "real_improvement": "G >= g_threshold and W < w_threshold",
+      "inflation_trap": "G < g_threshold and W >= w_threshold",
+      "low_change_low_inflation": "G < g_threshold and W < w_threshold",
+      "mixed": "G >= g_threshold and W >= w_threshold"
+    },
+    "proportion_intervals": "Pointwise Wilson score intervals across valid seeds; not multiplicity-adjusted."
+  },
+  "confidence_level": 0.95,
+  "continuous_source": "Archived summary.scenarios estimates; no aggregation during rendering.",
+  "classification_source": "Archived per-seed terminal_year metrics; proportions condition on n_valid.",
+  "core_validation_failures": 15,
+  "cells": [
+    {
+      "scenario": "taste_0_ii_0",
+      "taste_median": 0,
+      "initial_impact_probability": 0,
+      "burn_in_day": 600,
+      "n_planned": 3,
+      "n_valid": 2,
+      "core_validation_failures": 1,
+      "observations": [
+        {
+          "seed": 22001,
+          "status": "valid",
+          "reason": null,
+          "G": -1.3289682539682497,
+          "W": 0.0
+        },
+        {
+          "seed": 22002,
+          "status": "unclassified",
+          "reason": "mechanical_validation_failed",
+          "G": null,
+          "W": null
+        },
+        {
+          "seed": 22003,
+          "status": "valid",
+          "reason": null,
+          "G": -1.326271119751113,
+          "W": 0.0
+        }
+      ],
+      "continuous": {
+        "G": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "W": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "impact_share_at_burn_in": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "impact_wealth_share_at_burn_in": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        }
+      },
+      "classifications": [
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        }
+      ]
+    },
+    {
+      "scenario": "taste_0_ii_02",
+      "taste_median": 0,
+      "initial_impact_probability": 0.2,
+      "burn_in_day": 600,
+      "n_planned": 3,
+      "n_valid": 2,
+      "core_validation_failures": 1,
+      "observations": [
+        {
+          "seed": 22001,
+          "status": "valid",
+          "reason": null,
+          "G": -1.3289682539682497,
+          "W": 0.0
+        },
+        {
+          "seed": 22002,
+          "status": "unclassified",
+          "reason": "mechanical_validation_failed",
+          "G": null,
+          "W": null
+        },
+        {
+          "seed": 22003,
+          "status": "valid",
+          "reason": null,
+          "G": -1.326271119751113,
+          "W": 0.0
+        }
+      ],
+      "continuous": {
+        "G": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "W": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "impact_share_at_burn_in": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "impact_wealth_share_at_burn_in": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        }
+      },
+      "classifications": [
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        }
+      ]
+    },
+    {
+      "scenario": "taste_0_ii_05",
+      "taste_median": 0,
+      "initial_impact_probability": 0.5,
+      "burn_in_day": 600,
+      "n_planned": 3,
+      "n_valid": 2,
+      "core_validation_failures": 1,
+      "observations": [
+        {
+          "seed": 22001,
+          "status": "valid",
+          "reason": null,
+          "G": -1.3289682539682497,
+          "W": 0.0
+        },
+        {
+          "seed": 22002,
+          "status": "unclassified",
+          "reason": "mechanical_validation_failed",
+          "G": null,
+          "W": null
+        },
+        {
+          "seed": 22003,
+          "status": "valid",
+          "reason": null,
+          "G": -1.326271119751113,
+          "W": 0.0
+        }
+      ],
+      "continuous": {
+        "G": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "W": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "impact_share_at_burn_in": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "impact_wealth_share_at_burn_in": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        }
+      },
+      "classifications": [
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        }
+      ]
+    },
+    {
+      "scenario": "taste_0_ii_08",
+      "taste_median": 0,
+      "initial_impact_probability": 0.8,
+      "burn_in_day": 600,
+      "n_planned": 3,
+      "n_valid": 2,
+      "core_validation_failures": 1,
+      "observations": [
+        {
+          "seed": 22001,
+          "status": "valid",
+          "reason": null,
+          "G": -1.3289682539682497,
+          "W": 0.0
+        },
+        {
+          "seed": 22002,
+          "status": "unclassified",
+          "reason": "mechanical_validation_failed",
+          "G": null,
+          "W": null
+        },
+        {
+          "seed": 22003,
+          "status": "valid",
+          "reason": null,
+          "G": -1.326271119751113,
+          "W": 0.0
+        }
+      ],
+      "continuous": {
+        "G": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "W": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "impact_share_at_burn_in": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "impact_wealth_share_at_burn_in": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        }
+      },
+      "classifications": [
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        }
+      ]
+    },
+    {
+      "scenario": "taste_001_ii_0",
+      "taste_median": 0.01,
+      "initial_impact_probability": 0,
+      "burn_in_day": 600,
+      "n_planned": 3,
+      "n_valid": 2,
+      "core_validation_failures": 1,
+      "observations": [
+        {
+          "seed": 22001,
+          "status": "valid",
+          "reason": null,
+          "G": -1.3289682539682497,
+          "W": 0.0
+        },
+        {
+          "seed": 22002,
+          "status": "unclassified",
+          "reason": "mechanical_validation_failed",
+          "G": null,
+          "W": null
+        },
+        {
+          "seed": 22003,
+          "status": "valid",
+          "reason": null,
+          "G": -1.326271119751113,
+          "W": 0.0
+        }
+      ],
+      "continuous": {
+        "G": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "W": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "impact_share_at_burn_in": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "impact_wealth_share_at_burn_in": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        }
+      },
+      "classifications": [
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        }
+      ]
+    },
+    {
+      "scenario": "taste_001_ii_02",
+      "taste_median": 0.01,
+      "initial_impact_probability": 0.2,
+      "burn_in_day": 600,
+      "n_planned": 3,
+      "n_valid": 2,
+      "core_validation_failures": 1,
+      "observations": [
+        {
+          "seed": 22001,
+          "status": "valid",
+          "reason": null,
+          "G": -1.0981466223667844,
+          "W": 0.0
+        },
+        {
+          "seed": 22002,
+          "status": "unclassified",
+          "reason": "mechanical_validation_failed",
+          "G": null,
+          "W": null
+        },
+        {
+          "seed": 22003,
+          "status": "valid",
+          "reason": null,
+          "G": -1.1611672377575182,
+          "W": 0.0
+        }
+      ],
+      "continuous": {
+        "G": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "W": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "impact_share_at_burn_in": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "impact_wealth_share_at_burn_in": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        }
+      },
+      "classifications": [
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        }
+      ]
+    },
+    {
+      "scenario": "taste_001_ii_05",
+      "taste_median": 0.01,
+      "initial_impact_probability": 0.5,
+      "burn_in_day": 600,
+      "n_planned": 3,
+      "n_valid": 3,
+      "core_validation_failures": 0,
+      "observations": [
+        {
+          "seed": 22001,
+          "status": "valid",
+          "reason": null,
+          "G": -1.0528548970076428,
+          "W": 0.0
+        },
+        {
+          "seed": 22002,
+          "status": "valid",
+          "reason": null,
+          "G": -0.9902901298382413,
+          "W": 0.0
+        },
+        {
+          "seed": 22003,
+          "status": "valid",
+          "reason": null,
+          "G": -1.0833687971388595,
+          "W": 0.0
+        }
+      ],
+      "continuous": {
+        "G": {
+          "status": "complete",
+          "mean": -1.0421712746615812,
+          "ci_low": -1.1600439210128823,
+          "ci_high": -0.92429862831028,
+          "n": 3
+        },
+        "W": {
+          "status": "complete",
+          "mean": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n": 3
+        },
+        "impact_share_at_burn_in": {
+          "status": "complete",
+          "mean": 0.4666666666666666,
+          "ci_low": 0.45010574858833113,
+          "ci_high": 0.4832275847450021,
+          "n": 3
+        },
+        "impact_wealth_share_at_burn_in": {
+          "status": "complete",
+          "mean": 0.4945311269806362,
+          "ci_low": 0.3167532740513236,
+          "ci_high": 0.6723089799099489,
+          "n": 3
+        }
+      },
+      "classifications": [
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22002": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 3,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.5614970317550454
+            ],
+            "inflation_trap": [
+              0.0,
+              0.5614970317550454
+            ],
+            "low_change_low_inflation": [
+              0.4385029682449546,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.5614970317550454
+            ]
+          },
+          "status": "development_only",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22002": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 3,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.5614970317550454
+            ],
+            "inflation_trap": [
+              0.0,
+              0.5614970317550454
+            ],
+            "low_change_low_inflation": [
+              0.4385029682449546,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.5614970317550454
+            ]
+          },
+          "status": "development_only",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22002": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 3,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.5614970317550454
+            ],
+            "inflation_trap": [
+              0.0,
+              0.5614970317550454
+            ],
+            "low_change_low_inflation": [
+              0.4385029682449546,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.5614970317550454
+            ]
+          },
+          "status": "development_only",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22002": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 3,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.5614970317550454
+            ],
+            "inflation_trap": [
+              0.0,
+              0.5614970317550454
+            ],
+            "low_change_low_inflation": [
+              0.4385029682449546,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.5614970317550454
+            ]
+          },
+          "status": "development_only",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22002": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 3,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.5614970317550454
+            ],
+            "inflation_trap": [
+              0.0,
+              0.5614970317550454
+            ],
+            "low_change_low_inflation": [
+              0.4385029682449546,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.5614970317550454
+            ]
+          },
+          "status": "development_only",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22002": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 3,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.5614970317550454
+            ],
+            "inflation_trap": [
+              0.0,
+              0.5614970317550454
+            ],
+            "low_change_low_inflation": [
+              0.4385029682449546,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.5614970317550454
+            ]
+          },
+          "status": "development_only",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22002": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 3,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.5614970317550454
+            ],
+            "inflation_trap": [
+              0.0,
+              0.5614970317550454
+            ],
+            "low_change_low_inflation": [
+              0.4385029682449546,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.5614970317550454
+            ]
+          },
+          "status": "development_only",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22002": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 3,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.5614970317550454
+            ],
+            "inflation_trap": [
+              0.0,
+              0.5614970317550454
+            ],
+            "low_change_low_inflation": [
+              0.4385029682449546,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.5614970317550454
+            ]
+          },
+          "status": "development_only",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22002": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 3,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.5614970317550454
+            ],
+            "inflation_trap": [
+              0.0,
+              0.5614970317550454
+            ],
+            "low_change_low_inflation": [
+              0.4385029682449546,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.5614970317550454
+            ]
+          },
+          "status": "development_only",
+          "dominant_state": null
+        }
+      ]
+    },
+    {
+      "scenario": "taste_001_ii_08",
+      "taste_median": 0.01,
+      "initial_impact_probability": 0.8,
+      "burn_in_day": 600,
+      "n_planned": 3,
+      "n_valid": 2,
+      "core_validation_failures": 1,
+      "observations": [
+        {
+          "seed": 22001,
+          "status": "valid",
+          "reason": null,
+          "G": -0.9229877171633164,
+          "W": 0.0
+        },
+        {
+          "seed": 22002,
+          "status": "unclassified",
+          "reason": "mechanical_validation_failed",
+          "G": null,
+          "W": null
+        },
+        {
+          "seed": 22003,
+          "status": "valid",
+          "reason": null,
+          "G": -1.0298398670373285,
+          "W": 0.0
+        }
+      ],
+      "continuous": {
+        "G": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "W": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "impact_share_at_burn_in": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "impact_wealth_share_at_burn_in": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        }
+      },
+      "classifications": [
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        }
+      ]
+    },
+    {
+      "scenario": "taste_002_ii_0",
+      "taste_median": 0.02,
+      "initial_impact_probability": 0,
+      "burn_in_day": 600,
+      "n_planned": 3,
+      "n_valid": 2,
+      "core_validation_failures": 1,
+      "observations": [
+        {
+          "seed": 22001,
+          "status": "valid",
+          "reason": null,
+          "G": -1.3289682539682497,
+          "W": 0.0
+        },
+        {
+          "seed": 22002,
+          "status": "unclassified",
+          "reason": "mechanical_validation_failed",
+          "G": null,
+          "W": null
+        },
+        {
+          "seed": 22003,
+          "status": "valid",
+          "reason": null,
+          "G": -1.326271119751113,
+          "W": 0.0
+        }
+      ],
+      "continuous": {
+        "G": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "W": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "impact_share_at_burn_in": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "impact_wealth_share_at_burn_in": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        }
+      },
+      "classifications": [
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        }
+      ]
+    },
+    {
+      "scenario": "taste_002_ii_02",
+      "taste_median": 0.02,
+      "initial_impact_probability": 0.2,
+      "burn_in_day": 600,
+      "n_planned": 3,
+      "n_valid": 2,
+      "core_validation_failures": 1,
+      "observations": [
+        {
+          "seed": 22001,
+          "status": "valid",
+          "reason": null,
+          "G": -0.9586853194081345,
+          "W": 0.0
+        },
+        {
+          "seed": 22002,
+          "status": "unclassified",
+          "reason": "mechanical_validation_failed",
+          "G": null,
+          "W": null
+        },
+        {
+          "seed": 22003,
+          "status": "valid",
+          "reason": null,
+          "G": -1.0378362216668577,
+          "W": 0.0
+        }
+      ],
+      "continuous": {
+        "G": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "W": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "impact_share_at_burn_in": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "impact_wealth_share_at_burn_in": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        }
+      },
+      "classifications": [
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        }
+      ]
+    },
+    {
+      "scenario": "taste_002_ii_05",
+      "taste_median": 0.02,
+      "initial_impact_probability": 0.5,
+      "burn_in_day": 600,
+      "n_planned": 3,
+      "n_valid": 2,
+      "core_validation_failures": 1,
+      "observations": [
+        {
+          "seed": 22001,
+          "status": "valid",
+          "reason": null,
+          "G": -0.9080171860868047,
+          "W": 0.0
+        },
+        {
+          "seed": 22002,
+          "status": "unclassified",
+          "reason": "mechanical_validation_failed",
+          "G": null,
+          "W": null
+        },
+        {
+          "seed": 22003,
+          "status": "valid",
+          "reason": null,
+          "G": -0.9276295901899674,
+          "W": 0.0
+        }
+      ],
+      "continuous": {
+        "G": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "W": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "impact_share_at_burn_in": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "impact_wealth_share_at_burn_in": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        }
+      },
+      "classifications": [
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        }
+      ]
+    },
+    {
+      "scenario": "taste_002_ii_08",
+      "taste_median": 0.02,
+      "initial_impact_probability": 0.8,
+      "burn_in_day": 600,
+      "n_planned": 3,
+      "n_valid": 2,
+      "core_validation_failures": 1,
+      "observations": [
+        {
+          "seed": 22001,
+          "status": "valid",
+          "reason": null,
+          "G": -0.7269338327452224,
+          "W": 0.0
+        },
+        {
+          "seed": 22002,
+          "status": "unclassified",
+          "reason": "mechanical_validation_failed",
+          "G": null,
+          "W": null
+        },
+        {
+          "seed": 22003,
+          "status": "valid",
+          "reason": null,
+          "G": -0.8614744588890008,
+          "W": 0.0
+        }
+      ],
+      "continuous": {
+        "G": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "W": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "impact_share_at_burn_in": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "impact_wealth_share_at_burn_in": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        }
+      },
+      "classifications": [
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        }
+      ]
+    },
+    {
+      "scenario": "taste_004_ii_0",
+      "taste_median": 0.04,
+      "initial_impact_probability": 0,
+      "burn_in_day": 600,
+      "n_planned": 3,
+      "n_valid": 2,
+      "core_validation_failures": 1,
+      "observations": [
+        {
+          "seed": 22001,
+          "status": "valid",
+          "reason": null,
+          "G": -1.3289682539682497,
+          "W": 0.0
+        },
+        {
+          "seed": 22002,
+          "status": "unclassified",
+          "reason": "mechanical_validation_failed",
+          "G": null,
+          "W": null
+        },
+        {
+          "seed": 22003,
+          "status": "valid",
+          "reason": null,
+          "G": -1.326271119751113,
+          "W": 0.0
+        }
+      ],
+      "continuous": {
+        "G": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "W": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "impact_share_at_burn_in": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "impact_wealth_share_at_burn_in": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        }
+      },
+      "classifications": [
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        }
+      ]
+    },
+    {
+      "scenario": "taste_004_ii_02",
+      "taste_median": 0.04,
+      "initial_impact_probability": 0.2,
+      "burn_in_day": 600,
+      "n_planned": 3,
+      "n_valid": 2,
+      "core_validation_failures": 1,
+      "observations": [
+        {
+          "seed": 22001,
+          "status": "valid",
+          "reason": null,
+          "G": -0.7884895087220952,
+          "W": 0.0
+        },
+        {
+          "seed": 22002,
+          "status": "unclassified",
+          "reason": "mechanical_validation_failed",
+          "G": null,
+          "W": null
+        },
+        {
+          "seed": 22003,
+          "status": "valid",
+          "reason": null,
+          "G": -0.9140213369108635,
+          "W": 0.0
+        }
+      ],
+      "continuous": {
+        "G": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "W": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "impact_share_at_burn_in": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "impact_wealth_share_at_burn_in": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        }
+      },
+      "classifications": [
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        }
+      ]
+    },
+    {
+      "scenario": "taste_004_ii_05",
+      "taste_median": 0.04,
+      "initial_impact_probability": 0.5,
+      "burn_in_day": 600,
+      "n_planned": 3,
+      "n_valid": 2,
+      "core_validation_failures": 1,
+      "observations": [
+        {
+          "seed": 22001,
+          "status": "valid",
+          "reason": null,
+          "G": -0.7050819197198467,
+          "W": 0.0
+        },
+        {
+          "seed": 22002,
+          "status": "unclassified",
+          "reason": "mechanical_validation_failed",
+          "G": null,
+          "W": null
+        },
+        {
+          "seed": 22003,
+          "status": "valid",
+          "reason": null,
+          "G": -0.7373383490760603,
+          "W": 0.0
+        }
+      ],
+      "continuous": {
+        "G": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "W": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "impact_share_at_burn_in": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "impact_wealth_share_at_burn_in": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        }
+      },
+      "classifications": [
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        }
+      ]
+    },
+    {
+      "scenario": "taste_004_ii_08",
+      "taste_median": 0.04,
+      "initial_impact_probability": 0.8,
+      "burn_in_day": 600,
+      "n_planned": 3,
+      "n_valid": 2,
+      "core_validation_failures": 1,
+      "observations": [
+        {
+          "seed": 22001,
+          "status": "valid",
+          "reason": null,
+          "G": -0.498007222373245,
+          "W": 0.0
+        },
+        {
+          "seed": 22002,
+          "status": "unclassified",
+          "reason": "mechanical_validation_failed",
+          "G": null,
+          "W": null
+        },
+        {
+          "seed": 22003,
+          "status": "valid",
+          "reason": null,
+          "G": -0.6675379599949635,
+          "W": 0.0
+        }
+      ],
+      "continuous": {
+        "G": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "W": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "impact_share_at_burn_in": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        },
+        "impact_wealth_share_at_burn_in": {
+          "status": "incomplete",
+          "mean": null,
+          "ci_low": null,
+          "ci_high": null,
+          "n": 2
+        }
+      },
+      "classifications": [
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.125,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.25,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.125,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.25,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        },
+        {
+          "g_threshold": 0.5,
+          "w_threshold": 0.5,
+          "seed_classes": {
+            "22001": "low_change_low_inflation",
+            "22003": "low_change_low_inflation"
+          },
+          "counts": {
+            "real_improvement": 0,
+            "inflation_trap": 0,
+            "low_change_low_inflation": 2,
+            "mixed": 0
+          },
+          "proportions": {
+            "real_improvement": 0.0,
+            "inflation_trap": 0.0,
+            "low_change_low_inflation": 1.0,
+            "mixed": 0.0
+          },
+          "intervals": {
+            "real_improvement": [
+              0.0,
+              0.6576197724933468
+            ],
+            "inflation_trap": [
+              0.0,
+              0.6576197724933468
+            ],
+            "low_change_low_inflation": [
+              0.3423802275066532,
+              1.0
+            ],
+            "mixed": [
+              0.0,
+              0.6576197724933468
+            ]
+          },
+          "status": "incomplete",
+          "dominant_state": null
+        }
+      ]
+    }
+  ]
+}

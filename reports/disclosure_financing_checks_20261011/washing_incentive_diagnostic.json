@@ -1,0 +1,1153 @@
+{
+  "status": "development_incentive_diagnostic_only",
+  "generated_utc": "2026-10-11T08:21:15.224626+00:00",
+  "archive_directory": "reports/disclosure_financing_development_20261011_v2",
+  "runs": 45,
+  "total_action_counts_real_wash_maintain": [
+    18896,
+    0,
+    21604
+  ],
+  "archived_rule_hashes": {
+    "abm/disclosure/financing.py": "a18ca872c5bcd72f0e78590a4fcb66fee94d5d7bd0f85636f1dcabcabf4e749e",
+    "abm/disclosure/game.py": "d4ab674b931f75477d73f43089ff44ebb7e7bbcaf032348f334bd175c403397c"
+  },
+  "discount_factors": {
+    "real_annuity_years": 3.725762993642411,
+    "wash_annuity_years": 3.830453583057525,
+    "eventual_fine_pv_factor": 0.4550438181463527
+  },
+  "actual_baseline_config": {
+    "seed": 23001,
+    "n_investors": 150,
+    "n_firms": 30,
+    "trading_days": 1800,
+    "burn_in_days": 600,
+    "size_class_shares": [
+      0.1,
+      0.3,
+      0.6
+    ],
+    "intrinsic_value_log_sd": 1.0,
+    "cash_flow_yield": 0.05,
+    "fundamental_drift": 0.04,
+    "fundamental_volatility": 0.159,
+    "fundamental_common_correlation": 0.4,
+    "investor_wealth_log_sd": 1.0,
+    "investor_float_share": 0.8,
+    "initial_equity_share": 0.7,
+    "initial_market_volatility": 0.18,
+    "initial_asset_volatility": 0.27,
+    "max_equity_share": 1.0,
+    "risk_aversion_mean": 3.0,
+    "risk_aversion_sd": 0.5,
+    "risk_aversion_min": 0.5,
+    "decision_interval_median": 20.0,
+    "decision_interval_log_sd": 0.5,
+    "decision_interval_max": 120,
+    "choice_intensity_median": 2.0,
+    "choice_intensity_log_sd": 0.5,
+    "rebalance_speed": 0.5,
+    "risk_free_rate": 0.025,
+    "mispricing_reversion": 0.15,
+    "variance_ewma_decay": 0.94,
+    "allocation_variance_decay": 0.99,
+    "news_pass_through": 0.9,
+    "price_impact": 1.0,
+    "liquidity_fraction": 0.3,
+    "liquidity_volatility_sensitivity": 3.03,
+    "liquidity_stress_threshold": 0.8,
+    "minimum_liquidity_fraction": 0.3,
+    "depth_resilience": 0.15,
+    "reference_variance_decay": 0.995,
+    "permanent_impact_fraction": 0.486,
+    "transient_impact_decay": 0.974,
+    "order_flow_memory": 0.3,
+    "max_log_return": 0.3,
+    "transaction_cost_rate": 0.001,
+    "noise_flow_scale": 0.002,
+    "noise_common_correlation": 0.8,
+    "noise_persistence": 0.5,
+    "noise_inventory_reversion": 0.05,
+    "noise_float_share": 0.05,
+    "noise_volatility_exponent": 1.77,
+    "market_maker_cash_multiple": 1.0,
+    "market_maker_inventory_skew": 0.01,
+    "initial_impact_share": 0.2,
+    "taste_median": 0.02,
+    "taste_log_sd": 0.5,
+    "imitation_interval": 60,
+    "imitation_intensity": 100.0,
+    "imitation_update_fraction": 0.1,
+    "firm_decision_interval": 60,
+    "firm_policy": "npv",
+    "financing_exposure_fraction": 0.5,
+    "financing_spread": 0.05,
+    "financing_repricing_interval": 60,
+    "financing_horizon_days": 1260,
+    "firm_discount_rate": 0.05
+  },
+  "actual_baseline_domain": {
+    "name": "esg",
+    "attribute_label": "ESG rating",
+    "unit": "score, 0-100",
+    "direction": 1,
+    "initial_mean": 50.0,
+    "initial_sd": 15.0,
+    "raw_lower": 0.0,
+    "raw_upper": 100.0,
+    "natural_decay": 0.2,
+    "real_cost_scale": 0.05,
+    "real_cost_log_sd": 0.5,
+    "size_cost_multipliers": [
+      0.6,
+      1.0,
+      1.6
+    ],
+    "cost_level_elasticity": 1.5,
+    "max_change_per_period": 0.25,
+    "wash_cost_ratio": 0.2,
+    "implementation_delay_days": 120,
+    "disclosure_delay_days": 20,
+    "baseline_audit_probability": 0.01,
+    "baseline_penalty": 0.005,
+    "baseline_transparency": 0.1,
+    "baseline_subsidy": 0.0,
+    "action_labels": {
+      "improve": "真实改善",
+      "wash": "漂绿",
+      "maintain": "维持现状"
+    }
+  },
+  "benefit_inversion": {
+    "interior_count": 18896,
+    "minimum": 6.2286224862011885e-06,
+    "median": 4.1924651605315326e-05,
+    "quantile_95": 0.00010082630148276059,
+    "maximum": 0.00021402789863352945,
+    "maintain_bound_count": 4,
+    "maximum_maintain_bound": 1.605483287294194e-05,
+    "formula": "b = (2 * resource_cost_fraction / amount - subsidy) / real_annuity; only positive interior real choices",
+    "is_direct_recording_of_b": false
+  },
+  "thresholds": [
+    {
+      "regime": "B",
+      "transparency": 0.1,
+      "penalty": 0.005,
+      "positive_wash_b_threshold": 0.0006599795969610151,
+      "interior_wash_beats_real_b_threshold": 0.0012773544463345542,
+      "wash_can_beat_real_interior_with_nonnegative_subsidy": true
+    },
+    {
+      "regime": "I",
+      "transparency": 0.6,
+      "penalty": 0.005,
+      "positive_wash_b_threshold": 0.001484954093162284,
+      "interior_wash_beats_real_b_threshold": null,
+      "wash_can_beat_real_interior_with_nonnegative_subsidy": false
+    },
+    {
+      "regime": "F",
+      "transparency": 0.1,
+      "penalty": 0.02,
+      "positive_wash_b_threshold": 0.0026399183878440605,
+      "interior_wash_beats_real_b_threshold": 0.005109417785338217,
+      "wash_can_beat_real_interior_with_nonnegative_subsidy": true
+    },
+    {
+      "regime": "IF",
+      "transparency": 0.6,
+      "penalty": 0.02,
+      "positive_wash_b_threshold": 0.005939816372649136,
+      "interior_wash_beats_real_b_threshold": null,
+      "wash_can_beat_real_interior_with_nonnegative_subsidy": false
+    }
+  ],
+  "runs_detail": [
+    {
+      "scenario": "equal_cost_B",
+      "seed": 23001,
+      "action_counts_real_wash_maintain": [
+        900,
+        0,
+        0
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 900,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": 4.110444090240257e-05,
+      "benefit_maximum": 0.0001313417917624996,
+      "wash_linear_gain_maximum": -0.0018224303175560876,
+      "maintain_bounds": [],
+      "null_benefit_identically_zero_by_archived_rule": false,
+      "result_sha256": "3327cf24884802646919e1c4cf6acac8f6fa8a1a048169ec51a3ad3c5c6692e1",
+      "manifest_sha256": "fcc14227316cc35e523af8cbda8d949ae36ba132bb499971b3e4f547f93405ac"
+    },
+    {
+      "scenario": "equal_cost_B",
+      "seed": 23002,
+      "action_counts_real_wash_maintain": [
+        900,
+        0,
+        0
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 900,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": 2.799307229697721e-05,
+      "benefit_maximum": 0.00011032866555104561,
+      "wash_linear_gain_maximum": -0.0018948711416852011,
+      "maintain_bounds": [],
+      "null_benefit_identically_zero_by_archived_rule": false,
+      "result_sha256": "44d613c09f9f1b971ceb852865ab94a4bb09ba46fd4fdbf7625283a90ac37d41",
+      "manifest_sha256": "3ce6e33a2d0fe717ca2f5667f66d68ce62539ac5cccb5b4c517a7ba5fdad1796"
+    },
+    {
+      "scenario": "equal_cost_B",
+      "seed": 23003,
+      "action_counts_real_wash_maintain": [
+        900,
+        0,
+        0
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 900,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": 5.3199340403184064e-05,
+      "benefit_maximum": 0.00021402789863352945,
+      "wash_linear_gain_maximum": -0.0015373775526561955,
+      "maintain_bounds": [],
+      "null_benefit_identically_zero_by_archived_rule": false,
+      "result_sha256": "9e4830daa1e2c7de29d8beebec95aecfb696d53336d74bd144ac7cd21117b51a",
+      "manifest_sha256": "dd3c900f239ce46167f9377857decf141f93b6d450cd5a36855d96eb2fb9c96a"
+    },
+    {
+      "scenario": "equal_cost_F",
+      "seed": 23001,
+      "action_counts_real_wash_maintain": [
+        900,
+        0,
+        0
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 900,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": 4.110444090240257e-05,
+      "benefit_maximum": 0.0001313417917624996,
+      "wash_linear_gain_maximum": -0.0018699859224669167,
+      "maintain_bounds": [],
+      "null_benefit_identically_zero_by_archived_rule": false,
+      "result_sha256": "3327cf24884802646919e1c4cf6acac8f6fa8a1a048169ec51a3ad3c5c6692e1",
+      "manifest_sha256": "e9a9ee74ca5bdbcd7a48fe31a51d61d80e191abfc7b49846c22a7ae441e1c9d7"
+    },
+    {
+      "scenario": "equal_cost_F",
+      "seed": 23002,
+      "action_counts_real_wash_maintain": [
+        900,
+        0,
+        0
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 900,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": 2.799307229697721e-05,
+      "benefit_maximum": 0.00011032866555104561,
+      "wash_linear_gain_maximum": -0.0019453782979043262,
+      "maintain_bounds": [],
+      "null_benefit_identically_zero_by_archived_rule": false,
+      "result_sha256": "44d613c09f9f1b971ceb852865ab94a4bb09ba46fd4fdbf7625283a90ac37d41",
+      "manifest_sha256": "84ee709e18aac398509dd6f3abc526dc5c7b23399fd3713a015fc682b85971fa"
+    },
+    {
+      "scenario": "equal_cost_F",
+      "seed": 23003,
+      "action_counts_real_wash_maintain": [
+        900,
+        0,
+        0
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 900,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": 5.3199340403184064e-05,
+      "benefit_maximum": 0.00021402789863352945,
+      "wash_linear_gain_maximum": -0.0020269288804456156,
+      "maintain_bounds": [],
+      "null_benefit_identically_zero_by_archived_rule": false,
+      "result_sha256": "9e4830daa1e2c7de29d8beebec95aecfb696d53336d74bd144ac7cd21117b51a",
+      "manifest_sha256": "5f799a78cadc438cbfaedd5a2743ac694d2cacfd0f8c6becb83ca10af98ed3dd"
+    },
+    {
+      "scenario": "equal_cost_I",
+      "seed": 23001,
+      "action_counts_real_wash_maintain": [
+        900,
+        0,
+        0
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 900,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": 4.110444090240257e-05,
+      "benefit_maximum": 0.0001313417917624996,
+      "wash_linear_gain_maximum": -0.0018699859224669167,
+      "maintain_bounds": [],
+      "null_benefit_identically_zero_by_archived_rule": false,
+      "result_sha256": "3327cf24884802646919e1c4cf6acac8f6fa8a1a048169ec51a3ad3c5c6692e1",
+      "manifest_sha256": "3a15ff71acc13d59e776e0ea98f1a25a43c89ad94c38bb6b8b846b29547fd649"
+    },
+    {
+      "scenario": "equal_cost_I",
+      "seed": 23002,
+      "action_counts_real_wash_maintain": [
+        900,
+        0,
+        0
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 900,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": 2.799307229697721e-05,
+      "benefit_maximum": 0.00011032866555104561,
+      "wash_linear_gain_maximum": -0.0019453782979043262,
+      "maintain_bounds": [],
+      "null_benefit_identically_zero_by_archived_rule": false,
+      "result_sha256": "44d613c09f9f1b971ceb852865ab94a4bb09ba46fd4fdbf7625283a90ac37d41",
+      "manifest_sha256": "f01b2b6d060de463b8be0112bef9ac930c87322deaab10ae21aac2ff7eaf08e0"
+    },
+    {
+      "scenario": "equal_cost_I",
+      "seed": 23003,
+      "action_counts_real_wash_maintain": [
+        900,
+        0,
+        0
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 900,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": 5.3199340403184064e-05,
+      "benefit_maximum": 0.00021402789863352945,
+      "wash_linear_gain_maximum": -0.0019472895182537332,
+      "maintain_bounds": [],
+      "null_benefit_identically_zero_by_archived_rule": false,
+      "result_sha256": "9e4830daa1e2c7de29d8beebec95aecfb696d53336d74bd144ac7cd21117b51a",
+      "manifest_sha256": "af2cb6ee637b5cbd65a80321a9db27a2a9c1313c5f5f176b86d5debd6f49e37a"
+    },
+    {
+      "scenario": "market_B",
+      "seed": 23001,
+      "action_counts_real_wash_maintain": [
+        900,
+        0,
+        0
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 900,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": 4.1084678984542515e-05,
+      "benefit_maximum": 0.00013124865990071102,
+      "wash_linear_gain_maximum": -0.001822751381102404,
+      "maintain_bounds": [],
+      "null_benefit_identically_zero_by_archived_rule": false,
+      "result_sha256": "10cd77e3d1d421b51700bb8c8fd9055f6fc522692a07d8a3b83b9a514f4f7477",
+      "manifest_sha256": "4a4c45b3e5fbcd402cb2495e123c708ad77a248ad356a4c2db442a2ec8e2d8c3"
+    },
+    {
+      "scenario": "market_B",
+      "seed": 23002,
+      "action_counts_real_wash_maintain": [
+        899,
+        0,
+        1
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 899,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": 2.923549721087898e-05,
+      "benefit_maximum": 0.00010991178462146407,
+      "wash_linear_gain_maximum": -0.001896308300430583,
+      "maintain_bounds": [
+        {
+          "day": 360,
+          "firm_zero_based": 29,
+          "benefit_upper_bound": 1.605483287294194e-05,
+          "wash_linear_gain_upper_bound": -0.0022198715278385684
+        }
+      ],
+      "null_benefit_identically_zero_by_archived_rule": false,
+      "result_sha256": "d45ec260f828dd4ded8fddef7b4cfb37627eb768e15bafc4ce01230b796cff13",
+      "manifest_sha256": "afe1673ea578ad94f81566cd0e79ed363b84d4d634d7161d0b3abd00cad455b1"
+    },
+    {
+      "scenario": "market_B",
+      "seed": 23003,
+      "action_counts_real_wash_maintain": [
+        900,
+        0,
+        0
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 900,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": 5.319675856649102e-05,
+      "benefit_maximum": 0.0002139598288219739,
+      "wash_linear_gain_maximum": -0.0015376122170844093,
+      "maintain_bounds": [],
+      "null_benefit_identically_zero_by_archived_rule": false,
+      "result_sha256": "a2b350202766aff0a9734774a72a93778c671b03652bb83a9ecd35e01f2efb12",
+      "manifest_sha256": "3e4ca21e2326b6eeb056d83d4cc94c6a62a6253e22c37320420c19ec8c1b39fa"
+    },
+    {
+      "scenario": "market_F",
+      "seed": 23001,
+      "action_counts_real_wash_maintain": [
+        900,
+        0,
+        0
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 900,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": 4.1084678984542515e-05,
+      "benefit_maximum": 0.00013124865990071102,
+      "wash_linear_gain_maximum": -0.0018702212582612648,
+      "maintain_bounds": [],
+      "null_benefit_identically_zero_by_archived_rule": false,
+      "result_sha256": "10cd77e3d1d421b51700bb8c8fd9055f6fc522692a07d8a3b83b9a514f4f7477",
+      "manifest_sha256": "ac05e4f3e72b681d2c4f078c8fe4f535656df4c9085f05b6bf04e3ae62fa26c2"
+    },
+    {
+      "scenario": "market_F",
+      "seed": 23002,
+      "action_counts_real_wash_maintain": [
+        899,
+        0,
+        1
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 899,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": 2.923549721087898e-05,
+      "benefit_maximum": 0.00010991178462146407,
+      "wash_linear_gain_maximum": -0.0019454315342813324,
+      "maintain_bounds": [
+        {
+          "day": 360,
+          "firm_zero_based": 29,
+          "benefit_upper_bound": 1.605483287294194e-05,
+          "wash_linear_gain_upper_bound": -0.0022198715278385684
+        }
+      ],
+      "null_benefit_identically_zero_by_archived_rule": false,
+      "result_sha256": "d45ec260f828dd4ded8fddef7b4cfb37627eb768e15bafc4ce01230b796cff13",
+      "manifest_sha256": "521acf55504156c95edb34c0ea6413e2a02fc26160edf38cc58ad24baf1aa6b1"
+    },
+    {
+      "scenario": "market_F",
+      "seed": 23003,
+      "action_counts_real_wash_maintain": [
+        900,
+        0,
+        0
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 900,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": 5.319675856649102e-05,
+      "benefit_maximum": 0.0002139598288219739,
+      "wash_linear_gain_maximum": -0.0020270431460689456,
+      "maintain_bounds": [],
+      "null_benefit_identically_zero_by_archived_rule": false,
+      "result_sha256": "a2b350202766aff0a9734774a72a93778c671b03652bb83a9ecd35e01f2efb12",
+      "manifest_sha256": "e6522434c89e860af885ee44290a56ca5eeff9d1147b4ad0c220f274f3c542f6"
+    },
+    {
+      "scenario": "market_I",
+      "seed": 23001,
+      "action_counts_real_wash_maintain": [
+        900,
+        0,
+        0
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 900,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": 4.1084678984542515e-05,
+      "benefit_maximum": 0.00013124865990071102,
+      "wash_linear_gain_maximum": -0.0018702212582612648,
+      "maintain_bounds": [],
+      "null_benefit_identically_zero_by_archived_rule": false,
+      "result_sha256": "10cd77e3d1d421b51700bb8c8fd9055f6fc522692a07d8a3b83b9a514f4f7477",
+      "manifest_sha256": "999a66ca8d54f6f68252ce8cf3ec4ca495041a785af2dbf0c27900322295d318"
+    },
+    {
+      "scenario": "market_I",
+      "seed": 23002,
+      "action_counts_real_wash_maintain": [
+        899,
+        0,
+        1
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 899,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": 2.923549721087898e-05,
+      "benefit_maximum": 0.00010991178462146407,
+      "wash_linear_gain_maximum": -0.0019454315342813324,
+      "maintain_bounds": [
+        {
+          "day": 360,
+          "firm_zero_based": 29,
+          "benefit_upper_bound": 1.605483287294194e-05,
+          "wash_linear_gain_upper_bound": -0.0022198715278385684
+        }
+      ],
+      "null_benefit_identically_zero_by_archived_rule": false,
+      "result_sha256": "d45ec260f828dd4ded8fddef7b4cfb37627eb768e15bafc4ce01230b796cff13",
+      "manifest_sha256": "b95cf6a3d23f1fe5284356ecafd4215c8f14f85e8da7bd4b6a265a9301953725"
+    },
+    {
+      "scenario": "market_I",
+      "seed": 23003,
+      "action_counts_real_wash_maintain": [
+        900,
+        0,
+        0
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 900,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": 5.319675856649102e-05,
+      "benefit_maximum": 0.0002139598288219739,
+      "wash_linear_gain_maximum": -0.0019473938135551616,
+      "maintain_bounds": [],
+      "null_benefit_identically_zero_by_archived_rule": false,
+      "result_sha256": "a2b350202766aff0a9734774a72a93778c671b03652bb83a9ecd35e01f2efb12",
+      "manifest_sha256": "18ce4e87fdb43a3d833da3e8de1f64eea69f61cb9fbdac068f55f7e7626ee6e7"
+    },
+    {
+      "scenario": "market_IF",
+      "seed": 23001,
+      "action_counts_real_wash_maintain": [
+        900,
+        0,
+        0
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 900,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": 4.1084678984542515e-05,
+      "benefit_maximum": 0.00013124865990071102,
+      "wash_linear_gain_maximum": -0.0018702212582612648,
+      "maintain_bounds": [],
+      "null_benefit_identically_zero_by_archived_rule": false,
+      "result_sha256": "10cd77e3d1d421b51700bb8c8fd9055f6fc522692a07d8a3b83b9a514f4f7477",
+      "manifest_sha256": "ab406ac0125e1cdfc66b66a506ec81175952d7b2dc9f95e46d10dd29f71c81d1"
+    },
+    {
+      "scenario": "market_IF",
+      "seed": 23002,
+      "action_counts_real_wash_maintain": [
+        899,
+        0,
+        1
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 899,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": 2.923549721087898e-05,
+      "benefit_maximum": 0.00010991178462146407,
+      "wash_linear_gain_maximum": -0.0019454315342813324,
+      "maintain_bounds": [
+        {
+          "day": 360,
+          "firm_zero_based": 29,
+          "benefit_upper_bound": 1.605483287294194e-05,
+          "wash_linear_gain_upper_bound": -0.0022198715278385684
+        }
+      ],
+      "null_benefit_identically_zero_by_archived_rule": false,
+      "result_sha256": "d45ec260f828dd4ded8fddef7b4cfb37627eb768e15bafc4ce01230b796cff13",
+      "manifest_sha256": "67c0c0fb6d9a082eac97ec1318cb912b050ded1fde651bd4ce5c46e51541718f"
+    },
+    {
+      "scenario": "market_IF",
+      "seed": 23003,
+      "action_counts_real_wash_maintain": [
+        900,
+        0,
+        0
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 900,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": 5.319675856649102e-05,
+      "benefit_maximum": 0.0002139598288219739,
+      "wash_linear_gain_maximum": -0.0020270431460689456,
+      "maintain_bounds": [],
+      "null_benefit_identically_zero_by_archived_rule": false,
+      "result_sha256": "a2b350202766aff0a9734774a72a93778c671b03652bb83a9ecd35e01f2efb12",
+      "manifest_sha256": "8ecb2d93614415ccc934cabcf8649f898e2880a5347d611ef34c9b4b0c222293"
+    },
+    {
+      "scenario": "zero_financing_exposure",
+      "seed": 23001,
+      "action_counts_real_wash_maintain": [
+        0,
+        0,
+        900
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 0,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": null,
+      "benefit_maximum": null,
+      "wash_linear_gain_maximum": null,
+      "maintain_bounds": [],
+      "null_benefit_identically_zero_by_archived_rule": true,
+      "result_sha256": "f693fd4708113f2501528d40f1144636f9de5caa9ad6d520ccb4cb2c0ef610c5",
+      "manifest_sha256": "4842bada57cc901d089cbe2df7b3fbc09af50589ad638f5a1ac46e1e9a10b529"
+    },
+    {
+      "scenario": "zero_financing_exposure",
+      "seed": 23002,
+      "action_counts_real_wash_maintain": [
+        0,
+        0,
+        900
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 0,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": null,
+      "benefit_maximum": null,
+      "wash_linear_gain_maximum": null,
+      "maintain_bounds": [],
+      "null_benefit_identically_zero_by_archived_rule": true,
+      "result_sha256": "c5e687c5e1c2c13a9b0fdf50f1502aba163f154b85fa7c7823f0d7678ef397a1",
+      "manifest_sha256": "38332d2700fc455f6e685c875fcb4d23475b0aee37de53e327d03ae8729cf57f"
+    },
+    {
+      "scenario": "zero_financing_exposure",
+      "seed": 23003,
+      "action_counts_real_wash_maintain": [
+        0,
+        0,
+        900
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 0,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": null,
+      "benefit_maximum": null,
+      "wash_linear_gain_maximum": null,
+      "maintain_bounds": [],
+      "null_benefit_identically_zero_by_archived_rule": true,
+      "result_sha256": "0552d7defcc704b94209e8c1ec583186dc1c937dae90482cb3519dc3a65b04ed",
+      "manifest_sha256": "feeb3c5661a33af7971db63d1a8f7a7113e434668e653afcb3f906b3291498a0"
+    },
+    {
+      "scenario": "zero_financing_spread",
+      "seed": 23001,
+      "action_counts_real_wash_maintain": [
+        0,
+        0,
+        900
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 0,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": null,
+      "benefit_maximum": null,
+      "wash_linear_gain_maximum": null,
+      "maintain_bounds": [],
+      "null_benefit_identically_zero_by_archived_rule": true,
+      "result_sha256": "d5e654c83bb176cbdfa25a83cdae431ebbc3590bca74691c460b10169ea8db8a",
+      "manifest_sha256": "29969d6de1cc6ca3cfaafa7dace04ea1d386f7109eb6a43400356c67f1452b32"
+    },
+    {
+      "scenario": "zero_financing_spread",
+      "seed": 23002,
+      "action_counts_real_wash_maintain": [
+        0,
+        0,
+        900
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 0,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": null,
+      "benefit_maximum": null,
+      "wash_linear_gain_maximum": null,
+      "maintain_bounds": [],
+      "null_benefit_identically_zero_by_archived_rule": true,
+      "result_sha256": "88fa9d30d2b5fe2e876251cb9c56b78742b48d4db833f50556b7a0a80ce8a183",
+      "manifest_sha256": "7e4214cb0e53acfb3a0f3de6f5da337022d0df0b7b43ccf3c5a159f3f4e07529"
+    },
+    {
+      "scenario": "zero_financing_spread",
+      "seed": 23003,
+      "action_counts_real_wash_maintain": [
+        0,
+        0,
+        900
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 0,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": null,
+      "benefit_maximum": null,
+      "wash_linear_gain_maximum": null,
+      "maintain_bounds": [],
+      "null_benefit_identically_zero_by_archived_rule": true,
+      "result_sha256": "bf19956ac325afe9ee3228a592888710f95e834935035c64ff44aaf801d3094f",
+      "manifest_sha256": "a6ec379caee8b7eb421e6db96595d8d950adcbdc2090dced04d07234d49afb81"
+    },
+    {
+      "scenario": "zero_impact_B",
+      "seed": 23001,
+      "action_counts_real_wash_maintain": [
+        0,
+        0,
+        900
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 0,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": null,
+      "benefit_maximum": null,
+      "wash_linear_gain_maximum": null,
+      "maintain_bounds": [],
+      "null_benefit_identically_zero_by_archived_rule": true,
+      "result_sha256": "75b97cbc3c319a35a50169d8c6d74876cec173cccc459958c5ed90106f6654a0",
+      "manifest_sha256": "b645ebbd680cff24709b0c672c64329583321dd370d5c1e01902aa2e0cb0b445"
+    },
+    {
+      "scenario": "zero_impact_B",
+      "seed": 23002,
+      "action_counts_real_wash_maintain": [
+        0,
+        0,
+        900
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 0,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": null,
+      "benefit_maximum": null,
+      "wash_linear_gain_maximum": null,
+      "maintain_bounds": [],
+      "null_benefit_identically_zero_by_archived_rule": true,
+      "result_sha256": "6069b1aa927014bb8952792273b48a606d03c9361820f26fd66bff6d507da61d",
+      "manifest_sha256": "c18c71ca1b230d7ef2b3871823eab2bb1a06855f2e22317b63aef7cfb7c0083c"
+    },
+    {
+      "scenario": "zero_impact_B",
+      "seed": 23003,
+      "action_counts_real_wash_maintain": [
+        0,
+        0,
+        900
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 0,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": null,
+      "benefit_maximum": null,
+      "wash_linear_gain_maximum": null,
+      "maintain_bounds": [],
+      "null_benefit_identically_zero_by_archived_rule": true,
+      "result_sha256": "829334023c1844d36af032d7804d34b08b426c6632b9d591a0b100395a9f2cf3",
+      "manifest_sha256": "654948320fb354cd9676c4ac18b5f84464dceb00c43bff70aaa753343fe075a4"
+    },
+    {
+      "scenario": "zero_taste_B",
+      "seed": 23001,
+      "action_counts_real_wash_maintain": [
+        0,
+        0,
+        900
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 0,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": null,
+      "benefit_maximum": null,
+      "wash_linear_gain_maximum": null,
+      "maintain_bounds": [],
+      "null_benefit_identically_zero_by_archived_rule": true,
+      "result_sha256": "f207d37f6eea8604baf7a84cbc5abdd2249e0582d970ad5462a71a6f47ba1e7f",
+      "manifest_sha256": "001ee8dfe821367200ac9dc86d335eef2bd3869c6554fa9949e49acc37c9ec82"
+    },
+    {
+      "scenario": "zero_taste_B",
+      "seed": 23002,
+      "action_counts_real_wash_maintain": [
+        0,
+        0,
+        900
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 0,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": null,
+      "benefit_maximum": null,
+      "wash_linear_gain_maximum": null,
+      "maintain_bounds": [],
+      "null_benefit_identically_zero_by_archived_rule": true,
+      "result_sha256": "98343c3270ecc0c89e5cdc562b60e101f5faa1c1aa84de47464ec1a3c8c53d10",
+      "manifest_sha256": "475f7f57bd778295891bb6bbb1111efba6e6070cee8295a3dbe7dd7e22d37c3b"
+    },
+    {
+      "scenario": "zero_taste_B",
+      "seed": 23003,
+      "action_counts_real_wash_maintain": [
+        0,
+        0,
+        900
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 0,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": null,
+      "benefit_maximum": null,
+      "wash_linear_gain_maximum": null,
+      "maintain_bounds": [],
+      "null_benefit_identically_zero_by_archived_rule": true,
+      "result_sha256": "4551f2b57e434d6deddb9d21cfb8193589de8a9093dc1f624d26d2a6e12dddaa",
+      "manifest_sha256": "1062ec0fa62671e037ff808bef0c2ac38a34fbdaebe88a8c3595a8daba2c4786"
+    },
+    {
+      "scenario": "zero_taste_F",
+      "seed": 23001,
+      "action_counts_real_wash_maintain": [
+        0,
+        0,
+        900
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 0,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": null,
+      "benefit_maximum": null,
+      "wash_linear_gain_maximum": null,
+      "maintain_bounds": [],
+      "null_benefit_identically_zero_by_archived_rule": true,
+      "result_sha256": "f207d37f6eea8604baf7a84cbc5abdd2249e0582d970ad5462a71a6f47ba1e7f",
+      "manifest_sha256": "f992ba9400983ab760a41c75b5778f7f7ad5566b3d0f13b59bbbd859a685e9e3"
+    },
+    {
+      "scenario": "zero_taste_F",
+      "seed": 23002,
+      "action_counts_real_wash_maintain": [
+        0,
+        0,
+        900
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 0,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": null,
+      "benefit_maximum": null,
+      "wash_linear_gain_maximum": null,
+      "maintain_bounds": [],
+      "null_benefit_identically_zero_by_archived_rule": true,
+      "result_sha256": "98343c3270ecc0c89e5cdc562b60e101f5faa1c1aa84de47464ec1a3c8c53d10",
+      "manifest_sha256": "fb98801dc04d88062ad0014bcc40fdca085b629e0826ca382d44155479efa615"
+    },
+    {
+      "scenario": "zero_taste_F",
+      "seed": 23003,
+      "action_counts_real_wash_maintain": [
+        0,
+        0,
+        900
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 0,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": null,
+      "benefit_maximum": null,
+      "wash_linear_gain_maximum": null,
+      "maintain_bounds": [],
+      "null_benefit_identically_zero_by_archived_rule": true,
+      "result_sha256": "4551f2b57e434d6deddb9d21cfb8193589de8a9093dc1f624d26d2a6e12dddaa",
+      "manifest_sha256": "4ff140df15088fc84d1d6469efddacbb62e4be7e0d0b61beb5ade48490373b64"
+    },
+    {
+      "scenario": "zero_taste_I",
+      "seed": 23001,
+      "action_counts_real_wash_maintain": [
+        0,
+        0,
+        900
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 0,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": null,
+      "benefit_maximum": null,
+      "wash_linear_gain_maximum": null,
+      "maintain_bounds": [],
+      "null_benefit_identically_zero_by_archived_rule": true,
+      "result_sha256": "f207d37f6eea8604baf7a84cbc5abdd2249e0582d970ad5462a71a6f47ba1e7f",
+      "manifest_sha256": "e0173eed392d6668f6cc789a72d494e762f43e3e73ab7931f684f903d7de0547"
+    },
+    {
+      "scenario": "zero_taste_I",
+      "seed": 23002,
+      "action_counts_real_wash_maintain": [
+        0,
+        0,
+        900
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 0,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": null,
+      "benefit_maximum": null,
+      "wash_linear_gain_maximum": null,
+      "maintain_bounds": [],
+      "null_benefit_identically_zero_by_archived_rule": true,
+      "result_sha256": "98343c3270ecc0c89e5cdc562b60e101f5faa1c1aa84de47464ec1a3c8c53d10",
+      "manifest_sha256": "730487d834ffbe3fd46f9d6756b8a27f423687f2435bfed728ac13ba80533a14"
+    },
+    {
+      "scenario": "zero_taste_I",
+      "seed": 23003,
+      "action_counts_real_wash_maintain": [
+        0,
+        0,
+        900
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 0,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": null,
+      "benefit_maximum": null,
+      "wash_linear_gain_maximum": null,
+      "maintain_bounds": [],
+      "null_benefit_identically_zero_by_archived_rule": true,
+      "result_sha256": "4551f2b57e434d6deddb9d21cfb8193589de8a9093dc1f624d26d2a6e12dddaa",
+      "manifest_sha256": "9eba5588dbc74fbf87e7935639c1fb3b53c45c2c2997a39e1b7209ce1d31540f"
+    },
+    {
+      "scenario": "zero_taste_IF",
+      "seed": 23001,
+      "action_counts_real_wash_maintain": [
+        0,
+        0,
+        900
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 0,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": null,
+      "benefit_maximum": null,
+      "wash_linear_gain_maximum": null,
+      "maintain_bounds": [],
+      "null_benefit_identically_zero_by_archived_rule": true,
+      "result_sha256": "f207d37f6eea8604baf7a84cbc5abdd2249e0582d970ad5462a71a6f47ba1e7f",
+      "manifest_sha256": "5961be05b067872c8ac7bf81285357e89ed2cb68dc013118fc5a736cfc49307f"
+    },
+    {
+      "scenario": "zero_taste_IF",
+      "seed": 23002,
+      "action_counts_real_wash_maintain": [
+        0,
+        0,
+        900
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 0,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": null,
+      "benefit_maximum": null,
+      "wash_linear_gain_maximum": null,
+      "maintain_bounds": [],
+      "null_benefit_identically_zero_by_archived_rule": true,
+      "result_sha256": "98343c3270ecc0c89e5cdc562b60e101f5faa1c1aa84de47464ec1a3c8c53d10",
+      "manifest_sha256": "aa21d132d2d29150633d380e28d44889bcec097f9c1667dcd6555eed76654d39"
+    },
+    {
+      "scenario": "zero_taste_IF",
+      "seed": 23003,
+      "action_counts_real_wash_maintain": [
+        0,
+        0,
+        900
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 0,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": null,
+      "benefit_maximum": null,
+      "wash_linear_gain_maximum": null,
+      "maintain_bounds": [],
+      "null_benefit_identically_zero_by_archived_rule": true,
+      "result_sha256": "4551f2b57e434d6deddb9d21cfb8193589de8a9093dc1f624d26d2a6e12dddaa",
+      "manifest_sha256": "4a8d9ffedf0d037b72848600de2bad466d967d51d5031cd485e8587960fb8c4a"
+    },
+    {
+      "scenario": "zero_taste_zero_policy",
+      "seed": 23001,
+      "action_counts_real_wash_maintain": [
+        0,
+        0,
+        900
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 0,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": null,
+      "benefit_maximum": null,
+      "wash_linear_gain_maximum": null,
+      "maintain_bounds": [],
+      "null_benefit_identically_zero_by_archived_rule": true,
+      "result_sha256": "f207d37f6eea8604baf7a84cbc5abdd2249e0582d970ad5462a71a6f47ba1e7f",
+      "manifest_sha256": "db23c1c224918712c74f696a2a16f70529257632d5b6fa8ce723c3f113409a74"
+    },
+    {
+      "scenario": "zero_taste_zero_policy",
+      "seed": 23002,
+      "action_counts_real_wash_maintain": [
+        0,
+        0,
+        900
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 0,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": null,
+      "benefit_maximum": null,
+      "wash_linear_gain_maximum": null,
+      "maintain_bounds": [],
+      "null_benefit_identically_zero_by_archived_rule": true,
+      "result_sha256": "98343c3270ecc0c89e5cdc562b60e101f5faa1c1aa84de47464ec1a3c8c53d10",
+      "manifest_sha256": "798b6b2af6c3c84621f7dab45c69a4b7584a8d2426411030410190b450b277f6"
+    },
+    {
+      "scenario": "zero_taste_zero_policy",
+      "seed": 23003,
+      "action_counts_real_wash_maintain": [
+        0,
+        0,
+        900
+      ],
+      "max_inflation": 0.0,
+      "interior_real_observations": 0,
+      "capacity_bound_real_observations": 0,
+      "benefit_median": null,
+      "benefit_maximum": null,
+      "wash_linear_gain_maximum": null,
+      "maintain_bounds": [],
+      "null_benefit_identically_zero_by_archived_rule": true,
+      "result_sha256": "4551f2b57e434d6deddb9d21cfb8193589de8a9093dc1f624d26d2a6e12dddaa",
+      "manifest_sha256": "1deed7b6f401b6fdcf25a1e5a13da77fa5bfb6fccba217df166bffc11dbe10fb"
+    }
+  ],
+  "frozen_theoretical_candidate_checks": [
+    {
+      "case": "observed_median",
+      "annual_benefit_per_sd": 4.1924651605315326e-05,
+      "penalty": 0.005,
+      "marginal_cost": 0.05,
+      "action": "improve",
+      "amount_sd": 0.0015620131547243472,
+      "npv_fraction_current_cap": 1.2199425477659538e-07
+    },
+    {
+      "case": "observed_maximum",
+      "annual_benefit_per_sd": 0.00021402789863352945,
+      "penalty": 0.005,
+      "marginal_cost": 0.05,
+      "action": "improve",
+      "amount_sd": 0.007974172243358531,
+      "npv_fraction_current_cap": 3.179371148337482e-06
+    },
+    {
+      "case": "penalty_removed_at_observed_maximum",
+      "annual_benefit_per_sd": 0.00021402789863352945,
+      "penalty": 0,
+      "marginal_cost": 0.05,
+      "action": "inflate",
+      "amount_sd": 0.036892076903778395,
+      "npv_fraction_current_cap": 1.3610253382742998e-05
+    },
+    {
+      "case": "above_positive_threshold",
+      "annual_benefit_per_sd": 0.0006929785768090659,
+      "penalty": 0.005,
+      "marginal_cost": 0.05,
+      "action": "improve",
+      "amount_sd": 0.02581873936862203,
+      "npv_fraction_current_cap": 3.333036512924166e-05
+    },
+    {
+      "case": "above_winner_threshold",
+      "annual_benefit_per_sd": 0.001341222168651282,
+      "penalty": 0.005,
+      "marginal_cost": 0.05,
+      "action": "inflate",
+      "amount_sd": 0.11742606223480369,
+      "npv_fraction_current_cap": 0.00013788880091971991
+    }
+  ],
+  "policy_arrays_equality": [
+    {
+      "seed": 23001,
+      "scenario": "market_I",
+      "all_recorded_arrays_equal_including_nan": true
+    },
+    {
+      "seed": 23001,
+      "scenario": "market_F",
+      "all_recorded_arrays_equal_including_nan": true
+    },
+    {
+      "seed": 23001,
+      "scenario": "market_IF",
+      "all_recorded_arrays_equal_including_nan": true
+    },
+    {
+      "seed": 23002,
+      "scenario": "market_I",
+      "all_recorded_arrays_equal_including_nan": true
+    },
+    {
+      "seed": 23002,
+      "scenario": "market_F",
+      "all_recorded_arrays_equal_including_nan": true
+    },
+    {
+      "seed": 23002,
+      "scenario": "market_IF",
+      "all_recorded_arrays_equal_including_nan": true
+    },
+    {
+      "seed": 23003,
+      "scenario": "market_I",
+      "all_recorded_arrays_equal_including_nan": true
+    },
+    {
+      "seed": 23003,
+      "scenario": "market_F",
+      "all_recorded_arrays_equal_including_nan": true
+    },
+    {
+      "seed": 23003,
+      "scenario": "market_IF",
+      "all_recorded_arrays_equal_including_nan": true
+    }
+  ],
+  "limitations": [
+    "Only the frozen v2 rules and three development seeds; no market reruns or parameter changes.",
+    "The candidate checks use c=.05 and capacity=.25; they are algebra checks, not estimated companies or policy experiments.",
+    "15 v2 runs fail the original no-price-cap gate; no confirmatory or empirical policy claim is licensed.",
+    "Interior FOC recovers b under the recorded model, not a causal or externally estimated financing effect."
+  ],
+  "diagnostic_code_sha256": "97cefecd9887c966c505c8cab7f779acdd4db34d165463a8eb56561d29c162e4"
+}

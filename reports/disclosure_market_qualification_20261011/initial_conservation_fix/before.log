@@ -1,0 +1,14 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+______________ test_shares_and_cash_are_conserved_with_dividends ______________
+
+    def test_shares_and_cash_are_conserved_with_dividends():
+        market = CrossSectionMarket(SMALL_MARKET)
+        initial_shares = market.investors.holdings.sum(axis=0) + market.noise_holdings + market.market_maker_inventory
+        initial_share_error = float(np.max(np.abs(initial_shares - 1.0)))
+>       assert market.maximum_share_error[0] == initial_share_error
+E       assert np.float64(0.0) == 2.220446049250313e-16
+
+tests\test_disclosure_market.py:45: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_disclosure_market.py::test_shares_and_cash_are_conserved_with_dividends

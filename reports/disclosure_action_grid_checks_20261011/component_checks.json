@@ -1,0 +1,173 @@
+{
+  "status": "PASS",
+  "scope": "component functions and static decision-hook contexts",
+  "market_initializations": 0,
+  "market_runs": 0,
+  "source_hashes_before": {
+    "src/abm/disclosure/config.py": "b17304a9953d22e4d6c940aaa50d1ffdc74685e6b264ddbd32b646ac2d6a347d",
+    "src/abm/disclosure/learning.py": "33e58faac3e8a7f283a8da42cfb1db1735f2171aa08ebcf5ac23e170906ec358",
+    "src/abm/disclosure/game.py": "2a1acd241f3ce1548ab9b9118993d612a441b76f14b8081cfa42db6aa92d9669",
+    "src/abm/tabular.py": "031ece614f1e049cbf143818386d6aefb44d4a3c7d50b28d0a4fb1e5f40d9ac9"
+  },
+  "source_hashes_after": {
+    "src/abm/disclosure/config.py": "b17304a9953d22e4d6c940aaa50d1ffdc74685e6b264ddbd32b646ac2d6a347d",
+    "src/abm/disclosure/learning.py": "33e58faac3e8a7f283a8da42cfb1db1735f2171aa08ebcf5ac23e170906ec358",
+    "src/abm/disclosure/game.py": "2a1acd241f3ce1548ab9b9118993d612a441b76f14b8081cfa42db6aa92d9669",
+    "src/abm/tabular.py": "031ece614f1e049cbf143818386d6aefb44d4a3c7d50b28d0a4fb1e5f40d9ac9"
+  },
+  "source_unchanged": true,
+  "script_sha256": "623a3fdf468c2e5203411b1f82e3eaa289074cc916108859c034d62b68e0af19",
+  "checks": [
+    {
+      "name": "config_and_layout",
+      "status": "PASS",
+      "details": {
+        "choice_count": 17,
+        "semantic_count": 3,
+        "choice_kinds": [
+          0,
+          1,
+          2,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        "external_list_detached": true,
+        "legacy_default_serialization_omits_grid": true
+      }
+    },
+    {
+      "name": "candidates_and_dedup",
+      "status": "PASS",
+      "details": {
+        "capacity_contexts": [
+          0.0,
+          0.001,
+          0.0025,
+          0.003,
+          0.02,
+          0.03,
+          0.25
+        ],
+        "both_kinds_keep_lowest_duplicate_index": true,
+        "negative_npv_positive_capacity_actions_remain_legal": true
+      }
+    },
+    {
+      "name": "exploration_and_compatibility",
+      "status": "PASS",
+      "details": {
+        "hierarchical_exploration_and_tie_contexts": 6,
+        "quantiles_per_context": 18000,
+        "maximum_probability_error": 0.0,
+        "legacy_draws_exact": 1001
+      }
+    },
+    {
+      "name": "frozen_table_and_dynamic_update",
+      "status": "PASS",
+      "details": {
+        "masked_illegal_high_q_excluded": true,
+        "choice_16_updated": true,
+        "frozen_file_sha256": "145155181b3ce0e9b4764361e3c112da3bfaba7985f1a8147f42c2b2ee6e6d3e",
+        "unvisited_without_maintain_selects_first_legal": true,
+        "saved_metadata_detached_from_caller": true
+      }
+    },
+    {
+      "name": "decision_hook_value_anchor",
+      "status": "PASS",
+      "details": {
+        "static_contexts": [
+          {
+            "mode": "npv_discrete",
+            "subsidy": 0.01,
+            "pending_value": 0.0,
+            "fine": 2e-05,
+            "choice_indices": [
+              11,
+              11,
+              11
+            ],
+            "semantic_actions": [
+              0,
+              0,
+              0
+            ],
+            "post_commitment_value_anchors": [
+              0.00047,
+              0.00047,
+              0.00047
+            ],
+            "maintain_invalid": true
+          },
+          {
+            "mode": "q_learning",
+            "subsidy": 0.01,
+            "pending_value": 0.0,
+            "fine": 2e-05,
+            "choice_indices": [
+              0,
+              0,
+              0
+            ],
+            "semantic_actions": [
+              0,
+              0,
+              0
+            ],
+            "post_commitment_value_anchors": [
+              1.4687500000000001e-05,
+              1.4687500000000001e-05,
+              1.4687500000000001e-05
+            ],
+            "maintain_invalid": true
+          },
+          {
+            "mode": "npv_discrete",
+            "subsidy": 0.01,
+            "pending_value": -3e-05,
+            "fine": 0.0,
+            "choice_indices": [
+              11,
+              11,
+              11
+            ],
+            "semantic_actions": [
+              0,
+              0,
+              0
+            ],
+            "post_commitment_value_anchors": [
+              0.00046000000000000007,
+              0.00046000000000000007,
+              0.00046000000000000007
+            ],
+            "maintain_invalid": true
+          },
+          {
+            "mode": "npv_discrete",
+            "subsidy": 0.0,
+            "all_invalid_rejected": true
+          }
+        ],
+        "same_mask_for_ql_and_npv": true
+      }
+    }
+  ],
+  "pending_review": [
+    "runner/training group coverage after owner freeze",
+    "market-level acceptance"
+  ]
+}

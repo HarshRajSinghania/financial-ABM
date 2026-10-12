@@ -1,0 +1,15 @@
+{
+  "contract": {
+    "spec_sha256": "40e7e7711a1739b1a812c958d79e094bc7fac553642d55da1a7ea07345e4cf74",
+    "launcher_sha256": "37562ed7f426991143e47723f2d99eb2a139add379deb20be1a7ac3cdefdb36e",
+    "initial_manifest_sha256": "8d99c849c0d187234e804fe52bef2b9b66c6fc90f5abab0c467dcd3fefe23e68",
+    "seed_lineage_sha256": "2cbf27f928a8db95c6fb19e35f1043d3c16f8cf109157a2e2089f3ccae2611d6",
+    "source_zip_sha256": "0763385ed37592e88ef18c41f6ddb3bb76d8ee7df6430071b80429c6beac2ed7",
+    "python_version": "3.12.9",
+    "numpy_version": "2.5.1"
+  },
+  "stopped_utc": "2026-10-11T11:27:51.923460+00:00",
+  "exception_type": "GlobalStop",
+  "error": "Traceback (most recent call last):\n  File \"C:\\Users\\kanzaler\\Desktop\\ABM\\reports\\disclosure_market_qualification_20261011\\run_frozen.py\", line 526, in main\n    run_case(case, contract)\n  File \"C:\\Users\\kanzaler\\Desktop\\ABM\\reports\\disclosure_market_qualification_20261011\\run_frozen.py\", line 413, in run_case\n    raise stop\n  File \"C:\\Users\\kanzaler\\Desktop\\ABM\\reports\\disclosure_market_qualification_20261011\\run_frozen.py\", line 345, in run_case\n    require(np.allclose(np.abs(recorder.data[\"share_error\"]).max(axis=1), result.maximum_share_error, rtol=0, atol=1e-15), \"Per-asset share record differs\")\n  File \"C:\\Users\\kanzaler\\Desktop\\ABM\\reports\\disclosure_market_qualification_20261011\\run_frozen.py\", line 35, in require\n    raise GlobalStop(message)\nGlobalStop: Per-asset share record differs\n",
+  "automatic_extra_worlds": 0
+}

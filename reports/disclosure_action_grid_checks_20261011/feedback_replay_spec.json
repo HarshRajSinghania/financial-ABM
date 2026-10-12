@@ -1,0 +1,22 @@
+{
+  "purpose": "development_failure_diagnostic",
+  "archive": "reports/disclosure_action_grid_development_20261011_v1",
+  "experiment_id": "1ef41a727d2552f738d39e1338f5472ff9fcf6a256bbdf21935eff34852ef7f2",
+  "cases": [
+    "training/seed_27001",
+    "validation/seed_27304/q_learning",
+    "validation/seed_27304/npv_discrete",
+    "validation/seed_27304/npv",
+    "validation/seed_27305/q_learning",
+    "validation/seed_27305/npv_discrete",
+    "validation/seed_27305/npv"
+  ],
+  "selection": "First archived training world and both validation seeds with price caps, including every rule; selected after observing failures, not a prevalence sample.",
+  "budget": {"replays": 7, "days_each": 1800, "new_seeds": 0, "parameter_changes": 0},
+  "acceptance": "Every original result array and fingerprint, and each available final Q table, must match bitwise. Abort on mismatch. Preserve original archives.",
+  "diagnostics": [
+    "Original quote terms, liquidity, noise amplification, and deciding investor wealth share",
+    "Actual old-price submitted and new-price cash-constrained executed orders",
+    "Static same-day quote at realized executed flow with other pre-quote state fixed; not a recomputed equilibrium or path counterfactual"
+  ]
+}

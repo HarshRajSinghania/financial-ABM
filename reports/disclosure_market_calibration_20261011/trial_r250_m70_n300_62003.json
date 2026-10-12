@@ -1,0 +1,407 @@
+{
+  "freeze_id": "a515aea3edd21c4d541618f2986b1851e51d242d4f89eb7428b1ce79a9fcfda8",
+  "candidate": "r250_m70_n300",
+  "seed": 62003,
+  "config": {
+    "seed": 62003,
+    "n_investors": 1000,
+    "n_firms": 200,
+    "trading_days": 6592,
+    "burn_in_days": 1000,
+    "size_class_shares": [
+      0.1,
+      0.3,
+      0.6
+    ],
+    "intrinsic_value_log_sd": 1.0,
+    "cash_flow_yield": 0.05,
+    "fundamental_drift": 0.04,
+    "fundamental_volatility": 0.159,
+    "fundamental_common_correlation": 0.4,
+    "investor_wealth_log_sd": 1.0,
+    "investor_float_share": 0.8,
+    "initial_equity_share": 0.7,
+    "initial_market_volatility": 0.18,
+    "initial_asset_volatility": 0.27,
+    "max_equity_share": 1.0,
+    "risk_aversion_mean": 3.0,
+    "risk_aversion_sd": 0.5,
+    "risk_aversion_min": 0.5,
+    "decision_interval_median": 20.0,
+    "decision_interval_log_sd": 0.5,
+    "decision_interval_max": 120,
+    "choice_intensity_median": 2.0,
+    "choice_intensity_log_sd": 0.5,
+    "rebalance_speed": 0.25,
+    "risk_free_rate": 0.025,
+    "mispricing_reversion": 0.15,
+    "variance_ewma_decay": 0.94,
+    "allocation_variance_decay": 0.99,
+    "news_pass_through": 0.9,
+    "price_impact": 1.0,
+    "liquidity_fraction": 0.3,
+    "liquidity_volatility_sensitivity": 3.03,
+    "liquidity_stress_threshold": 0.8,
+    "minimum_liquidity_fraction": 0.3,
+    "depth_resilience": 0.15,
+    "reference_variance_decay": 0.995,
+    "permanent_impact_fraction": 0.486,
+    "transient_impact_decay": 0.974,
+    "order_flow_memory": 0.7,
+    "max_log_return": 0.3,
+    "transaction_cost_rate": 0.001,
+    "noise_flow_scale": 0.003,
+    "noise_common_correlation": 0.8,
+    "noise_persistence": 0.5,
+    "noise_inventory_reversion": 0.05,
+    "noise_float_share": 0.05,
+    "noise_volatility_exponent": 1.77,
+    "market_maker_cash_multiple": 1.0,
+    "market_maker_inventory_skew": 0.01,
+    "initial_impact_share": 0.0,
+    "taste_median": 0.02,
+    "taste_log_sd": 0.5,
+    "imitation_interval": 60,
+    "imitation_intensity": 100.0,
+    "imitation_update_fraction": 0.1,
+    "firm_decision_interval": 60,
+    "firm_policy": "npv",
+    "financing_exposure_fraction": 0.5,
+    "financing_spread": 0.05,
+    "financing_repricing_interval": 60,
+    "financing_horizon_days": 1260,
+    "firm_discount_rate": 0.05
+  },
+  "status": "completed",
+  "started_at_utc": "2026-10-11T08:23:48.059850+00:00",
+  "market_seconds": 2.8574321000050986,
+  "completed_days": 6592,
+  "artifact": "trial_r250_m70_n300_62003.npz",
+  "artifact_sha256": "15ec156538bf144472527e3da35bf1ce56c549b3eec5695631601cbdc449e1b2",
+  "result_fingerprint": "9b58bea1ff0a185792597d3ce12cfc30c1967976357826767d0f26fcc30e93b7",
+  "intrinsic_value_path_sha256": "13dd103c720ba7f7366010ef70b48e99e072a868c93497a140957526600e3c5d",
+  "mechanical": {
+    "status": "FAIL",
+    "checks": {
+      "finite_positive_prices": true,
+      "finite_positive_intrinsic_values": true,
+      "no_price_caps": false,
+      "cash_conservation": true,
+      "share_conservation": true
+    },
+    "price_cap_hits": 11,
+    "maximum_relative_cash_error": 2.5430599558127026e-15,
+    "maximum_absolute_share_error": 4.3298697960381105e-15,
+    "conservation_tolerance": 1e-08,
+    "cash_error_measure": "relative to expected cash; absolute if expected cash is zero",
+    "share_error_measure": "daily maximum absolute error across all assets"
+  },
+  "price_stylized": {
+    "status": "PASS",
+    "checks": {
+      "all_assets_have_finite_moments": true,
+      "all_assets_positive_excess_kurtosis": true,
+      "all_assets_positive_abs_return_acf_1": true
+    },
+    "failed_assets": {
+      "nonfinite_moments": [],
+      "nonpositive_excess_kurtosis": [],
+      "nonpositive_abs_return_acf_1": []
+    }
+  },
+  "holder_total_stylized": {
+    "status": "PASS",
+    "checks": {
+      "finite_nine_moments": true,
+      "positive_excess_kurtosis_every_company": true,
+      "positive_abs_return_acf1_every_company": true
+    }
+  },
+  "cap_hits_full": 11,
+  "cap_hits_burn_in": 10,
+  "cap_hits_measurement": 1,
+  "price_cap_boundary_touches_scope": "Per-company absolute log-return boundary within 1e-12 is diagnostic; official clipped-raw counts are saved separately by day.",
+  "maximum_absolute_log_mispricing": 0.7158554524603383,
+  "price_mean_moments": [
+    0.013917850696782563,
+    10.610006545102356,
+    -0.024564292916007733,
+    0.23610195000557843,
+    0.17174395659954522,
+    0.12795755856402155,
+    -0.035066255287698606,
+    0.033747723563781244,
+    2.8566490724624654
+  ],
+  "holder_total_mean_moments": [
+    0.013919657573766214,
+    10.606112566241672,
+    -0.024572913529810128,
+    0.23523172587464256,
+    0.1712446637804333,
+    0.12747119590119416,
+    -0.03488922141996873,
+    0.033929577198296305,
+    2.856891752937169
+  ],
+  "price_moment_distributions": {
+    "daily_volatility": {
+      "count": 200,
+      "finite_count": 200,
+      "mean": 0.013917850696782568,
+      "positive_count": 200,
+      "quantiles": {
+        "min": 0.012673170036227812,
+        "p05": 0.012955056226867568,
+        "median": 0.013827211104584618,
+        "p95": 0.015151733547955409,
+        "max": 0.0164225526388509
+      }
+    },
+    "excess_kurtosis": {
+      "count": 200,
+      "finite_count": 200,
+      "mean": 10.610006545102356,
+      "positive_count": 200,
+      "quantiles": {
+        "min": 2.3045601066408157,
+        "p05": 3.091998066431313,
+        "median": 8.031900118932224,
+        "p95": 26.912476576430574,
+        "max": 53.21361956743696
+      }
+    },
+    "return_acf_1": {
+      "count": 200,
+      "finite_count": 200,
+      "mean": -0.024564292916007736,
+      "positive_count": 35,
+      "quantiles": {
+        "min": -0.07807659315269463,
+        "p05": -0.06422166944448293,
+        "median": -0.026552577796135797,
+        "p95": 0.021014492026290254,
+        "max": 0.05987616143484066
+      }
+    },
+    "abs_return_acf_1": {
+      "count": 200,
+      "finite_count": 200,
+      "mean": 0.2361019500055786,
+      "positive_count": 200,
+      "quantiles": {
+        "min": 0.1343309484905885,
+        "p05": 0.15769111256090787,
+        "median": 0.23329634597759125,
+        "p95": 0.3268653304849576,
+        "max": 0.4823407006561751
+      }
+    },
+    "abs_return_acf_5": {
+      "count": 200,
+      "finite_count": 200,
+      "mean": 0.17174395659954508,
+      "positive_count": 200,
+      "quantiles": {
+        "min": 0.07381013900913291,
+        "p05": 0.10551848814004783,
+        "median": 0.16733649525170724,
+        "p95": 0.25971383957035704,
+        "max": 0.312451097216812
+      }
+    },
+    "abs_return_acf_20": {
+      "count": 200,
+      "finite_count": 200,
+      "mean": 0.12795755856402155,
+      "positive_count": 200,
+      "quantiles": {
+        "min": 0.04297309612632629,
+        "p05": 0.07254855847771549,
+        "median": 0.12659568861138112,
+        "p95": 0.1984985111673022,
+        "max": 0.26370894017734947
+      }
+    },
+    "quantile_01": {
+      "count": 200,
+      "finite_count": 200,
+      "mean": -0.03506625528769862,
+      "positive_count": 0,
+      "quantiles": {
+        "min": -0.042160680144632784,
+        "p05": -0.03889101218135994,
+        "median": -0.035026048921555884,
+        "p95": -0.031586566434399665,
+        "max": -0.02949400036919862
+      }
+    },
+    "quantile_99": {
+      "count": 200,
+      "finite_count": 200,
+      "mean": 0.03374772356378125,
+      "positive_count": 200,
+      "quantiles": {
+        "min": 0.02953206171021098,
+        "p05": 0.03122771054846451,
+        "median": 0.03361402710306376,
+        "p95": 0.03668932708465052,
+        "max": 0.038794141323142746
+      }
+    },
+    "hill_tail_index": {
+      "count": 200,
+      "finite_count": 200,
+      "mean": 2.8566490724624676,
+      "positive_count": 200,
+      "quantiles": {
+        "min": 2.050487822375452,
+        "p05": 2.2292415083538892,
+        "median": 2.8009348544190904,
+        "p95": 3.6550500577156084,
+        "max": 4.053194425672437
+      }
+    }
+  },
+  "holder_total_moment_distributions": {
+    "daily_volatility": {
+      "count": 200,
+      "finite_count": 200,
+      "mean": 0.013919657573766215,
+      "positive_count": 200,
+      "quantiles": {
+        "min": 0.012674902198804796,
+        "p05": 0.012956720300548185,
+        "median": 0.013828837937311551,
+        "p95": 0.01515397199142358,
+        "max": 0.01642443419416288
+      }
+    },
+    "excess_kurtosis": {
+      "count": 200,
+      "finite_count": 200,
+      "mean": 10.60611256624167,
+      "positive_count": 200,
+      "quantiles": {
+        "min": 2.303508816697671,
+        "p05": 3.0901477816354035,
+        "median": 8.029675648826567,
+        "p95": 26.89978393655009,
+        "max": 53.19452842337165
+      }
+    },
+    "return_acf_1": {
+      "count": 200,
+      "finite_count": 200,
+      "mean": -0.024572913529810125,
+      "positive_count": 34,
+      "quantiles": {
+        "min": -0.07808415611801386,
+        "p05": -0.06419464836336314,
+        "median": -0.026560447400825218,
+        "p95": 0.021018955582849504,
+        "max": 0.05988498621009445
+      }
+    },
+    "abs_return_acf_1": {
+      "count": 200,
+      "finite_count": 200,
+      "mean": 0.23523172587464244,
+      "positive_count": 200,
+      "quantiles": {
+        "min": 0.13336441792910148,
+        "p05": 0.15663399456786226,
+        "median": 0.2323153984682111,
+        "p95": 0.32612657896075176,
+        "max": 0.48197551374490694
+      }
+    },
+    "abs_return_acf_5": {
+      "count": 200,
+      "finite_count": 200,
+      "mean": 0.1712446637804333,
+      "positive_count": 200,
+      "quantiles": {
+        "min": 0.07331772764828164,
+        "p05": 0.10526251761719112,
+        "median": 0.16631869662135454,
+        "p95": 0.25897985910840715,
+        "max": 0.31245298850741027
+      }
+    },
+    "abs_return_acf_20": {
+      "count": 200,
+      "finite_count": 200,
+      "mean": 0.12747119590119413,
+      "positive_count": 200,
+      "quantiles": {
+        "min": 0.04279205256623042,
+        "p05": 0.07244613767365493,
+        "median": 0.12611910440244126,
+        "p95": 0.1978353292586991,
+        "max": 0.26375820883906803
+      }
+    },
+    "quantile_01": {
+      "count": 200,
+      "finite_count": 200,
+      "mean": -0.034889221419968745,
+      "positive_count": 0,
+      "quantiles": {
+        "min": -0.04197973628730299,
+        "p05": -0.038699450809820804,
+        "median": -0.03485684062713569,
+        "p95": -0.03142698043052739,
+        "max": -0.029332845973958358
+      }
+    },
+    "quantile_99": {
+      "count": 200,
+      "finite_count": 200,
+      "mean": 0.033929577198296305,
+      "positive_count": 200,
+      "quantiles": {
+        "min": 0.029721420788823793,
+        "p05": 0.031400710626583055,
+        "median": 0.03379105599824336,
+        "p95": 0.03686046413120623,
+        "max": 0.03900015592193292
+      }
+    },
+    "hill_tail_index": {
+      "count": 200,
+      "finite_count": 200,
+      "mean": 2.8568917529371687,
+      "positive_count": 200,
+      "quantiles": {
+        "min": 2.051624988293053,
+        "p05": 2.22654709597202,
+        "median": 2.797692458564317,
+        "p95": 3.656195148491185,
+        "max": 4.052998853741285
+      }
+    }
+  },
+  "mean_company_price_return": 0.0002265476162977083,
+  "mean_company_holder_total_return": 0.00040088751515805077,
+  "mean_company_dividend_yield": 0.00017433989886034247,
+  "raw_paths_saved": false,
+  "raw_path_reproduction": "Re-execute exact config/seed with frozen core sources; all per-company nine moments and full-day ledger/cap diagnostics are saved in NPZ.",
+  "total_elapsed_seconds": 3.1996134000073653,
+  "source_hashes_after": {
+    "src/abm/__init__.py": "9b9e11c347cf20ff8170e08477e633427383c6aeaa97da8f1eea709467e03752",
+    "src/abm/disclosure/__init__.py": "caed7f0a7b7920d67c5a613c6aada60d0d0d9f6d72327727fb425449fcd7ca24",
+    "src/abm/disclosure/config.py": "e1596ed5386a09217fcc21a97b79821f1d565b3b7cdd4a978b49c437e5b511ae",
+    "src/abm/disclosure/firms.py": "6ed925a4dc1c6fb5e591fba46bdc42943fcc7bc9d5e6cd88df1f76f3f8dbfbe9",
+    "src/abm/disclosure/investors.py": "051d558946056a0856795df9baec8541246ea782ea78d2e453a40e2a8a4f83b4",
+    "src/abm/disclosure/market.py": "3686a67b19826384eb6fb55dfda3ec3fd8cc36e6df4a31c8ebd532173129d25f",
+    "src/abm/disclosure/harness.py": "4b620ba358615124d16d4ae0e5940fb4946a12787f5ea561395a054aea9d2cc0",
+    "src/abm/disclosure/validate.py": "a01d05b738b26d9a63d47500a9f82f6d1e8a59168d4629feaae7369be63eafd2",
+    "src/abm/manifest.py": "ca129defcd127b7153520bc2a06ac58288761b3f186e19e1f99db057413aa762",
+    "src/abm/schemas.py": "44360f9c9bb313c89a95b487d2c20485ce5a16ec84b1a80a312b74afa60a13d1",
+    "src/abm/msm.py": "37e62ff0ae312a1e4b2a49c4a3fc06e80752daac7f343f340f7b0628e6df425a",
+    "src/abm/french49.py": "2e1948232d414452986d7e94897bff795b12a6254c06a855000994c9838c8c07",
+    "src/abm/platform_tuning.py": "bb7ebbbcb6e99ba3458c73f76ae1423356a4f1fc9f6f48f1942bc9b99e0bbbc0"
+  },
+  "core_sources_unchanged": true
+}

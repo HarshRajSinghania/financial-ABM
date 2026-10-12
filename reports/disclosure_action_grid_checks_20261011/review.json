@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-11",
+  "conclusion": "no_unresolved_blocking_code_defect_found",
+  "scope": "read_only_diff_review_and_deterministic_mathematical_component_archival_checks",
+  "market_initializations": 0,
+  "market_runs": 0,
+  "research_acceptance": "pending_real_frozen_market_evidence",
+  "reviewed_source_sha256": {
+    "src/abm/disclosure/config.py": "b17304a9953d22e4d6c940aaa50d1ffdc74685e6b264ddbd32b646ac2d6a347d",
+    "src/abm/disclosure/learning.py": "33e58faac3e8a7f283a8da42cfb1db1735f2171aa08ebcf5ac23e170906ec358",
+    "src/abm/tabular.py": "031ece614f1e049cbf143818386d6aefb44d4a3c7d50b28d0a4fb1e5f40d9ac9",
+    "src/abm/disclosure/game.py": "2a1acd241f3ce1548ab9b9118993d612a441b76f14b8081cfa42db6aa92d9669",
+    "src/abm/disclosure/runner.py": "6bf394fc17211411574f2a3d784f58bfada25cceb664a2615a07d80fa08a52a4",
+    "src/abm/disclosure/training.py": "1504e9f9e6de48f2d7fdf2d13eea61012107cd483a292b4001c66a8fa7c78269"
+  },
+  "source_unchanged_during_checks": true,
+  "source_matches_at_report": true,
+  "evidence_sha256": {
+    "math_spec.json": "e6720a081c37e9f0b88a9b6c7c89f1ced9f13b10023b156b95af8eefa6cd8df5",
+    "math_checks.py": "b84c5175aca1bd667ba6dd7840c301e21e1a82f03a92cb6badf045c72ab21271",
+    "math_checks.json": "4b9163e894dacf25fc3079a3e3ac58fe31b5662591b107aae5d8b3ced5c8fba7",
+    "math_report.md": "25397adac7a679b29e00c30ae11cca3899663cd76eecc529fd80826f1e00717c",
+    "component_checks.py": "623a3fdf468c2e5203411b1f82e3eaa289074cc916108859c034d62b68e0af19",
+    "component_checks.json": "276cc8bec9ab813238e276c2b3f9070fbb64f9e9e7fa776bb84cf0d6244b2d55",
+    "component_frozen17.npz": "145155181b3ce0e9b4764361e3c112da3bfaba7985f1a8147f42c2b2ee6e6d3e",
+    "group_checks.py": "87dcef147a24730db5b027c06afcdbbcda2898219efa39271cee231393c61dc2",
+    "group_checks.json": "0926b151bc9787b68a3918b7dce786f95e198c998485fd7b2c024f24fffeb9ab",
+    "review.md": "cfc77ea56f48d729bd0ad2e08f20658ef72878088852efb22ee2dc2aee897e02"
+  },
+  "diff_baseline": {
+    "path": "reports/disclosure_q_learning_smoke_20261011_v1/training/seed_25001/source.zip",
+    "sha256": "d939f21c106797d52c0adbaaa5ae7157f6ae0983827cfa2d98b411ace6cc0acc"
+  },
+  "frozen_development_spec_reference": {
+    "path": "configs/disclosure_action_grid_development_v1.json",
+    "sha256": "a87ec3e4633b7d6c743e3eea3bf6c1079e57efd7fc4f328874c1c7492d72160c",
+    "market_execution_by_reviewer": false
+  },
+  "checks": {
+    "mathematics": "PASS",
+    "core_component_groups": 5,
+    "core_component_status": "PASS",
+    "coverage_fixture_status": "PASS",
+    "coverage_fixture_checks": {
+      "rare_group_legal_amplitude_failure_survives_global_pass": true,
+      "raw_choice_16_reports_semantic_wash_1": true,
+      "pooled_pass_cannot_hide_one_world_group_failure": true,
+      "unobserved_groups_are_not_observed": true,
+      "rare_group_all_unseen_survives_small_global_unseen_fraction": true
+    }
+  },
+  "resolved_issue": {
+    "path": "src/abm/disclosure/config.py",
+    "line": 141,
+    "issue": "mutable caller list could change validated action grid",
+    "status": "fixed_by_owner_and_independently_probed"
+  },
+  "mathematical_limits": {
+    "old_gross_annual_sd": 0.0105,
+    "full_grid_gross_annual_sd": 1.05,
+    "smooth_quadratic_relative_bound": 0.1111111111111111,
+    "subfirst_absolute_bound_at_c_005": 7.8125e-08,
+    "report_capacity_kink_relative_loss": 0.25925925925925924,
+    "bound_is_not_global_for_piecewise_objective": true,
+    "gross_capacity_is_not_incentive_or_outcome": true
+  },
+  "remaining_limits": [
+    "No full market regression independently executed in this phase.",
+    "No development training or frozen-market coverage run by this reviewer.",
+    "Scenario-specific pretrained tables do not guarantee paired pre-policy paths.",
+    "Aggregate audit fines cannot be attributed to individual wash projects."
+  ]
+}

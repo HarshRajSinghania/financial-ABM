@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "purpose": "Fixed deterministic component-formula diagnostic, not a market counterfactual or calibration",
+  "budget": {"array_traces": 16, "days_per_trace": 2048, "market_worlds": 0, "rng_draws": 0, "maximum_book_traces": 8, "maximum_book_quotes": 16384},
+  "source": {
+    "parent_freeze": "reports/disclosure_market_qualification_20261011/freeze.json",
+    "parent_freeze_sha256": "40e7e7711a1739b1a812c958d79e094bc7fac553642d55da1a7ea07345e4cf74",
+    "archive": "reports/disclosure_feedback_development_20261011/source.zip",
+    "archive_sha256": "0763385ed37592e88ef18c41f6ddb3bb76d8ee7df6430071b80429c6beac2ed7",
+    "isolated_directory": "reports/disclosure_market_qualification_20261011/isolated_src",
+    "market_sha256": "3686a67b19826384eb6fb55dfda3ec3fd8cc36e6df4a31c8ebd532173129d25f",
+    "config_sha256": "b17304a9953d22e4d6c940aaa50d1ffdc74685e6b264ddbd32b646ac2d6a347d",
+    "active_market_and_config_match_at_preparation": true,
+    "scope": "Run only the archived book/config. Active source changes after this freeze are not used. The archive also contains unrelated old disclosure code."
+  },
+  "runtime": {"python_version": "3.12.9", "numpy_version": "2.5.1", "thread_count": 1},
+  "parameters": {"permanent_impact_fraction": 0.486, "transient_impact_decay": 0.974, "max_log_return": 0.3, "liquidity_fraction": 0.3, "price_impact": 1.0},
+  "memories": [{"id": "m30", "value": 0.3}, {"id": "m70", "value": 0.7}],
+  "predictors": ["impact_ema", "flow_ema_current_depth"],
+  "inputs": [
+    {"id": "pulse_depth1", "flow_segments": [[1, 1, 0.01], [2, 2048, 0.0]], "depth_segments": [[1, 2048, 1.0]], "initial_flow_predictor": 0.0, "initial_transient": 0.0},
+    {"id": "pulse_depth_floor", "flow_segments": [[1, 1, 0.01], [2, 2048, 0.0]], "depth_segments": [[1, 2048, 0.3]], "initial_flow_predictor": 0.0, "initial_transient": 0.0},
+    {"id": "constant_depth_steps", "flow_segments": [[1, 2048, 0.01]], "depth_segments": [[1, 512, 1.0], [513, 1024, 0.3], [1025, 2048, 1.0]], "initial_flow_predictor": 0.01, "initial_transient": 0.0},
+    {"id": "zero_depth_steps", "flow_segments": [[1, 2048, 0.0]], "depth_segments": [[1, 512, 1.0], [513, 1024, 0.3], [1025, 2048, 1.0]], "initial_flow_predictor": 0.0, "initial_transient": 0.0}
+  ],
+  "case_order": "memories, then inputs, then predictors, each in the listed order",
+  "definitions": {
+    "flow_u": "price_impact * submitted monetary flow / (liquidity_fraction * reference market cap); u is dimensionless, not a share order",
+    "impact_ema": "s=u/d-m_previous; m=rho*m_previous+(1-rho)*u/d",
+    "flow_ema_current_depth": "s=(u-q_previous)/d; q=rho*q_previous+(1-rho)*u",
+    "transient_and_quote": "T=decay*T_previous+(1-p)*s; raw=p*u+T-T_previous; clipped=clip(raw,-max_log_return,max_log_return)",
+    "initial_impact_predictor": "initial_flow_predictor / first_depth",
+    "cumulative": "Sum of log quote changes; the exact raw identity is p*cumsum(u)+T-initial_T",
+    "depth_residual": "impact_ema surprise minus flow_ema_current_depth surprise under identical externally supplied u/depth; a toy component contrast only",
+    "next_day_reversal": "For pulse inputs only: first/second raw and clipped changes, each divided by the fixed pulse amplitude, and second/first response ratio"
+  },
+  "book_controls": {
+    "configuration": "All parent base_config fields inherited except n_firms=1 for the scalar book and the listed order_flow_memory; no CrossSectionMarket construction",
+    "quote_inputs": "reference market cap=1, net_flow_value=u*liquidity_fraction/price_impact, news=0, inventory_gap=0",
+    "depth": "Before each quote set depth to the prescribed 1 or .3, reference_variance=1, and variance=0 for depth1 or (liquidity_stress_threshold+1)^2 for depth .3. The unchanged source depth target then equals the prescribed depth, preserving depth_resilience=.15.",
+    "variance": "Do not call record_returns; variance and depth are external controls, not endogenous EWMA paths. Preserve predictor/transient state across days.",
+    "source_comparison": "Only impact_ema traces also call the real frozen CrossSectionBook.price_moves once per day; compare raw, clipped, cap flag, depth, predictor and transient after every call"
+  },
+  "checks": {"absolute_tolerance": 1e-12, "relative_tolerance": 1e-12, "finite_paths": true, "raw_cumulative_identity": true, "pulse_first_two_closed_form": true, "constant_depth_predictor_equivalence": true, "zero_flow_negative_control": true, "depth_step_first_residual": true},
+  "stopping": "Complete exactly the fixed16 traces, or stop at the first source/formula/invariant/identity/runtime/I/O inconsistency; save the observed prefix and original error. No retries, additional traces, parameter changes, source edits, winner or default promotion.",
+  "limits": [
+    "External u and depth bypass investors, budgets, inventory, settlement, fundamentals, dividends and endogenous variance/depth feedback. This is not a complete market path or market counterfactual.",
+    "The .01 amplitude and depth steps are fixed before execution, not selected to hit or avoid a cap. Raw and clipped paths are both archived; clipping is descriptive, not a toy market qualification gate.",
+    "A conditional-flow EMA is another declared heuristic, not an estimated best predictor or a guarantee of martingale prices.",
+    "No return ACF, nine-moment empirical matching, population cap incidence, stability qualification or economic policy effect is inferred from these deterministic inputs."
+  ]
+}

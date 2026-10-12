@@ -1,0 +1,1202 @@
+..........................................FFFFFF....FFF................. [ 44%]
+.......................................................F................ [ 89%]
+.................                                                        [100%]
+================================== FAILURES ===================================
+______ test_group_common_state_cannot_hide_below_global_one_percent[0-0] ______
+
+choice = 0, group = 0
+
+    @pytest.mark.parametrize("choice", [0, 16])
+    @pytest.mark.parametrize("group", [0, 3])
+    def test_group_common_state_cannot_hide_below_global_one_percent(choice, group):
+        visits = visits_at({(group, 0): 99, (group, 1): 1, (1, 0): 900})
+        counts = np.full((6, 81, CHOICES), 20, dtype=np.int64)
+        counts[group, 1, choice] = 19
+>       local = single_report(visits, counts)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_disclosure_group_coverage.py:72: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_disclosure_group_coverage.py:58: in single_report
+    return runner.learning_report(result, config, learner, training=training_mode)["coverage"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+result = namespace(learning_groups=array([[-1, -1, -1, ..., -1, -1, -1],
+       [ 0,  0,  0, ...,  1,  1,  1]], shape=(2, 1000)...market=namespace(prices=array([[1., 1., 1., ..., 1., 1., 1.],
+       [1., 1., 1., ..., 1., 1., 1.]], shape=(2, 1000))))
+config = MarketConfig(seed=20261012, n_investors=30, n_firms=1000, trading_days=1, burn_in_days=0, size_class_shares=(0.1, 0.3,...tion=0.5, financing_spread=0.05, financing_repricing_interval=60, financing_horizon_days=1260, firm_discount_rate=0.05)
+learner = <abm.tabular.CompanyQLearner object at 0x00000233CCDED610>
+
+    def learning_report(
+        result: DisclosureResult, config: MarketConfig, learner: CompanyQLearner | None, *, training: bool,
+        coverage_target: int = 0,
+    ) -> dict[str, Any]:
+        visits = np.zeros((6, 81), dtype=np.int64)
+        kinds = action_kinds(2 * len(config.firm_action_fractions) + 1)
+        legal_visits = np.zeros((6, 81, len(kinds)), dtype=np.int64)
+        groups, states = result.learning_groups[1:], result.learning_states[1:]
+        np.add.at(visits, (groups.ravel(), states.ravel()), 1)
+        for action in range(len(kinds)):
+            np.add.at(legal_visits[:, :, action], (groups.ravel(), states.ravel()),
+                      result.valid_actions[1:, :, action].ravel().astype(np.int64))
+        decisions = int(visits.sum())
+        unseen = None if result.unvisited_state is None else int(result.unvisited_state[1:].sum())
+        fraction = unseen / decisions if unseen is not None and decisions else None
+        undercovered, group_undercovered = [], []
+        group_totals = visits.sum(axis=1)
+        if learner is not None:
+            common = (visits > 0) & (visits >= .01 * decisions)
+            for group, state, action in np.argwhere(common[:, :, None] & (legal_visits > 0) & (learner.counts < 20)):
+                undercovered.append({"group": int(group), "state": int(state),
+                                     "choice_index": int(action), "action": int(kinds[action]),
+                                     "count": int(learner.counts[group, state, action])})
+            group_common = (visits > 0) & (visits >= .01 * group_totals[:, None])
+            for group, state, action in np.argwhere(group_common[:, :, None] & (legal_visits > 0) & (learner.counts < 20)):
+                group_undercovered.append({"group": int(group), "state": int(state),
+                                           "choice_index": int(action), "action": int(kinds[action]),
+                                           "count": int(learner.counts[group, state, action])})
+        group_unseen = None
+        if result.unvisited_state is not None:
+            group_unseen = np.zeros(6, dtype=np.int64)
+            np.add.at(group_unseen, groups.ravel(), result.unvisited_state[1:].ravel().astype(np.int64))
+        group_reports = []
+        for group, total in enumerate(group_totals):
+            missing = None if group_unseen is None else int(group_unseen[group])
+            share = missing / int(total) if missing is not None and total else None
+            status = "not_observed" if not total else (
+                "not_applicable" if learner is None or training else (
+                    "PASS" if share is not None and share <= .05
+                    and not any(item["group"] == group for item in group_undercovered) else "FAIL"
+                )
+            )
+            group_reports.append({"group": group, "size_class": group % 3, "policy_epoch": group // 3,
+                                  "decisions": int(total), "unseen_state_decisions": missing,
+                                  "unseen_state_fraction": share, "status": status})
+        global_status = "not_applicable" if learner is None or training else (
+            "PASS" if fraction is not None and fraction <= .05 and not undercovered else "FAIL"
+        )
+        coverage_status = "FAIL" if any(group["status"] == "FAIL" for group in group_reports) else global_status
+        period = config.firm_decision_interval
+        last = config.trading_days
+        last_decision = last // period * period
+        ledger = {
+            "financing_adjustment": result.financing_value_adjustment,
+            "resource_cost": result.applied_resource_cost,
+            "fine": result.applied_fine,
+            "subsidy": result.applied_subsidy,
+        }
+        net = ledger["financing_adjustment"] - ledger["resource_cost"] - ledger["fine"] + ledger["subsidy"]
+        discount = np.exp(-config.firm_discount_rate * np.arange(last + 1) / TRADING_DAYS_PER_YEAR)
+        pending = []
+        for decision, firm in np.argwhere(result.action_due_day > last):
+            pending.append({"decision_day": int(decision * period), "firm": int(firm),
+                            "action": int(result.actions[decision, firm]),
+                            "due_day": int(result.action_due_day[decision, firm]),
+                            "amount": float(result.amounts[decision, firm])})
+        unapplied = {}
+        for name, fractions in (("resource_cost", result.cost_fraction), ("fine", result.penalty_fraction),
+                                ("subsidy", result.subsidy_fraction)):
+            amount = fractions[-1] * result.market.prices[-1] if last_decision == last else np.zeros(config.n_firms)
+            unapplied[name] = amount.tolist()
+        report = {
+            "firm_policy": config.firm_policy, "training": training,
+            "coverage": {
+                "visits": visits.tolist(), "legal_action_visits": legal_visits.tolist(),
+                "unseen_state_decisions": unseen, "decisions": decisions, "unseen_state_fraction": fraction,
+                "common_state_minimum_action_count": 20, "common_state_share_threshold": .01,
+                "common_state_undercovered_actions": undercovered,
+                "group_common_state_undercovered_actions": group_undercovered,
+                "group_common_state_share_threshold": .01, "maximum_unseen_state_fraction": .05,
+                "groups": group_reports, "global_status": global_status, "status": coverage_status,
+            },
+            "ledger": {
+                "scope": "Full observed window; private financing-baseline differences, not causal effects or lifetime profit.",
+                "totals_by_firm": {key: value.sum(axis=0).tolist() for key, value in ledger.items()},
+                "discounted_net_by_initial_cap": (discount @ net / result.market.prices[0]).tolist(),
+                "completed_transitions": int(result.learning_transition.sum()),
+            },
+            "tail": {
+                "last_decision_day": last_decision if last_decision else None,
+                "unclosed_decisions": config.n_firms if last_decision else 0,
+                "observed_days_of_unclosed_window": last - last_decision if last_decision else 0,
+                "unapplied_next_day_commitments": unapplied,
+                "pending_projects": pending,
+                "outstanding_inflation": result.inflation[-1].tolist(),
+            },
+        }
+>       updates = result.learning_update
+                  ^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'types.SimpleNamespace' object has no attribute 'learning_update'. Did you mean: 'learning_states'?
+
+src\abm\disclosure\runner.py:250: AttributeError
+_____ test_group_common_state_cannot_hide_below_global_one_percent[0-16] ______
+
+choice = 16, group = 0
+
+    @pytest.mark.parametrize("choice", [0, 16])
+    @pytest.mark.parametrize("group", [0, 3])
+    def test_group_common_state_cannot_hide_below_global_one_percent(choice, group):
+        visits = visits_at({(group, 0): 99, (group, 1): 1, (1, 0): 900})
+        counts = np.full((6, 81, CHOICES), 20, dtype=np.int64)
+        counts[group, 1, choice] = 19
+>       local = single_report(visits, counts)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_disclosure_group_coverage.py:72: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_disclosure_group_coverage.py:58: in single_report
+    return runner.learning_report(result, config, learner, training=training_mode)["coverage"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+result = namespace(learning_groups=array([[-1, -1, -1, ..., -1, -1, -1],
+       [ 0,  0,  0, ...,  1,  1,  1]], shape=(2, 1000)...market=namespace(prices=array([[1., 1., 1., ..., 1., 1., 1.],
+       [1., 1., 1., ..., 1., 1., 1.]], shape=(2, 1000))))
+config = MarketConfig(seed=20261012, n_investors=30, n_firms=1000, trading_days=1, burn_in_days=0, size_class_shares=(0.1, 0.3,...tion=0.5, financing_spread=0.05, financing_repricing_interval=60, financing_horizon_days=1260, firm_discount_rate=0.05)
+learner = <abm.tabular.CompanyQLearner object at 0x00000233CCDEF200>
+
+    def learning_report(
+        result: DisclosureResult, config: MarketConfig, learner: CompanyQLearner | None, *, training: bool,
+        coverage_target: int = 0,
+    ) -> dict[str, Any]:
+        visits = np.zeros((6, 81), dtype=np.int64)
+        kinds = action_kinds(2 * len(config.firm_action_fractions) + 1)
+        legal_visits = np.zeros((6, 81, len(kinds)), dtype=np.int64)
+        groups, states = result.learning_groups[1:], result.learning_states[1:]
+        np.add.at(visits, (groups.ravel(), states.ravel()), 1)
+        for action in range(len(kinds)):
+            np.add.at(legal_visits[:, :, action], (groups.ravel(), states.ravel()),
+                      result.valid_actions[1:, :, action].ravel().astype(np.int64))
+        decisions = int(visits.sum())
+        unseen = None if result.unvisited_state is None else int(result.unvisited_state[1:].sum())
+        fraction = unseen / decisions if unseen is not None and decisions else None
+        undercovered, group_undercovered = [], []
+        group_totals = visits.sum(axis=1)
+        if learner is not None:
+            common = (visits > 0) & (visits >= .01 * decisions)
+            for group, state, action in np.argwhere(common[:, :, None] & (legal_visits > 0) & (learner.counts < 20)):
+                undercovered.append({"group": int(group), "state": int(state),
+                                     "choice_index": int(action), "action": int(kinds[action]),
+                                     "count": int(learner.counts[group, state, action])})
+            group_common = (visits > 0) & (visits >= .01 * group_totals[:, None])
+            for group, state, action in np.argwhere(group_common[:, :, None] & (legal_visits > 0) & (learner.counts < 20)):
+                group_undercovered.append({"group": int(group), "state": int(state),
+                                           "choice_index": int(action), "action": int(kinds[action]),
+                                           "count": int(learner.counts[group, state, action])})
+        group_unseen = None
+        if result.unvisited_state is not None:
+            group_unseen = np.zeros(6, dtype=np.int64)
+            np.add.at(group_unseen, groups.ravel(), result.unvisited_state[1:].ravel().astype(np.int64))
+        group_reports = []
+        for group, total in enumerate(group_totals):
+            missing = None if group_unseen is None else int(group_unseen[group])
+            share = missing / int(total) if missing is not None and total else None
+            status = "not_observed" if not total else (
+                "not_applicable" if learner is None or training else (
+                    "PASS" if share is not None and share <= .05
+                    and not any(item["group"] == group for item in group_undercovered) else "FAIL"
+                )
+            )
+            group_reports.append({"group": group, "size_class": group % 3, "policy_epoch": group // 3,
+                                  "decisions": int(total), "unseen_state_decisions": missing,
+                                  "unseen_state_fraction": share, "status": status})
+        global_status = "not_applicable" if learner is None or training else (
+            "PASS" if fraction is not None and fraction <= .05 and not undercovered else "FAIL"
+        )
+        coverage_status = "FAIL" if any(group["status"] == "FAIL" for group in group_reports) else global_status
+        period = config.firm_decision_interval
+        last = config.trading_days
+        last_decision = last // period * period
+        ledger = {
+            "financing_adjustment": result.financing_value_adjustment,
+            "resource_cost": result.applied_resource_cost,
+            "fine": result.applied_fine,
+            "subsidy": result.applied_subsidy,
+        }
+        net = ledger["financing_adjustment"] - ledger["resource_cost"] - ledger["fine"] + ledger["subsidy"]
+        discount = np.exp(-config.firm_discount_rate * np.arange(last + 1) / TRADING_DAYS_PER_YEAR)
+        pending = []
+        for decision, firm in np.argwhere(result.action_due_day > last):
+            pending.append({"decision_day": int(decision * period), "firm": int(firm),
+                            "action": int(result.actions[decision, firm]),
+                            "due_day": int(result.action_due_day[decision, firm]),
+                            "amount": float(result.amounts[decision, firm])})
+        unapplied = {}
+        for name, fractions in (("resource_cost", result.cost_fraction), ("fine", result.penalty_fraction),
+                                ("subsidy", result.subsidy_fraction)):
+            amount = fractions[-1] * result.market.prices[-1] if last_decision == last else np.zeros(config.n_firms)
+            unapplied[name] = amount.tolist()
+        report = {
+            "firm_policy": config.firm_policy, "training": training,
+            "coverage": {
+                "visits": visits.tolist(), "legal_action_visits": legal_visits.tolist(),
+                "unseen_state_decisions": unseen, "decisions": decisions, "unseen_state_fraction": fraction,
+                "common_state_minimum_action_count": 20, "common_state_share_threshold": .01,
+                "common_state_undercovered_actions": undercovered,
+                "group_common_state_undercovered_actions": group_undercovered,
+                "group_common_state_share_threshold": .01, "maximum_unseen_state_fraction": .05,
+                "groups": group_reports, "global_status": global_status, "status": coverage_status,
+            },
+            "ledger": {
+                "scope": "Full observed window; private financing-baseline differences, not causal effects or lifetime profit.",
+                "totals_by_firm": {key: value.sum(axis=0).tolist() for key, value in ledger.items()},
+                "discounted_net_by_initial_cap": (discount @ net / result.market.prices[0]).tolist(),
+                "completed_transitions": int(result.learning_transition.sum()),
+            },
+            "tail": {
+                "last_decision_day": last_decision if last_decision else None,
+                "unclosed_decisions": config.n_firms if last_decision else 0,
+                "observed_days_of_unclosed_window": last - last_decision if last_decision else 0,
+                "unapplied_next_day_commitments": unapplied,
+                "pending_projects": pending,
+                "outstanding_inflation": result.inflation[-1].tolist(),
+            },
+        }
+>       updates = result.learning_update
+                  ^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'types.SimpleNamespace' object has no attribute 'learning_update'. Did you mean: 'learning_states'?
+
+src\abm\disclosure\runner.py:250: AttributeError
+______ test_group_common_state_cannot_hide_below_global_one_percent[3-0] ______
+
+choice = 0, group = 3
+
+    @pytest.mark.parametrize("choice", [0, 16])
+    @pytest.mark.parametrize("group", [0, 3])
+    def test_group_common_state_cannot_hide_below_global_one_percent(choice, group):
+        visits = visits_at({(group, 0): 99, (group, 1): 1, (1, 0): 900})
+        counts = np.full((6, 81, CHOICES), 20, dtype=np.int64)
+        counts[group, 1, choice] = 19
+>       local = single_report(visits, counts)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_disclosure_group_coverage.py:72: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_disclosure_group_coverage.py:58: in single_report
+    return runner.learning_report(result, config, learner, training=training_mode)["coverage"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+result = namespace(learning_groups=array([[-1, -1, -1, ..., -1, -1, -1],
+       [ 1,  1,  1, ...,  3,  3,  3]], shape=(2, 1000)...market=namespace(prices=array([[1., 1., 1., ..., 1., 1., 1.],
+       [1., 1., 1., ..., 1., 1., 1.]], shape=(2, 1000))))
+config = MarketConfig(seed=20261012, n_investors=30, n_firms=1000, trading_days=1, burn_in_days=0, size_class_shares=(0.1, 0.3,...tion=0.5, financing_spread=0.05, financing_repricing_interval=60, financing_horizon_days=1260, firm_discount_rate=0.05)
+learner = <abm.tabular.CompanyQLearner object at 0x00000233CCDEED20>
+
+    def learning_report(
+        result: DisclosureResult, config: MarketConfig, learner: CompanyQLearner | None, *, training: bool,
+        coverage_target: int = 0,
+    ) -> dict[str, Any]:
+        visits = np.zeros((6, 81), dtype=np.int64)
+        kinds = action_kinds(2 * len(config.firm_action_fractions) + 1)
+        legal_visits = np.zeros((6, 81, len(kinds)), dtype=np.int64)
+        groups, states = result.learning_groups[1:], result.learning_states[1:]
+        np.add.at(visits, (groups.ravel(), states.ravel()), 1)
+        for action in range(len(kinds)):
+            np.add.at(legal_visits[:, :, action], (groups.ravel(), states.ravel()),
+                      result.valid_actions[1:, :, action].ravel().astype(np.int64))
+        decisions = int(visits.sum())
+        unseen = None if result.unvisited_state is None else int(result.unvisited_state[1:].sum())
+        fraction = unseen / decisions if unseen is not None and decisions else None
+        undercovered, group_undercovered = [], []
+        group_totals = visits.sum(axis=1)
+        if learner is not None:
+            common = (visits > 0) & (visits >= .01 * decisions)
+            for group, state, action in np.argwhere(common[:, :, None] & (legal_visits > 0) & (learner.counts < 20)):
+                undercovered.append({"group": int(group), "state": int(state),
+                                     "choice_index": int(action), "action": int(kinds[action]),
+                                     "count": int(learner.counts[group, state, action])})
+            group_common = (visits > 0) & (visits >= .01 * group_totals[:, None])
+            for group, state, action in np.argwhere(group_common[:, :, None] & (legal_visits > 0) & (learner.counts < 20)):
+                group_undercovered.append({"group": int(group), "state": int(state),
+                                           "choice_index": int(action), "action": int(kinds[action]),
+                                           "count": int(learner.counts[group, state, action])})
+        group_unseen = None
+        if result.unvisited_state is not None:
+            group_unseen = np.zeros(6, dtype=np.int64)
+            np.add.at(group_unseen, groups.ravel(), result.unvisited_state[1:].ravel().astype(np.int64))
+        group_reports = []
+        for group, total in enumerate(group_totals):
+            missing = None if group_unseen is None else int(group_unseen[group])
+            share = missing / int(total) if missing is not None and total else None
+            status = "not_observed" if not total else (
+                "not_applicable" if learner is None or training else (
+                    "PASS" if share is not None and share <= .05
+                    and not any(item["group"] == group for item in group_undercovered) else "FAIL"
+                )
+            )
+            group_reports.append({"group": group, "size_class": group % 3, "policy_epoch": group // 3,
+                                  "decisions": int(total), "unseen_state_decisions": missing,
+                                  "unseen_state_fraction": share, "status": status})
+        global_status = "not_applicable" if learner is None or training else (
+            "PASS" if fraction is not None and fraction <= .05 and not undercovered else "FAIL"
+        )
+        coverage_status = "FAIL" if any(group["status"] == "FAIL" for group in group_reports) else global_status
+        period = config.firm_decision_interval
+        last = config.trading_days
+        last_decision = last // period * period
+        ledger = {
+            "financing_adjustment": result.financing_value_adjustment,
+            "resource_cost": result.applied_resource_cost,
+            "fine": result.applied_fine,
+            "subsidy": result.applied_subsidy,
+        }
+        net = ledger["financing_adjustment"] - ledger["resource_cost"] - ledger["fine"] + ledger["subsidy"]
+        discount = np.exp(-config.firm_discount_rate * np.arange(last + 1) / TRADING_DAYS_PER_YEAR)
+        pending = []
+        for decision, firm in np.argwhere(result.action_due_day > last):
+            pending.append({"decision_day": int(decision * period), "firm": int(firm),
+                            "action": int(result.actions[decision, firm]),
+                            "due_day": int(result.action_due_day[decision, firm]),
+                            "amount": float(result.amounts[decision, firm])})
+        unapplied = {}
+        for name, fractions in (("resource_cost", result.cost_fraction), ("fine", result.penalty_fraction),
+                                ("subsidy", result.subsidy_fraction)):
+            amount = fractions[-1] * result.market.prices[-1] if last_decision == last else np.zeros(config.n_firms)
+            unapplied[name] = amount.tolist()
+        report = {
+            "firm_policy": config.firm_policy, "training": training,
+            "coverage": {
+                "visits": visits.tolist(), "legal_action_visits": legal_visits.tolist(),
+                "unseen_state_decisions": unseen, "decisions": decisions, "unseen_state_fraction": fraction,
+                "common_state_minimum_action_count": 20, "common_state_share_threshold": .01,
+                "common_state_undercovered_actions": undercovered,
+                "group_common_state_undercovered_actions": group_undercovered,
+                "group_common_state_share_threshold": .01, "maximum_unseen_state_fraction": .05,
+                "groups": group_reports, "global_status": global_status, "status": coverage_status,
+            },
+            "ledger": {
+                "scope": "Full observed window; private financing-baseline differences, not causal effects or lifetime profit.",
+                "totals_by_firm": {key: value.sum(axis=0).tolist() for key, value in ledger.items()},
+                "discounted_net_by_initial_cap": (discount @ net / result.market.prices[0]).tolist(),
+                "completed_transitions": int(result.learning_transition.sum()),
+            },
+            "tail": {
+                "last_decision_day": last_decision if last_decision else None,
+                "unclosed_decisions": config.n_firms if last_decision else 0,
+                "observed_days_of_unclosed_window": last - last_decision if last_decision else 0,
+                "unapplied_next_day_commitments": unapplied,
+                "pending_projects": pending,
+                "outstanding_inflation": result.inflation[-1].tolist(),
+            },
+        }
+>       updates = result.learning_update
+                  ^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'types.SimpleNamespace' object has no attribute 'learning_update'. Did you mean: 'learning_states'?
+
+src\abm\disclosure\runner.py:250: AttributeError
+_____ test_group_common_state_cannot_hide_below_global_one_percent[3-16] ______
+
+choice = 16, group = 3
+
+    @pytest.mark.parametrize("choice", [0, 16])
+    @pytest.mark.parametrize("group", [0, 3])
+    def test_group_common_state_cannot_hide_below_global_one_percent(choice, group):
+        visits = visits_at({(group, 0): 99, (group, 1): 1, (1, 0): 900})
+        counts = np.full((6, 81, CHOICES), 20, dtype=np.int64)
+        counts[group, 1, choice] = 19
+>       local = single_report(visits, counts)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_disclosure_group_coverage.py:72: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_disclosure_group_coverage.py:58: in single_report
+    return runner.learning_report(result, config, learner, training=training_mode)["coverage"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+result = namespace(learning_groups=array([[-1, -1, -1, ..., -1, -1, -1],
+       [ 1,  1,  1, ...,  3,  3,  3]], shape=(2, 1000)...market=namespace(prices=array([[1., 1., 1., ..., 1., 1., 1.],
+       [1., 1., 1., ..., 1., 1., 1.]], shape=(2, 1000))))
+config = MarketConfig(seed=20261012, n_investors=30, n_firms=1000, trading_days=1, burn_in_days=0, size_class_shares=(0.1, 0.3,...tion=0.5, financing_spread=0.05, financing_repricing_interval=60, financing_horizon_days=1260, firm_discount_rate=0.05)
+learner = <abm.tabular.CompanyQLearner object at 0x00000233CCDEDC10>
+
+    def learning_report(
+        result: DisclosureResult, config: MarketConfig, learner: CompanyQLearner | None, *, training: bool,
+        coverage_target: int = 0,
+    ) -> dict[str, Any]:
+        visits = np.zeros((6, 81), dtype=np.int64)
+        kinds = action_kinds(2 * len(config.firm_action_fractions) + 1)
+        legal_visits = np.zeros((6, 81, len(kinds)), dtype=np.int64)
+        groups, states = result.learning_groups[1:], result.learning_states[1:]
+        np.add.at(visits, (groups.ravel(), states.ravel()), 1)
+        for action in range(len(kinds)):
+            np.add.at(legal_visits[:, :, action], (groups.ravel(), states.ravel()),
+                      result.valid_actions[1:, :, action].ravel().astype(np.int64))
+        decisions = int(visits.sum())
+        unseen = None if result.unvisited_state is None else int(result.unvisited_state[1:].sum())
+        fraction = unseen / decisions if unseen is not None and decisions else None
+        undercovered, group_undercovered = [], []
+        group_totals = visits.sum(axis=1)
+        if learner is not None:
+            common = (visits > 0) & (visits >= .01 * decisions)
+            for group, state, action in np.argwhere(common[:, :, None] & (legal_visits > 0) & (learner.counts < 20)):
+                undercovered.append({"group": int(group), "state": int(state),
+                                     "choice_index": int(action), "action": int(kinds[action]),
+                                     "count": int(learner.counts[group, state, action])})
+            group_common = (visits > 0) & (visits >= .01 * group_totals[:, None])
+            for group, state, action in np.argwhere(group_common[:, :, None] & (legal_visits > 0) & (learner.counts < 20)):
+                group_undercovered.append({"group": int(group), "state": int(state),
+                                           "choice_index": int(action), "action": int(kinds[action]),
+                                           "count": int(learner.counts[group, state, action])})
+        group_unseen = None
+        if result.unvisited_state is not None:
+            group_unseen = np.zeros(6, dtype=np.int64)
+            np.add.at(group_unseen, groups.ravel(), result.unvisited_state[1:].ravel().astype(np.int64))
+        group_reports = []
+        for group, total in enumerate(group_totals):
+            missing = None if group_unseen is None else int(group_unseen[group])
+            share = missing / int(total) if missing is not None and total else None
+            status = "not_observed" if not total else (
+                "not_applicable" if learner is None or training else (
+                    "PASS" if share is not None and share <= .05
+                    and not any(item["group"] == group for item in group_undercovered) else "FAIL"
+                )
+            )
+            group_reports.append({"group": group, "size_class": group % 3, "policy_epoch": group // 3,
+                                  "decisions": int(total), "unseen_state_decisions": missing,
+                                  "unseen_state_fraction": share, "status": status})
+        global_status = "not_applicable" if learner is None or training else (
+            "PASS" if fraction is not None and fraction <= .05 and not undercovered else "FAIL"
+        )
+        coverage_status = "FAIL" if any(group["status"] == "FAIL" for group in group_reports) else global_status
+        period = config.firm_decision_interval
+        last = config.trading_days
+        last_decision = last // period * period
+        ledger = {
+            "financing_adjustment": result.financing_value_adjustment,
+            "resource_cost": result.applied_resource_cost,
+            "fine": result.applied_fine,
+            "subsidy": result.applied_subsidy,
+        }
+        net = ledger["financing_adjustment"] - ledger["resource_cost"] - ledger["fine"] + ledger["subsidy"]
+        discount = np.exp(-config.firm_discount_rate * np.arange(last + 1) / TRADING_DAYS_PER_YEAR)
+        pending = []
+        for decision, firm in np.argwhere(result.action_due_day > last):
+            pending.append({"decision_day": int(decision * period), "firm": int(firm),
+                            "action": int(result.actions[decision, firm]),
+                            "due_day": int(result.action_due_day[decision, firm]),
+                            "amount": float(result.amounts[decision, firm])})
+        unapplied = {}
+        for name, fractions in (("resource_cost", result.cost_fraction), ("fine", result.penalty_fraction),
+                                ("subsidy", result.subsidy_fraction)):
+            amount = fractions[-1] * result.market.prices[-1] if last_decision == last else np.zeros(config.n_firms)
+            unapplied[name] = amount.tolist()
+        report = {
+            "firm_policy": config.firm_policy, "training": training,
+            "coverage": {
+                "visits": visits.tolist(), "legal_action_visits": legal_visits.tolist(),
+                "unseen_state_decisions": unseen, "decisions": decisions, "unseen_state_fraction": fraction,
+                "common_state_minimum_action_count": 20, "common_state_share_threshold": .01,
+                "common_state_undercovered_actions": undercovered,
+                "group_common_state_undercovered_actions": group_undercovered,
+                "group_common_state_share_threshold": .01, "maximum_unseen_state_fraction": .05,
+                "groups": group_reports, "global_status": global_status, "status": coverage_status,
+            },
+            "ledger": {
+                "scope": "Full observed window; private financing-baseline differences, not causal effects or lifetime profit.",
+                "totals_by_firm": {key: value.sum(axis=0).tolist() for key, value in ledger.items()},
+                "discounted_net_by_initial_cap": (discount @ net / result.market.prices[0]).tolist(),
+                "completed_transitions": int(result.learning_transition.sum()),
+            },
+            "tail": {
+                "last_decision_day": last_decision if last_decision else None,
+                "unclosed_decisions": config.n_firms if last_decision else 0,
+                "observed_days_of_unclosed_window": last - last_decision if last_decision else 0,
+                "unapplied_next_day_commitments": unapplied,
+                "pending_projects": pending,
+                "outstanding_inflation": result.inflation[-1].tolist(),
+            },
+        }
+>       updates = result.learning_update
+                  ^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'types.SimpleNamespace' object has no attribute 'learning_update'. Did you mean: 'learning_states'?
+
+src\abm\disclosure\runner.py:250: AttributeError
+_ test_group_unseen_limit_uses_group_denominator_and_includes_five_percent[50-PASS] _
+
+missing = 50, expected = 'PASS'
+
+    @pytest.mark.parametrize("missing,expected", [(50, "PASS"), (60, "FAIL")])
+    def test_group_unseen_limit_uses_group_denominator_and_includes_five_percent(missing, expected):
+        values = {(0, 0): 1000 - missing, (1, 0): 9000}
+        values.update({(0, state): missing // 10 for state in range(1, 11)})
+        visits = visits_at(values)
+        counts = np.full((6, 81, CHOICES), 20, dtype=np.int64)
+        counts[0, 1:11] = 0
+>       local = single_report(visits, counts)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_disclosure_group_coverage.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_disclosure_group_coverage.py:58: in single_report
+    return runner.learning_report(result, config, learner, training=training_mode)["coverage"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+result = namespace(learning_groups=array([[-1, -1, -1, ..., -1, -1, -1],
+       [ 0,  0,  0, ...,  1,  1,  1]], shape=(2, 10000...arket=namespace(prices=array([[1., 1., 1., ..., 1., 1., 1.],
+       [1., 1., 1., ..., 1., 1., 1.]], shape=(2, 10000))))
+config = MarketConfig(seed=20261012, n_investors=30, n_firms=10000, trading_days=1, burn_in_days=0, size_class_shares=(0.1, 0.3...tion=0.5, financing_spread=0.05, financing_repricing_interval=60, financing_horizon_days=1260, firm_discount_rate=0.05)
+learner = <abm.tabular.CompanyQLearner object at 0x00000233CCDEE2A0>
+
+    def learning_report(
+        result: DisclosureResult, config: MarketConfig, learner: CompanyQLearner | None, *, training: bool,
+        coverage_target: int = 0,
+    ) -> dict[str, Any]:
+        visits = np.zeros((6, 81), dtype=np.int64)
+        kinds = action_kinds(2 * len(config.firm_action_fractions) + 1)
+        legal_visits = np.zeros((6, 81, len(kinds)), dtype=np.int64)
+        groups, states = result.learning_groups[1:], result.learning_states[1:]
+        np.add.at(visits, (groups.ravel(), states.ravel()), 1)
+        for action in range(len(kinds)):
+            np.add.at(legal_visits[:, :, action], (groups.ravel(), states.ravel()),
+                      result.valid_actions[1:, :, action].ravel().astype(np.int64))
+        decisions = int(visits.sum())
+        unseen = None if result.unvisited_state is None else int(result.unvisited_state[1:].sum())
+        fraction = unseen / decisions if unseen is not None and decisions else None
+        undercovered, group_undercovered = [], []
+        group_totals = visits.sum(axis=1)
+        if learner is not None:
+            common = (visits > 0) & (visits >= .01 * decisions)
+            for group, state, action in np.argwhere(common[:, :, None] & (legal_visits > 0) & (learner.counts < 20)):
+                undercovered.append({"group": int(group), "state": int(state),
+                                     "choice_index": int(action), "action": int(kinds[action]),
+                                     "count": int(learner.counts[group, state, action])})
+            group_common = (visits > 0) & (visits >= .01 * group_totals[:, None])
+            for group, state, action in np.argwhere(group_common[:, :, None] & (legal_visits > 0) & (learner.counts < 20)):
+                group_undercovered.append({"group": int(group), "state": int(state),
+                                           "choice_index": int(action), "action": int(kinds[action]),
+                                           "count": int(learner.counts[group, state, action])})
+        group_unseen = None
+        if result.unvisited_state is not None:
+            group_unseen = np.zeros(6, dtype=np.int64)
+            np.add.at(group_unseen, groups.ravel(), result.unvisited_state[1:].ravel().astype(np.int64))
+        group_reports = []
+        for group, total in enumerate(group_totals):
+            missing = None if group_unseen is None else int(group_unseen[group])
+            share = missing / int(total) if missing is not None and total else None
+            status = "not_observed" if not total else (
+                "not_applicable" if learner is None or training else (
+                    "PASS" if share is not None and share <= .05
+                    and not any(item["group"] == group for item in group_undercovered) else "FAIL"
+                )
+            )
+            group_reports.append({"group": group, "size_class": group % 3, "policy_epoch": group // 3,
+                                  "decisions": int(total), "unseen_state_decisions": missing,
+                                  "unseen_state_fraction": share, "status": status})
+        global_status = "not_applicable" if learner is None or training else (
+            "PASS" if fraction is not None and fraction <= .05 and not undercovered else "FAIL"
+        )
+        coverage_status = "FAIL" if any(group["status"] == "FAIL" for group in group_reports) else global_status
+        period = config.firm_decision_interval
+        last = config.trading_days
+        last_decision = last // period * period
+        ledger = {
+            "financing_adjustment": result.financing_value_adjustment,
+            "resource_cost": result.applied_resource_cost,
+            "fine": result.applied_fine,
+            "subsidy": result.applied_subsidy,
+        }
+        net = ledger["financing_adjustment"] - ledger["resource_cost"] - ledger["fine"] + ledger["subsidy"]
+        discount = np.exp(-config.firm_discount_rate * np.arange(last + 1) / TRADING_DAYS_PER_YEAR)
+        pending = []
+        for decision, firm in np.argwhere(result.action_due_day > last):
+            pending.append({"decision_day": int(decision * period), "firm": int(firm),
+                            "action": int(result.actions[decision, firm]),
+                            "due_day": int(result.action_due_day[decision, firm]),
+                            "amount": float(result.amounts[decision, firm])})
+        unapplied = {}
+        for name, fractions in (("resource_cost", result.cost_fraction), ("fine", result.penalty_fraction),
+                                ("subsidy", result.subsidy_fraction)):
+            amount = fractions[-1] * result.market.prices[-1] if last_decision == last else np.zeros(config.n_firms)
+            unapplied[name] = amount.tolist()
+        report = {
+            "firm_policy": config.firm_policy, "training": training,
+            "coverage": {
+                "visits": visits.tolist(), "legal_action_visits": legal_visits.tolist(),
+                "unseen_state_decisions": unseen, "decisions": decisions, "unseen_state_fraction": fraction,
+                "common_state_minimum_action_count": 20, "common_state_share_threshold": .01,
+                "common_state_undercovered_actions": undercovered,
+                "group_common_state_undercovered_actions": group_undercovered,
+                "group_common_state_share_threshold": .01, "maximum_unseen_state_fraction": .05,
+                "groups": group_reports, "global_status": global_status, "status": coverage_status,
+            },
+            "ledger": {
+                "scope": "Full observed window; private financing-baseline differences, not causal effects or lifetime profit.",
+                "totals_by_firm": {key: value.sum(axis=0).tolist() for key, value in ledger.items()},
+                "discounted_net_by_initial_cap": (discount @ net / result.market.prices[0]).tolist(),
+                "completed_transitions": int(result.learning_transition.sum()),
+            },
+            "tail": {
+                "last_decision_day": last_decision if last_decision else None,
+                "unclosed_decisions": config.n_firms if last_decision else 0,
+                "observed_days_of_unclosed_window": last - last_decision if last_decision else 0,
+                "unapplied_next_day_commitments": unapplied,
+                "pending_projects": pending,
+                "outstanding_inflation": result.inflation[-1].tolist(),
+            },
+        }
+>       updates = result.learning_update
+                  ^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'types.SimpleNamespace' object has no attribute 'learning_update'. Did you mean: 'learning_states'?
+
+src\abm\disclosure\runner.py:250: AttributeError
+_ test_group_unseen_limit_uses_group_denominator_and_includes_five_percent[60-FAIL] _
+
+missing = 60, expected = 'FAIL'
+
+    @pytest.mark.parametrize("missing,expected", [(50, "PASS"), (60, "FAIL")])
+    def test_group_unseen_limit_uses_group_denominator_and_includes_five_percent(missing, expected):
+        values = {(0, 0): 1000 - missing, (1, 0): 9000}
+        values.update({(0, state): missing // 10 for state in range(1, 11)})
+        visits = visits_at(values)
+        counts = np.full((6, 81, CHOICES), 20, dtype=np.int64)
+        counts[0, 1:11] = 0
+>       local = single_report(visits, counts)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_disclosure_group_coverage.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_disclosure_group_coverage.py:58: in single_report
+    return runner.learning_report(result, config, learner, training=training_mode)["coverage"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+result = namespace(learning_groups=array([[-1, -1, -1, ..., -1, -1, -1],
+       [ 0,  0,  0, ...,  1,  1,  1]], shape=(2, 10000...arket=namespace(prices=array([[1., 1., 1., ..., 1., 1., 1.],
+       [1., 1., 1., ..., 1., 1., 1.]], shape=(2, 10000))))
+config = MarketConfig(seed=20261012, n_investors=30, n_firms=10000, trading_days=1, burn_in_days=0, size_class_shares=(0.1, 0.3...tion=0.5, financing_spread=0.05, financing_repricing_interval=60, financing_horizon_days=1260, firm_discount_rate=0.05)
+learner = <abm.tabular.CompanyQLearner object at 0x00000233CCDEE540>
+
+    def learning_report(
+        result: DisclosureResult, config: MarketConfig, learner: CompanyQLearner | None, *, training: bool,
+        coverage_target: int = 0,
+    ) -> dict[str, Any]:
+        visits = np.zeros((6, 81), dtype=np.int64)
+        kinds = action_kinds(2 * len(config.firm_action_fractions) + 1)
+        legal_visits = np.zeros((6, 81, len(kinds)), dtype=np.int64)
+        groups, states = result.learning_groups[1:], result.learning_states[1:]
+        np.add.at(visits, (groups.ravel(), states.ravel()), 1)
+        for action in range(len(kinds)):
+            np.add.at(legal_visits[:, :, action], (groups.ravel(), states.ravel()),
+                      result.valid_actions[1:, :, action].ravel().astype(np.int64))
+        decisions = int(visits.sum())
+        unseen = None if result.unvisited_state is None else int(result.unvisited_state[1:].sum())
+        fraction = unseen / decisions if unseen is not None and decisions else None
+        undercovered, group_undercovered = [], []
+        group_totals = visits.sum(axis=1)
+        if learner is not None:
+            common = (visits > 0) & (visits >= .01 * decisions)
+            for group, state, action in np.argwhere(common[:, :, None] & (legal_visits > 0) & (learner.counts < 20)):
+                undercovered.append({"group": int(group), "state": int(state),
+                                     "choice_index": int(action), "action": int(kinds[action]),
+                                     "count": int(learner.counts[group, state, action])})
+            group_common = (visits > 0) & (visits >= .01 * group_totals[:, None])
+            for group, state, action in np.argwhere(group_common[:, :, None] & (legal_visits > 0) & (learner.counts < 20)):
+                group_undercovered.append({"group": int(group), "state": int(state),
+                                           "choice_index": int(action), "action": int(kinds[action]),
+                                           "count": int(learner.counts[group, state, action])})
+        group_unseen = None
+        if result.unvisited_state is not None:
+            group_unseen = np.zeros(6, dtype=np.int64)
+            np.add.at(group_unseen, groups.ravel(), result.unvisited_state[1:].ravel().astype(np.int64))
+        group_reports = []
+        for group, total in enumerate(group_totals):
+            missing = None if group_unseen is None else int(group_unseen[group])
+            share = missing / int(total) if missing is not None and total else None
+            status = "not_observed" if not total else (
+                "not_applicable" if learner is None or training else (
+                    "PASS" if share is not None and share <= .05
+                    and not any(item["group"] == group for item in group_undercovered) else "FAIL"
+                )
+            )
+            group_reports.append({"group": group, "size_class": group % 3, "policy_epoch": group // 3,
+                                  "decisions": int(total), "unseen_state_decisions": missing,
+                                  "unseen_state_fraction": share, "status": status})
+        global_status = "not_applicable" if learner is None or training else (
+            "PASS" if fraction is not None and fraction <= .05 and not undercovered else "FAIL"
+        )
+        coverage_status = "FAIL" if any(group["status"] == "FAIL" for group in group_reports) else global_status
+        period = config.firm_decision_interval
+        last = config.trading_days
+        last_decision = last // period * period
+        ledger = {
+            "financing_adjustment": result.financing_value_adjustment,
+            "resource_cost": result.applied_resource_cost,
+            "fine": result.applied_fine,
+            "subsidy": result.applied_subsidy,
+        }
+        net = ledger["financing_adjustment"] - ledger["resource_cost"] - ledger["fine"] + ledger["subsidy"]
+        discount = np.exp(-config.firm_discount_rate * np.arange(last + 1) / TRADING_DAYS_PER_YEAR)
+        pending = []
+        for decision, firm in np.argwhere(result.action_due_day > last):
+            pending.append({"decision_day": int(decision * period), "firm": int(firm),
+                            "action": int(result.actions[decision, firm]),
+                            "due_day": int(result.action_due_day[decision, firm]),
+                            "amount": float(result.amounts[decision, firm])})
+        unapplied = {}
+        for name, fractions in (("resource_cost", result.cost_fraction), ("fine", result.penalty_fraction),
+                                ("subsidy", result.subsidy_fraction)):
+            amount = fractions[-1] * result.market.prices[-1] if last_decision == last else np.zeros(config.n_firms)
+            unapplied[name] = amount.tolist()
+        report = {
+            "firm_policy": config.firm_policy, "training": training,
+            "coverage": {
+                "visits": visits.tolist(), "legal_action_visits": legal_visits.tolist(),
+                "unseen_state_decisions": unseen, "decisions": decisions, "unseen_state_fraction": fraction,
+                "common_state_minimum_action_count": 20, "common_state_share_threshold": .01,
+                "common_state_undercovered_actions": undercovered,
+                "group_common_state_undercovered_actions": group_undercovered,
+                "group_common_state_share_threshold": .01, "maximum_unseen_state_fraction": .05,
+                "groups": group_reports, "global_status": global_status, "status": coverage_status,
+            },
+            "ledger": {
+                "scope": "Full observed window; private financing-baseline differences, not causal effects or lifetime profit.",
+                "totals_by_firm": {key: value.sum(axis=0).tolist() for key, value in ledger.items()},
+                "discounted_net_by_initial_cap": (discount @ net / result.market.prices[0]).tolist(),
+                "completed_transitions": int(result.learning_transition.sum()),
+            },
+            "tail": {
+                "last_decision_day": last_decision if last_decision else None,
+                "unclosed_decisions": config.n_firms if last_decision else 0,
+                "observed_days_of_unclosed_window": last - last_decision if last_decision else 0,
+                "unapplied_next_day_commitments": unapplied,
+                "pending_projects": pending,
+                "outstanding_inflation": result.inflation[-1].tolist(),
+            },
+        }
+>       updates = result.learning_update
+                  ^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'types.SimpleNamespace' object has no attribute 'learning_update'. Did you mean: 'learning_states'?
+
+src\abm\disclosure\runner.py:250: AttributeError
+___ test_unobserved_groups_do_not_fail_an_observed_group_at_twenty_records ____
+
+    def test_unobserved_groups_do_not_fail_an_observed_group_at_twenty_records():
+        visits = visits_at({(4, 0): 100})
+        counts = np.full((6, 81, CHOICES), 20, dtype=np.int64)
+>       for report in (single_report(visits, counts),
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                       training._coverage([validation_record(48, visits, counts)], counts, 1)):
+
+tests\test_disclosure_group_coverage.py:149: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_disclosure_group_coverage.py:58: in single_report
+    return runner.learning_report(result, config, learner, training=training_mode)["coverage"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+result = namespace(learning_groups=array([[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, ...1., 1., 1., 1., 1.,
+        1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
+        1., 1., 1., 1.]])))
+config = MarketConfig(seed=20261012, n_investors=30, n_firms=100, trading_days=1, burn_in_days=0, size_class_shares=(0.1, 0.3, ...tion=0.5, financing_spread=0.05, financing_repricing_interval=60, financing_horizon_days=1260, firm_discount_rate=0.05)
+learner = <abm.tabular.CompanyQLearner object at 0x00000233CCDEE780>
+
+    def learning_report(
+        result: DisclosureResult, config: MarketConfig, learner: CompanyQLearner | None, *, training: bool,
+        coverage_target: int = 0,
+    ) -> dict[str, Any]:
+        visits = np.zeros((6, 81), dtype=np.int64)
+        kinds = action_kinds(2 * len(config.firm_action_fractions) + 1)
+        legal_visits = np.zeros((6, 81, len(kinds)), dtype=np.int64)
+        groups, states = result.learning_groups[1:], result.learning_states[1:]
+        np.add.at(visits, (groups.ravel(), states.ravel()), 1)
+        for action in range(len(kinds)):
+            np.add.at(legal_visits[:, :, action], (groups.ravel(), states.ravel()),
+                      result.valid_actions[1:, :, action].ravel().astype(np.int64))
+        decisions = int(visits.sum())
+        unseen = None if result.unvisited_state is None else int(result.unvisited_state[1:].sum())
+        fraction = unseen / decisions if unseen is not None and decisions else None
+        undercovered, group_undercovered = [], []
+        group_totals = visits.sum(axis=1)
+        if learner is not None:
+            common = (visits > 0) & (visits >= .01 * decisions)
+            for group, state, action in np.argwhere(common[:, :, None] & (legal_visits > 0) & (learner.counts < 20)):
+                undercovered.append({"group": int(group), "state": int(state),
+                                     "choice_index": int(action), "action": int(kinds[action]),
+                                     "count": int(learner.counts[group, state, action])})
+            group_common = (visits > 0) & (visits >= .01 * group_totals[:, None])
+            for group, state, action in np.argwhere(group_common[:, :, None] & (legal_visits > 0) & (learner.counts < 20)):
+                group_undercovered.append({"group": int(group), "state": int(state),
+                                           "choice_index": int(action), "action": int(kinds[action]),
+                                           "count": int(learner.counts[group, state, action])})
+        group_unseen = None
+        if result.unvisited_state is not None:
+            group_unseen = np.zeros(6, dtype=np.int64)
+            np.add.at(group_unseen, groups.ravel(), result.unvisited_state[1:].ravel().astype(np.int64))
+        group_reports = []
+        for group, total in enumerate(group_totals):
+            missing = None if group_unseen is None else int(group_unseen[group])
+            share = missing / int(total) if missing is not None and total else None
+            status = "not_observed" if not total else (
+                "not_applicable" if learner is None or training else (
+                    "PASS" if share is not None and share <= .05
+                    and not any(item["group"] == group for item in group_undercovered) else "FAIL"
+                )
+            )
+            group_reports.append({"group": group, "size_class": group % 3, "policy_epoch": group // 3,
+                                  "decisions": int(total), "unseen_state_decisions": missing,
+                                  "unseen_state_fraction": share, "status": status})
+        global_status = "not_applicable" if learner is None or training else (
+            "PASS" if fraction is not None and fraction <= .05 and not undercovered else "FAIL"
+        )
+        coverage_status = "FAIL" if any(group["status"] == "FAIL" for group in group_reports) else global_status
+        period = config.firm_decision_interval
+        last = config.trading_days
+        last_decision = last // period * period
+        ledger = {
+            "financing_adjustment": result.financing_value_adjustment,
+            "resource_cost": result.applied_resource_cost,
+            "fine": result.applied_fine,
+            "subsidy": result.applied_subsidy,
+        }
+        net = ledger["financing_adjustment"] - ledger["resource_cost"] - ledger["fine"] + ledger["subsidy"]
+        discount = np.exp(-config.firm_discount_rate * np.arange(last + 1) / TRADING_DAYS_PER_YEAR)
+        pending = []
+        for decision, firm in np.argwhere(result.action_due_day > last):
+            pending.append({"decision_day": int(decision * period), "firm": int(firm),
+                            "action": int(result.actions[decision, firm]),
+                            "due_day": int(result.action_due_day[decision, firm]),
+                            "amount": float(result.amounts[decision, firm])})
+        unapplied = {}
+        for name, fractions in (("resource_cost", result.cost_fraction), ("fine", result.penalty_fraction),
+                                ("subsidy", result.subsidy_fraction)):
+            amount = fractions[-1] * result.market.prices[-1] if last_decision == last else np.zeros(config.n_firms)
+            unapplied[name] = amount.tolist()
+        report = {
+            "firm_policy": config.firm_policy, "training": training,
+            "coverage": {
+                "visits": visits.tolist(), "legal_action_visits": legal_visits.tolist(),
+                "unseen_state_decisions": unseen, "decisions": decisions, "unseen_state_fraction": fraction,
+                "common_state_minimum_action_count": 20, "common_state_share_threshold": .01,
+                "common_state_undercovered_actions": undercovered,
+                "group_common_state_undercovered_actions": group_undercovered,
+                "group_common_state_share_threshold": .01, "maximum_unseen_state_fraction": .05,
+                "groups": group_reports, "global_status": global_status, "status": coverage_status,
+            },
+            "ledger": {
+                "scope": "Full observed window; private financing-baseline differences, not causal effects or lifetime profit.",
+                "totals_by_firm": {key: value.sum(axis=0).tolist() for key, value in ledger.items()},
+                "discounted_net_by_initial_cap": (discount @ net / result.market.prices[0]).tolist(),
+                "completed_transitions": int(result.learning_transition.sum()),
+            },
+            "tail": {
+                "last_decision_day": last_decision if last_decision else None,
+                "unclosed_decisions": config.n_firms if last_decision else 0,
+                "observed_days_of_unclosed_window": last - last_decision if last_decision else 0,
+                "unapplied_next_day_commitments": unapplied,
+                "pending_projects": pending,
+                "outstanding_inflation": result.inflation[-1].tolist(),
+            },
+        }
+>       updates = result.learning_update
+                  ^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'types.SimpleNamespace' object has no attribute 'learning_update'. Did you mean: 'learning_states'?
+
+src\abm\disclosure\runner.py:250: AttributeError
+__ test_training_and_nonlearner_coverage_remain_not_applicable[False-False] ___
+
+has_learner = False, training_mode = False
+
+    @pytest.mark.parametrize("has_learner,training_mode", [(False, False), (True, True)])
+    def test_training_and_nonlearner_coverage_remain_not_applicable(has_learner, training_mode):
+        visits = visits_at({(0, 0): 100})
+        counts = np.zeros((6, 81, CHOICES), dtype=np.int64)
+>       report = single_report(visits, counts, training_mode=training_mode, has_learner=has_learner)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_disclosure_group_coverage.py:161: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_disclosure_group_coverage.py:58: in single_report
+    return runner.learning_report(result, config, learner, training=training_mode)["coverage"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+result = namespace(learning_groups=array([[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, ...1., 1., 1., 1., 1.,
+        1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
+        1., 1., 1., 1.]])))
+config = MarketConfig(seed=20261012, n_investors=30, n_firms=100, trading_days=1, burn_in_days=0, size_class_shares=(0.1, 0.3, ...tion=0.5, financing_spread=0.05, financing_repricing_interval=60, financing_horizon_days=1260, firm_discount_rate=0.05)
+learner = None
+
+    def learning_report(
+        result: DisclosureResult, config: MarketConfig, learner: CompanyQLearner | None, *, training: bool,
+        coverage_target: int = 0,
+    ) -> dict[str, Any]:
+        visits = np.zeros((6, 81), dtype=np.int64)
+        kinds = action_kinds(2 * len(config.firm_action_fractions) + 1)
+        legal_visits = np.zeros((6, 81, len(kinds)), dtype=np.int64)
+        groups, states = result.learning_groups[1:], result.learning_states[1:]
+        np.add.at(visits, (groups.ravel(), states.ravel()), 1)
+        for action in range(len(kinds)):
+            np.add.at(legal_visits[:, :, action], (groups.ravel(), states.ravel()),
+                      result.valid_actions[1:, :, action].ravel().astype(np.int64))
+        decisions = int(visits.sum())
+        unseen = None if result.unvisited_state is None else int(result.unvisited_state[1:].sum())
+        fraction = unseen / decisions if unseen is not None and decisions else None
+        undercovered, group_undercovered = [], []
+        group_totals = visits.sum(axis=1)
+        if learner is not None:
+            common = (visits > 0) & (visits >= .01 * decisions)
+            for group, state, action in np.argwhere(common[:, :, None] & (legal_visits > 0) & (learner.counts < 20)):
+                undercovered.append({"group": int(group), "state": int(state),
+                                     "choice_index": int(action), "action": int(kinds[action]),
+                                     "count": int(learner.counts[group, state, action])})
+            group_common = (visits > 0) & (visits >= .01 * group_totals[:, None])
+            for group, state, action in np.argwhere(group_common[:, :, None] & (legal_visits > 0) & (learner.counts < 20)):
+                group_undercovered.append({"group": int(group), "state": int(state),
+                                           "choice_index": int(action), "action": int(kinds[action]),
+                                           "count": int(learner.counts[group, state, action])})
+        group_unseen = None
+        if result.unvisited_state is not None:
+            group_unseen = np.zeros(6, dtype=np.int64)
+            np.add.at(group_unseen, groups.ravel(), result.unvisited_state[1:].ravel().astype(np.int64))
+        group_reports = []
+        for group, total in enumerate(group_totals):
+            missing = None if group_unseen is None else int(group_unseen[group])
+            share = missing / int(total) if missing is not None and total else None
+            status = "not_observed" if not total else (
+                "not_applicable" if learner is None or training else (
+                    "PASS" if share is not None and share <= .05
+                    and not any(item["group"] == group for item in group_undercovered) else "FAIL"
+                )
+            )
+            group_reports.append({"group": group, "size_class": group % 3, "policy_epoch": group // 3,
+                                  "decisions": int(total), "unseen_state_decisions": missing,
+                                  "unseen_state_fraction": share, "status": status})
+        global_status = "not_applicable" if learner is None or training else (
+            "PASS" if fraction is not None and fraction <= .05 and not undercovered else "FAIL"
+        )
+        coverage_status = "FAIL" if any(group["status"] == "FAIL" for group in group_reports) else global_status
+        period = config.firm_decision_interval
+        last = config.trading_days
+        last_decision = last // period * period
+        ledger = {
+            "financing_adjustment": result.financing_value_adjustment,
+            "resource_cost": result.applied_resource_cost,
+            "fine": result.applied_fine,
+            "subsidy": result.applied_subsidy,
+        }
+        net = ledger["financing_adjustment"] - ledger["resource_cost"] - ledger["fine"] + ledger["subsidy"]
+        discount = np.exp(-config.firm_discount_rate * np.arange(last + 1) / TRADING_DAYS_PER_YEAR)
+        pending = []
+        for decision, firm in np.argwhere(result.action_due_day > last):
+            pending.append({"decision_day": int(decision * period), "firm": int(firm),
+                            "action": int(result.actions[decision, firm]),
+                            "due_day": int(result.action_due_day[decision, firm]),
+                            "amount": float(result.amounts[decision, firm])})
+        unapplied = {}
+        for name, fractions in (("resource_cost", result.cost_fraction), ("fine", result.penalty_fraction),
+                                ("subsidy", result.subsidy_fraction)):
+            amount = fractions[-1] * result.market.prices[-1] if last_decision == last else np.zeros(config.n_firms)
+            unapplied[name] = amount.tolist()
+        report = {
+            "firm_policy": config.firm_policy, "training": training,
+            "coverage": {
+                "visits": visits.tolist(), "legal_action_visits": legal_visits.tolist(),
+                "unseen_state_decisions": unseen, "decisions": decisions, "unseen_state_fraction": fraction,
+                "common_state_minimum_action_count": 20, "common_state_share_threshold": .01,
+                "common_state_undercovered_actions": undercovered,
+                "group_common_state_undercovered_actions": group_undercovered,
+                "group_common_state_share_threshold": .01, "maximum_unseen_state_fraction": .05,
+                "groups": group_reports, "global_status": global_status, "status": coverage_status,
+            },
+            "ledger": {
+                "scope": "Full observed window; private financing-baseline differences, not causal effects or lifetime profit.",
+                "totals_by_firm": {key: value.sum(axis=0).tolist() for key, value in ledger.items()},
+                "discounted_net_by_initial_cap": (discount @ net / result.market.prices[0]).tolist(),
+                "completed_transitions": int(result.learning_transition.sum()),
+            },
+            "tail": {
+                "last_decision_day": last_decision if last_decision else None,
+                "unclosed_decisions": config.n_firms if last_decision else 0,
+                "observed_days_of_unclosed_window": last - last_decision if last_decision else 0,
+                "unapplied_next_day_commitments": unapplied,
+                "pending_projects": pending,
+                "outstanding_inflation": result.inflation[-1].tolist(),
+            },
+        }
+>       updates = result.learning_update
+                  ^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'types.SimpleNamespace' object has no attribute 'learning_update'. Did you mean: 'learning_states'?
+
+src\abm\disclosure\runner.py:250: AttributeError
+___ test_training_and_nonlearner_coverage_remain_not_applicable[True-True] ____
+
+has_learner = True, training_mode = True
+
+    @pytest.mark.parametrize("has_learner,training_mode", [(False, False), (True, True)])
+    def test_training_and_nonlearner_coverage_remain_not_applicable(has_learner, training_mode):
+        visits = visits_at({(0, 0): 100})
+        counts = np.zeros((6, 81, CHOICES), dtype=np.int64)
+>       report = single_report(visits, counts, training_mode=training_mode, has_learner=has_learner)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_disclosure_group_coverage.py:161: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_disclosure_group_coverage.py:58: in single_report
+    return runner.learning_report(result, config, learner, training=training_mode)["coverage"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+result = namespace(learning_groups=array([[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, ...1., 1., 1., 1., 1.,
+        1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
+        1., 1., 1., 1.]])))
+config = MarketConfig(seed=20261012, n_investors=30, n_firms=100, trading_days=1, burn_in_days=0, size_class_shares=(0.1, 0.3, ...tion=0.5, financing_spread=0.05, financing_repricing_interval=60, financing_horizon_days=1260, firm_discount_rate=0.05)
+learner = <abm.tabular.CompanyQLearner object at 0x00000233CCDED820>
+
+    def learning_report(
+        result: DisclosureResult, config: MarketConfig, learner: CompanyQLearner | None, *, training: bool,
+        coverage_target: int = 0,
+    ) -> dict[str, Any]:
+        visits = np.zeros((6, 81), dtype=np.int64)
+        kinds = action_kinds(2 * len(config.firm_action_fractions) + 1)
+        legal_visits = np.zeros((6, 81, len(kinds)), dtype=np.int64)
+        groups, states = result.learning_groups[1:], result.learning_states[1:]
+        np.add.at(visits, (groups.ravel(), states.ravel()), 1)
+        for action in range(len(kinds)):
+            np.add.at(legal_visits[:, :, action], (groups.ravel(), states.ravel()),
+                      result.valid_actions[1:, :, action].ravel().astype(np.int64))
+        decisions = int(visits.sum())
+        unseen = None if result.unvisited_state is None else int(result.unvisited_state[1:].sum())
+        fraction = unseen / decisions if unseen is not None and decisions else None
+        undercovered, group_undercovered = [], []
+        group_totals = visits.sum(axis=1)
+        if learner is not None:
+            common = (visits > 0) & (visits >= .01 * decisions)
+            for group, state, action in np.argwhere(common[:, :, None] & (legal_visits > 0) & (learner.counts < 20)):
+                undercovered.append({"group": int(group), "state": int(state),
+                                     "choice_index": int(action), "action": int(kinds[action]),
+                                     "count": int(learner.counts[group, state, action])})
+            group_common = (visits > 0) & (visits >= .01 * group_totals[:, None])
+            for group, state, action in np.argwhere(group_common[:, :, None] & (legal_visits > 0) & (learner.counts < 20)):
+                group_undercovered.append({"group": int(group), "state": int(state),
+                                           "choice_index": int(action), "action": int(kinds[action]),
+                                           "count": int(learner.counts[group, state, action])})
+        group_unseen = None
+        if result.unvisited_state is not None:
+            group_unseen = np.zeros(6, dtype=np.int64)
+            np.add.at(group_unseen, groups.ravel(), result.unvisited_state[1:].ravel().astype(np.int64))
+        group_reports = []
+        for group, total in enumerate(group_totals):
+            missing = None if group_unseen is None else int(group_unseen[group])
+            share = missing / int(total) if missing is not None and total else None
+            status = "not_observed" if not total else (
+                "not_applicable" if learner is None or training else (
+                    "PASS" if share is not None and share <= .05
+                    and not any(item["group"] == group for item in group_undercovered) else "FAIL"
+                )
+            )
+            group_reports.append({"group": group, "size_class": group % 3, "policy_epoch": group // 3,
+                                  "decisions": int(total), "unseen_state_decisions": missing,
+                                  "unseen_state_fraction": share, "status": status})
+        global_status = "not_applicable" if learner is None or training else (
+            "PASS" if fraction is not None and fraction <= .05 and not undercovered else "FAIL"
+        )
+        coverage_status = "FAIL" if any(group["status"] == "FAIL" for group in group_reports) else global_status
+        period = config.firm_decision_interval
+        last = config.trading_days
+        last_decision = last // period * period
+        ledger = {
+            "financing_adjustment": result.financing_value_adjustment,
+            "resource_cost": result.applied_resource_cost,
+            "fine": result.applied_fine,
+            "subsidy": result.applied_subsidy,
+        }
+        net = ledger["financing_adjustment"] - ledger["resource_cost"] - ledger["fine"] + ledger["subsidy"]
+        discount = np.exp(-config.firm_discount_rate * np.arange(last + 1) / TRADING_DAYS_PER_YEAR)
+        pending = []
+        for decision, firm in np.argwhere(result.action_due_day > last):
+            pending.append({"decision_day": int(decision * period), "firm": int(firm),
+                            "action": int(result.actions[decision, firm]),
+                            "due_day": int(result.action_due_day[decision, firm]),
+                            "amount": float(result.amounts[decision, firm])})
+        unapplied = {}
+        for name, fractions in (("resource_cost", result.cost_fraction), ("fine", result.penalty_fraction),
+                                ("subsidy", result.subsidy_fraction)):
+            amount = fractions[-1] * result.market.prices[-1] if last_decision == last else np.zeros(config.n_firms)
+            unapplied[name] = amount.tolist()
+        report = {
+            "firm_policy": config.firm_policy, "training": training,
+            "coverage": {
+                "visits": visits.tolist(), "legal_action_visits": legal_visits.tolist(),
+                "unseen_state_decisions": unseen, "decisions": decisions, "unseen_state_fraction": fraction,
+                "common_state_minimum_action_count": 20, "common_state_share_threshold": .01,
+                "common_state_undercovered_actions": undercovered,
+                "group_common_state_undercovered_actions": group_undercovered,
+                "group_common_state_share_threshold": .01, "maximum_unseen_state_fraction": .05,
+                "groups": group_reports, "global_status": global_status, "status": coverage_status,
+            },
+            "ledger": {
+                "scope": "Full observed window; private financing-baseline differences, not causal effects or lifetime profit.",
+                "totals_by_firm": {key: value.sum(axis=0).tolist() for key, value in ledger.items()},
+                "discounted_net_by_initial_cap": (discount @ net / result.market.prices[0]).tolist(),
+                "completed_transitions": int(result.learning_transition.sum()),
+            },
+            "tail": {
+                "last_decision_day": last_decision if last_decision else None,
+                "unclosed_decisions": config.n_firms if last_decision else 0,
+                "observed_days_of_unclosed_window": last - last_decision if last_decision else 0,
+                "unapplied_next_day_commitments": unapplied,
+                "pending_projects": pending,
+                "outstanding_inflation": result.inflation[-1].tolist(),
+            },
+        }
+>       updates = result.learning_update
+                  ^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'types.SimpleNamespace' object has no attribute 'learning_update'. Did you mean: 'learning_states'?
+
+src\abm\disclosure\runner.py:250: AttributeError
+_ test_common_prefix_budget_copies_real_prefix_counts_and_starts_post_table_at_zero _
+
+tmp_path = WindowsPath('C:/Users/kanzaler/AppData/Local/Temp/pytest-of-kanzaler/pytest-58/test_common_prefix_budget_copi0')
+archive_harness = <test_disclosure_training.ArchiveHarness object at 0x00000233CCB5A1B0>
+
+    def test_common_prefix_budget_copies_real_prefix_counts_and_starts_post_table_at_zero(tmp_path, archive_harness):
+        path = tmp_path / "common.npz"
+        digest = make_common_model(path)
+        source, _ = load_frozen(path)
+        output = tmp_path / "conditional"
+        result = training.train_and_evaluate(CONFIG, DOMAIN, POLICY.with_intervention(61), output,
+                                             training_seeds=(101, 102), validation_seeds=(201,),
+                                             reserved_seeds=(301,), common_prepolicy_model=path,
+                                             common_prepolicy_sha256=digest)
+        initial, _ = load_frozen(output / "initial_model.npz")
+        frozen, metadata = load_frozen(output / "frozen_model.npz")
+        np.testing.assert_array_equal(initial.values[:3], source.values[:3])
+        np.testing.assert_array_equal(initial.counts[:3], source.counts[:3])
+        assert not initial.values[3:].any() and not initial.counts[3:].any()
+        np.testing.assert_array_equal(frozen.values[:3], source.values[:3])
+        np.testing.assert_array_equal(frozen.counts[:3], source.counts[:3])
+        assert frozen.counts[3:].sum() == 60
+        assert metadata["common_prepolicy"]["sha256"] == digest
+        assert metadata["common_prepolicy"]["training_seeds"] == [901]
+        assert metadata["common_prepolicy"]["validation_seeds"] == [902]
+        assert metadata["common_prepolicy"]["table_fingerprint"] == table_fingerprint(source, prefix_groups=3)
+        assert metadata["initial_table"]["post_counts"] == 0
+        assert result["comparison_scope"] == "conditional_strategy_deployment"
+        assert [row["common_prepolicy_sha256"] for row in archive_harness.calls] == [digest, digest, digest, None, None]
+>       assert json.loads((output / "experiment.json").read_text())["common_prepolicy"] == metadata["common_prepolicy"]
+E       AssertionError: assert {'model_path'... 6, ...}, ...} == {'model_path'... 6, ...}, ...}
+E         
+E         Omitting 7 identical items, use -vv to show
+E         Differing items:
+E         {'source_contract': {'candidate_fraction': 0.01, 'config': {'allocation_variance_decay': 0.99, 'burn_in_days': 60, 'ca...attribute_label': 'ESG rating', 'baseline_audit_probability': 0.01, 'baseline_penalty': 0.005, ...}, 'groups': 6, ...}} != {'source_contract': {'candidate_fraction': 0.01, 'config': {'allocation_variance_decay': 0.99, 'burn_in_days': 60, 'ca...attribute_label': 'ESG rating', 'baseline_audit_probability': 0.01, 'baseline_penalty': 0.005, ...}, 'groups': 6, ...}}
+E         Use -v to get more diff
+
+tests\test_disclosure_training.py:221: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_disclosure_group_coverage.py::test_group_common_state_cannot_hide_below_global_one_percent[0-0]
+FAILED tests/test_disclosure_group_coverage.py::test_group_common_state_cannot_hide_below_global_one_percent[0-16]
+FAILED tests/test_disclosure_group_coverage.py::test_group_common_state_cannot_hide_below_global_one_percent[3-0]
+FAILED tests/test_disclosure_group_coverage.py::test_group_common_state_cannot_hide_below_global_one_percent[3-16]
+FAILED tests/test_disclosure_group_coverage.py::test_group_unseen_limit_uses_group_denominator_and_includes_five_percent[50-PASS]
+FAILED tests/test_disclosure_group_coverage.py::test_group_unseen_limit_uses_group_denominator_and_includes_five_percent[60-FAIL]
+FAILED tests/test_disclosure_group_coverage.py::test_unobserved_groups_do_not_fail_an_observed_group_at_twenty_records
+FAILED tests/test_disclosure_group_coverage.py::test_training_and_nonlearner_coverage_remain_not_applicable[False-False]
+FAILED tests/test_disclosure_group_coverage.py::test_training_and_nonlearner_coverage_remain_not_applicable[True-True]
+FAILED tests/test_disclosure_training.py::test_common_prefix_budget_copies_real_prefix_counts_and_starts_post_table_at_zero

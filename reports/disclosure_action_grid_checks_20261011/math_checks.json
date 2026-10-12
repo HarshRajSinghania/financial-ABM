@@ -1,0 +1,142 @@
+{
+  "status": "PASS",
+  "scope": "mathematical diagnostic, not model or research acceptance",
+  "market_initializations": 0,
+  "market_runs": 0,
+  "spec_sha256": "e6720a081c37e9f0b88a9b6c7c89f1ced9f13b10023b156b95af8eefa6cd8df5",
+  "script_sha256": "b84c5175aca1bd667ba6dd7840c301e21e1a82f03a92cb6badf045c72ab21271",
+  "numpy_version": "2.5.1",
+  "fixed_amounts_sd": [
+    0.0025,
+    0.005,
+    0.01,
+    0.02,
+    0.04,
+    0.08,
+    0.16,
+    0.25
+  ],
+  "gross_annual_amount_upper_bounds": {
+    "old_single_amplitude_sd": 0.0105,
+    "full_grid_sd": 1.05,
+    "natural_decay_sd": 0.2,
+    "old_share_of_decay": 0.0525,
+    "full_share_of_decay": 5.25,
+    "old_interior_net_upper_bound_sd": -0.1895,
+    "full_interior_net_upper_bound_sd": 0.8500000000000001,
+    "interpretation": "Decision-quota upper bounds before delay, capacity, economic incentives or learning; not attainable equilibrium or predicted outcomes."
+  },
+  "smooth_quadratic": {
+    "objective": "f(x)=a*x-c*x*x, c>0",
+    "intervals": [
+      {
+        "lower_amount_sd": 0.0025,
+        "upper_amount_sd": 0.005,
+        "ratio": 2.0,
+        "relative_loss_bound": 0.1111111111111111,
+        "sampled_maximum_relative_loss": 0.11111111111111124,
+        "worst_optimum_sd": 0.00375
+      },
+      {
+        "lower_amount_sd": 0.005,
+        "upper_amount_sd": 0.01,
+        "ratio": 2.0,
+        "relative_loss_bound": 0.1111111111111111,
+        "sampled_maximum_relative_loss": 0.11111111111111124,
+        "worst_optimum_sd": 0.0075
+      },
+      {
+        "lower_amount_sd": 0.01,
+        "upper_amount_sd": 0.02,
+        "ratio": 2.0,
+        "relative_loss_bound": 0.1111111111111111,
+        "sampled_maximum_relative_loss": 0.11111111111111124,
+        "worst_optimum_sd": 0.015
+      },
+      {
+        "lower_amount_sd": 0.02,
+        "upper_amount_sd": 0.04,
+        "ratio": 2.0,
+        "relative_loss_bound": 0.1111111111111111,
+        "sampled_maximum_relative_loss": 0.11111111111111124,
+        "worst_optimum_sd": 0.03
+      },
+      {
+        "lower_amount_sd": 0.04,
+        "upper_amount_sd": 0.08,
+        "ratio": 2.0,
+        "relative_loss_bound": 0.1111111111111111,
+        "sampled_maximum_relative_loss": 0.11111111111111124,
+        "worst_optimum_sd": 0.06
+      },
+      {
+        "lower_amount_sd": 0.08,
+        "upper_amount_sd": 0.16,
+        "ratio": 2.0,
+        "relative_loss_bound": 0.1111111111111111,
+        "sampled_maximum_relative_loss": 0.11111111111111124,
+        "worst_optimum_sd": 0.12
+      },
+      {
+        "lower_amount_sd": 0.16,
+        "upper_amount_sd": 0.25,
+        "ratio": 1.5625,
+        "relative_loss_bound": 0.04818560380725759,
+        "sampled_maximum_relative_loss": 0.04818560380725727,
+        "worst_optimum_sd": 0.20500000000000002
+      }
+    ],
+    "conditions": [
+      "positive continuous optimum between two legal neighboring grid points",
+      "neighboring legal amount ratio <=2",
+      "maintain legal",
+      "same smooth quadratic on the interval"
+    ],
+    "global_relative_guarantee_for_piecewise_objectives": false
+  },
+  "below_first_amount": {
+    "first_amount_sd": 0.0025,
+    "absolute_error_bound": 7.8125e-08,
+    "sampled_maximum_absolute_error": 7.8125e-08,
+    "relative_error_may_equal_one": true,
+    "conditions": [
+      "maintain legal",
+      "0<=continuous optimum<=first legal amount",
+      "same smooth quadratic"
+    ]
+  },
+  "report_capacity_counterexample": {
+    "report_capacity_sd": 0.03,
+    "real_value_per_sd": 0.006,
+    "displaced_real_value_per_sd": 0.0,
+    "subsidy_per_sd": 0.0,
+    "cost_coefficient": 0.05,
+    "continuous_optimum_sd": 0.03,
+    "continuous_value": 0.00013499999999999997,
+    "fixed_candidate_values": [
+      0.0,
+      1.46875e-05,
+      2.875e-05,
+      5.5e-05,
+      0.0001,
+      9.999999999999998e-05,
+      -0.00014000000000000004,
+      -0.0011,
+      -0.002945
+    ],
+    "best_grid_amounts_sd": [
+      0.02,
+      0.04
+    ],
+    "best_grid_value": 0.0001,
+    "relative_loss": 0.2592592592592591,
+    "left_derivative_at_kink": 0.003,
+    "right_derivative_at_kink": -0.003
+  },
+  "limits": [
+    "No candidate generation uses an NPV optimum; only the fixed specification supplies candidate amounts.",
+    "Feasibility masks removing a bracketing point or maintain invalidate the stated bound assumptions.",
+    "An NPV minimum-value threshold adds at most that threshold to objective regret when maintain is legal.",
+    "Gross action capacity does not establish positive private NPV, algorithm quality or policy effectiveness."
+  ]
+}

@@ -1,0 +1,182 @@
+--- old/src/abm/disclosure/financing.py
++++ new/src/abm/disclosure/financing.py
+@@ -53,6 +53,7 @@
+     repricing_interval: int, period_days: int, implementation_delay: int,
+     disclosure_delay: int, audit_probability: float, transparency: float,
+     publish_audit_results: bool = False, published_now: NDArray[np.bool_] | None = None,
++    reporting_interval_days: int = 1,
+ ) -> tuple[NDArray[np.float64], NDArray[np.float64], NDArray[np.float64], NDArray[np.float64]]:
+     """Return low/high real-signal annuities, wash survival and the fine factor.
+ 
+@@ -69,6 +70,21 @@
+         implementation_delay=implementation_delay, disclosure_delay=disclosure_delay,
+         audit_probability=audit_probability,
+     )
++    if reporting_interval_days != 1:
++        signals = _periodic_report_signals(
++            decision_day=decision_day, horizon_days=horizon_days, period_days=period_days,
++            implementation_delay=implementation_delay, disclosure_delay=disclosure_delay,
++            audit_probability=audit_probability, transparency=transparency,
++            publish_audit_results=publish_audit_results, reporting_interval_days=reporting_interval_days,
++        )
++        times = np.arange(1, horizon_days + 1)
++        quoted_day = (decision_day + times) // repricing_interval * repricing_interval - 1
++        quote_index = np.maximum(quoted_day - decision_day, 0)
++        known = np.zeros(np.asarray(discount_rate).size, dtype=bool) if published_now is None else np.asarray(published_now, dtype=bool)
++        discount = np.exp(-times[:, None] * np.asarray(discount_rate)[None, :] / TRADING_DAYS_PER_YEAR)
++        factors = tuple(np.sum(signals[quote_index[:, None], known.astype(np.int64)[None, :], index] * discount,
++                               axis=0) / TRADING_DAYS_PER_YEAR for index in range(3))
++        return *factors, fine
+     times = np.arange(1, horizon_days + 1)
+     quoted_day = (decision_day + times) // repricing_interval * repricing_interval - 1
+     real_due = decision_day + max(1, implementation_delay)
+@@ -103,3 +119,55 @@
+     return (np.sum(real_signal * discount, axis=0) / TRADING_DAYS_PER_YEAR,
+             np.sum(displaced_signal * discount, axis=0) / TRADING_DAYS_PER_YEAR,
+             np.sum(wash_signal * discount, axis=0) / TRADING_DAYS_PER_YEAR, fine)
++
++
++def _periodic_report_signals(
++    *, decision_day: int, horizon_days: int, period_days: int, implementation_delay: int,
++    disclosure_delay: int, audit_probability: float, transparency: float,
++    publish_audit_results: bool, reporting_interval_days: int,
++) -> NDArray[np.float64]:
++    """Expected incremental signals by day, initial certificate and action segment.
++
++    Completed records are auditable before their scheduled publication. Every
++    selected audit refreshes the ordinary report after trading. Each probability
++    cell tracks surviving records and the current certificate jointly; cached
++    report moments are weighted by that same cell's probability.
++    """
++    real_due = decision_day + max(1, implementation_delay)
++    wash_due = decision_day + max(1, disclosure_delay)
++    probability = np.zeros((2, 2, 2))
++    probability[0, 1, 0] = 1.0
++    probability[1, 1, int(publish_audit_results and decision_day % period_days == 0)] = 1.0
++    wash_probability = probability.copy()
++    low = np.zeros_like(probability)
++    high = np.zeros_like(probability)
++    wash = np.zeros_like(probability)
++    alive = np.arange(2)[None, :, None]
++    signals = np.zeros((horizon_days + 1, 2, 3))
++    p = audit_probability
++    certificate = int(publish_audit_results)
++    for offset in range(1, horizon_days + 1):
++        day = decision_day + offset
++        implemented = float(day >= real_due)
++        if day % reporting_interval_days == 0:
++            low = implemented * probability
++            high = implemented * (1.0 - (1.0 - transparency) * alive) * probability
++            wash = float(day >= wash_due) * alive * wash_probability
++        latest_audit = (day - 1) // period_days * period_days
++        certified_real = float(latest_audit >= real_due) * probability[:, :, 1].sum(axis=1)
++        signals[offset, :, 0] = low[:, :, 0].sum(axis=1) + certified_real
++        signals[offset, :, 1] = high[:, :, 0].sum(axis=1) + certified_real
++        signals[offset, :, 2] = wash[:, :, 0].sum(axis=1)
++        if day % period_days == 0:
++            selected = p * probability.sum(axis=(1, 2))
++            selected_wash = p * wash_probability.sum(axis=(1, 2))
++            probability = np.stack(((1.0 - p) * probability.sum(axis=2), np.zeros((2, 2))), axis=2)
++            low = np.stack(((1.0 - p) * low.sum(axis=2), np.zeros((2, 2))), axis=2)
++            high = np.stack(((1.0 - p) * high.sum(axis=2), np.zeros((2, 2))), axis=2)
++            wash_probability = np.stack(((1.0 - p) * wash_probability.sum(axis=2), np.zeros((2, 2))), axis=2)
++            wash = np.stack(((1.0 - p) * wash.sum(axis=2), np.zeros((2, 2))), axis=2)
++            probability[:, 0, certificate] += selected
++            low[:, 0, certificate] += implemented * selected
++            high[:, 0, certificate] += implemented * selected
++            wash_probability[:, int(day < wash_due), certificate] += selected_wash
++    return signals
+--- old/src/abm/disclosure/game.py
++++ new/src/abm/disclosure/game.py
+@@ -155,6 +155,7 @@
+         disclosure_delay=disclosure_delay, audit_probability=regime.audit_probability,
+         transparency=regime.transparency, publish_audit_results=regime.publish_audit_results,
+         published_now=published_now,
++        reporting_interval_days=regime.reporting_interval_days,
+     )
+     improve_benefit = benefit * real_annuity
+     improve_gain = improve_benefit + regime.subsidy
+@@ -382,11 +383,11 @@
+         return self.public_signal_history[day].copy()
+ 
+     def attribute_signal(self) -> FloatArray:
+-        """Current-stage public information, with a fixed daily error."""
++        """Current-stage public information from reports and dated audits."""
+         return self.planning_signal_history[self.signal_day].copy()
+ 
+     def _public_signal(self, day: int) -> FloatArray:
+-        signal = self.attributes.observed(self.policy.at(day).transparency) + self.disclosure_error_history[day]
++        signal = self.report_cache.copy()
+         period = (day - 1) // self.config.firm_decision_interval
+         if period >= 0:
+             public = self.publication_history[period].astype(bool)
+@@ -398,7 +399,10 @@
+             return
+         if day < self.signal_day:
+             raise ValueError("signal days must move forwards")
+-        self.disclosure_error_history[day] = self.policy.at(day).disclosure_noise_sd * self.signal_rng.standard_normal(self.config.n_firms)
++        regime = self.policy.at(day)
++        self.disclosure_error_history[day] = regime.disclosure_noise_sd * self.signal_rng.standard_normal(self.config.n_firms)
++        if day == 0 or day % regime.reporting_interval_days == 0:
++            self.report_cache = self.attributes.observed(regime.transparency) + self.disclosure_error_history[day]
+         self.public_signal_history[day] = self._public_signal(day)
+         self.planning_signal_history[day] = self.public_signal_history[day]
+         self.signal_day = day
+@@ -501,6 +505,7 @@
+         caught = selected & (state.inflation > 0)
+         penalty = np.where(caught, regime.penalty * state.inflation, 0.0)
+         state.inflation[caught] = 0.0
++        self.report_cache[selected] = state.observed(regime.transparency)[selected] + self.disclosure_error_history[day, selected]
+         published = selected & regime.publish_audit_results
+         self.audit_selected_history[period] = selected
+         self.publication_history[period] = published
+@@ -573,6 +578,7 @@
+             disclosure_delay=disclosure_delay, audit_probability=regime.audit_probability,
+             transparency=regime.transparency, publish_audit_results=regime.publish_audit_results,
+             published_now=published,
++            reporting_interval_days=regime.reporting_interval_days,
+         )
+         benefit = self.marginal_financing_saving()
+         marginal_cost = state.marginal_cost(domain)
+--- old/src/abm/disclosure/policy.py
++++ new/src/abm/disclosure/policy.py
+@@ -12,6 +12,9 @@
+   fraction of market cap;
+ * disclosure error and delay, and dated audit publications, affect the
+   public signal separately from the audit and fine instruments.
++
++In this model, reports follow a global publication calendar. Each checked
++firm also updates its ordinary report at close, separately from certification.
+ 
+ Audit probability also determines how long inflated reports survive, so
+ equal probability-times-penalty does not hold either their value or the
+@@ -36,6 +39,7 @@
+     disclosure_noise_sd: float = 0.0
+     disclosure_delay_days: int | None = None
+     publish_audit_results: bool = False
++    reporting_interval_days: int = 1
+ 
+     def __post_init__(self) -> None:
+         if not 0 <= self.audit_probability <= 1 or not 0 <= self.transparency <= 1:
+@@ -50,6 +54,8 @@
+             raise ValueError("disclosure_delay_days must be a nonnegative integer or None")
+         if type(self.publish_audit_results) is not bool:
+             raise ValueError("publish_audit_results must be boolean")
++        if type(self.reporting_interval_days) is not int or self.reporting_interval_days < 1:
++            raise ValueError("reporting_interval_days must be a positive integer")
+ 
+     @classmethod
+     def baseline(cls, domain: DomainSpec) -> "PolicyRegime":
+@@ -89,10 +95,12 @@
+         self, start_day: int, *, transparency: float | None = None,
+         disclosure_noise_sd: float | None = None, disclosure_delay_days: int | None = None,
+         publish_audit_results: bool | None = None,
++        reporting_interval_days: int | None = None,
+     ) -> "PolicySchedule":
+         """Change information instruments, retaining audit, fine and subsidy."""
+         changes = {name: value for name, value in {
+             "transparency": transparency, "disclosure_noise_sd": disclosure_noise_sd,
+             "disclosure_delay_days": disclosure_delay_days, "publish_audit_results": publish_audit_results,
++            "reporting_interval_days": reporting_interval_days,
+         }.items() if value is not None}
+         return self.with_intervention(start_day, **changes)

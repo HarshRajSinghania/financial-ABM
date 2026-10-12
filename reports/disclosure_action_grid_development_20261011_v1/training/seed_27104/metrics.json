@@ -1,0 +1,137 @@
+{
+  "window": {
+    "start_day": 600,
+    "end_day": 1800,
+    "elapsed_days": 1200,
+    "state_observations": 1201,
+    "decision_observations": 20,
+    "decision_days": [
+      660,
+      720,
+      780,
+      840,
+      900,
+      960,
+      1020,
+      1080,
+      1140,
+      1200,
+      1260,
+      1320,
+      1380,
+      1440,
+      1500,
+      1560,
+      1620,
+      1680,
+      1740,
+      1800
+    ],
+    "cost_basis": "Commitments in (start_day, end_day] at decision-day prices; applied the following day.",
+    "interpretation": "Descriptive changes include delayed pre-window actions, not causal returns on in-window decisions."
+  },
+  "true_change": {
+    "equal_weight_sd": -0.5722142857142825,
+    "equal_weight_raw": -8.583214285714238,
+    "fixed_start_cap_weight_sd": -0.6050776201828741,
+    "fixed_start_cap_weight_raw": -9.07616430274311,
+    "end_cap_weight_sd": -0.6096581835727264,
+    "end_cap_weight_raw": -9.144872753590898
+  },
+  "full_period_change": {
+    "equal_weight_sd": -0.8904880952380904,
+    "equal_weight_raw": -13.357321428571355
+  },
+  "terminal_year": {
+    "start_day": 1549,
+    "observations": 252,
+    "complete_year": true,
+    "change_from_initial_sd": -0.8439927248677204,
+    "inflation_mean_sd": 0.6322569444444445
+  },
+  "decay_adjusted_gain": {
+    "equal_weight_sd": 0.37523097908811825,
+    "equal_weight_raw": 5.628464686321775,
+    "fixed_start_cap_weight_sd": 0.3420422738941282,
+    "fixed_start_cap_weight_raw": 5.130634108411924,
+    "end_cap_weight_sd": 0.3382690592660424,
+    "end_cap_weight_raw": 5.074035888990637
+  },
+  "size": {
+    "large": {
+      "count": 3,
+      "change_sd": -0.6673809523809492,
+      "change_raw": -10.010714285714238,
+      "decay_adjusted_gain_sd": 0.2850000000000032
+    },
+    "mid": {
+      "count": 9,
+      "change_sd": -0.5218253968253935,
+      "change_raw": -7.827380952380903,
+      "decay_adjusted_gain_sd": 0.41410326362705346
+    },
+    "small": {
+      "count": 18,
+      "change_sd": -0.5815476190476159,
+      "change_raw": -8.723214285714239,
+      "decay_adjusted_gain_sd": 0.37083333333333646
+    },
+    "large_minus_small_sd": -0.08583333333333332,
+    "large_minus_small_raw": -1.2874999999999996
+  },
+  "inflation": {
+    "initial_mean_sd": 0.3176666666666666,
+    "final_mean_sd": 0.6605000000000001,
+    "mean_sd": 0.5137639467110742,
+    "mean_absolute_raw_gap": 7.706459200666113,
+    "final_absolute_raw_gap": 9.907500000000002,
+    "mean_range_fraction": 0.07706459200666113
+  },
+  "impact": {
+    "initial_share": 0.24666666666666667,
+    "final_share": 0.5066666666666667,
+    "initial_wealth_share": 0.20015795375624132,
+    "final_wealth_share": 0.534610409734186
+  },
+  "pricing_slope": {
+    "mean": -0.005470326649852671,
+    "observations": 20
+  },
+  "costs": {
+    "initial_market_cap": 29.999999999999993,
+    "resource_cost": 0.10181609532809528,
+    "real_improvement_cost": 0.052913904136554085,
+    "washing_cost": 0.04890219119154119,
+    "fine_transfer": 0.009728740077442503,
+    "subsidy_transfer": 0.0,
+    "private_net_outflow": 0.11154483540553778,
+    "resource_cost_fraction_initial_cap": 0.0033938698442698436,
+    "private_net_outflow_fraction_initial_cap": 0.0037181611801845936,
+    "fine_transfer_fraction_initial_cap": 0.0003242913359147502,
+    "subsidy_transfer_fraction_initial_cap": 0.0,
+    "carry_in_resource_cost": 0.009573468992534062,
+    "unapplied_final_day_resource_cost": 0.0003443135059574133
+  },
+  "efficiency": {
+    "decay_adjusted_sd_per_resource_cost": 110.56139342575332,
+    "beneficial_raw_gain_per_resource_cost": 1658.4209013862999,
+    "undefined_reason": null
+  },
+  "diagnostics": {
+    "status": "ok",
+    "missing_size_classes": [],
+    "pricing_slope_missing_observations": 0,
+    "finite_metrics": true
+  },
+  "financing": {
+    "status": "modeled_accrual",
+    "interpretation": "Accrued financing fees, not payments or cash-solvency evidence; value adjustment is relative to the initial contract.",
+    "fixed_exposure": 14.999999999999996,
+    "accrued_cost": 3.3034493760943944,
+    "baseline_accrued_cost": 2.9761904761904767,
+    "value_adjustment": -0.3272588999039183,
+    "accrued_cost_fraction_initial_cap": 0.1101149792031465,
+    "mean_contract_rate": 0.046276095152793996,
+    "maximum_ledger_error": 7.623296525288703e-20
+  }
+}

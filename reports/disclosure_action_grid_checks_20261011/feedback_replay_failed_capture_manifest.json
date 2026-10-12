@@ -1,0 +1,33 @@
+{
+  "created_utc": "2026-10-11T10:31:41.964624+00:00",
+  "spec_sha256": "9a5694050ce1389d2030fe6b603ae6f96090196989554ac520bdde25c0b8abf0",
+  "script_sha256": "6c1df9797929f53394bb90f4d6e97166eef557645d163365eddef6b3b2cd6607",
+  "summary_manifest_sha256": "ad560a103210391c17657a755b074a8e31fd8148a1dfcdfa0491921ddeb4f990",
+  "specification": {
+    "purpose": "development_failure_diagnostic",
+    "archive": "reports/disclosure_action_grid_development_20261011_v1",
+    "experiment_id": "1ef41a727d2552f738d39e1338f5472ff9fcf6a256bbdf21935eff34852ef7f2",
+    "cases": [
+      "training/seed_27001",
+      "validation/seed_27304/q_learning",
+      "validation/seed_27304/npv_discrete",
+      "validation/seed_27304/npv",
+      "validation/seed_27305/q_learning",
+      "validation/seed_27305/npv_discrete",
+      "validation/seed_27305/npv"
+    ],
+    "selection": "First archived training world and both validation seeds with price caps, including every rule; selected after observing failures, not a prevalence sample.",
+    "budget": {
+      "replays": 7,
+      "days_each": 1800,
+      "new_seeds": 0,
+      "parameter_changes": 0
+    },
+    "acceptance": "Every original result array and fingerprint, and each available final Q table, must match bitwise. Abort on mismatch. Preserve original archives.",
+    "diagnostics": [
+      "Original quote terms, liquidity, noise amplification, and deciding investor wealth share",
+      "Actual old-price submitted and new-price cash-constrained executed orders",
+      "Static same-day quote at realized executed flow with other pre-quote state fixed; not a recomputed equilibrium or path counterfactual"
+    ]
+  }
+}
