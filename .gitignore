@@ -21,3 +21,39 @@ reports/**/web.pid
 reports/**/web.*.log
 reports/**/daily/
 reports/**/reconstruction/
+
+# Disclosure research: large regenerable binaries stay local
+reports/**/*.npz
+reports/**/*.npz.tmp
+reports/**/attempt_*/source.zip
+reports/**/isolated_src/
+reports/**/run.lock
+reports/**/writer.lock
+reports/**/experiment.lock
+
+# Vendor and textbook data without an open redistribution licence: rebuild with the
+# collection scripts and check against the recorded hashes instead of committing them.
+data/raw/disclosure_public_20261011/
+data/raw/disclosure_market_public_20261011/
+data/processed/disclosure_public_20261011/
+data/processed/disclosure_public_20261012/
+data/processed/disclosure_market_public_20261011/
+reports/disclosure_public_data_20261011/**
+!reports/disclosure_public_data_20261011/**/
+!reports/disclosure_public_data_20261011/**/*.py
+!reports/disclosure_public_data_20261011/**/*.ps1
+!reports/disclosure_public_data_20261011/**/*.md
+!reports/disclosure_public_data_20261011/**/summary.json
+!reports/disclosure_public_data_20261011/csi300_joint_20261009/joint_statistics.json
+!reports/disclosure_public_data_20261011/csi300_joint_20261009/manifest.json
+!reports/disclosure_public_data_20261011/csi300_joint_20261009/market_*_sigma*.json
+!reports/disclosure_public_data_20261011/csi300_joint_20261009/domain_*.json
+# Per-trial duplicates of summary records, trained tables and oversized audits (kept locally)
+reports/**/source.zip
+!reports/disclosure_feedback_development_20261011/source.zip
+reports/**/learning.json
+reports/**/attempt_*/report.md
+reports/**/attempt_*/validation.json
+reports/disclosure_action_grid_development_20261011_v1/summary.json
+reports/disclosure_action_grid_checks_20261011/verification.json
+reports/disclosure_market_qualification_20261011/audit_validation.json
