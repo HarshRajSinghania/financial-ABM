@@ -48,19 +48,19 @@ class ContextualBandit:
 
 class CompanyQLearner:
     def __init__(self, groups: int = 3, epsilon: float = 0.1,
-                 learning_rate: float = 0.1, discount: float = 0.9):
-        if groups < 1 or not 0 <= epsilon <= 1 or not 0 < learning_rate <= 1 or not 0 <= discount < 1:
+                 learning_rate: float = 0.1, discount: float = 0.9, actions: int = 3):
+        if groups < 1 or actions < 1 or not 0 <= epsilon <= 1 or not 0 < learning_rate <= 1 or not 0 <= discount < 1:
             raise ValueError("invalid Q-learning parameters")
         self.epsilon, self.learning_rate, self.discount = epsilon, learning_rate, discount
-        self.values = np.zeros((groups, 81, 3), dtype=np.float64)
-        self.counts = np.zeros((groups, 81, 3), dtype=np.int64)
+        self.values = np.zeros((groups, 81, actions), dtype=np.float64)
+        self.counts = np.zeros((groups, 81, actions), dtype=np.int64)
 
     def probabilities(self, groups: np.ndarray, states: np.ndarray) -> np.ndarray:
         return epsilon_probabilities(self.values[groups, states], self.epsilon)
 
     def choose(self, groups: np.ndarray, states: np.ndarray, rng: np.random.Generator) -> np.ndarray:
         probabilities = self.probabilities(groups, states)
-        return np.minimum((rng.random(groups.size)[:, None] > np.cumsum(probabilities, axis=1)).sum(axis=1), 2)
+        return np.minimum((rng.random(groups.size)[:, None] > np.cumsum(probabilities, axis=1)).sum(axis=1), self.values.shape[2] - 1)
 
     def update(self, ids: np.ndarray, groups: np.ndarray, states: np.ndarray,
                actions: np.ndarray, rewards: np.ndarray, next_states: np.ndarray) -> None:

@@ -1,0 +1,245 @@
+{
+  "name": "disclosure_financing_development_v1",
+  "purpose": "development",
+  "_note": "Development only: explicit fixed financing exposure and accrued fees. Contract pricing and cost parameters are assumptions; this is neither empirical calibration nor evidence of cash solvency.",
+  "domain": "domains/esg.json",
+  "market": {
+    "n_investors": 150,
+    "n_firms": 30,
+    "trading_days": 1800,
+    "burn_in_days": 600,
+    "initial_impact_share": 0.2,
+    "taste_median": 0.02,
+    "financing_exposure_fraction": 0.5,
+    "financing_spread": 0.05,
+    "financing_repricing_interval": 60,
+    "financing_horizon_days": 1260,
+    "firm_discount_rate": 0.05
+  },
+  "seeds": [
+    23001,
+    23002,
+    23003
+  ],
+  "scenarios": [
+    {
+      "name": "market_B"
+    },
+    {
+      "name": "market_I",
+      "policy": {
+        "start_day": 601,
+        "changes": {
+          "transparency": 0.6
+        }
+      }
+    },
+    {
+      "name": "market_F",
+      "policy": {
+        "start_day": 601,
+        "changes": {
+          "penalty": 0.02
+        }
+      }
+    },
+    {
+      "name": "market_IF",
+      "policy": {
+        "start_day": 601,
+        "changes": {
+          "transparency": 0.6,
+          "penalty": 0.02
+        }
+      }
+    },
+    {
+      "name": "zero_taste_B",
+      "market": {
+        "taste_median": 0.0
+      }
+    },
+    {
+      "name": "zero_taste_I",
+      "market": {
+        "taste_median": 0.0
+      },
+      "policy": {
+        "start_day": 601,
+        "changes": {
+          "transparency": 0.6
+        }
+      }
+    },
+    {
+      "name": "zero_taste_F",
+      "market": {
+        "taste_median": 0.0
+      },
+      "policy": {
+        "start_day": 601,
+        "changes": {
+          "penalty": 0.02
+        }
+      }
+    },
+    {
+      "name": "zero_taste_IF",
+      "market": {
+        "taste_median": 0.0
+      },
+      "policy": {
+        "start_day": 601,
+        "changes": {
+          "transparency": 0.6,
+          "penalty": 0.02
+        }
+      }
+    },
+    {
+      "name": "equal_cost_B",
+      "domain": {
+        "size_cost_multipliers": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "name": "equal_cost_I",
+      "domain": {
+        "size_cost_multipliers": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "policy": {
+        "start_day": 601,
+        "changes": {
+          "transparency": 0.6
+        }
+      }
+    },
+    {
+      "name": "equal_cost_F",
+      "domain": {
+        "size_cost_multipliers": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "policy": {
+        "start_day": 601,
+        "changes": {
+          "penalty": 0.02
+        }
+      }
+    },
+    {
+      "name": "zero_impact_B",
+      "market": {
+        "initial_impact_share": 0.0
+      }
+    },
+    {
+      "name": "zero_taste_zero_policy",
+      "market": {
+        "taste_median": 0.0
+      },
+      "domain": {
+        "baseline_audit_probability": 0.0,
+        "baseline_penalty": 0.0,
+        "baseline_transparency": 0.0,
+        "baseline_subsidy": 0.0
+      }
+    },
+    {
+      "name": "zero_financing_exposure",
+      "market": {
+        "financing_exposure_fraction": 0.0
+      }
+    },
+    {
+      "name": "zero_financing_spread",
+      "market": {
+        "financing_spread": 0.0
+      }
+    }
+  ],
+  "comparisons": [
+    {
+      "name": "market_effect",
+      "weights": {
+        "market_B": 1,
+        "zero_taste_B": -1
+      },
+      "primary": true,
+      "primary_metric": "full_period_change.equal_weight_sd"
+    },
+    {
+      "name": "information_minus_penalty",
+      "weights": {
+        "market_I": 1,
+        "market_F": -1
+      },
+      "primary": true
+    },
+    {
+      "name": "market_policy_interaction",
+      "weights": {
+        "market_IF": 1,
+        "zero_taste_IF": -1,
+        "market_B": -1,
+        "zero_taste_B": 1
+      },
+      "primary": true
+    },
+    {
+      "name": "residual_size_gap",
+      "weights": {
+        "equal_cost_B": 1
+      },
+      "primary": true,
+      "primary_metric": "size.large_minus_small_sd"
+    },
+    {
+      "name": "information_minus_baseline",
+      "weights": {
+        "market_I": 1,
+        "market_B": -1
+      }
+    },
+    {
+      "name": "penalty_minus_baseline",
+      "weights": {
+        "market_F": 1,
+        "market_B": -1
+      }
+    },
+    {
+      "name": "size_cost_assumption_effect",
+      "weights": {
+        "market_B": 1,
+        "equal_cost_B": -1
+      }
+    }
+  ],
+  "analysis": {
+    "primary_metric": "true_change.equal_weight_sd",
+    "metrics": [
+      "true_change.equal_weight_sd",
+      "full_period_change.equal_weight_sd",
+      "inflation.mean_sd",
+      "size.large_minus_small_sd",
+      "costs.resource_cost",
+      "costs.private_net_outflow",
+      "costs.resource_cost_fraction_initial_cap",
+      "financing.accrued_cost_fraction_initial_cap",
+      "financing.value_adjustment"
+    ],
+    "confidence_level": 0.95
+  }
+}

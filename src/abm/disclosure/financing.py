@@ -1,0 +1,173 @@
+"""Expected financing-fee cash flows for a fixed external exposure.
+
+The horizon limits prospective fee savings. A false report's eventual fine
+remains a liability beyond that horizon. Quotes observed on day t can first
+affect a contract repriced on day t + 1; audits follow that day's trading.
+"""
+
+from __future__ import annotations
+
+import numpy as np
+from numpy.typing import NDArray
+
+from .config import TRADING_DAYS_PER_YEAR
+
+
+def financing_discount_factors(
+    discount_rate: NDArray[np.float64], *, decision_day: int, horizon_days: int,
+    repricing_interval: int, period_days: int, implementation_delay: int,
+    disclosure_delay: int, audit_probability: float,
+) -> tuple[NDArray[np.float64], NDArray[np.float64], NDArray[np.float64]]:
+    """Return real/wash annuities and the expected discounted fine factor.
+
+Rates and future quote responses are locally held fixed. These are firms'
+conditional forecasts, not an assertion of a permanent equilibrium premium.
+    """
+    times = np.arange(1, horizon_days + 1)
+    calendar = decision_day + times
+    last_reprice = calendar // repricing_interval * repricing_interval
+    quoted_day = last_reprice - 1
+    real_due = decision_day + max(1, implementation_delay)
+    wash_due = decision_day + max(1, disclosure_delay)
+    real_visible = quoted_day >= real_due
+    wash_visible = quoted_day >= wash_due
+    first_audit = ((wash_due + period_days - 1) // period_days) * period_days
+    # A quote precedes the audit on its own day, so only earlier audits
+    # remove the signal used at a contract's most recent repricing.
+    audits = np.maximum(0, (quoted_day - 1 - first_audit) // period_days + 1)
+    survival = np.power(1.0 - audit_probability, audits) * wash_visible
+    discount = np.exp(-times[:, None] * np.asarray(discount_rate)[None, :] / TRADING_DAYS_PER_YEAR)
+    real = real_visible @ discount / TRADING_DAYS_PER_YEAR
+    wash = survival @ discount / TRADING_DAYS_PER_YEAR
+    if audit_probability == 0:
+        fine = np.zeros_like(discount_rate)
+    else:
+        first_discount = np.exp(-discount_rate * (first_audit - decision_day) / TRADING_DAYS_PER_YEAR)
+        repeat_discount = np.exp(-discount_rate * period_days / TRADING_DAYS_PER_YEAR)
+        fine = audit_probability * first_discount / (1.0 - (1.0 - audit_probability) * repeat_discount)
+    return real, wash, fine
+
+
+def financing_signal_factors(
+    discount_rate: NDArray[np.float64], *, decision_day: int, horizon_days: int,
+    repricing_interval: int, period_days: int, implementation_delay: int,
+    disclosure_delay: int, audit_probability: float, transparency: float,
+    publish_audit_results: bool = False, published_now: NDArray[np.bool_] | None = None,
+    reporting_interval_days: int = 1,
+) -> tuple[NDArray[np.float64], NDArray[np.float64], NDArray[np.float64], NDArray[np.float64]]:
+    """Return low/high real-signal annuities, wash survival and the fine factor.
+
+    Remaining report capacity is locally fixed. Audits remove the old
+    inflation displaced by a real action. Avoided fines on that old stock
+    are excluded for both publication regimes. A published snapshot lasts
+    one decision period and contains an action only if it was implemented
+    by the snapshot's observation date. ``published_now`` is the firm's
+    known, just-completed audit; future checks remain random.
+    """
+    real, wash, fine = financing_discount_factors(
+        discount_rate, decision_day=decision_day, horizon_days=horizon_days,
+        repricing_interval=repricing_interval, period_days=period_days,
+        implementation_delay=implementation_delay, disclosure_delay=disclosure_delay,
+        audit_probability=audit_probability,
+    )
+    if reporting_interval_days != 1:
+        signals = _periodic_report_signals(
+            decision_day=decision_day, horizon_days=horizon_days, period_days=period_days,
+            implementation_delay=implementation_delay, disclosure_delay=disclosure_delay,
+            audit_probability=audit_probability, transparency=transparency,
+            publish_audit_results=publish_audit_results, reporting_interval_days=reporting_interval_days,
+        )
+        times = np.arange(1, horizon_days + 1)
+        quoted_day = (decision_day + times) // repricing_interval * repricing_interval - 1
+        quote_index = np.maximum(quoted_day - decision_day, 0)
+        known = np.zeros(np.asarray(discount_rate).size, dtype=bool) if published_now is None else np.asarray(published_now, dtype=bool)
+        discount = np.exp(-times[:, None] * np.asarray(discount_rate)[None, :] / TRADING_DAYS_PER_YEAR)
+        factors = tuple(np.sum(signals[quote_index[:, None], known.astype(np.int64)[None, :], index] * discount,
+                               axis=0) / TRADING_DAYS_PER_YEAR for index in range(3))
+        return *factors, fine
+    times = np.arange(1, horizon_days + 1)
+    quoted_day = (decision_day + times) // repricing_interval * repricing_interval - 1
+    real_due = decision_day + max(1, implementation_delay)
+    wash_due = decision_day + max(1, disclosure_delay)
+    real_visible = quoted_day >= real_due
+    checks = np.maximum(0, (quoted_day - 1) // period_days - decision_day // period_days)
+    old_survival = np.power(1.0 - audit_probability, checks)
+    discount = np.exp(-times[:, None] * np.asarray(discount_rate)[None, :] / TRADING_DAYS_PER_YEAR)
+    if not publish_audit_results:
+        displaced = real - (1.0 - transparency) * ((real_visible * old_survival) @ discount / TRADING_DAYS_PER_YEAR)
+        return real, displaced, wash, fine
+
+    known = np.zeros(np.asarray(discount_rate).size, dtype=bool) if published_now is None else np.asarray(published_now, dtype=bool)
+    latest_audit = (quoted_day - 1) // period_days * period_days
+    current = latest_audit == decision_day
+    certificate = np.where((latest_audit > decision_day)[:, None], audit_probability,
+                           np.where(current[:, None], known[None, :], 0.0))
+    visible = real_visible[:, None]
+    real_signal = visible * (1.0 - certificate) + certificate * (latest_audit >= real_due)[:, None]
+    # Surviving old inflation and a future published check are mutually
+    # exclusive. A known pre-action certificate can coexist with it.
+    unverified_old = old_survival[:, None] * np.where(current[:, None], ~known[None, :], 1.0)
+    displaced_signal = real_signal - (1.0 - transparency) * visible * unverified_old
+    first_audit = ((wash_due + period_days - 1) // period_days) * period_days
+    wash_checks = np.maximum(0, (quoted_day - 1 - first_audit) // period_days + 1)
+    wash_survival = np.power(1.0 - audit_probability, wash_checks)[:, None]
+    # A pre-disclosure certificate can hide a surviving new report. After
+    # disclosure, the selected check already removes that report.
+    wash_signal = (quoted_day >= wash_due)[:, None] * (
+        wash_survival - certificate * (latest_audit < wash_due)[:, None]
+    )
+    return (np.sum(real_signal * discount, axis=0) / TRADING_DAYS_PER_YEAR,
+            np.sum(displaced_signal * discount, axis=0) / TRADING_DAYS_PER_YEAR,
+            np.sum(wash_signal * discount, axis=0) / TRADING_DAYS_PER_YEAR, fine)
+
+
+def _periodic_report_signals(
+    *, decision_day: int, horizon_days: int, period_days: int, implementation_delay: int,
+    disclosure_delay: int, audit_probability: float, transparency: float,
+    publish_audit_results: bool, reporting_interval_days: int,
+) -> NDArray[np.float64]:
+    """Expected incremental signals by day, initial certificate and action segment.
+
+    Completed records are auditable before their scheduled publication. Every
+    selected audit refreshes the ordinary report after trading. Each probability
+    cell tracks surviving records and the current certificate jointly; cached
+    report moments are weighted by that same cell's probability.
+    """
+    real_due = decision_day + max(1, implementation_delay)
+    wash_due = decision_day + max(1, disclosure_delay)
+    probability = np.zeros((2, 2, 2))
+    probability[0, 1, 0] = 1.0
+    probability[1, 1, int(publish_audit_results and decision_day % period_days == 0)] = 1.0
+    wash_probability = probability.copy()
+    low = np.zeros_like(probability)
+    high = np.zeros_like(probability)
+    wash = np.zeros_like(probability)
+    alive = np.arange(2)[None, :, None]
+    signals = np.zeros((horizon_days + 1, 2, 3))
+    p = audit_probability
+    certificate = int(publish_audit_results)
+    for offset in range(1, horizon_days + 1):
+        day = decision_day + offset
+        implemented = float(day >= real_due)
+        if day % reporting_interval_days == 0:
+            low = implemented * probability
+            high = implemented * (1.0 - (1.0 - transparency) * alive) * probability
+            wash = float(day >= wash_due) * alive * wash_probability
+        latest_audit = (day - 1) // period_days * period_days
+        certified_real = float(latest_audit >= real_due) * probability[:, :, 1].sum(axis=1)
+        signals[offset, :, 0] = low[:, :, 0].sum(axis=1) + certified_real
+        signals[offset, :, 1] = high[:, :, 0].sum(axis=1) + certified_real
+        signals[offset, :, 2] = wash[:, :, 0].sum(axis=1)
+        if day % period_days == 0:
+            selected = p * probability.sum(axis=(1, 2))
+            selected_wash = p * wash_probability.sum(axis=(1, 2))
+            probability = np.stack(((1.0 - p) * probability.sum(axis=2), np.zeros((2, 2))), axis=2)
+            low = np.stack(((1.0 - p) * low.sum(axis=2), np.zeros((2, 2))), axis=2)
+            high = np.stack(((1.0 - p) * high.sum(axis=2), np.zeros((2, 2))), axis=2)
+            wash_probability = np.stack(((1.0 - p) * wash_probability.sum(axis=2), np.zeros((2, 2))), axis=2)
+            wash = np.stack(((1.0 - p) * wash.sum(axis=2), np.zeros((2, 2))), axis=2)
+            probability[:, 0, certificate] += selected
+            low[:, 0, certificate] += implemented * selected
+            high[:, 0, certificate] += implemented * selected
+            wash_probability[:, int(day < wash_due), certificate] += selected_wash
+    return signals

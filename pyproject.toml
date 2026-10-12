@@ -40,6 +40,11 @@ dev = ["httpx>=0.28,<1", "pytest>=8.3,<9"]
 [project.scripts]
 abm-benchmark = "abm.french49:main"
 abm-calibrate = "abm.calibration:main"
+abm-calibrate-msm = "abm.msm:main"
+abm-baselines = "abm.baselines:main"
+abm-msm-report = "abm.msm_report:main"
+abm-disclosure-run = "abm.disclosure.runner:main"
+abm-disclosure-experiment = "abm.disclosure.experiments:main"
 abm-desktop = "abm.desktop:main"
 abm-plot = "abm.visualization:main"
 abm-web = "abm.web:main"

@@ -1,0 +1,219 @@
+{
+  "_note": "The CSV measures an observed proxy. Assigning independent empirical draws to the simulated true state with zero initial inflation is a modeling assumption, not an identified decomposition of real capability and misrepresentation. Only the initial proxy distribution is fitted. Costs, decay, delays and policy parameters are inherited assumptions, not empirical estimates.",
+  "_sources": [
+    "https://www.worldbenchmarkingalliance.org/latest/core-social-indicator-assessments-2000-largest-and-most-influential-companies-globally"
+  ],
+  "_calibration": {
+    "status": "observed_proxy_initial_distribution_only",
+    "source_csv": {
+      "path": "data/processed/disclosure_public_20261011/latest_indicator_scores.csv",
+      "bytes": 228644,
+      "sha256": "fe974ce10ec6aa650ad68ff241e0a618d5a9b25baf4150dd1f78cd712128c0c7"
+    },
+    "upstream_raw_file": {
+      "path": "data/raw/disclosure_public_20261011/wba_csi_assessments_2021_2023_april2024_v2.xlsx",
+      "bytes": 17540532,
+      "sha256": "6e94e0d739c5efc69a86e1b9d70e8480bad66e6521b9287a1feb0f613f13abda"
+    },
+    "selection": {
+      "value_column": "CSI Total (out of 20)",
+      "year_column": "YEAR ",
+      "year": "2023",
+      "year_match": "trimmed literal equality",
+      "input_rows": 1728,
+      "filtered_out_rows": 693,
+      "missing_year_rows": 0,
+      "selected_blank_value_rows": 0,
+      "included_rows": 1035,
+      "missing_policy": "exclude blank values; reject nonnumeric, nonfinite and out-of-bounds values"
+    },
+    "sample": {
+      "n": 1035,
+      "unique_values": 32,
+      "min": 0.0,
+      "max": 15.5,
+      "mean": 5.385507246376812,
+      "population_sd": 3.8592611002995967,
+      "median": 5.0,
+      "zero_mass": 0.12367149758454106,
+      "lower_bound_mass": 0.12367149758454106,
+      "upper_bound_mass": 0.0
+    },
+    "template_file": {
+      "path": "configs/domains/esg.json",
+      "bytes": 1114,
+      "sha256": "1010e0aea9a50d2c62dc43076b996fd6befd35dc75a7fee44f28b66252ac52b5"
+    },
+    "unidentified_domain_parameters": [
+      "natural_decay",
+      "real_cost_scale",
+      "real_cost_log_sd",
+      "size_cost_multipliers",
+      "cost_level_elasticity",
+      "max_change_per_period",
+      "wash_cost_ratio",
+      "implementation_delay_days",
+      "disclosure_delay_days",
+      "baseline_audit_probability",
+      "baseline_penalty",
+      "baseline_transparency",
+      "baseline_subsidy"
+    ]
+  },
+  "name": "wba_social_2023",
+  "attribute_label": "WBA CSI social observed proxy",
+  "unit": "CSI social observed proxy points, 0-20",
+  "direction": 1,
+  "initial_mean": 5.385507246376812,
+  "initial_sd": 3.8592611002995967,
+  "raw_lower": 0.0,
+  "raw_upper": 20.0,
+  "natural_decay": 0.2,
+  "real_cost_scale": 0.05,
+  "real_cost_log_sd": 0.5,
+  "size_cost_multipliers": [
+    0.6,
+    1.0,
+    1.6
+  ],
+  "cost_level_elasticity": 1.5,
+  "max_change_per_period": 0.25,
+  "wash_cost_ratio": 0.2,
+  "implementation_delay_days": 120,
+  "disclosure_delay_days": 20,
+  "baseline_audit_probability": 0.01,
+  "baseline_penalty": 0.005,
+  "baseline_transparency": 0.1,
+  "baseline_subsidy": 0.0,
+  "action_labels": {},
+  "initial_empirical_distribution": [
+    [
+      0.0,
+      128
+    ],
+    [
+      0.5,
+      32
+    ],
+    [
+      1.0,
+      26
+    ],
+    [
+      1.5,
+      23
+    ],
+    [
+      2.0,
+      37
+    ],
+    [
+      2.5,
+      38
+    ],
+    [
+      3.0,
+      37
+    ],
+    [
+      3.5,
+      49
+    ],
+    [
+      4.0,
+      53
+    ],
+    [
+      4.5,
+      49
+    ],
+    [
+      5.0,
+      55
+    ],
+    [
+      5.5,
+      65
+    ],
+    [
+      6.0,
+      57
+    ],
+    [
+      6.5,
+      51
+    ],
+    [
+      7.0,
+      50
+    ],
+    [
+      7.5,
+      33
+    ],
+    [
+      8.0,
+      32
+    ],
+    [
+      8.5,
+      31
+    ],
+    [
+      9.0,
+      26
+    ],
+    [
+      9.5,
+      17
+    ],
+    [
+      10.0,
+      14
+    ],
+    [
+      10.5,
+      12
+    ],
+    [
+      11.0,
+      17
+    ],
+    [
+      11.5,
+      20
+    ],
+    [
+      12.0,
+      12
+    ],
+    [
+      12.5,
+      12
+    ],
+    [
+      13.0,
+      17
+    ],
+    [
+      13.5,
+      15
+    ],
+    [
+      14.0,
+      10
+    ],
+    [
+      14.5,
+      5
+    ],
+    [
+      15.0,
+      8
+    ],
+    [
+      15.5,
+      4
+    ]
+  ]
+}

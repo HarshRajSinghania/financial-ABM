@@ -1,0 +1,33 @@
+{
+  "_note": "Exploratory, uncalibrated assumptions pending empirical fitting. An ESG rating is an observed proxy, not the latent true attribute. Baseline transition paths and washing traps are illustrative and do not validate policy rankings. Size cost multipliers [0.6, 1.0, 1.6] assume a large-firm cost advantage and require an equal-cost [1, 1, 1] control.",
+  "name": "esg",
+  "attribute_label": "ESG rating",
+  "unit": "score, 0-100",
+  "direction": 1,
+  "initial_mean": 50.0,
+  "initial_sd": 15.0,
+  "raw_lower": 0.0,
+  "raw_upper": 100.0,
+  "natural_decay": 0.2,
+  "real_cost_scale": 0.05,
+  "real_cost_log_sd": 0.5,
+  "size_cost_multipliers": [
+    0.6,
+    1.0,
+    1.6
+  ],
+  "cost_level_elasticity": 1.5,
+  "max_change_per_period": 0.25,
+  "wash_cost_ratio": 0.2,
+  "implementation_delay_days": 120,
+  "disclosure_delay_days": 20,
+  "baseline_audit_probability": 0.01,
+  "baseline_penalty": 0.005,
+  "baseline_transparency": 0.1,
+  "baseline_subsidy": 0.0,
+  "action_labels": {
+    "improve": "真实改善",
+    "wash": "漂绿",
+    "maintain": "维持现状"
+  }
+}
