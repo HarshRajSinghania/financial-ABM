@@ -78,7 +78,7 @@ flowchart LR
 | 机制验证 | 多种子消融、配对对照、预热期、检查点与冻结机制 |
 | Stage 2 | 信息图传播、投资者 Bandit、企业表格 Q-learning；合成五节点与 1000 人试跑 |
 | Stage 3 | 真实 SEC 8-K 快照、按会话截止时间进入的信息因子、归档重建、情景比较与 PNG/SVG 动画/数据导出；[验证与限制](reports/stage3_20261003/analysis.md) |
-| 多资产披露研究 | 通用的真实改善、夸大披露、核查和融资反馈；共享多幅度的 NPV / Q-learning 比较。独立研究入口，尚未通过完整市场与实证验收；[研究契约](docs/disclosure_research_contract.md)、[学习与固定预算](docs/disclosure_q_learning_design.md) |
+| 多资产披露研究 | 通用的真实改善、夸大披露、核查和融资反馈；共享多幅度的 NPV / Q-learning 比较。独立研究入口，尚未通过完整市场与实证验收；[文档索引与当前状态](docs/README.md)、[研究契约](docs/disclosure_research_contract.md)、[学习与固定预算](docs/disclosure_q_learning_design.md) |
 | 观察界面 | 本地 Web / 桌面 live、replay、batch；独立的 GitHub 只读展厅 |
 
 原有 Web / 桌面主应用仍使用单资产市场。独立多资产披露模块通过领域配置切换：[ESG](configs/domains/esg.json)、[公开 WBA 社会维度代理](configs/domains/wba_social_2023.json)、[AI-washing](configs/domains/ai_washing.json) 共用市场和决策实现。更换领域须同时明确指标方向、单位、分布和机制参数，并重新训练学习表；公开社会维度评分不等于真实综合 ESG，AI 参数仍为探索性假设。[公开数据与校准边界](docs/disclosure_research_contract.md)中保留来源和限制。
