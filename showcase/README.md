@@ -34,7 +34,8 @@ python -m http.server 8080 --directory _site
 | `app.js` | 机制链路、报告/指标切换、验收明细、数据导出 |
 | `build.py` | 数据读取、来源验证、离线单页构建 |
 | `test_showcase.py` | 数据与静态构建回归 |
-| `../.github/assets/observatory.svg` | GitHub README 封面 |
+| `../.github/assets/disclosure-cover.svg` | GitHub README 封面（多智能体披露研究） |
+| `../.github/assets/observatory.svg` | 原 Stage 1 单资产市场封面（保留） |
 
 ```sh
 python -m unittest discover -s showcase -p 'test_*.py'
