@@ -43,20 +43,17 @@ ESG 研究大多用历史数据检验相关性：ESG 好的公司收益更高吗
 
 ```mermaid
 flowchart LR
-    A[披露的 ESG 信息] --> B[投资者配置<br/>PM 与 II]
-    B --> C[价格 / 市值]
-    C --> D[融资成本]
-    D --> E[企业选择<br/>真实改善 · 漂绿 · 维持]
-    E --> F[披露 · 核查 · 罚款]
-    F --> A
-    G[监管者<br/>透明度 · 核查 · 罚款] -.-> F
-    B -. 按季度模仿 .-> B
+    INV["投资者 PM / II<br/>按季度相互模仿"] -->|买卖| MKT["价格 · 市值<br/>融资成本"]
+    MKT -->|融资收益| FIRM["企业<br/>真实改善 · 漂绿 · 维持"]
+    FIRM -->|披露的 ESG| INV
+    REG["监管者<br/>透明度 · 核查 · 罚款"] -->|核查与罚款| FIRM
+    REG -->|透明度| INV
     classDef info fill:#122a30,stroke:#75d8df,color:#d9f5ef
     classDef agent fill:#202b1c,stroke:#c6f590,color:#e8f8d7
     classDef policy fill:#251f31,stroke:#bca5eb,color:#eee3ff
-    class A,C,D info
-    class B,E agent
-    class F,G policy
+    class MKT info
+    class INV,FIRM agent
+    class REG policy
 ```
 
 | 参与者 | 规模 | 行为 |
