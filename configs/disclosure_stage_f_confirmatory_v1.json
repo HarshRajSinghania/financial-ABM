@@ -1,0 +1,931 @@
+{
+  "name": "disclosure_stage_f_confirmatory_v1",
+  "purpose": "confirmatory",
+  "archive": "compact",
+  "_note": "Plan stage F (research contract section 20). Development and confirmatory specs differ only in name, purpose and seeds; the development run checks the pipeline and may not change the design.",
+  "domain": "domains/csi300_huazheng_esg_quantile_copula_fixed_fine_saturated.json",
+  "market": {
+    "n_investors": 1000,
+    "n_firms": 200,
+    "trading_days": 3500,
+    "burn_in_days": 1200,
+    "initial_impact_share": 0.2,
+    "taste_median": 0.0724,
+    "imitation_rule": "pairwise",
+    "financing_exposure_fraction": 0.5,
+    "financing_spread": 0.05,
+    "financing_repricing_interval": 60,
+    "financing_horizon_days": 1260,
+    "firm_discount_rate": 0.05,
+    "intrinsic_value_log_sd": 0.9151544344205937
+  },
+  "seeds": [
+    41001,
+    41002,
+    41003,
+    41004,
+    41005,
+    41006,
+    41007,
+    41008,
+    41009,
+    41010,
+    41011,
+    41012,
+    41013,
+    41014,
+    41015,
+    41016,
+    41017,
+    41018,
+    41019,
+    41020,
+    41021,
+    41022,
+    41023,
+    41024,
+    41025,
+    41026,
+    41027,
+    41028,
+    41029,
+    41030
+  ],
+  "scenarios": [
+    {
+      "name": "B"
+    },
+    {
+      "name": "I",
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "transparency": 0.6
+        }
+      }
+    },
+    {
+      "name": "F",
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "fixed_fine": 0.00018245963214655838
+        }
+      }
+    },
+    {
+      "name": "IF",
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "transparency": 0.6,
+          "fixed_fine": 0.00018245963214655838
+        }
+      }
+    },
+    {
+      "name": "off_B",
+      "market": {
+        "taste_median": 0.0
+      }
+    },
+    {
+      "name": "off_I",
+      "market": {
+        "taste_median": 0.0
+      },
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "transparency": 0.6
+        }
+      }
+    },
+    {
+      "name": "off_F",
+      "market": {
+        "taste_median": 0.0
+      },
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "fixed_fine": 0.00018245963214655838
+        }
+      }
+    },
+    {
+      "name": "off_IF",
+      "market": {
+        "taste_median": 0.0
+      },
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "transparency": 0.6,
+          "fixed_fine": 0.00018245963214655838
+        }
+      }
+    },
+    {
+      "name": "I_0p3",
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "transparency": 0.3
+        }
+      }
+    },
+    {
+      "name": "I_0p5",
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "transparency": 0.5
+        }
+      }
+    },
+    {
+      "name": "I_0p7",
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "transparency": 0.7
+        }
+      }
+    },
+    {
+      "name": "I_0p8",
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "transparency": 0.8
+        }
+      }
+    },
+    {
+      "name": "F_0x",
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "fixed_fine": 0.0
+        }
+      }
+    },
+    {
+      "name": "F_2x",
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "fixed_fine": 9.122981607327919e-05
+        }
+      }
+    },
+    {
+      "name": "F_8x",
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "fixed_fine": 0.00036491926429311675
+        }
+      }
+    },
+    {
+      "name": "P_1x",
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "fixed_fine": 0.0,
+          "penalty": 4.5614908036639594e-05
+        }
+      }
+    },
+    {
+      "name": "P_2x",
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "fixed_fine": 0.0,
+          "penalty": 9.122981607327919e-05
+        }
+      }
+    },
+    {
+      "name": "P_4x",
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "fixed_fine": 0.0,
+          "penalty": 0.00018245963214655838
+        }
+      }
+    },
+    {
+      "name": "eqcost_B",
+      "domain": {
+        "size_cost_multipliers": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "name": "eqcost_I",
+      "domain": {
+        "size_cost_multipliers": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "transparency": 0.6
+        }
+      }
+    },
+    {
+      "name": "eqcost_F",
+      "domain": {
+        "size_cost_multipliers": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "fixed_fine": 0.00018245963214655838
+        }
+      }
+    },
+    {
+      "name": "eqcost_IF",
+      "domain": {
+        "size_cost_multipliers": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "transparency": 0.6,
+          "fixed_fine": 0.00018245963214655838
+        }
+      }
+    },
+    {
+      "name": "zeroII_B",
+      "market": {
+        "initial_impact_share": 0.0
+      }
+    },
+    {
+      "name": "null_control",
+      "market": {
+        "taste_median": 0.0
+      },
+      "policy": {
+        "baseline": {
+          "audit_probability": 0.0,
+          "transparency": 0.0,
+          "fixed_fine": 0.0,
+          "penalty": 0.0
+        }
+      }
+    },
+    {
+      "name": "decay0_B",
+      "domain": {
+        "natural_decay": 0.0
+      }
+    },
+    {
+      "name": "decay0_I",
+      "domain": {
+        "natural_decay": 0.0
+      },
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "transparency": 0.6
+        }
+      }
+    },
+    {
+      "name": "decay0_F",
+      "domain": {
+        "natural_decay": 0.0
+      },
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "fixed_fine": 0.00018245963214655838
+        }
+      }
+    },
+    {
+      "name": "decay0_IF",
+      "domain": {
+        "natural_decay": 0.0
+      },
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "transparency": 0.6,
+          "fixed_fine": 0.00018245963214655838
+        }
+      }
+    },
+    {
+      "name": "indep_B",
+      "domain": {
+        "initial_size_rank_correlation": 0.0
+      }
+    },
+    {
+      "name": "indep_I",
+      "domain": {
+        "initial_size_rank_correlation": 0.0
+      },
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "transparency": 0.6
+        }
+      }
+    },
+    {
+      "name": "indep_F",
+      "domain": {
+        "initial_size_rank_correlation": 0.0
+      },
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "fixed_fine": 0.00018245963214655838
+        }
+      }
+    },
+    {
+      "name": "booksd_B",
+      "market": {
+        "intrinsic_value_log_sd": 1.2984286951303177
+      }
+    },
+    {
+      "name": "booksd_I",
+      "market": {
+        "intrinsic_value_log_sd": 1.2984286951303177
+      },
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "transparency": 0.6
+        }
+      }
+    },
+    {
+      "name": "booksd_F",
+      "market": {
+        "intrinsic_value_log_sd": 1.2984286951303177
+      },
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "fixed_fine": 0.00018245963214655838
+        }
+      }
+    },
+    {
+      "name": "pm1_t0_s0",
+      "market": {
+        "taste_median": 0.0,
+        "initial_impact_share": 0.0
+      }
+    },
+    {
+      "name": "pm1_t0_s0p5",
+      "market": {
+        "taste_median": 0.0,
+        "initial_impact_share": 0.5
+      }
+    },
+    {
+      "name": "pm1_t0_s0p8",
+      "market": {
+        "taste_median": 0.0,
+        "initial_impact_share": 0.8
+      }
+    },
+    {
+      "name": "pm1_t0p0362_s0",
+      "market": {
+        "taste_median": 0.0362,
+        "initial_impact_share": 0.0
+      }
+    },
+    {
+      "name": "pm1_t0p0362_s0p2",
+      "market": {
+        "taste_median": 0.0362,
+        "initial_impact_share": 0.2
+      }
+    },
+    {
+      "name": "pm1_t0p0362_s0p5",
+      "market": {
+        "taste_median": 0.0362,
+        "initial_impact_share": 0.5
+      }
+    },
+    {
+      "name": "pm1_t0p0362_s0p8",
+      "market": {
+        "taste_median": 0.0362,
+        "initial_impact_share": 0.8
+      }
+    },
+    {
+      "name": "pm1_t0p0724_s0p5",
+      "market": {
+        "taste_median": 0.0724,
+        "initial_impact_share": 0.5
+      }
+    },
+    {
+      "name": "pm1_t0p0724_s0p8",
+      "market": {
+        "taste_median": 0.0724,
+        "initial_impact_share": 0.8
+      }
+    },
+    {
+      "name": "pm1_t0p1448_s0",
+      "market": {
+        "taste_median": 0.1448,
+        "initial_impact_share": 0.0
+      }
+    },
+    {
+      "name": "pm1_t0p1448_s0p2",
+      "market": {
+        "taste_median": 0.1448,
+        "initial_impact_share": 0.2
+      }
+    },
+    {
+      "name": "pm1_t0p1448_s0p5",
+      "market": {
+        "taste_median": 0.1448,
+        "initial_impact_share": 0.5
+      }
+    },
+    {
+      "name": "pm1_t0p1448_s0p8",
+      "market": {
+        "taste_median": 0.1448,
+        "initial_impact_share": 0.8
+      }
+    },
+    {
+      "name": "pm2_w0p05_tau0p1",
+      "domain": {
+        "wash_cost_ratio": 0.05
+      }
+    },
+    {
+      "name": "pm2_w0p05_tau0p3",
+      "domain": {
+        "wash_cost_ratio": 0.05
+      },
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "transparency": 0.3
+        }
+      }
+    },
+    {
+      "name": "pm2_w0p05_tau0p6",
+      "domain": {
+        "wash_cost_ratio": 0.05
+      },
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "transparency": 0.6
+        }
+      }
+    },
+    {
+      "name": "pm2_w0p05_tau0p8",
+      "domain": {
+        "wash_cost_ratio": 0.05
+      },
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "transparency": 0.8
+        }
+      }
+    },
+    {
+      "name": "pm2_w0p1_tau0p1",
+      "domain": {
+        "wash_cost_ratio": 0.1
+      }
+    },
+    {
+      "name": "pm2_w0p1_tau0p3",
+      "domain": {
+        "wash_cost_ratio": 0.1
+      },
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "transparency": 0.3
+        }
+      }
+    },
+    {
+      "name": "pm2_w0p1_tau0p6",
+      "domain": {
+        "wash_cost_ratio": 0.1
+      },
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "transparency": 0.6
+        }
+      }
+    },
+    {
+      "name": "pm2_w0p1_tau0p8",
+      "domain": {
+        "wash_cost_ratio": 0.1
+      },
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "transparency": 0.8
+        }
+      }
+    },
+    {
+      "name": "pm2_w0p4_tau0p1",
+      "domain": {
+        "wash_cost_ratio": 0.4
+      }
+    },
+    {
+      "name": "pm2_w0p4_tau0p3",
+      "domain": {
+        "wash_cost_ratio": 0.4
+      },
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "transparency": 0.3
+        }
+      }
+    },
+    {
+      "name": "pm2_w0p4_tau0p6",
+      "domain": {
+        "wash_cost_ratio": 0.4
+      },
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "transparency": 0.6
+        }
+      }
+    },
+    {
+      "name": "pm2_w0p4_tau0p8",
+      "domain": {
+        "wash_cost_ratio": 0.4
+      },
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "transparency": 0.8
+        }
+      }
+    }
+  ],
+  "comparisons": [
+    {
+      "name": "P1_market_full_period",
+      "weights": {
+        "B": 1,
+        "off_B": -1
+      },
+      "primary": true,
+      "primary_metric": "full_period_change.equal_weight_sd"
+    },
+    {
+      "name": "P2_I_minus_F",
+      "weights": {
+        "I": 1,
+        "F": -1
+      },
+      "primary": true
+    },
+    {
+      "name": "P3_interaction",
+      "weights": {
+        "IF": 1,
+        "B": -1,
+        "off_IF": -1,
+        "off_B": 1
+      },
+      "primary": true
+    },
+    {
+      "name": "P4_size_cost_gap",
+      "weights": {
+        "B": 1,
+        "eqcost_B": -1
+      },
+      "primary": true,
+      "primary_metric": "size.large_minus_small_sd"
+    },
+    {
+      "name": "I_minus_B",
+      "weights": {
+        "I": 1,
+        "B": -1
+      }
+    },
+    {
+      "name": "F_minus_B",
+      "weights": {
+        "F": 1,
+        "B": -1
+      }
+    },
+    {
+      "name": "IF_minus_B",
+      "weights": {
+        "IF": 1,
+        "B": -1
+      }
+    },
+    {
+      "name": "off_I_minus_B",
+      "weights": {
+        "off_I": 1,
+        "off_B": -1
+      }
+    },
+    {
+      "name": "off_F_minus_B",
+      "weights": {
+        "off_F": 1,
+        "off_B": -1
+      }
+    },
+    {
+      "name": "off_IF_minus_B",
+      "weights": {
+        "off_IF": 1,
+        "off_B": -1
+      }
+    },
+    {
+      "name": "eqcost_I_minus_B",
+      "weights": {
+        "eqcost_I": 1,
+        "eqcost_B": -1
+      }
+    },
+    {
+      "name": "eqcost_F_minus_B",
+      "weights": {
+        "eqcost_F": 1,
+        "eqcost_B": -1
+      }
+    },
+    {
+      "name": "eqcost_IF_minus_B",
+      "weights": {
+        "eqcost_IF": 1,
+        "eqcost_B": -1
+      }
+    },
+    {
+      "name": "decay0_I_minus_B",
+      "weights": {
+        "decay0_I": 1,
+        "decay0_B": -1
+      }
+    },
+    {
+      "name": "decay0_F_minus_B",
+      "weights": {
+        "decay0_F": 1,
+        "decay0_B": -1
+      }
+    },
+    {
+      "name": "decay0_IF_minus_B",
+      "weights": {
+        "decay0_IF": 1,
+        "decay0_B": -1
+      }
+    },
+    {
+      "name": "off_I_minus_F",
+      "weights": {
+        "off_I": 1,
+        "off_F": -1
+      }
+    },
+    {
+      "name": "eqcost_I_minus_F",
+      "weights": {
+        "eqcost_I": 1,
+        "eqcost_F": -1
+      }
+    },
+    {
+      "name": "decay0_I_minus_F",
+      "weights": {
+        "decay0_I": 1,
+        "decay0_F": -1
+      }
+    },
+    {
+      "name": "indep_I_minus_F",
+      "weights": {
+        "indep_I": 1,
+        "indep_F": -1
+      }
+    },
+    {
+      "name": "booksd_I_minus_F",
+      "weights": {
+        "booksd_I": 1,
+        "booksd_F": -1
+      }
+    },
+    {
+      "name": "indep_I_minus_B",
+      "weights": {
+        "indep_I": 1,
+        "indep_B": -1
+      }
+    },
+    {
+      "name": "indep_F_minus_B",
+      "weights": {
+        "indep_F": 1,
+        "indep_B": -1
+      }
+    },
+    {
+      "name": "booksd_I_minus_B",
+      "weights": {
+        "booksd_I": 1,
+        "booksd_B": -1
+      }
+    },
+    {
+      "name": "booksd_F_minus_B",
+      "weights": {
+        "booksd_F": 1,
+        "booksd_B": -1
+      }
+    },
+    {
+      "name": "I_0p3_minus_B",
+      "weights": {
+        "I_0p3": 1,
+        "B": -1
+      }
+    },
+    {
+      "name": "I_0p5_minus_B",
+      "weights": {
+        "I_0p5": 1,
+        "B": -1
+      }
+    },
+    {
+      "name": "I_0p7_minus_B",
+      "weights": {
+        "I_0p7": 1,
+        "B": -1
+      }
+    },
+    {
+      "name": "I_0p8_minus_B",
+      "weights": {
+        "I_0p8": 1,
+        "B": -1
+      }
+    },
+    {
+      "name": "F_0x_minus_B",
+      "weights": {
+        "F_0x": 1,
+        "B": -1
+      }
+    },
+    {
+      "name": "F_2x_minus_B",
+      "weights": {
+        "F_2x": 1,
+        "B": -1
+      }
+    },
+    {
+      "name": "F_8x_minus_B",
+      "weights": {
+        "F_8x": 1,
+        "B": -1
+      }
+    },
+    {
+      "name": "P_1x_minus_B",
+      "weights": {
+        "P_1x": 1,
+        "B": -1
+      }
+    },
+    {
+      "name": "P_2x_minus_B",
+      "weights": {
+        "P_2x": 1,
+        "B": -1
+      }
+    },
+    {
+      "name": "P_4x_minus_B",
+      "weights": {
+        "P_4x": 1,
+        "B": -1
+      }
+    },
+    {
+      "name": "P_1x_minus_fixed_1x",
+      "weights": {
+        "P_1x": 1,
+        "B": -1
+      }
+    },
+    {
+      "name": "P_2x_minus_fixed_2x",
+      "weights": {
+        "P_2x": 1,
+        "F_2x": -1
+      }
+    },
+    {
+      "name": "P_4x_minus_fixed_4x",
+      "weights": {
+        "P_4x": 1,
+        "F": -1
+      }
+    },
+    {
+      "name": "F_size_cost_gap",
+      "weights": {
+        "F": 1,
+        "eqcost_F": -1
+      }
+    },
+    {
+      "name": "decay0_B_minus_B",
+      "weights": {
+        "decay0_B": 1,
+        "B": -1
+      }
+    }
+  ],
+  "analysis": {
+    "primary_metric": "true_change.equal_weight_sd",
+    "metrics": [
+      "true_change.equal_weight_sd",
+      "true_change.fixed_start_cap_weight_sd",
+      "decay_adjusted_gain.equal_weight_sd",
+      "full_period_change.equal_weight_sd",
+      "inflation.mean_sd",
+      "size.large_minus_small_sd",
+      "terminal_year.change_from_initial_sd",
+      "terminal_year.decay_adjusted_from_initial_sd",
+      "terminal_year.inflation_mean_sd",
+      "costs.resource_cost_fraction_initial_cap",
+      "costs.private_net_outflow_fraction_initial_cap",
+      "costs.fine_transfer_fraction_initial_cap",
+      "impact.final_share"
+    ],
+    "confidence_level": 0.95
+  }
+}

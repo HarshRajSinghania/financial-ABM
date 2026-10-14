@@ -112,6 +112,12 @@ def compute_metrics(
         }
 
     change = true[end] - true[start]
+    # Terminal-year level against the no-action path from day zero: bounded natural decay only.
+    terminal_days = np.arange(terminal_start, days)
+    terminal_baseline = np.maximum(
+        true[0][None, :] - domain.natural_decay * terminal_days[:, None] / TRADING_DAYS_PER_YEAR,
+        domain.goodness_bounds[0],
+    )
     baseline = np.maximum(
         true[start] - domain.natural_decay * (end - start) / TRADING_DAYS_PER_YEAR,
         domain.goodness_bounds[0],
@@ -168,6 +174,7 @@ def compute_metrics(
             "observations": days - terminal_start,
             "complete_year": days - terminal_start == TRADING_DAYS_PER_YEAR,
             "change_from_initial_sd": float((true[terminal_start:] - true[0]).mean()),
+            "decay_adjusted_from_initial_sd": float((true[terminal_start:] - terminal_baseline).mean()),
             "inflation_mean_sd": float(inflation[terminal_start:].mean()),
         },
         "decay_adjusted_gain": summarize(gain),

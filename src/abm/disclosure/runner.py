@@ -127,10 +127,18 @@ def write_json(path: Path, payload: dict[str, Any]) -> None:
     temporary.replace(path)
 
 
-def save_result(path: Path, result: DisclosureResult) -> None:
+# Day-by-firm float matrices dropped by a compact archive (about 27 of 28 MB at contract scale).
+# The manifest fingerprint still covers them; a deterministic replay regenerates them.
+COMPACT_OMITTED = ("true_goodness", "public_signal", "planning_signal", "market_prices", "market_intrinsic_values")
+
+
+def save_result(path: Path, result: DisclosureResult, *, omit: tuple[str, ...] = ()) -> None:
     arrays = {item.name: getattr(result, item.name) for item in fields(result)
               if item.name != "market" and getattr(result, item.name) is not None}
     arrays.update({"market_" + item.name: getattr(result.market, item.name) for item in fields(result.market)})
+    if set(omit) - set(arrays):
+        raise ValueError("cannot omit unknown result arrays")
+    arrays = {name: value for name, value in arrays.items() if name not in omit}
     temporary = path.with_suffix(".tmp.npz")
     np.savez_compressed(temporary, **arrays)
     temporary.replace(path)
@@ -283,8 +291,15 @@ def run_and_archive(
     learning_metadata: dict[str, Any] | None = None,
     coverage_target: int = 0,
     common_prepolicy_sha256: str | None = None,
+    archive: str = "full",
 ) -> dict[str, Any]:
-    """Save inputs and source before running; completion requires a result hash."""
+    """Save inputs and source before running; completion requires a result hash.
+
+    ``archive="compact"`` leaves COMPACT_OMITTED out of result.npz; such archives cannot be loaded
+    with load_result, but metrics, validation and the result fingerprint are complete.
+    """
+    if archive not in ("full", "compact"):
+        raise ValueError("archive must be 'full' or 'compact'")
     if type(coverage_target) is not int or coverage_target < 0:
         raise ValueError("coverage_target must be a nonnegative integer")
     policy = policy or PolicySchedule.constant(domain)
@@ -343,9 +358,9 @@ def run_and_archive(
             save_frozen(destination / "input_model.npz", learner, learning_metadata)
             model_artifacts.append("input_model.npz")
         package_parent = Path(__file__).resolve().parents[2]
-        with zipfile.ZipFile(destination / "source.zip", "x", compression=zipfile.ZIP_DEFLATED) as archive:
+        with zipfile.ZipFile(destination / "source.zip", "x", compression=zipfile.ZIP_DEFLATED) as bundle:
             for relative in identity["source_hashes"]:
-                archive.write(package_parent / relative, relative)
+                bundle.write(package_parent / relative, relative)
         if source_hashes() != identity["source_hashes"]:
             raise RuntimeError("source changed while archiving the run")
         market = DisclosureMarket(config, domain, policy, learner=learner, training=training,
@@ -372,9 +387,12 @@ def run_and_archive(
         validation = validate_market(result.market, config)
         if source_hashes() != identity["source_hashes"]:
             raise RuntimeError("source changed during the run")
-        save_result(destination / "result.npz", result)
+        save_result(destination / "result.npz", result, omit=COMPACT_OMITTED if archive == "compact" else ())
         write_json(destination / "metrics.json", metrics)
         write_json(destination / "validation.json", validation)
+        if archive == "compact":
+            manifest["compact_archive"] = {"omitted_result_arrays": list(COMPACT_OMITTED),
+                                           "note": "The result fingerprint covers the full result; replay to regenerate."}
         manifest.update({
             "status": "complete",
             "elapsed_seconds": time.perf_counter() - started,

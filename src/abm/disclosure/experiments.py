@@ -34,6 +34,8 @@ def freeze_spec(path: str | Path) -> dict:
         raise ValueError("at least two distinct nonnegative seeds are required")
     if spec["purpose"] == "confirmatory" and len(seeds) < 30:
         raise ValueError("confirmatory experiments require at least 30 seeds")
+    if spec.get("archive", "full") not in ("full", "compact"):
+        raise ValueError("archive must be 'full' or 'compact'")
     raw_domain = json.loads((path.parent / spec["domain"]).read_text(encoding="utf-8"))
     domain = DomainSpec.from_dict({key: value for key, value in raw_domain.items() if not key.startswith("_")})
     base_config = MarketConfig.from_dict(spec["market"])
@@ -95,12 +97,13 @@ def _inputs(scenario: dict, seed: int):
     return config, domain, schedule
 
 
-def _run_trial(scenario: dict, seed: int, destination: str, purpose: str, expected_id: str) -> dict:
+def _run_trial(scenario: dict, seed: int, destination: str, purpose: str, expected_id: str,
+               archive: str = "full") -> dict:
     config, domain, policy = _inputs(scenario, seed)
     if run_identity(config, domain, policy)["run_id"] != expected_id:
         raise RuntimeError("source or environment changed before a trial started")
     try:
-        run_and_archive(config, domain, destination, policy, purpose=purpose)
+        run_and_archive(config, domain, destination, policy, purpose=purpose, archive=archive)
         return {"status": "complete", "path": destination}
     except Exception as error:
         failed_path = Path(destination)
@@ -319,7 +322,8 @@ def _run_frozen_experiment(frozen: dict, destination: Path, workers: int) -> Pat
                     complete = True
             if not complete:
                 output = trial_path / f"attempt_{len(attempts) + 1:03d}"
-                jobs.append((scenario, seed, str(output), frozen["spec"]["purpose"], expected_id))
+                jobs.append((scenario, seed, str(output), frozen["spec"]["purpose"], expected_id,
+                             frozen["spec"].get("archive", "full")))
     if source_hashes() != frozen["source_hashes"]:
         raise RuntimeError("source changed while preparing experiment")
     if workers == 1:

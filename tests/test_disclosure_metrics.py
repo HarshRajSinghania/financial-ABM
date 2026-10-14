@@ -67,6 +67,7 @@ def test_full_period_and_short_terminal_summary_use_day_zero_not_burn_in(result)
     assert metrics["terminal_year"] == {
         "start_day": 0, "observations": 5, "complete_year": False,
         "change_from_initial_sd": pytest.approx(.18),
+        "decay_adjusted_from_initial_sd": pytest.approx(.20),
         "inflation_mean_sd": pytest.approx(1.4 / 15),
     }
     zero_window = compute_metrics(result, CONFIG, DOMAIN, start_day=4)
@@ -92,6 +93,7 @@ def test_terminal_summary_uses_exactly_last_252_state_days(result):
     assert metrics["terminal_year"] == {
         "start_day": 2, "observations": 252, "complete_year": True,
         "change_from_initial_sd": pytest.approx(-.5),
+        "decay_adjusted_from_initial_sd": pytest.approx(-.5 + .01 * 127.5),
         "inflation_mean_sd": pytest.approx(.1),
     }
 
@@ -130,6 +132,15 @@ def test_natural_decay_counterfactual_respects_lower_bound(result):
     metrics = compute_metrics(replace(result, true_goodness=true), CONFIG, DOMAIN)
     assert metrics["decay_adjusted_gain"]["equal_weight_sd"] == pytest.approx(.14 / 3)
     assert metrics["size"]["large"]["decay_adjusted_gain_sd"] == pytest.approx(0.)
+
+
+def test_terminal_decay_adjustment_starts_at_day_zero_and_respects_lower_bound(result):
+    low = DOMAIN.goodness_bounds[0]
+    true = result.true_goodness.copy()
+    true[0, 0] = low + .01
+    metrics = compute_metrics(replace(result, true_goodness=true), CONFIG, DOMAIN)
+    # Firm 0's no-action path sits on the bound from day 1; the others decay by .01 a day from zero.
+    assert metrics["terminal_year"]["decay_adjusted_from_initial_sd"] == pytest.approx((2.9 - 4 * low) / 15)
 
 
 def test_lower_is_better_keeps_raw_change_signed_and_efficiency_beneficial(result):
