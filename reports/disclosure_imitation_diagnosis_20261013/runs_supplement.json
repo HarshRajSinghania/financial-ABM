@@ -1,0 +1,572 @@
+{
+  "status": "post hoc supplement; not part of the section 18.3 design",
+  "cell": {
+    "label": "pairwise_taste0724_0.2",
+    "rule": "pairwise",
+    "taste_median": 0.0724,
+    "initial_probability": 0.2,
+    "imitation_interval": 60
+  },
+  "control": "pairwise_zero_0.2",
+  "script_sha256": "ffb5ea3823db6386feb55c8e1f7b5e0e5d14b6dcf621f207bd02c5c1711f1887",
+  "source_hashes": {
+    "abm/__init__.py": "9b9e11c347cf20ff8170e08477e633427383c6aeaa97da8f1eea709467e03752",
+    "abm/baselines.py": "4e7092d5ba402febbfac320c3364eccbd3cfd20a657dfa3605aae8c9e0956610",
+    "abm/calibration.py": "36b7c015f2cffc99cc1b05477a71bef9b5029d52e098e7d53df6566aa6d7fb08",
+    "abm/config.py": "8aa583ba39a53ea8f17ca7e8d924731695ea84dcb48fa52ed831dad3497b6a19",
+    "abm/data_sources.py": "fec0558d5e334de8d8e03251d6198eabf9cd744a28186ba9abf0a9999bce5e96",
+    "abm/desktop.py": "31314c0fc135dd0c03929f7b01b41ac0ec98c27487c484ceb53e90d87bce78b6",
+    "abm/disclosure/__init__.py": "d14301a861bf0c116b993a54b09ae97ebc2500da34caafb5fb84794564edaaf8",
+    "abm/disclosure/calibration.py": "e8afa9cf36c5780cc32dc116f80dabcf54de883dadba2386e6705db29a27e441",
+    "abm/disclosure/config.py": "4bf3b3e02a7d0455129c2561a47f310cb3274596382f825d80a1065e9b36bbd1",
+    "abm/disclosure/domain.py": "0330aad59186b0c91abc4f6aa5c7ded040bc4b0678b80355c57a530882fb18a1",
+    "abm/disclosure/experiments.py": "f5d25a19a80cf354fef5a0b90baf35c391f9025abf40c22c54ff3cf5410e4e47",
+    "abm/disclosure/financing.py": "0fc622d9ea083eca53a8e593c236fa0dd59125b4b08d556f5f4963b1160f5323",
+    "abm/disclosure/firms.py": "6ed925a4dc1c6fb5e591fba46bdc42943fcc7bc9d5e6cd88df1f76f3f8dbfbe9",
+    "abm/disclosure/game.py": "769bc37e8ca978ad9c3de638d2d73fff2644325d79a0bb03f92cf8c4c8333a3e",
+    "abm/disclosure/harness.py": "7674451ec6a6834ef2b3e8ed81773a0539809b995d641424c5bd285477f36c37",
+    "abm/disclosure/investors.py": "53e75a9cc09ac1e7466f2126606fe68e1e5e3887df94e32572fb2ff3c2a2c5db",
+    "abm/disclosure/learning.py": "e2b46d8130b0805c5a8eeb35b23e4cee487f39b9d0430f8cfac1948d621f7c5a",
+    "abm/disclosure/market.py": "addbc4f9f1ea6841d9a126359569ddaa8e62cca3e0c70b235326c646a34e47a5",
+    "abm/disclosure/metrics.py": "d475c45a7f2975ccf92b3b3984f578b7f802d12ee6195c96443dadc6890f4867",
+    "abm/disclosure/phase.py": "c7ca7b3ee3ee78034c5a67190540da25957a8e7054fb75ae48d3eb4def234841",
+    "abm/disclosure/policy.py": "b86f66bcb1ea12e65bb4c4944a66a2667afaa5c33dacdf4d48c4f18b40f7bd17",
+    "abm/disclosure/report.py": "21b39849bcc6bc22f67cfd1c714c20d5b07c1d58ade22c9399fcf9c3575d72f6",
+    "abm/disclosure/runner.py": "5812be910b15ddfc496b9e02464edd02b225e376a9cf767059475b9c809fd5e2",
+    "abm/disclosure/training.py": "1019e988b5d0f9a615ae52a7f5802106522da45a369b7fafedddd546aa90fb14",
+    "abm/disclosure/validate.py": "a01d05b738b26d9a63d47500a9f82f6d1e8a59168d4629feaae7369be63eafd2",
+    "abm/french49.py": "2e1948232d414452986d7e94897bff795b12a6254c06a855000994c9838c8c07",
+    "abm/harness.py": "838f87827059fb642751b722ea3e8138513e6a5874781b37d91b81d4f09badc6",
+    "abm/information.py": "7044d4cf100ff5d01dc957ac62c375303a89a510c65c736561ba4e23cfadce0e",
+    "abm/learning.py": "3fb1efeb439d137b404af9daa9fd856c45b66d3d85f0983ab73a31b02e2621b6",
+    "abm/manifest.py": "ca129defcd127b7153520bc2a06ac58288761b3f186e19e1f99db057413aa762",
+    "abm/mechanism_validation.py": "3c70fc90b4421eb4989f77b1814a2ea7e3e738c4c90c4ee9481fd3af5ba74d88",
+    "abm/microstructure.py": "dc48ef60cb4f8222012dc06125d5b5364eaa0e50013eee6fe0673a0cf80610cf",
+    "abm/msm.py": "37e62ff0ae312a1e4b2a49c4a3fc06e80752daac7f343f340f7b0628e6df425a",
+    "abm/msm_report.py": "57918bfaae3d95a903bcc10e064076871a7a6a2de6991871ce2d654ae16dad96",
+    "abm/platform_tuning.py": "bb7ebbbcb6e99ba3458c73f76ae1423356a4f1fc9f6f48f1942bc9b99e0bbbc0",
+    "abm/policies.py": "478257d30db939482c07af8cf946a99fadf0c7816cde18e9aa0e3bd4fec9a678",
+    "abm/population.py": "4eed3d8ff73854e7953ba07e5035aba6325a52f1cac46cfc9ebb50e2f1fa8869",
+    "abm/reproduction.py": "e935a76feb0e37a83755fddf043c3f6233c66065be1792e84a0d04d2eaf13e08",
+    "abm/run_service.py": "39b25a6539c03a379bd3e4b26b5f68ff85d8cbc72badaa644d75c8ef9447a92e",
+    "abm/runner.py": "77595da272c3148e567fcc8d977590dcb67e9135d1515363f2bd0f80b43e0818",
+    "abm/scenario.py": "48042eabede6228b144288d5f3d89d444ef4a13fb979cecf138ca795867a5879",
+    "abm/schemas.py": "44360f9c9bb313c89a95b487d2c20485ce5a16ec84b1a80a312b74afa60a13d1",
+    "abm/settlement.py": "5ecb577bf331b177b5a02e73eb5d95e7fccd72d854848169fe2577110726d691",
+    "abm/stage1_diagnostics.py": "3a7eb99e123c4051d2d0f119ff758ca498cab659d26931659eab3d196c4e3122",
+    "abm/stage1_freeze.py": "3d27b4eb3b8e0abb563256dc9c993bd71293500a483b6d1e36ad9f0c6c3d7cf3",
+    "abm/stage2.py": "f736d19aa3e00034ee222bc3b0f375519943efbf1265a6827a1533de5e36c8a0",
+    "abm/stage2_view.py": "71d66005963a475c1a787ef9233c99892b45fd8526f0b43a8404484a872d96f5",
+    "abm/stage3.py": "b2e888d94271071fedc417a3278750babf13e0e92b656e47e1de20cc0fe9bcf9",
+    "abm/tabular.py": "031ece614f1e049cbf143818386d6aefb44d4a3c7d50b28d0a4fb1e5f40d9ac9",
+    "abm/telemetry.py": "78e4ab1e1b647fab65e4e926604b884f2f1a833a4f6479e211f3a64b7efa09ee",
+    "abm/visualization.py": "db75549c4e7680dcfe988d05531fae79489a80c693759c750738cb1fba9e8765",
+    "abm/web.py": "96d453dee9a13b2b4ba3e3bdb1f4a74114ca2fcb97af6657a04b5418f7dc6349"
+  },
+  "runs_json_sha256": "25bbff9244c54474732f3a049947bc1ecd04ee337a5b2b6489782d02fd7ce4a4",
+  "summary": {
+    "share_change": {
+      "mean": 0.03175,
+      "ci_low": 0.016997774699137356,
+      "ci_high": 0.04650222530086265,
+      "p_value": 0.00024261476681524188,
+      "n": 20
+    },
+    "paired_share_change_minus_zero_taste": {
+      "mean": 0.02665,
+      "ci_low": 0.017389667843871467,
+      "ci_high": 0.03591033215612853,
+      "p_value": 8.543611760971626e-06,
+      "n": 20
+    },
+    "paired_wealth_share_change_minus_zero_taste": {
+      "mean": 0.028670782391977335,
+      "ci_low": 0.017745530637025355,
+      "ci_high": 0.03959603414692932,
+      "p_value": 2.677589102779194e-05,
+      "n": 20
+    }
+  },
+  "records": [
+    {
+      "label": "pairwise_taste0724_0.2",
+      "rule": "pairwise",
+      "taste_median": 0.0724,
+      "initial_probability": 0.2,
+      "imitation_interval": 60,
+      "seed": 29001,
+      "fingerprint": "3537776471a64b7e94b1f50cb8866fa76f5d00c3d4d542642596c700372717da",
+      "seconds": 228.03531880001538,
+      "share": {
+        "day_0": 0.204,
+        "day_1200": 0.233,
+        "day_3500": 0.259
+      },
+      "wealth_share": {
+        "day_0": 0.20210087861891413,
+        "day_1200": 0.23282022178180697,
+        "day_3500": 0.2539582404787864
+      },
+      "price_cap_hits": 0,
+      "periods": 58,
+      "artifact": "pairwise_taste0724_0.2_29001.npz",
+      "artifact_sha256": "d80bd57235fc560882cef6206999b3cf665be015bc82b4938766d10295970e2a"
+    },
+    {
+      "label": "pairwise_taste0724_0.2",
+      "rule": "pairwise",
+      "taste_median": 0.0724,
+      "initial_probability": 0.2,
+      "imitation_interval": 60,
+      "seed": 29002,
+      "fingerprint": "0236c51bc3efcf17c0af2d59aa7f9b35057105d287dcd2063f5c18110370eb1f",
+      "seconds": 230.53952239995124,
+      "share": {
+        "day_0": 0.22,
+        "day_1200": 0.228,
+        "day_3500": 0.247
+      },
+      "wealth_share": {
+        "day_0": 0.2286488795185619,
+        "day_1200": 0.23569428561773348,
+        "day_3500": 0.2526415038480464
+      },
+      "price_cap_hits": 0,
+      "periods": 58,
+      "artifact": "pairwise_taste0724_0.2_29002.npz",
+      "artifact_sha256": "b349a9306e528ed8497144d11f50ba429c0aad2758f379e0b10c656e20d14e01"
+    },
+    {
+      "label": "pairwise_taste0724_0.2",
+      "rule": "pairwise",
+      "taste_median": 0.0724,
+      "initial_probability": 0.2,
+      "imitation_interval": 60,
+      "seed": 29003,
+      "fingerprint": "7f0b66dc8d09842d53be3353877b5543f27b2c5478c18c594e04772194a3f26d",
+      "seconds": 229.82778099999996,
+      "share": {
+        "day_0": 0.194,
+        "day_1200": 0.208,
+        "day_3500": 0.271
+      },
+      "wealth_share": {
+        "day_0": 0.1885442948535855,
+        "day_1200": 0.20793770374835577,
+        "day_3500": 0.28623835365570527
+      },
+      "price_cap_hits": 1,
+      "periods": 58,
+      "artifact": "pairwise_taste0724_0.2_29003.npz",
+      "artifact_sha256": "084e2890e2a9601336eb21a0eb131f8845ab67e49c742470f58551e2e250089c"
+    },
+    {
+      "label": "pairwise_taste0724_0.2",
+      "rule": "pairwise",
+      "taste_median": 0.0724,
+      "initial_probability": 0.2,
+      "imitation_interval": 60,
+      "seed": 29004,
+      "fingerprint": "3f745a156948af9e8a28f860eb0f9551fc454155fb14a6b43a5d2c621bfeaa86",
+      "seconds": 227.2153585999622,
+      "share": {
+        "day_0": 0.198,
+        "day_1200": 0.185,
+        "day_3500": 0.198
+      },
+      "wealth_share": {
+        "day_0": 0.18882112433698992,
+        "day_1200": 0.1844232997612272,
+        "day_3500": 0.193830185137997
+      },
+      "price_cap_hits": 0,
+      "periods": 58,
+      "artifact": "pairwise_taste0724_0.2_29004.npz",
+      "artifact_sha256": "d55424c95e6a386ca2ecc26cff57a5fb77fa26d3988fe95dd2ca58c0cfc30e1a"
+    },
+    {
+      "label": "pairwise_taste0724_0.2",
+      "rule": "pairwise",
+      "taste_median": 0.0724,
+      "initial_probability": 0.2,
+      "imitation_interval": 60,
+      "seed": 29005,
+      "fingerprint": "f8428591d8f908cf7ac8aef3ee6abdfb972efedb4a958122d5b8a3e61b0671fb",
+      "seconds": 228.86068550002528,
+      "share": {
+        "day_0": 0.186,
+        "day_1200": 0.192,
+        "day_3500": 0.216
+      },
+      "wealth_share": {
+        "day_0": 0.19554886000691177,
+        "day_1200": 0.20902662094580368,
+        "day_3500": 0.24018929962957059
+      },
+      "price_cap_hits": 0,
+      "periods": 58,
+      "artifact": "pairwise_taste0724_0.2_29005.npz",
+      "artifact_sha256": "d86f03e03a6d87f7351a5029d576e609b113ada581a2e3f9248117315c2a7b42"
+    },
+    {
+      "label": "pairwise_taste0724_0.2",
+      "rule": "pairwise",
+      "taste_median": 0.0724,
+      "initial_probability": 0.2,
+      "imitation_interval": 60,
+      "seed": 29006,
+      "fingerprint": "0637c6b0f0042cb96f98b30c4efb2e5bccb811495602a90813fcf53b580ddbd9",
+      "seconds": 230.25473500002408,
+      "share": {
+        "day_0": 0.189,
+        "day_1200": 0.183,
+        "day_3500": 0.183
+      },
+      "wealth_share": {
+        "day_0": 0.18298699426321827,
+        "day_1200": 0.17923435413536334,
+        "day_3500": 0.17659096644896496
+      },
+      "price_cap_hits": 0,
+      "periods": 58,
+      "artifact": "pairwise_taste0724_0.2_29006.npz",
+      "artifact_sha256": "bfb6fe87380b84fa4261a31019d932f4beb3aa4356ad5edba1a7a0ae47c2ae7f"
+    },
+    {
+      "label": "pairwise_taste0724_0.2",
+      "rule": "pairwise",
+      "taste_median": 0.0724,
+      "initial_probability": 0.2,
+      "imitation_interval": 60,
+      "seed": 29007,
+      "fingerprint": "0629172326aff0cda74bf6144e4a957c2432c6f535aa1e154b071c0b837c218b",
+      "seconds": 230.23363209998934,
+      "share": {
+        "day_0": 0.214,
+        "day_1200": 0.237,
+        "day_3500": 0.256
+      },
+      "wealth_share": {
+        "day_0": 0.21554847319463744,
+        "day_1200": 0.2410624932356691,
+        "day_3500": 0.2565254919439362
+      },
+      "price_cap_hits": 0,
+      "periods": 58,
+      "artifact": "pairwise_taste0724_0.2_29007.npz",
+      "artifact_sha256": "bfd144c84ca3126aea3cde7c2b1ef8973762096019fbb1b6a2d561ebd022fd92"
+    },
+    {
+      "label": "pairwise_taste0724_0.2",
+      "rule": "pairwise",
+      "taste_median": 0.0724,
+      "initial_probability": 0.2,
+      "imitation_interval": 60,
+      "seed": 29008,
+      "fingerprint": "b7a492d506ee54f0969b2ffc059989b131c53cb561b086720cd54e2c4b0bce46",
+      "seconds": 230.0455238999566,
+      "share": {
+        "day_0": 0.183,
+        "day_1200": 0.189,
+        "day_3500": 0.207
+      },
+      "wealth_share": {
+        "day_0": 0.17012824588036055,
+        "day_1200": 0.1730615320341493,
+        "day_3500": 0.17928843625111968
+      },
+      "price_cap_hits": 0,
+      "periods": 58,
+      "artifact": "pairwise_taste0724_0.2_29008.npz",
+      "artifact_sha256": "748804a32b089b2fc52a96082eab6430dde225d8c73d462a009900ae9e23276d"
+    },
+    {
+      "label": "pairwise_taste0724_0.2",
+      "rule": "pairwise",
+      "taste_median": 0.0724,
+      "initial_probability": 0.2,
+      "imitation_interval": 60,
+      "seed": 29009,
+      "fingerprint": "a628c6dab920cff0505f61c6996cae0b3da552522b71212169e9a2593be21f10",
+      "seconds": 229.3317314000451,
+      "share": {
+        "day_0": 0.212,
+        "day_1200": 0.247,
+        "day_3500": 0.298
+      },
+      "wealth_share": {
+        "day_0": 0.19512792875085236,
+        "day_1200": 0.24141674671114044,
+        "day_3500": 0.28754430921003005
+      },
+      "price_cap_hits": 0,
+      "periods": 58,
+      "artifact": "pairwise_taste0724_0.2_29009.npz",
+      "artifact_sha256": "c8c45c8903990dfdc7413efc86996c1309399dd1f5e0e2caff940e25448cd86d"
+    },
+    {
+      "label": "pairwise_taste0724_0.2",
+      "rule": "pairwise",
+      "taste_median": 0.0724,
+      "initial_probability": 0.2,
+      "imitation_interval": 60,
+      "seed": 29010,
+      "fingerprint": "c175a22f027f6cf8660d657169aff33c9f72f08f7031518e1442f83e82bfbf4d",
+      "seconds": 228.03313090000302,
+      "share": {
+        "day_0": 0.197,
+        "day_1200": 0.23,
+        "day_3500": 0.27
+      },
+      "wealth_share": {
+        "day_0": 0.21819274532451396,
+        "day_1200": 0.2345012386935419,
+        "day_3500": 0.2709456989461744
+      },
+      "price_cap_hits": 1,
+      "periods": 58,
+      "artifact": "pairwise_taste0724_0.2_29010.npz",
+      "artifact_sha256": "946fbc9d352e5c2fa7e6fa1bff21804d52c54bfe19c5d76a4123f15c7c9767d2"
+    },
+    {
+      "label": "pairwise_taste0724_0.2",
+      "rule": "pairwise",
+      "taste_median": 0.0724,
+      "initial_probability": 0.2,
+      "imitation_interval": 60,
+      "seed": 29011,
+      "fingerprint": "efd3fb0ad71febf6b57f88cc5a24c53a94ad3b508c50ad9d7a36eb649d30889f",
+      "seconds": 228.6081217000028,
+      "share": {
+        "day_0": 0.21,
+        "day_1200": 0.216,
+        "day_3500": 0.251
+      },
+      "wealth_share": {
+        "day_0": 0.25253693759786083,
+        "day_1200": 0.2545837433443853,
+        "day_3500": 0.27714804531727527
+      },
+      "price_cap_hits": 0,
+      "periods": 58,
+      "artifact": "pairwise_taste0724_0.2_29011.npz",
+      "artifact_sha256": "1a2db225c7bcdde4aebbb7bb91b440cbd4b82857edfcc268ed2fa273030470c2"
+    },
+    {
+      "label": "pairwise_taste0724_0.2",
+      "rule": "pairwise",
+      "taste_median": 0.0724,
+      "initial_probability": 0.2,
+      "imitation_interval": 60,
+      "seed": 29012,
+      "fingerprint": "fef94af732a97a38a435ba766b0fa58b23ef7b997114f934582198f73beae393",
+      "seconds": 229.26367099996423,
+      "share": {
+        "day_0": 0.212,
+        "day_1200": 0.219,
+        "day_3500": 0.251
+      },
+      "wealth_share": {
+        "day_0": 0.19497606910464912,
+        "day_1200": 0.20686426783113582,
+        "day_3500": 0.24507840869616593
+      },
+      "price_cap_hits": 0,
+      "periods": 58,
+      "artifact": "pairwise_taste0724_0.2_29012.npz",
+      "artifact_sha256": "111cb40a86cda35e2d76c59414871cc9babefe6107d299ccea15d3f5a98217db"
+    },
+    {
+      "label": "pairwise_taste0724_0.2",
+      "rule": "pairwise",
+      "taste_median": 0.0724,
+      "initial_probability": 0.2,
+      "imitation_interval": 60,
+      "seed": 29013,
+      "fingerprint": "cafc5a1569df6db90c61d946f9fbb32a064655f4e55a2d491e6d8711da53eebd",
+      "seconds": 227.53872350003803,
+      "share": {
+        "day_0": 0.202,
+        "day_1200": 0.195,
+        "day_3500": 0.235
+      },
+      "wealth_share": {
+        "day_0": 0.18692775158874247,
+        "day_1200": 0.17586905353370888,
+        "day_3500": 0.2144880427666359
+      },
+      "price_cap_hits": 0,
+      "periods": 58,
+      "artifact": "pairwise_taste0724_0.2_29013.npz",
+      "artifact_sha256": "51d8aa1d597b94ceaa305ecc7a7044423ff37bcb666130a4abdfed09a48f96b5"
+    },
+    {
+      "label": "pairwise_taste0724_0.2",
+      "rule": "pairwise",
+      "taste_median": 0.0724,
+      "initial_probability": 0.2,
+      "imitation_interval": 60,
+      "seed": 29014,
+      "fingerprint": "f055eeed6e0e2cbf89ee754d386b2a4a7544af90e93e50eda525fc583d738a90",
+      "seconds": 228.3806388999801,
+      "share": {
+        "day_0": 0.193,
+        "day_1200": 0.183,
+        "day_3500": 0.188
+      },
+      "wealth_share": {
+        "day_0": 0.1948044253690614,
+        "day_1200": 0.18265900238885707,
+        "day_3500": 0.19136223261804317
+      },
+      "price_cap_hits": 0,
+      "periods": 58,
+      "artifact": "pairwise_taste0724_0.2_29014.npz",
+      "artifact_sha256": "2cef9dc0487e5fa360ee9ae1ea8cf9c418fe721c9677b3b45b9447d71074a729"
+    },
+    {
+      "label": "pairwise_taste0724_0.2",
+      "rule": "pairwise",
+      "taste_median": 0.0724,
+      "initial_probability": 0.2,
+      "imitation_interval": 60,
+      "seed": 29015,
+      "fingerprint": "d07619b25a64e75db8489b016e4b0572dc94dca504a59df273d07892324b08f0",
+      "seconds": 229.38584549998632,
+      "share": {
+        "day_0": 0.207,
+        "day_1200": 0.2,
+        "day_3500": 0.219
+      },
+      "wealth_share": {
+        "day_0": 0.18928577140029448,
+        "day_1200": 0.19788343990687648,
+        "day_3500": 0.21947773386721012
+      },
+      "price_cap_hits": 0,
+      "periods": 58,
+      "artifact": "pairwise_taste0724_0.2_29015.npz",
+      "artifact_sha256": "3278879dc5a6c3ef6c102742b7461a908d54d97cb366a4c2715989924466a872"
+    },
+    {
+      "label": "pairwise_taste0724_0.2",
+      "rule": "pairwise",
+      "taste_median": 0.0724,
+      "initial_probability": 0.2,
+      "imitation_interval": 60,
+      "seed": 29016,
+      "fingerprint": "86e36dfa27e7ce37621bd90600294829a6108b0ec0a8d059e39b9ee22ca9bbdf",
+      "seconds": 228.03500069997972,
+      "share": {
+        "day_0": 0.224,
+        "day_1200": 0.229,
+        "day_3500": 0.215
+      },
+      "wealth_share": {
+        "day_0": 0.21059200686379353,
+        "day_1200": 0.21033233178288174,
+        "day_3500": 0.20472361663021338
+      },
+      "price_cap_hits": 0,
+      "periods": 58,
+      "artifact": "pairwise_taste0724_0.2_29016.npz",
+      "artifact_sha256": "70d352361525912adfb0ff9d467a85af96370a1f435876fe592a6e7b96e87887"
+    },
+    {
+      "label": "pairwise_taste0724_0.2",
+      "rule": "pairwise",
+      "taste_median": 0.0724,
+      "initial_probability": 0.2,
+      "imitation_interval": 60,
+      "seed": 29017,
+      "fingerprint": "d3b9a6ca54a454e2f1913a2a46aa504fad3a97a1a070930ab5938d82c137df97",
+      "seconds": 229.4460301999934,
+      "share": {
+        "day_0": 0.217,
+        "day_1200": 0.224,
+        "day_3500": 0.21
+      },
+      "wealth_share": {
+        "day_0": 0.196335154126288,
+        "day_1200": 0.2260079050405784,
+        "day_3500": 0.21282096115495722
+      },
+      "price_cap_hits": 0,
+      "periods": 58,
+      "artifact": "pairwise_taste0724_0.2_29017.npz",
+      "artifact_sha256": "9a9030e9a8187312b72bcdef696dc1ad8c44aa499a87a474380125a5b56be6a3"
+    },
+    {
+      "label": "pairwise_taste0724_0.2",
+      "rule": "pairwise",
+      "taste_median": 0.0724,
+      "initial_probability": 0.2,
+      "imitation_interval": 60,
+      "seed": 29018,
+      "fingerprint": "c36b47bf90a63b94ead0c15a049fd70432705f1a89a2e3c0a680e400440fa66c",
+      "seconds": 231.47862110001734,
+      "share": {
+        "day_0": 0.192,
+        "day_1200": 0.214,
+        "day_3500": 0.274
+      },
+      "wealth_share": {
+        "day_0": 0.1937453507795563,
+        "day_1200": 0.2115084491291234,
+        "day_3500": 0.2631278902958514
+      },
+      "price_cap_hits": 0,
+      "periods": 58,
+      "artifact": "pairwise_taste0724_0.2_29018.npz",
+      "artifact_sha256": "75cfa8ae14d146c359c293649bcd255aabc2574a7ee4852b5070a2438f052f28"
+    },
+    {
+      "label": "pairwise_taste0724_0.2",
+      "rule": "pairwise",
+      "taste_median": 0.0724,
+      "initial_probability": 0.2,
+      "imitation_interval": 60,
+      "seed": 29019,
+      "fingerprint": "fd321ba65a00db9b16832b98af641a72a67787eb778ad1f7bb928ba5c641509c",
+      "seconds": 230.39485199999763,
+      "share": {
+        "day_0": 0.201,
+        "day_1200": 0.216,
+        "day_3500": 0.246
+      },
+      "wealth_share": {
+        "day_0": 0.19417143224289632,
+        "day_1200": 0.22930235965578524,
+        "day_3500": 0.22573187835976513
+      },
+      "price_cap_hits": 4,
+      "periods": 58,
+      "artifact": "pairwise_taste0724_0.2_29019.npz",
+      "artifact_sha256": "73fc59bf7c2b187c133931e97cc9c00f881864990f220a35d9acf0aa27f3bb4f"
+    },
+    {
+      "label": "pairwise_taste0724_0.2",
+      "rule": "pairwise",
+      "taste_median": 0.0724,
+      "initial_probability": 0.2,
+      "imitation_interval": 60,
+      "seed": 29020,
+      "fingerprint": "3cc36523a864fff3b73e5395170e706aaf92ee78674883623362e70ed0bdde24",
+      "seconds": 222.67013899999438,
+      "share": {
+        "day_0": 0.221,
+        "day_1200": 0.222,
+        "day_3500": 0.217
+      },
+      "wealth_share": {
+        "day_0": 0.2041463134933357,
+        "day_1200": 0.2043394184684248,
+        "day_3500": 0.2163890154428294
+      },
+      "price_cap_hits": 0,
+      "periods": 58,
+      "artifact": "pairwise_taste0724_0.2_29020.npz",
+      "artifact_sha256": "fe8173e7304436fa3328b2d5fd9473135870cc228468a626a2bb5c46e5727dd0"
+    }
+  ]
+}

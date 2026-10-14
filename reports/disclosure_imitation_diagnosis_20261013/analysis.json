@@ -1,0 +1,764 @@
+{
+  "contract": "research contract section 18",
+  "script_sha256": "a339d9d7d0e905bc5d07fe1ad5a596dff882229915c879ebc8adaaa62e55711a",
+  "runs_sha256": "25bbff9244c54474732f3a049947bc1ecd04ee337a5b2b6489782d02fd7ce4a4",
+  "instrumentation_checks": [
+    {
+      "label": "type_mean_zero_0.2",
+      "seed": 29001,
+      "fingerprint_matches": true
+    },
+    {
+      "label": "pairwise_taste_0.2",
+      "seed": 29001,
+      "fingerprint_matches": true
+    }
+  ],
+  "acceptance": {
+    "a_pairwise_zero_taste_no_drift": true,
+    "b_pairwise_taste_distinguishable": true
+  },
+  "cells": {
+    "type_mean_zero_0.2": {
+      "label": "type_mean_zero_0.2",
+      "rule": "type_mean",
+      "taste_median": 0.0,
+      "initial_probability": 0.2,
+      "imitation_interval": 60,
+      "seeds": 20,
+      "price_cap_hits": 6,
+      "share_change": {
+        "mean": 0.052500000000000005,
+        "ci_low": 0.027368339668134373,
+        "ci_high": 0.07763166033186564,
+        "p_value": 0.00032771505010727067,
+        "n": 20,
+        "contains_zero": false
+      },
+      "wealth_share_change": {
+        "mean": 0.05072446455657616,
+        "ci_low": 0.0246531403045011,
+        "ci_high": 0.07679578880865122,
+        "p_value": 0.0006497165633369124,
+        "n": 20,
+        "contains_zero": false
+      },
+      "policy_window_share_change": {
+        "mean": 0.02185,
+        "ci_low": 0.009973829570331988,
+        "ci_high": 0.033726170429668016,
+        "p_value": 0.0010773389020605345,
+        "n": 20,
+        "contains_zero": false
+      },
+      "flows_mean_over_seeds": {
+        "realized": 0.052500000000000005,
+        "expected": 0.051774813567543966,
+        "selection": 0.0036162049366237096,
+        "asymmetry": 0.048158608630920266
+      },
+      "advantage": {
+        "mean": 1.2469672195254176e-05,
+        "sd": 0.0005308180250279305,
+        "mean_absolute": 0.00032099872899566935,
+        "signal_to_noise": 0.023491425700169183,
+        "mean_standard_error": 0.0005682253454352998,
+        "share_periods_abs_z_above_1.96": 0.01896551724137931,
+        "periods": 1160
+      }
+    },
+    "type_mean_zero_0.5": {
+      "label": "type_mean_zero_0.5",
+      "rule": "type_mean",
+      "taste_median": 0.0,
+      "initial_probability": 0.5,
+      "imitation_interval": 60,
+      "seeds": 20,
+      "price_cap_hits": 6,
+      "share_change": {
+        "mean": 0.011850000000000008,
+        "ci_low": -0.008082240829836536,
+        "ci_high": 0.03178224082983655,
+        "p_value": 0.22850923234303538,
+        "n": 20,
+        "contains_zero": true
+      },
+      "wealth_share_change": {
+        "mean": 0.014570522971652913,
+        "ci_low": -0.00507446544786044,
+        "ci_high": 0.03421551139116627,
+        "p_value": 0.13707001601941404,
+        "n": 20,
+        "contains_zero": true
+      },
+      "policy_window_share_change": {
+        "mean": 0.004599999999999998,
+        "ci_low": -0.007336323300791864,
+        "ci_high": 0.016536323300791862,
+        "p_value": 0.4298749237103545,
+        "n": 20,
+        "contains_zero": true
+      },
+      "flows_mean_over_seeds": {
+        "realized": 0.011849999999999998,
+        "expected": 0.010767570452956855,
+        "selection": 0.013426049382187754,
+        "asymmetry": -0.0026584789292308985
+      },
+      "advantage": {
+        "mean": 4.629672200754399e-05,
+        "sd": 0.0005815145049990363,
+        "mean_absolute": 0.000405468290405136,
+        "signal_to_noise": 0.07961404506603101,
+        "mean_standard_error": 0.00047533886664755896,
+        "share_periods_abs_z_above_1.96": 0.01293103448275862,
+        "periods": 1160
+      }
+    },
+    "type_mean_zero_0.8": {
+      "label": "type_mean_zero_0.8",
+      "rule": "type_mean",
+      "taste_median": 0.0,
+      "initial_probability": 0.8,
+      "imitation_interval": 60,
+      "seeds": 20,
+      "price_cap_hits": 6,
+      "share_change": {
+        "mean": -0.06935000000000002,
+        "ci_low": -0.09259664276780381,
+        "ci_high": -0.04610335723219623,
+        "p_value": 5.369937913186381e-06,
+        "n": 20,
+        "contains_zero": false
+      },
+      "wealth_share_change": {
+        "mean": -0.0661067992420889,
+        "ci_low": -0.09079116576539123,
+        "ci_high": -0.041422432718786574,
+        "p_value": 2.0953581293261245e-05,
+        "n": 20,
+        "contains_zero": false
+      },
+      "policy_window_share_change": {
+        "mean": -0.027049999999999998,
+        "ci_low": -0.03785812530544466,
+        "ci_high": -0.016241874694555333,
+        "p_value": 4.6818396173274184e-05,
+        "n": 20,
+        "contains_zero": false
+      },
+      "flows_mean_over_seeds": {
+        "realized": -0.06935,
+        "expected": -0.06729093746854745,
+        "selection": -0.006727022669638277,
+        "asymmetry": -0.06056391479890919
+      },
+      "advantage": {
+        "mean": -2.319662989530439e-05,
+        "sd": 0.0006615462141112009,
+        "mean_absolute": 0.000405056101559306,
+        "signal_to_noise": -0.035064262179278695,
+        "mean_standard_error": 0.0005580329821540517,
+        "share_periods_abs_z_above_1.96": 0.06810344827586207,
+        "periods": 1160
+      }
+    },
+    "type_mean_taste_0.2": {
+      "label": "type_mean_taste_0.2",
+      "rule": "type_mean",
+      "taste_median": 0.0635,
+      "initial_probability": 0.2,
+      "imitation_interval": 60,
+      "seeds": 20,
+      "price_cap_hits": 6,
+      "share_change": {
+        "mean": 0.19190000000000002,
+        "ci_low": 0.1678242850912014,
+        "ci_high": 0.21597571490879863,
+        "p_value": 8.362941677302524e-13,
+        "n": 20,
+        "contains_zero": false
+      },
+      "wealth_share_change": {
+        "mean": 0.19495135604503674,
+        "ci_low": 0.1703405177634739,
+        "ci_high": 0.2195621943265996,
+        "p_value": 9.34211390479794e-13,
+        "n": 20,
+        "contains_zero": false
+      },
+      "policy_window_share_change": {
+        "mean": 0.11499999999999999,
+        "ci_low": 0.09726543568812318,
+        "ci_high": 0.1327345643118768,
+        "p_value": 3.153740870012684e-11,
+        "n": 20,
+        "contains_zero": false
+      },
+      "flows_mean_over_seeds": {
+        "realized": 0.19190000000000002,
+        "expected": 0.1874665911406392,
+        "selection": 0.09392816779794033,
+        "asymmetry": 0.09353842334269889
+      },
+      "advantage": {
+        "mean": 0.00032389023378600116,
+        "sd": 0.001086620532461343,
+        "mean_absolute": 0.000879036208003601,
+        "signal_to_noise": 0.2980711518972919,
+        "mean_standard_error": 0.0005316946792504364,
+        "share_periods_abs_z_above_1.96": 0.46293103448275863,
+        "periods": 1160
+      }
+    },
+    "pairwise_zero_0.2": {
+      "label": "pairwise_zero_0.2",
+      "rule": "pairwise",
+      "taste_median": 0.0,
+      "initial_probability": 0.2,
+      "imitation_interval": 60,
+      "seeds": 20,
+      "price_cap_hits": 6,
+      "share_change": {
+        "mean": 0.005100000000000002,
+        "ci_low": -0.00404208877426227,
+        "ci_high": 0.014242088774262274,
+        "p_value": 0.25740718118062095,
+        "n": 20,
+        "contains_zero": true
+      },
+      "wealth_share_change": {
+        "mean": 0.004575751277235364,
+        "ci_low": -0.005352998256890409,
+        "ci_high": 0.014504500811361138,
+        "p_value": 0.3468685621573122,
+        "n": 20,
+        "contains_zero": true
+      },
+      "policy_window_share_change": {
+        "mean": 0.002600000000000004,
+        "ci_low": -0.0028714403956139147,
+        "ci_high": 0.008071440395613923,
+        "p_value": 0.3324324535513995,
+        "n": 20,
+        "contains_zero": true
+      },
+      "flows_mean_over_seeds": {
+        "realized": 0.0051,
+        "expected": 0.006217118668703965,
+        "selection": 0.006217118668703965,
+        "asymmetry": 0.0
+      },
+      "advantage": {
+        "mean": 5.981313647660776e-05,
+        "sd": 0.0006297583318766437,
+        "mean_absolute": 0.000394243939434981,
+        "signal_to_noise": 0.09497792001952247,
+        "mean_standard_error": 0.0005964607952031294,
+        "share_periods_abs_z_above_1.96": 0.01206896551724138,
+        "periods": 1160
+      }
+    },
+    "pairwise_zero_0.5": {
+      "label": "pairwise_zero_0.5",
+      "rule": "pairwise",
+      "taste_median": 0.0,
+      "initial_probability": 0.5,
+      "imitation_interval": 60,
+      "seeds": 20,
+      "price_cap_hits": 6,
+      "share_change": {
+        "mean": 0.008800000000000007,
+        "ci_low": -0.005125503555541493,
+        "ci_high": 0.02272550355554151,
+        "p_value": 0.20165096774952446,
+        "n": 20,
+        "contains_zero": true
+      },
+      "wealth_share_change": {
+        "mean": 0.008141932049462317,
+        "ci_low": -0.006283305520924409,
+        "ci_high": 0.022567169619849045,
+        "p_value": 0.25203994870230895,
+        "n": 20,
+        "contains_zero": true
+      },
+      "policy_window_share_change": {
+        "mean": 0.004600000000000004,
+        "ci_low": -0.005427908872671801,
+        "ci_high": 0.014627908872671808,
+        "p_value": 0.3490589602994261,
+        "n": 20,
+        "contains_zero": true
+      },
+      "flows_mean_over_seeds": {
+        "realized": 0.0088,
+        "expected": 0.007242165748947765,
+        "selection": 0.007242165748947765,
+        "asymmetry": 0.0
+      },
+      "advantage": {
+        "mean": 5.022412773489536e-05,
+        "sd": 0.0006739016305068889,
+        "mean_absolute": 0.00044836767359654624,
+        "signal_to_noise": 0.07452738717536306,
+        "mean_standard_error": 0.0004750630318429527,
+        "share_periods_abs_z_above_1.96": 0.05517241379310345,
+        "periods": 1160
+      }
+    },
+    "pairwise_zero_0.8": {
+      "label": "pairwise_zero_0.8",
+      "rule": "pairwise",
+      "taste_median": 0.0,
+      "initial_probability": 0.8,
+      "imitation_interval": 60,
+      "seeds": 20,
+      "price_cap_hits": 6,
+      "share_change": {
+        "mean": -0.00030000000000002247,
+        "ci_low": -0.011963451971577692,
+        "ci_high": 0.011363451971577647,
+        "p_value": 0.9576282998830761,
+        "n": 20,
+        "contains_zero": true
+      },
+      "wealth_share_change": {
+        "mean": -0.0003089875150595944,
+        "ci_low": -0.013273683687424487,
+        "ci_high": 0.012655708657305299,
+        "p_value": 0.9607362705639056,
+        "n": 20,
+        "contains_zero": true
+      },
+      "policy_window_share_change": {
+        "mean": -0.00020000000000001129,
+        "ci_low": -0.00816652588982323,
+        "ci_high": 0.007766525889823208,
+        "p_value": 0.958642601258499,
+        "n": 20,
+        "contains_zero": true
+      },
+      "flows_mean_over_seeds": {
+        "realized": -0.00030000000000000046,
+        "expected": -0.002568840886745542,
+        "selection": -0.002568840886745542,
+        "asymmetry": 0.0
+      },
+      "advantage": {
+        "mean": -1.9365013013743998e-05,
+        "sd": 0.0009215689208673681,
+        "mean_absolute": 0.0005717411546367054,
+        "signal_to_noise": -0.02101309253736325,
+        "mean_standard_error": 0.0005914459436579785,
+        "share_periods_abs_z_above_1.96": 0.15517241379310345,
+        "periods": 1160
+      }
+    },
+    "pairwise_taste_0.2": {
+      "label": "pairwise_taste_0.2",
+      "rule": "pairwise",
+      "taste_median": 0.0635,
+      "initial_probability": 0.2,
+      "imitation_interval": 60,
+      "seeds": 20,
+      "price_cap_hits": 6,
+      "share_change": {
+        "mean": 0.027600000000000003,
+        "ci_low": 0.01267025935719889,
+        "ci_high": 0.042529740642801114,
+        "p_value": 0.001032767184744851,
+        "n": 20,
+        "contains_zero": false
+      },
+      "wealth_share_change": {
+        "mean": 0.031231840859165964,
+        "ci_low": 0.017123983515696016,
+        "ci_high": 0.04533969820263591,
+        "p_value": 0.00018119015780719547,
+        "n": 20,
+        "contains_zero": false
+      },
+      "policy_window_share_change": {
+        "mean": 0.021599999999999998,
+        "ci_low": 0.011372886165148014,
+        "ci_high": 0.03182711383485198,
+        "p_value": 0.00029368152851972886,
+        "n": 20,
+        "contains_zero": false
+      },
+      "flows_mean_over_seeds": {
+        "realized": 0.027600000000000003,
+        "expected": 0.02917328232103101,
+        "selection": 0.02917328232103101,
+        "asymmetry": 0.0
+      },
+      "advantage": {
+        "mean": 0.00029068389466268093,
+        "sd": 0.0012241409002450327,
+        "mean_absolute": 0.0009583493591491381,
+        "signal_to_noise": 0.23745950699343155,
+        "mean_standard_error": 0.0005926409463049599,
+        "share_periods_abs_z_above_1.96": 0.42931034482758623,
+        "periods": 1160
+      }
+    },
+    "pairwise_taste_0.5": {
+      "label": "pairwise_taste_0.5",
+      "rule": "pairwise",
+      "taste_median": 0.0635,
+      "initial_probability": 0.5,
+      "imitation_interval": 60,
+      "seeds": 20,
+      "price_cap_hits": 7,
+      "share_change": {
+        "mean": 0.04905,
+        "ci_low": 0.02950958361684842,
+        "ci_high": 0.06859041638315158,
+        "p_value": 4.5235977381493776e-05,
+        "n": 20,
+        "contains_zero": false
+      },
+      "wealth_share_change": {
+        "mean": 0.05483479969620906,
+        "ci_low": 0.0342100860910555,
+        "ci_high": 0.07545951330136262,
+        "p_value": 2.2885088178005867e-05,
+        "n": 20,
+        "contains_zero": false
+      },
+      "policy_window_share_change": {
+        "mean": 0.02134999999999999,
+        "ci_low": 0.007357868688032522,
+        "ci_high": 0.03534213131196746,
+        "p_value": 0.0047816923860484,
+        "n": 20,
+        "contains_zero": false
+      },
+      "flows_mean_over_seeds": {
+        "realized": 0.04905,
+        "expected": 0.04638992735118501,
+        "selection": 0.04638992735118501,
+        "asymmetry": 0.0
+      },
+      "advantage": {
+        "mean": 0.0003241998975387069,
+        "sd": 0.0010522008515018244,
+        "mean_absolute": 0.000804176965428044,
+        "signal_to_noise": 0.3081159809707156,
+        "mean_standard_error": 0.0004718531163089904,
+        "share_periods_abs_z_above_1.96": 0.43189655172413793,
+        "periods": 1160
+      }
+    },
+    "pairwise_taste_0.8": {
+      "label": "pairwise_taste_0.8",
+      "rule": "pairwise",
+      "taste_median": 0.0635,
+      "initial_probability": 0.8,
+      "imitation_interval": 60,
+      "seeds": 20,
+      "price_cap_hits": 8,
+      "share_change": {
+        "mean": 0.025449999999999955,
+        "ci_low": 0.013036376106967364,
+        "ci_high": 0.03786362389303255,
+        "p_value": 0.00039433888814780486,
+        "n": 20,
+        "contains_zero": false
+      },
+      "wealth_share_change": {
+        "mean": 0.02716225283768984,
+        "ci_low": 0.014767096335447255,
+        "ci_high": 0.039557409339932424,
+        "p_value": 0.00020149761740055825,
+        "n": 20,
+        "contains_zero": false
+      },
+      "policy_window_share_change": {
+        "mean": 0.0068000000000000005,
+        "ci_low": -0.0008294583767411408,
+        "ci_high": 0.014429458376741141,
+        "p_value": 0.07763314336010417,
+        "n": 20,
+        "contains_zero": true
+      },
+      "flows_mean_over_seeds": {
+        "realized": 0.02545,
+        "expected": 0.0248343297410848,
+        "selection": 0.0248343297410848,
+        "asymmetry": 0.0
+      },
+      "advantage": {
+        "mean": 0.00029208259028588526,
+        "sd": 0.0013045895190934886,
+        "mean_absolute": 0.000943822417482231,
+        "signal_to_noise": 0.223888499800951,
+        "mean_standard_error": 0.0005976885103130648,
+        "share_periods_abs_z_above_1.96": 0.4077586206896552,
+        "periods": 1160
+      }
+    },
+    "pairwise_annual_zero_0.2": {
+      "label": "pairwise_annual_zero_0.2",
+      "rule": "pairwise",
+      "taste_median": 0.0,
+      "initial_probability": 0.2,
+      "imitation_interval": 252,
+      "seeds": 20,
+      "price_cap_hits": 6,
+      "share_change": {
+        "mean": 0.005349999999999998,
+        "ci_low": -0.003501699854803044,
+        "ci_high": 0.014201699854803039,
+        "p_value": 0.22115592844005097,
+        "n": 20,
+        "contains_zero": true
+      },
+      "wealth_share_change": {
+        "mean": 0.010495520026716196,
+        "ci_low": -0.0017912583801358972,
+        "ci_high": 0.022782298433568292,
+        "p_value": 0.08975521773612744,
+        "n": 20,
+        "contains_zero": true
+      },
+      "policy_window_share_change": {
+        "mean": 0.003549999999999999,
+        "ci_low": -0.002040403755879799,
+        "ci_high": 0.009140403755879796,
+        "p_value": 0.19955385127040035,
+        "n": 20,
+        "contains_zero": true
+      },
+      "flows_mean_over_seeds": {
+        "realized": 0.00535,
+        "expected": 0.00629098494835908,
+        "selection": 0.00629098494835908,
+        "asymmetry": 0.0
+      },
+      "advantage": {
+        "mean": 0.00027617519826237985,
+        "sd": 0.0017080709801941454,
+        "mean_absolute": 0.0010848737635914887,
+        "signal_to_noise": 0.16168836158728533,
+        "mean_standard_error": 0.001418204823285394,
+        "share_periods_abs_z_above_1.96": 0.007692307692307693,
+        "periods": 260
+      }
+    },
+    "pairwise_annual_taste_0.2": {
+      "label": "pairwise_annual_taste_0.2",
+      "rule": "pairwise",
+      "taste_median": 0.0635,
+      "initial_probability": 0.2,
+      "imitation_interval": 252,
+      "seeds": 20,
+      "price_cap_hits": 6,
+      "share_change": {
+        "mean": 0.03125,
+        "ci_low": 0.013714245389713109,
+        "ci_high": 0.04878575461028689,
+        "p_value": 0.001419518541221518,
+        "n": 20,
+        "contains_zero": false
+      },
+      "wealth_share_change": {
+        "mean": 0.03548413442418071,
+        "ci_low": 0.014228003401862744,
+        "ci_high": 0.05674026544649868,
+        "p_value": 0.002428123320692356,
+        "n": 20,
+        "contains_zero": false
+      },
+      "policy_window_share_change": {
+        "mean": 0.02425,
+        "ci_low": 0.01175916429109605,
+        "ci_high": 0.03674083570890395,
+        "p_value": 0.0006628297487267776,
+        "n": 20,
+        "contains_zero": false
+      },
+      "flows_mean_over_seeds": {
+        "realized": 0.03125,
+        "expected": 0.03225195987150656,
+        "selection": 0.03225195987150656,
+        "asymmetry": 0.0
+      },
+      "advantage": {
+        "mean": 0.0014131786871673217,
+        "sd": 0.0030424570649309284,
+        "mean_absolute": 0.0025288562641948686,
+        "signal_to_noise": 0.4644859917520001,
+        "mean_standard_error": 0.0014236118296897624,
+        "share_periods_abs_z_above_1.96": 0.45,
+        "periods": 260
+      }
+    }
+  },
+  "paired": {
+    "type_mean_taste_0.2_minus_type_mean_zero_0.2": {
+      "share_change": {
+        "mean": 0.1394,
+        "ci_low": 0.11392983937362612,
+        "ci_high": 0.16487016062637386,
+        "p_value": 5.654874130856488e-10,
+        "n": 20,
+        "contains_zero": false
+      },
+      "wealth_share_change": {
+        "mean": 0.14422689148846055,
+        "ci_low": 0.11620596792574653,
+        "ci_high": 0.17224781505117456,
+        "p_value": 1.565503829377194e-09,
+        "n": 20,
+        "contains_zero": false
+      }
+    },
+    "pairwise_taste_0.2_minus_pairwise_zero_0.2": {
+      "share_change": {
+        "mean": 0.022499999999999992,
+        "ci_low": 0.013994706861795124,
+        "ci_high": 0.03100529313820486,
+        "p_value": 2.431263564891176e-05,
+        "n": 20,
+        "contains_zero": false
+      },
+      "wealth_share_change": {
+        "mean": 0.0266560895819306,
+        "ci_low": 0.016677529334746248,
+        "ci_high": 0.03663464982911495,
+        "p_value": 2.1606030104432283e-05,
+        "n": 20,
+        "contains_zero": false
+      }
+    },
+    "pairwise_annual_taste_0.2_minus_pairwise_annual_zero_0.2": {
+      "share_change": {
+        "mean": 0.025899999999999996,
+        "ci_low": 0.015097822802805472,
+        "ci_high": 0.03670217719719452,
+        "p_value": 7.630588873722666e-05,
+        "n": 20,
+        "contains_zero": false
+      },
+      "wealth_share_change": {
+        "mean": 0.024988614397464526,
+        "ci_low": 0.01164784908179056,
+        "ci_high": 0.03832937971313849,
+        "p_value": 0.0009188769437939968,
+        "n": 20,
+        "contains_zero": false
+      }
+    }
+  },
+  "replicator_benchmark": {
+    "pairwise_taste": {
+      "ols_clustered_by_run": {
+        "intercept": 0.00029102124472944177,
+        "slope": 2.1541077904636114e-05,
+        "intercept_se": 8.313425155331614e-05,
+        "slope_se": 0.0001577893877674224,
+        "zero_at_share": -13.510059525238873,
+        "zero_inside_unit_interval": false,
+        "periods": 3480,
+        "runs": 60
+      },
+      "binned": [
+        {
+          "share_low": 0.1,
+          "periods": 281,
+          "mean_advantage": 0.00014121520766912195,
+          "se": 5.791487020343765e-05
+        },
+        {
+          "share_low": 0.2,
+          "periods": 871,
+          "mean_advantage": 0.00034394788897576257,
+          "se": 4.348282955728909e-05
+        },
+        {
+          "share_low": 0.4,
+          "periods": 83,
+          "mean_advantage": 0.0004408213616882561,
+          "se": 0.00012919569085311842
+        },
+        {
+          "share_low": 0.5,
+          "periods": 1042,
+          "mean_advantage": 0.00028534485624511543,
+          "se": 3.119134582228e-05
+        },
+        {
+          "share_low": 0.6000000000000001,
+          "periods": 35,
+          "mean_advantage": 0.0012044105119246988,
+          "se": 0.00026633554305527103
+        },
+        {
+          "share_low": 0.7000000000000001,
+          "periods": 205,
+          "mean_advantage": 0.00029936991545865795,
+          "se": 9.076573105079872e-05
+        },
+        {
+          "share_low": 0.8,
+          "periods": 955,
+          "mean_advantage": 0.00029051829535350996,
+          "se": 4.2272124585426066e-05
+        }
+      ]
+    },
+    "pairwise_zero": {
+      "ols_clustered_by_run": {
+        "intercept": 8.0158416547083e-05,
+        "slope": -9.893041863570224e-05,
+        "intercept_se": 6.267688645654653e-05,
+        "slope_se": 0.00013169758478757224,
+        "zero_at_share": 0.8102504533237186,
+        "zero_inside_unit_interval": true,
+        "periods": 3480,
+        "runs": 60
+      },
+      "binned": [
+        {
+          "share_low": 0.1,
+          "periods": 362,
+          "mean_advantage": -3.940952677338709e-05,
+          "se": 2.8015189338806608e-05
+        },
+        {
+          "share_low": 0.2,
+          "periods": 798,
+          "mean_advantage": 0.00010482391855241997,
+          "se": 2.352251662954058e-05
+        },
+        {
+          "share_low": 0.4,
+          "periods": 322,
+          "mean_advantage": -3.290967025263099e-05,
+          "se": 3.747249327322647e-05
+        },
+        {
+          "share_low": 0.5,
+          "periods": 838,
+          "mean_advantage": 8.216814080408806e-05,
+          "se": 2.3218651516771038e-05
+        },
+        {
+          "share_low": 0.7000000000000001,
+          "periods": 556,
+          "mean_advantage": -0.0001113842037119797,
+          "se": 2.762632148369921e-05
+        },
+        {
+          "share_low": 0.8,
+          "periods": 604,
+          "mean_advantage": 6.53413943177445e-05,
+          "se": 4.5068368309149085e-05
+        }
+      ]
+    }
+  },
+  "scope": "Development seeds 29001-29020; 95% t intervals across seeds, unadjusted; expected flows condition on the realized advantages and shares of each run."
+}
