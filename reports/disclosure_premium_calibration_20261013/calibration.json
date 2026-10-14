@@ -1,0 +1,4036 @@
+{
+  "purpose": "calibration (development seeds only); research contract section 15.4",
+  "script_sha256": "69b934685be07fa8f027750cbe85997bc2a5f6eb737d295ddf222d95c9218274",
+  "domain": {
+    "path": "configs/domains/csi300_huazheng_esg_quantile_copula.json",
+    "sha256": "781d45883b73389eb42e7a930d4567e3acd9855749dd4dd69f60d668257f4e2c",
+    "overrides": {
+      "baseline_penalty": 0.0,
+      "baseline_fixed_fine": 4.5614908036639594e-05
+    }
+  },
+  "fixed_fine": {
+    "yuan": 10000000.0,
+    "mean_market_cap_yuan": 219226573732.59695,
+    "model_units": 4.5614908036639594e-05,
+    "source_csv": {
+      "path": "data/processed/disclosure_public_20261012/csi300_joint_20261009.csv",
+      "sha256": "e675d8509129de26f8460ecd1237083dd35b008a5f1fd1eeded57e505d709408"
+    }
+  },
+  "market": {
+    "n_investors": 1000,
+    "n_firms": 200,
+    "trading_days": 1200,
+    "burn_in_days": 600,
+    "initial_impact_share": 0.2,
+    "financing_exposure_fraction": 0.5,
+    "financing_spread": 0.05,
+    "financing_repricing_interval": 60,
+    "financing_horizon_days": 1260,
+    "firm_discount_rate": 0.05,
+    "intrinsic_value_log_sd": 0.9151544344205937
+  },
+  "seeds": [
+    28001,
+    28002,
+    28003
+  ],
+  "tastes": [
+    0.02,
+    0.05,
+    0.1,
+    0.2,
+    0.4,
+    0.8
+  ],
+  "policy_start": 1201,
+  "targets": {
+    "main_bp": 28.0,
+    "lower_sensitivity_bp": 7.0
+  },
+  "instrumentation_check": {
+    "taste": 0.02,
+    "seed": 28001,
+    "fingerprint_matches": true
+  },
+  "summary": [
+    {
+      "taste_median": 0.02,
+      "worlds": 3,
+      "failed_worlds": 0,
+      "price_cap_hits": 4,
+      "max_abs_log_mispricing": 0.9817482782035286,
+      "decision_days": 60,
+      "local_rate_response": {
+        "median_firm_decision": 6.735605464563369e-05,
+        "p5": 3.997759382398655e-05,
+        "p95": 8.751478472457249e-05,
+        "median_late_days": 7.085966000483409e-05
+      },
+      "rate_slope": {
+        "median_day": -0.00022940115820003218,
+        "median_late_days": -0.0003126800804356686
+      },
+      "yield_slope": {
+        "median_day": -0.0006604033348345517,
+        "median_late_days": -0.000832722272245738
+      },
+      "log_price_premium_slope": {
+        "median_day": 0.01313638329438271,
+        "median_late_days": 0.015724785928114972
+      },
+      "impact_share_day_1200": 0.21666666666666667
+    },
+    {
+      "taste_median": 0.05,
+      "worlds": 3,
+      "failed_worlds": 0,
+      "price_cap_hits": 4,
+      "max_abs_log_mispricing": 1.0042666330837244,
+      "decision_days": 60,
+      "local_rate_response": {
+        "median_firm_decision": 0.00017048138128034616,
+        "p5": 9.640506708543165e-05,
+        "p95": 0.00024970356642049427,
+        "median_late_days": 0.00018603486805165444
+      },
+      "rate_slope": {
+        "median_day": -0.000498937958256729,
+        "median_late_days": -0.0005986965107040274
+      },
+      "yield_slope": {
+        "median_day": -0.0020824042736313783,
+        "median_late_days": -0.0021274344162131374
+      },
+      "log_price_premium_slope": {
+        "median_day": 0.03780795466783843,
+        "median_late_days": 0.041695317655531985
+      },
+      "impact_share_day_1200": 0.244
+    },
+    {
+      "taste_median": 0.1,
+      "worlds": 3,
+      "failed_worlds": 0,
+      "price_cap_hits": 4,
+      "max_abs_log_mispricing": 1.0550448980155185,
+      "decision_days": 60,
+      "local_rate_response": {
+        "median_firm_decision": 0.0003794922015569868,
+        "p5": 0.0002059719409653439,
+        "p95": 0.000686226701693262,
+        "median_late_days": 0.0004081381740842253
+      },
+      "rate_slope": {
+        "median_day": -0.0009526165207165826,
+        "median_late_days": -0.0010990695744374787
+      },
+      "yield_slope": {
+        "median_day": -0.004900758940579616,
+        "median_late_days": -0.005022656132432659
+      },
+      "log_price_premium_slope": {
+        "median_day": 0.08458769681376854,
+        "median_late_days": 0.09625667484273642
+      },
+      "impact_share_day_1200": 0.3393333333333333
+    },
+    {
+      "taste_median": 0.2,
+      "worlds": 3,
+      "failed_worlds": 0,
+      "price_cap_hits": 3,
+      "max_abs_log_mispricing": 1.9438271145605226,
+      "decision_days": 60,
+      "local_rate_response": {
+        "median_firm_decision": 0.001388470248571574,
+        "p5": 0.0004412953872702128,
+        "p95": 0.0026139960268569333,
+        "median_late_days": 0.0016967797454760967
+      },
+      "rate_slope": {
+        "median_day": -0.0035664078752964366,
+        "median_late_days": -0.003867995430614572
+      },
+      "yield_slope": {
+        "median_day": -0.019950039733496305,
+        "median_late_days": -0.02112846124720011
+      },
+      "log_price_premium_slope": {
+        "median_day": 0.32881206230218574,
+        "median_late_days": 0.3526208724246665
+      },
+      "impact_share_day_1200": 0.6069999999999999
+    },
+    {
+      "taste_median": 0.4,
+      "worlds": 3,
+      "failed_worlds": 0,
+      "price_cap_hits": 7,
+      "max_abs_log_mispricing": 2.623774063764138,
+      "decision_days": 60,
+      "local_rate_response": {
+        "median_firm_decision": 0.002113655071741019,
+        "p5": 0.000373508488956384,
+        "p95": 0.006626741834694529,
+        "median_late_days": 0.003621336917185431
+      },
+      "rate_slope": {
+        "median_day": -0.004106530512616006,
+        "median_late_days": -0.007344614925965444
+      },
+      "yield_slope": {
+        "median_day": -0.03647687120896377,
+        "median_late_days": -0.06371345128874305
+      },
+      "log_price_premium_slope": {
+        "median_day": 0.3826253034265627,
+        "median_late_days": 0.6461421447677452
+      },
+      "impact_share_day_1200": 0.6963333333333334
+    },
+    {
+      "taste_median": 0.8,
+      "worlds": 3,
+      "failed_worlds": 0,
+      "price_cap_hits": 74,
+      "max_abs_log_mispricing": 3.3125776560087083,
+      "decision_days": 60,
+      "local_rate_response": {
+        "median_firm_decision": 0.0012928592831340027,
+        "p5": 0.0001273298855274788,
+        "p95": 0.012962260297058823,
+        "median_late_days": 0.0024563596088252623
+      },
+      "rate_slope": {
+        "median_day": -0.0042714188724020125,
+        "median_late_days": -0.006257343852603963
+      },
+      "yield_slope": {
+        "median_day": -0.04676177526612561,
+        "median_late_days": -0.07956147147008957
+      },
+      "log_price_premium_slope": {
+        "median_day": 0.395367859341279,
+        "median_late_days": 0.5704130494539525
+      },
+      "impact_share_day_1200": 0.6793333333333335
+    }
+  ],
+  "implied_taste_median": {
+    "local_rate_response": {
+      "target_28bp": null,
+      "lower_7bp": null
+    },
+    "rate_slope": {
+      "target_28bp": 0.17614049741237384,
+      "lower_7bp": 0.0718746149774118
+    },
+    "yield_slope": {
+      "target_28bp": 0.06354985126224907,
+      "lower_7bp": 0.020951110201663858
+    }
+  },
+  "runs": [
+    {
+      "taste": 0.02,
+      "seed": 28001,
+      "status": "complete",
+      "fingerprint": "dea4fd50025cec6960763a84d458a4243b8fa082d76f4bb3410b577cb2edf107",
+      "seconds": 151.92621609999333,
+      "price_cap_hits": 2,
+      "max_abs_log_mispricing": 0.9438948691507848,
+      "decisions": [
+        {
+          "day": 60,
+          "local_rate_response_median": 7.156553655899593e-05,
+          "local_rate_response_mean": 7.179676930782522e-05,
+          "rate_slope": -0.00012797995995369131,
+          "yield_slope": -0.00042843894348781837,
+          "log_price_premium_slope": 0.009030818601544907,
+          "impact_share": 0.208,
+          "impact_wealth_share": 0.20807138923721338
+        },
+        {
+          "day": 120,
+          "local_rate_response_median": 7.159553950748217e-05,
+          "local_rate_response_mean": 7.154923626878947e-05,
+          "rate_slope": -0.00012746312831650314,
+          "yield_slope": -0.0004794598370888904,
+          "log_price_premium_slope": 0.01058559558515719,
+          "impact_share": 0.208,
+          "impact_wealth_share": 0.20800193384929788
+        },
+        {
+          "day": 180,
+          "local_rate_response_median": 6.785755876946459e-05,
+          "local_rate_response_mean": 6.828142258258395e-05,
+          "rate_slope": -0.00012432811180748769,
+          "yield_slope": -0.000515942870911849,
+          "log_price_premium_slope": 0.011563807804131854,
+          "impact_share": 0.206,
+          "impact_wealth_share": 0.20712892864590166
+        },
+        {
+          "day": 240,
+          "local_rate_response_median": 6.149566825653255e-05,
+          "local_rate_response_mean": 6.150067165300218e-05,
+          "rate_slope": -0.00019850740599234524,
+          "yield_slope": -0.0005843792515145042,
+          "log_price_premium_slope": 0.01308429233787253,
+          "impact_share": 0.205,
+          "impact_wealth_share": 0.20678851013357272
+        },
+        {
+          "day": 300,
+          "local_rate_response_median": 3.9119062859326586e-05,
+          "local_rate_response_mean": 4.010683123678016e-05,
+          "rate_slope": -0.0002526976353487076,
+          "yield_slope": -0.0009426430816950528,
+          "log_price_premium_slope": 0.011999624483910945,
+          "impact_share": 0.208,
+          "impact_wealth_share": 0.21033108171073894
+        },
+        {
+          "day": 360,
+          "local_rate_response_median": 6.205428577832201e-05,
+          "local_rate_response_mean": 6.284561703818891e-05,
+          "rate_slope": -0.00022622423355853088,
+          "yield_slope": -0.00036576962617353734,
+          "log_price_premium_slope": 0.0036810744004010234,
+          "impact_share": 0.204,
+          "impact_wealth_share": 0.20908193395520672
+        },
+        {
+          "day": 420,
+          "local_rate_response_median": 7.96408936273892e-05,
+          "local_rate_response_mean": 7.98110857138045e-05,
+          "rate_slope": -0.0001642337863217512,
+          "yield_slope": -0.0004179547366637714,
+          "log_price_premium_slope": 0.0053845799472802105,
+          "impact_share": 0.204,
+          "impact_wealth_share": 0.20905407833212902
+        },
+        {
+          "day": 480,
+          "local_rate_response_median": 8.548264409414825e-05,
+          "local_rate_response_mean": 8.542937082234543e-05,
+          "rate_slope": -0.00021425875905977816,
+          "yield_slope": -0.0004960105293984777,
+          "log_price_premium_slope": 0.007999856611221939,
+          "impact_share": 0.204,
+          "impact_wealth_share": 0.20901596514561416
+        },
+        {
+          "day": 540,
+          "local_rate_response_median": 8.446045885728127e-05,
+          "local_rate_response_mean": 8.465904815970732e-05,
+          "rate_slope": -0.00027922868182184005,
+          "yield_slope": -0.0005516723055753133,
+          "log_price_premium_slope": 0.01019945117786882,
+          "impact_share": 0.204,
+          "impact_wealth_share": 0.2090206364986852
+        },
+        {
+          "day": 600,
+          "local_rate_response_median": 8.518351013801702e-05,
+          "local_rate_response_mean": 8.506431354599705e-05,
+          "rate_slope": -0.000259030330555168,
+          "yield_slope": -0.0006377930094593547,
+          "log_price_premium_slope": 0.013093586976110896,
+          "impact_share": 0.208,
+          "impact_wealth_share": 0.2113271897218751
+        },
+        {
+          "day": 660,
+          "local_rate_response_median": 7.927845301828991e-05,
+          "local_rate_response_mean": 7.963683725357197e-05,
+          "rate_slope": -0.0002509801810077254,
+          "yield_slope": -0.0006651912598025658,
+          "log_price_premium_slope": 0.014276342289709474,
+          "impact_share": 0.208,
+          "impact_wealth_share": 0.2113172434097883
+        },
+        {
+          "day": 720,
+          "local_rate_response_median": 7.299270097878958e-05,
+          "local_rate_response_mean": 7.314658404800426e-05,
+          "rate_slope": -0.00023257808284153346,
+          "yield_slope": -0.0006913209296906416,
+          "log_price_premium_slope": 0.014906666388120255,
+          "impact_share": 0.208,
+          "impact_wealth_share": 0.21133179461052654
+        },
+        {
+          "day": 780,
+          "local_rate_response_median": 7.389423150069876e-05,
+          "local_rate_response_mean": 7.465727218117773e-05,
+          "rate_slope": -0.00032902329343376954,
+          "yield_slope": -0.0009002535377382226,
+          "log_price_premium_slope": 0.01894879814129663,
+          "impact_share": 0.208,
+          "impact_wealth_share": 0.21139722320608853
+        },
+        {
+          "day": 840,
+          "local_rate_response_median": 7.3245108626854e-05,
+          "local_rate_response_mean": 7.365423176924196e-05,
+          "rate_slope": -0.00037834875271447937,
+          "yield_slope": -0.0008759433125153721,
+          "log_price_premium_slope": 0.0194053494450595,
+          "impact_share": 0.214,
+          "impact_wealth_share": 0.2199276900740661
+        },
+        {
+          "day": 900,
+          "local_rate_response_median": 7.228556332917075e-05,
+          "local_rate_response_mean": 7.231548140108008e-05,
+          "rate_slope": -0.00040159414980064283,
+          "yield_slope": -0.0010766687473941071,
+          "log_price_premium_slope": 0.022528816696377622,
+          "impact_share": 0.214,
+          "impact_wealth_share": 0.21997321681437282
+        },
+        {
+          "day": 960,
+          "local_rate_response_median": 3.6814322411924975e-05,
+          "local_rate_response_mean": 4.5800337064739e-05,
+          "rate_slope": -0.0003126800804356686,
+          "yield_slope": -0.0013768021638665235,
+          "log_price_premium_slope": 0.016866105003547734,
+          "impact_share": 0.214,
+          "impact_wealth_share": 0.22005224121446842
+        },
+        {
+          "day": 1020,
+          "local_rate_response_median": 5.919922782226003e-05,
+          "local_rate_response_mean": 6.276483203336011e-05,
+          "rate_slope": -0.00028671413754206463,
+          "yield_slope": -0.0008321827911555673,
+          "log_price_premium_slope": 0.006604119020005802,
+          "impact_share": 0.214,
+          "impact_wealth_share": 0.21993705379802564
+        },
+        {
+          "day": 1080,
+          "local_rate_response_median": 7.95620443383689e-05,
+          "local_rate_response_mean": 8.024646235768773e-05,
+          "rate_slope": -0.0003645722748295384,
+          "yield_slope": -0.0005041380485732236,
+          "log_price_premium_slope": 0.004296583109884801,
+          "impact_share": 0.213,
+          "impact_wealth_share": 0.21955224928796185
+        },
+        {
+          "day": 1140,
+          "local_rate_response_median": 8.596797421446345e-05,
+          "local_rate_response_mean": 8.501832154113265e-05,
+          "rate_slope": -0.0003839667392741377,
+          "yield_slope": -0.0004294810038108462,
+          "log_price_premium_slope": 0.005281565512542225,
+          "impact_share": 0.213,
+          "impact_wealth_share": 0.2195906763369615
+        },
+        {
+          "day": 1200,
+          "local_rate_response_median": 8.613988475370118e-05,
+          "local_rate_response_mean": 8.502441987894003e-05,
+          "rate_slope": -0.0002513181741954032,
+          "yield_slope": -0.0005353092560345629,
+          "log_price_premium_slope": 0.008821589114747197,
+          "impact_share": 0.213,
+          "impact_wealth_share": 0.21959224201346933
+        }
+      ]
+    },
+    {
+      "taste": 0.02,
+      "seed": 28002,
+      "status": "complete",
+      "fingerprint": "437fc06aff383604304acc7219bece91d2d28de1a75455f70d1bb84c746827ee",
+      "seconds": 154.35752920003142,
+      "price_cap_hits": 2,
+      "max_abs_log_mispricing": 0.9817482782035286,
+      "decisions": [
+        {
+          "day": 60,
+          "local_rate_response_median": 5.407908847308375e-05,
+          "local_rate_response_mean": 5.408231477113705e-05,
+          "rate_slope": -6.646870313171555e-05,
+          "yield_slope": -0.0003434997325006362,
+          "log_price_premium_slope": 0.007159928060379031,
+          "impact_share": 0.21,
+          "impact_wealth_share": 0.18682831773193492
+        },
+        {
+          "day": 120,
+          "local_rate_response_median": 5.407231103386643e-05,
+          "local_rate_response_mean": 5.418467989689228e-05,
+          "rate_slope": -5.316102276717019e-05,
+          "yield_slope": -0.00044542470044716667,
+          "log_price_premium_slope": 0.009635020962803286,
+          "impact_share": 0.209,
+          "impact_wealth_share": 0.18623463314582803
+        },
+        {
+          "day": 180,
+          "local_rate_response_median": 5.296832987181813e-05,
+          "local_rate_response_mean": 5.284196942696075e-05,
+          "rate_slope": -2.0117597262780585e-05,
+          "yield_slope": -0.0004824670839060535,
+          "log_price_premium_slope": 0.010847786382405489,
+          "impact_share": 0.209,
+          "impact_wealth_share": 0.18609264496780256
+        },
+        {
+          "day": 240,
+          "local_rate_response_median": 5.3364354204338846e-05,
+          "local_rate_response_mean": 5.320921434898037e-05,
+          "rate_slope": -1.893430389779404e-05,
+          "yield_slope": -0.0004862717069864252,
+          "log_price_premium_slope": 0.010560318937985872,
+          "impact_share": 0.208,
+          "impact_wealth_share": 0.18611792751683856
+        },
+        {
+          "day": 300,
+          "local_rate_response_median": 3.683324711981034e-05,
+          "local_rate_response_mean": 3.886680656166289e-05,
+          "rate_slope": 0.0001334998814922168,
+          "yield_slope": 8.476090518611714e-05,
+          "log_price_premium_slope": -0.0015687167461020414,
+          "impact_share": 0.209,
+          "impact_wealth_share": 0.18717393881469654
+        },
+        {
+          "day": 360,
+          "local_rate_response_median": 3.094050189451524e-05,
+          "local_rate_response_mean": 3.4101317598198884e-05,
+          "rate_slope": 0.00012434483109425223,
+          "yield_slope": -0.0002750710967571908,
+          "log_price_premium_slope": 0.0005698704711947178,
+          "impact_share": 0.216,
+          "impact_wealth_share": 0.19153047088086983
+        },
+        {
+          "day": 420,
+          "local_rate_response_median": 5.3472589844217705e-05,
+          "local_rate_response_mean": 5.36642952703062e-05,
+          "rate_slope": 5.7080964426502605e-06,
+          "yield_slope": -0.001950576978044888,
+          "log_price_premium_slope": 0.017978643703008498,
+          "impact_share": 0.218,
+          "impact_wealth_share": 0.19318556493273487
+        },
+        {
+          "day": 480,
+          "local_rate_response_median": 6.333751449787922e-05,
+          "local_rate_response_mean": 6.297029519905593e-05,
+          "rate_slope": 2.5267406946445977e-05,
+          "yield_slope": -0.0017477268474514161,
+          "log_price_premium_slope": 0.022158402926723875,
+          "impact_share": 0.217,
+          "impact_wealth_share": 0.19175239044142867
+        },
+        {
+          "day": 540,
+          "local_rate_response_median": 6.522009223702412e-05,
+          "local_rate_response_mean": 6.468181464628931e-05,
+          "rate_slope": 2.5507533681629645e-05,
+          "yield_slope": -0.00129072029290412,
+          "log_price_premium_slope": 0.020333137806061906,
+          "impact_share": 0.216,
+          "impact_wealth_share": 0.18851915660089594
+        },
+        {
+          "day": 600,
+          "local_rate_response_median": 6.688332706459514e-05,
+          "local_rate_response_mean": 6.633225624828641e-05,
+          "rate_slope": 0.00013499754055446348,
+          "yield_slope": -0.0010549369499149796,
+          "log_price_premium_slope": 0.019153915437907988,
+          "impact_share": 0.222,
+          "impact_wealth_share": 0.19206666241324052
+        },
+        {
+          "day": 660,
+          "local_rate_response_median": 6.549202151826908e-05,
+          "local_rate_response_mean": 6.508081916454088e-05,
+          "rate_slope": 0.00022232137994463173,
+          "yield_slope": -0.0009980839441229169,
+          "log_price_premium_slope": 0.019955612906461813,
+          "impact_share": 0.22,
+          "impact_wealth_share": 0.19115204576799572
+        },
+        {
+          "day": 720,
+          "local_rate_response_median": 5.476913288116355e-05,
+          "local_rate_response_mean": 5.454520852425874e-05,
+          "rate_slope": 0.0002209020793481998,
+          "yield_slope": -0.0009101923811160209,
+          "log_price_premium_slope": 0.019151954256237287,
+          "impact_share": 0.22,
+          "impact_wealth_share": 0.1906809526755074
+        },
+        {
+          "day": 780,
+          "local_rate_response_median": 5.904546238492419e-05,
+          "local_rate_response_mean": 5.846456869243629e-05,
+          "rate_slope": 0.0001880108985288728,
+          "yield_slope": -0.0008806849780102005,
+          "log_price_premium_slope": 0.019244460876215178,
+          "impact_share": 0.219,
+          "impact_wealth_share": 0.18863759950867565
+        },
+        {
+          "day": 840,
+          "local_rate_response_median": 5.887938218175089e-05,
+          "local_rate_response_mean": 5.8199576126900245e-05,
+          "rate_slope": 0.0001382243643266766,
+          "yield_slope": -0.000832722272245738,
+          "log_price_premium_slope": 0.018633822619623406,
+          "impact_share": 0.222,
+          "impact_wealth_share": 0.1913915669240687
+        },
+        {
+          "day": 900,
+          "local_rate_response_median": 5.5744022405700464e-05,
+          "local_rate_response_mean": 5.4897438317626165e-05,
+          "rate_slope": 0.00019165481270216596,
+          "yield_slope": -0.000713780380199894,
+          "log_price_premium_slope": 0.015724785928114972,
+          "impact_share": 0.224,
+          "impact_wealth_share": 0.19343731020625227
+        },
+        {
+          "day": 960,
+          "local_rate_response_median": 5.406844836766194e-05,
+          "local_rate_response_mean": 5.3928488084947184e-05,
+          "rate_slope": 0.00021359338571756497,
+          "yield_slope": -0.0006194536671859859,
+          "log_price_premium_slope": 0.013720339680130455,
+          "impact_share": 0.224,
+          "impact_wealth_share": 0.19322919682762799
+        },
+        {
+          "day": 1020,
+          "local_rate_response_median": 4.470622607833796e-05,
+          "local_rate_response_mean": 4.500019275910852e-05,
+          "rate_slope": 0.00020184389342715433,
+          "yield_slope": -0.000865145261742259,
+          "log_price_premium_slope": 0.01569689696481937,
+          "impact_share": 0.224,
+          "impact_wealth_share": 0.19378519379892867
+        },
+        {
+          "day": 1080,
+          "local_rate_response_median": 5.012062140631638e-05,
+          "local_rate_response_mean": 5.083704388468325e-05,
+          "rate_slope": 0.0004476949537840492,
+          "yield_slope": -0.00020389142855149793,
+          "log_price_premium_slope": 0.0008945399697990933,
+          "impact_share": 0.232,
+          "impact_wealth_share": 0.20041510835339962
+        },
+        {
+          "day": 1140,
+          "local_rate_response_median": 6.06764668362526e-05,
+          "local_rate_response_mean": 6.1005450981053245e-05,
+          "rate_slope": 0.0005471589659905988,
+          "yield_slope": 0.00022260490417108994,
+          "log_price_premium_slope": -0.005609948524998741,
+          "impact_share": 0.231,
+          "impact_wealth_share": 0.19891933451303548
+        },
+        {
+          "day": 1200,
+          "local_rate_response_median": 6.314184106917802e-05,
+          "local_rate_response_mean": 6.279659868831373e-05,
+          "rate_slope": 0.0005333484436006817,
+          "yield_slope": -1.937518179804824e-05,
+          "log_price_premium_slope": -0.0007991252919838728,
+          "impact_share": 0.23,
+          "impact_wealth_share": 0.19796742938871967
+        }
+      ]
+    },
+    {
+      "taste": 0.02,
+      "seed": 28003,
+      "status": "complete",
+      "fingerprint": "17cd009ec66260084fe041691eace411341b27ada67654945efeb583f4a57a8f",
+      "seconds": 155.82452989998274,
+      "price_cap_hits": 0,
+      "max_abs_log_mispricing": 0.5765212513046533,
+      "decisions": [
+        {
+          "day": 60,
+          "local_rate_response_median": 6.987453915362714e-05,
+          "local_rate_response_mean": 7.056201891378783e-05,
+          "rate_slope": -0.00011521415415224483,
+          "yield_slope": -0.0003424496468025331,
+          "log_price_premium_slope": 0.006803276885859833,
+          "impact_share": 0.197,
+          "impact_wealth_share": 0.2049191513933938
+        },
+        {
+          "day": 120,
+          "local_rate_response_median": 7.337780063309434e-05,
+          "local_rate_response_mean": 7.417087294661109e-05,
+          "rate_slope": -0.00015654656135173916,
+          "yield_slope": -0.00039925145183882345,
+          "log_price_premium_slope": 0.008447604368826387,
+          "impact_share": 0.198,
+          "impact_wealth_share": 0.20581189715099313
+        },
+        {
+          "day": 180,
+          "local_rate_response_median": 6.808789636934294e-05,
+          "local_rate_response_mean": 6.86721908131617e-05,
+          "rate_slope": -0.00022388087207322364,
+          "yield_slope": -0.00043744993293297585,
+          "log_price_premium_slope": 0.00944379303967556,
+          "impact_share": 0.198,
+          "impact_wealth_share": 0.2056816915289154
+        },
+        {
+          "day": 240,
+          "local_rate_response_median": 7.214147401207955e-05,
+          "local_rate_response_mean": 7.231235436159845e-05,
+          "rate_slope": -0.0002487265403315358,
+          "yield_slope": -0.0005098509011895448,
+          "log_price_premium_slope": 0.011255880162107186,
+          "impact_share": 0.2,
+          "impact_wealth_share": 0.20720179217005472
+        },
+        {
+          "day": 300,
+          "local_rate_response_median": 6.526973351511127e-05,
+          "local_rate_response_mean": 6.5586885776704e-05,
+          "rate_slope": -0.0002903916256456978,
+          "yield_slope": -0.0006556154098665376,
+          "log_price_premium_slope": 0.014447073074646221,
+          "impact_share": 0.2,
+          "impact_wealth_share": 0.20717333154004297
+        },
+        {
+          "day": 360,
+          "local_rate_response_median": 6.0307023861726116e-05,
+          "local_rate_response_mean": 5.98579375241037e-05,
+          "rate_slope": -0.00029327806696089024,
+          "yield_slope": -0.0006911207915902392,
+          "log_price_premium_slope": 0.013717223945087263,
+          "impact_share": 0.198,
+          "impact_wealth_share": 0.20617037960085566
+        },
+        {
+          "day": 420,
+          "local_rate_response_median": 6.750240506569517e-05,
+          "local_rate_response_mean": 6.71009771868175e-05,
+          "rate_slope": -0.0005047000008505497,
+          "yield_slope": -0.001516184021141815,
+          "log_price_premium_slope": 0.025925310505436817,
+          "impact_share": 0.198,
+          "impact_wealth_share": 0.2064968412132017
+        },
+        {
+          "day": 480,
+          "local_rate_response_median": 6.641878928814668e-05,
+          "local_rate_response_mean": 6.599558304040202e-05,
+          "rate_slope": -0.00043767828874037074,
+          "yield_slope": -0.0012429608655344204,
+          "log_price_premium_slope": 0.022226943270114034,
+          "impact_share": 0.201,
+          "impact_wealth_share": 0.2121639952477458
+        },
+        {
+          "day": 540,
+          "local_rate_response_median": 7.36106743454195e-05,
+          "local_rate_response_mean": 7.293398132645997e-05,
+          "rate_slope": -0.0004218328148766885,
+          "yield_slope": -0.0007272007772258144,
+          "log_price_premium_slope": 0.013110027456360489,
+          "impact_share": 0.201,
+          "impact_wealth_share": 0.212198688287802
+        },
+        {
+          "day": 600,
+          "local_rate_response_median": 7.563070596569972e-05,
+          "local_rate_response_mean": 7.554330025852188e-05,
+          "rate_slope": -0.00044793146701769637,
+          "yield_slope": -0.0005389014779042502,
+          "log_price_premium_slope": 0.010319198540932585,
+          "impact_share": 0.2,
+          "impact_wealth_share": 0.21108731219480384
+        },
+        {
+          "day": 660,
+          "local_rate_response_median": 7.853699299095461e-05,
+          "local_rate_response_mean": 7.874522286850618e-05,
+          "rate_slope": -0.0004461335653748326,
+          "yield_slope": -0.0005103410695841224,
+          "log_price_premium_slope": 0.010736301006615514,
+          "impact_share": 0.202,
+          "impact_wealth_share": 0.21174939046975327
+        },
+        {
+          "day": 720,
+          "local_rate_response_median": 7.561104756085009e-05,
+          "local_rate_response_mean": 7.540603611022687e-05,
+          "rate_slope": -0.000549139356315429,
+          "yield_slope": -0.0005877904219758135,
+          "log_price_premium_slope": 0.01316273913240493,
+          "impact_share": 0.202,
+          "impact_wealth_share": 0.211843335331069
+        },
+        {
+          "day": 780,
+          "local_rate_response_median": 6.855122872538114e-05,
+          "local_rate_response_mean": 6.84317359109853e-05,
+          "rate_slope": -0.0006135118675230927,
+          "yield_slope": -0.0007053649449509639,
+          "log_price_premium_slope": 0.01537838721495017,
+          "impact_share": 0.206,
+          "impact_wealth_share": 0.21312246765768628
+        },
+        {
+          "day": 840,
+          "local_rate_response_median": 6.557099727794117e-05,
+          "local_rate_response_mean": 6.462927417696472e-05,
+          "rate_slope": -0.0006259444110643619,
+          "yield_slope": -0.0010208877292676036,
+          "log_price_premium_slope": 0.016618689571135603,
+          "impact_share": 0.21,
+          "impact_wealth_share": 0.21690898511137324
+        },
+        {
+          "day": 900,
+          "local_rate_response_median": 7.497784126806413e-05,
+          "local_rate_response_mean": 7.517819440651976e-05,
+          "rate_slope": -0.0005862625442382377,
+          "yield_slope": -0.000993422608704699,
+          "log_price_premium_slope": 0.016997996733490943,
+          "impact_share": 0.207,
+          "impact_wealth_share": 0.21637428673994574
+        },
+        {
+          "day": 960,
+          "local_rate_response_median": 7.789893742367389e-05,
+          "local_rate_response_mean": 7.818450244924873e-05,
+          "rate_slope": -0.0005742860476181273,
+          "yield_slope": -0.0008855305011741663,
+          "log_price_premium_slope": 0.017215981583042755,
+          "impact_share": 0.207,
+          "impact_wealth_share": 0.21615702362950084
+        },
+        {
+          "day": 1020,
+          "local_rate_response_median": 8.125925845129701e-05,
+          "local_rate_response_mean": 8.138425493536555e-05,
+          "rate_slope": -0.000466009860677257,
+          "yield_slope": -0.0009183684264123703,
+          "log_price_premium_slope": 0.019438987829776697,
+          "impact_share": 0.207,
+          "impact_wealth_share": 0.2159609736310123
+        },
+        {
+          "day": 1080,
+          "local_rate_response_median": 7.085966000483409e-05,
+          "local_rate_response_mean": 7.056954462705734e-05,
+          "rate_slope": -0.0005522316438785806,
+          "yield_slope": -0.0010034140534099548,
+          "log_price_premium_slope": 0.02173212771546094,
+          "impact_share": 0.207,
+          "impact_wealth_share": 0.215972874170026
+        },
+        {
+          "day": 1140,
+          "local_rate_response_median": 7.452924728717757e-05,
+          "local_rate_response_mean": 7.516976803809459e-05,
+          "rate_slope": -0.0005341458156445656,
+          "yield_slope": -0.001187952283049306,
+          "log_price_premium_slope": 0.024490224304706744,
+          "impact_share": 0.208,
+          "impact_wealth_share": 0.21653486152087126
+        },
+        {
+          "day": 1200,
+          "local_rate_response_median": 6.577715052741412e-05,
+          "local_rate_response_mean": 6.460691289084814e-05,
+          "rate_slope": -0.0005267729718581905,
+          "yield_slope": -0.0010722815165604429,
+          "log_price_premium_slope": 0.021848101892995086,
+          "impact_share": 0.207,
+          "impact_wealth_share": 0.2158334276986324
+        }
+      ]
+    },
+    {
+      "taste": 0.05,
+      "seed": 28001,
+      "status": "complete",
+      "fingerprint": "e654253592834a80722e373181839cdeb15e33061eae36537593edbedd2f8457",
+      "seconds": 155.62128279998433,
+      "price_cap_hits": 2,
+      "max_abs_log_mispricing": 0.9721342285260465,
+      "decisions": [
+        {
+          "day": 60,
+          "local_rate_response_median": 0.00017601929367401232,
+          "local_rate_response_mean": 0.00017809752531140134,
+          "rate_slope": -0.0002748581477460531,
+          "yield_slope": -0.0010545994334974986,
+          "log_price_premium_slope": 0.022239064322170685,
+          "impact_share": 0.208,
+          "impact_wealth_share": 0.20814943406466566
+        },
+        {
+          "day": 120,
+          "local_rate_response_median": 0.0001781020929432442,
+          "local_rate_response_mean": 0.00017896649034381521,
+          "rate_slope": -0.0003103321481318386,
+          "yield_slope": -0.0012245164614080708,
+          "log_price_premium_slope": 0.027029382414070866,
+          "impact_share": 0.212,
+          "impact_wealth_share": 0.21149476608656645
+        },
+        {
+          "day": 180,
+          "local_rate_response_median": 0.00017002176611683785,
+          "local_rate_response_mean": 0.0001706582288894154,
+          "rate_slope": -0.0003321526778648759,
+          "yield_slope": -0.0013556705600772795,
+          "log_price_premium_slope": 0.03039129895335141,
+          "impact_share": 0.21,
+          "impact_wealth_share": 0.21062488068353644
+        },
+        {
+          "day": 240,
+          "local_rate_response_median": 0.0001517124924548147,
+          "local_rate_response_mean": 0.00015356286868502785,
+          "rate_slope": -0.00042346057816139654,
+          "yield_slope": -0.0015043845514625717,
+          "log_price_premium_slope": 0.03369327493231369,
+          "impact_share": 0.21,
+          "impact_wealth_share": 0.21072534249212888
+        },
+        {
+          "day": 300,
+          "local_rate_response_median": 9.956645357825098e-05,
+          "local_rate_response_mean": 0.00010291009593928321,
+          "rate_slope": -0.0005157694370531114,
+          "yield_slope": -0.0025219069563256124,
+          "log_price_premium_slope": 0.03257936102654398,
+          "impact_share": 0.214,
+          "impact_wealth_share": 0.21639340966823864
+        },
+        {
+          "day": 360,
+          "local_rate_response_median": 0.00015966038713355834,
+          "local_rate_response_mean": 0.00016123574200683084,
+          "rate_slope": -0.000512424267194756,
+          "yield_slope": -0.0022522286596467268,
+          "log_price_premium_slope": 0.025717674148633577,
+          "impact_share": 0.211,
+          "impact_wealth_share": 0.21550564661678906
+        },
+        {
+          "day": 420,
+          "local_rate_response_median": 0.0002017354877520457,
+          "local_rate_response_mean": 0.00020431160848727154,
+          "rate_slope": -0.0004775116569740556,
+          "yield_slope": -0.002171261274068232,
+          "log_price_premium_slope": 0.029634995143075257,
+          "impact_share": 0.211,
+          "impact_wealth_share": 0.21548385749975568
+        },
+        {
+          "day": 480,
+          "local_rate_response_median": 0.00021448808966847483,
+          "local_rate_response_mean": 0.00021822205539612054,
+          "rate_slope": -0.0005555011126458211,
+          "yield_slope": -0.0021216278411434306,
+          "log_price_premium_slope": 0.03491162997046077,
+          "impact_share": 0.211,
+          "impact_wealth_share": 0.21548273950039826
+        },
+        {
+          "day": 540,
+          "local_rate_response_median": 0.00021328558958261175,
+          "local_rate_response_mean": 0.00021580413168648685,
+          "rate_slope": -0.0006238664014596229,
+          "yield_slope": -0.0020702663143776783,
+          "log_price_premium_slope": 0.038783950204095884,
+          "impact_share": 0.211,
+          "impact_wealth_share": 0.21552202760127498
+        },
+        {
+          "day": 600,
+          "local_rate_response_median": 0.00021239304252910883,
+          "local_rate_response_mean": 0.0002163826066631894,
+          "rate_slope": -0.0006316062391019973,
+          "yield_slope": -0.002088836484185405,
+          "log_price_premium_slope": 0.043145081576624125,
+          "impact_share": 0.215,
+          "impact_wealth_share": 0.21787946338254818
+        },
+        {
+          "day": 660,
+          "local_rate_response_median": 0.0001988971381085486,
+          "local_rate_response_mean": 0.00020219222763017907,
+          "rate_slope": -0.0005986965107040274,
+          "yield_slope": -0.002111161243399855,
+          "log_price_premium_slope": 0.04548866348990417,
+          "impact_share": 0.215,
+          "impact_wealth_share": 0.2178285044139566
+        },
+        {
+          "day": 720,
+          "local_rate_response_median": 0.00018293411064941448,
+          "local_rate_response_mean": 0.0001849565973871806,
+          "rate_slope": -0.0005919651831534224,
+          "yield_slope": -0.002171039505015446,
+          "log_price_premium_slope": 0.04685835721738005,
+          "impact_share": 0.214,
+          "impact_wealth_share": 0.21716246510666337
+        },
+        {
+          "day": 780,
+          "local_rate_response_median": 0.00018603486805165444,
+          "local_rate_response_mean": 0.00018840158565924385,
+          "rate_slope": -0.0006560384291217474,
+          "yield_slope": -0.002351212557738501,
+          "log_price_premium_slope": 0.049613787582879064,
+          "impact_share": 0.214,
+          "impact_wealth_share": 0.21723704281920048
+        },
+        {
+          "day": 840,
+          "local_rate_response_median": 0.00018108050060125356,
+          "local_rate_response_mean": 0.00018533664967342481,
+          "rate_slope": -0.0006878065938093677,
+          "yield_slope": -0.0022554933320954556,
+          "log_price_premium_slope": 0.050074075314292935,
+          "impact_share": 0.22,
+          "impact_wealth_share": 0.22577910496672812
+        },
+        {
+          "day": 900,
+          "local_rate_response_median": 0.0001790755049526333,
+          "local_rate_response_mean": 0.0001813685694857663,
+          "rate_slope": -0.0007475054003169224,
+          "yield_slope": -0.002627813372745428,
+          "log_price_premium_slope": 0.05417255022528541,
+          "impact_share": 0.22,
+          "impact_wealth_share": 0.22592090618966293
+        },
+        {
+          "day": 960,
+          "local_rate_response_median": 9.420087605366741e-05,
+          "local_rate_response_mean": 0.00011775837299490446,
+          "rate_slope": -0.0006573221607695667,
+          "yield_slope": -0.0035244202015282727,
+          "log_price_premium_slope": 0.04417984371380624,
+          "impact_share": 0.226,
+          "impact_wealth_share": 0.22873019500240557
+        },
+        {
+          "day": 1020,
+          "local_rate_response_median": 0.00014977963702482878,
+          "local_rate_response_mean": 0.00016045330089993555,
+          "rate_slope": -0.0005121539508918087,
+          "yield_slope": -0.0027573638478793454,
+          "log_price_premium_slope": 0.02711893678289889,
+          "impact_share": 0.226,
+          "impact_wealth_share": 0.22862725055287822
+        },
+        {
+          "day": 1080,
+          "local_rate_response_median": 0.00020181453000040525,
+          "local_rate_response_mean": 0.0002038699704913071,
+          "rate_slope": -0.0006274209047196324,
+          "yield_slope": -0.0023280515155675503,
+          "log_price_premium_slope": 0.028205650274563336,
+          "impact_share": 0.225,
+          "impact_wealth_share": 0.2283435328201881
+        },
+        {
+          "day": 1140,
+          "local_rate_response_median": 0.00021179997079057435,
+          "local_rate_response_mean": 0.0002154406952791152,
+          "rate_slope": -0.000599982698953179,
+          "yield_slope": -0.002066017833842581,
+          "log_price_premium_slope": 0.03157612542415687,
+          "impact_share": 0.225,
+          "impact_wealth_share": 0.22835387426170525
+        },
+        {
+          "day": 1200,
+          "local_rate_response_median": 0.00021296005021037519,
+          "local_rate_response_mean": 0.00021450061346932816,
+          "rate_slope": -0.0004857219656216494,
+          "yield_slope": -0.0020225687265623916,
+          "log_price_premium_slope": 0.036752865570334095,
+          "impact_share": 0.224,
+          "impact_wealth_share": 0.2275260648572908
+        }
+      ]
+    },
+    {
+      "taste": 0.05,
+      "seed": 28002,
+      "status": "complete",
+      "fingerprint": "19079e4cdc63244f3a6992fe9de2f7de46a91c46bc28029fe215dcd3c326ba9f",
+      "seconds": 156.1759854000411,
+      "price_cap_hits": 2,
+      "max_abs_log_mispricing": 1.0042666330837244,
+      "decisions": [
+        {
+          "day": 60,
+          "local_rate_response_median": 0.00013178600563262263,
+          "local_rate_response_mean": 0.00013309555710674394,
+          "rate_slope": -0.00017481359076099468,
+          "yield_slope": -0.000821653699709276,
+          "log_price_premium_slope": 0.017143722428582853,
+          "impact_share": 0.21,
+          "impact_wealth_share": 0.18686338001796665
+        },
+        {
+          "day": 120,
+          "local_rate_response_median": 0.00013262931204246025,
+          "local_rate_response_mean": 0.00013334721884764305,
+          "rate_slope": -0.0001899509042858624,
+          "yield_slope": -0.0010270957231047673,
+          "log_price_premium_slope": 0.022229265375027313,
+          "impact_share": 0.21,
+          "impact_wealth_share": 0.18686826251165953
+        },
+        {
+          "day": 180,
+          "local_rate_response_median": 0.0001302203098412016,
+          "local_rate_response_mean": 0.00013206104868324236,
+          "rate_slope": -0.00017373164993075206,
+          "yield_slope": -0.0011283167462164596,
+          "log_price_premium_slope": 0.025397280721040954,
+          "impact_share": 0.214,
+          "impact_wealth_share": 0.18910957946609794
+        },
+        {
+          "day": 240,
+          "local_rate_response_median": 0.00013190517204856358,
+          "local_rate_response_mean": 0.0001330238809471846,
+          "rate_slope": -0.0001949067525584358,
+          "yield_slope": -0.0012208562753668207,
+          "log_price_premium_slope": 0.02653550102220274,
+          "impact_share": 0.214,
+          "impact_wealth_share": 0.1893794929905002
+        },
+        {
+          "day": 300,
+          "local_rate_response_median": 9.352452921169838e-05,
+          "local_rate_response_mean": 9.755457232146249e-05,
+          "rate_slope": -1.333784371491866e-05,
+          "yield_slope": -0.0007769567137963939,
+          "log_price_premium_slope": 0.011645033846134483,
+          "impact_share": 0.215,
+          "impact_wealth_share": 0.19037653549189348
+        },
+        {
+          "day": 360,
+          "local_rate_response_median": 7.867449562485568e-05,
+          "local_rate_response_mean": 8.456560206026152e-05,
+          "rate_slope": -3.794436192461291e-05,
+          "yield_slope": -0.0016023890720481225,
+          "log_price_premium_slope": 0.015152976873740748,
+          "impact_share": 0.215,
+          "impact_wealth_share": 0.19062481865668537
+        },
+        {
+          "day": 420,
+          "local_rate_response_median": 0.0001288326276131903,
+          "local_rate_response_mean": 0.0001312510340386498,
+          "rate_slope": -0.00019071477082205026,
+          "yield_slope": -0.003590023830584353,
+          "log_price_premium_slope": 0.03651129677218835,
+          "impact_share": 0.213,
+          "impact_wealth_share": 0.18977762127769088
+        },
+        {
+          "day": 480,
+          "local_rate_response_median": 0.00015220980061897085,
+          "local_rate_response_mean": 0.00015354636281685404,
+          "rate_slope": -0.00017343689228519106,
+          "yield_slope": -0.003189289516523153,
+          "log_price_premium_slope": 0.04242292688171185,
+          "impact_share": 0.212,
+          "impact_wealth_share": 0.18835302927106307
+        },
+        {
+          "day": 540,
+          "local_rate_response_median": 0.0001558311103551252,
+          "local_rate_response_mean": 0.00015623812418844726,
+          "rate_slope": -0.00015554580416266502,
+          "yield_slope": -0.0025237886933868236,
+          "log_price_premium_slope": 0.041107562332656236,
+          "impact_share": 0.208,
+          "impact_wealth_share": 0.18402793925581235
+        },
+        {
+          "day": 600,
+          "local_rate_response_median": 0.00015279999556012057,
+          "local_rate_response_mean": 0.0001524962079396851,
+          "rate_slope": -2.3367145445050204e-05,
+          "yield_slope": -0.0021209771955534988,
+          "log_price_premium_slope": 0.039612187208957615,
+          "impact_share": 0.207,
+          "impact_wealth_share": 0.17642841994384015
+        },
+        {
+          "day": 660,
+          "local_rate_response_median": 0.00014977504210252822,
+          "local_rate_response_mean": 0.00015040347169852994,
+          "rate_slope": 0.0001098799657852093,
+          "yield_slope": -0.0019536523112144385,
+          "log_price_premium_slope": 0.039596436681811856,
+          "impact_share": 0.207,
+          "impact_wealth_share": 0.17627057239082755
+        },
+        {
+          "day": 720,
+          "local_rate_response_median": 0.00012461773932248284,
+          "local_rate_response_mean": 0.00012528347115754978,
+          "rate_slope": 0.0001274979870218228,
+          "yield_slope": -0.0017880914252068826,
+          "log_price_premium_slope": 0.037965481538689595,
+          "impact_share": 0.206,
+          "impact_wealth_share": 0.17520058558107546
+        },
+        {
+          "day": 780,
+          "local_rate_response_median": 0.0001329937911906278,
+          "local_rate_response_mean": 0.00013385957920227987,
+          "rate_slope": 0.00011417708166981272,
+          "yield_slope": -0.0017067059228982613,
+          "log_price_premium_slope": 0.0374713434809332,
+          "impact_share": 0.204,
+          "impact_wealth_share": 0.17268232457071264
+        },
+        {
+          "day": 840,
+          "local_rate_response_median": 0.00013197128398501236,
+          "local_rate_response_mean": 0.00013309414058272043,
+          "rate_slope": 7.861582026501348e-05,
+          "yield_slope": -0.001655890330986336,
+          "log_price_premium_slope": 0.03719149794452165,
+          "impact_share": 0.207,
+          "impact_wealth_share": 0.17543787361274635
+        },
+        {
+          "day": 900,
+          "local_rate_response_median": 0.00012525624110950933,
+          "local_rate_response_mean": 0.00012537933758509736,
+          "rate_slope": 0.00013625738877831706,
+          "yield_slope": -0.0016600812777131143,
+          "log_price_premium_slope": 0.03659806670420596,
+          "impact_share": 0.209,
+          "impact_wealth_share": 0.17752412112684904
+        },
+        {
+          "day": 960,
+          "local_rate_response_median": 0.00012852440067256227,
+          "local_rate_response_mean": 0.00013015716056857598,
+          "rate_slope": 0.00017093647259409017,
+          "yield_slope": -0.0017047423346356041,
+          "log_price_premium_slope": 0.037650427796987254,
+          "impact_share": 0.214,
+          "impact_wealth_share": 0.18415976655336366
+        },
+        {
+          "day": 1020,
+          "local_rate_response_median": 0.00010760640148324281,
+          "local_rate_response_mean": 0.00010827429258737922,
+          "rate_slope": 0.00017620948097825268,
+          "yield_slope": -0.0021318913093727747,
+          "log_price_premium_slope": 0.03948711225057073,
+          "impact_share": 0.214,
+          "impact_wealth_share": 0.18470842661233156
+        },
+        {
+          "day": 1080,
+          "local_rate_response_median": 0.0001288477206349408,
+          "local_rate_response_mean": 0.0001306472659109355,
+          "rate_slope": 0.00043919908648050075,
+          "yield_slope": -0.0016690457471476444,
+          "log_price_premium_slope": 0.024751793635355752,
+          "impact_share": 0.232,
+          "impact_wealth_share": 0.19836206675997092
+        },
+        {
+          "day": 1140,
+          "local_rate_response_median": 0.0001512162323212093,
+          "local_rate_response_mean": 0.00015751468812939506,
+          "rate_slope": 0.0006125532820954692,
+          "yield_slope": -0.0011469058121225224,
+          "log_price_premium_slope": 0.017519235037840766,
+          "impact_share": 0.231,
+          "impact_wealth_share": 0.19683585833984454
+        },
+        {
+          "day": 1200,
+          "local_rate_response_median": 0.00015540565078097125,
+          "local_rate_response_mean": 0.00016120789199529793,
+          "rate_slope": 0.0005837506156555357,
+          "yield_slope": -0.001273552893811683,
+          "log_price_premium_slope": 0.0229318775850641,
+          "impact_share": 0.229,
+          "impact_wealth_share": 0.19520576237297863
+        }
+      ]
+    },
+    {
+      "taste": 0.05,
+      "seed": 28003,
+      "status": "complete",
+      "fingerprint": "593e49df3ee4d5051bf88c35907a0b4da95872c2b2ad01acc9a2f1c0b08d015b",
+      "seconds": 155.2019909999799,
+      "price_cap_hits": 0,
+      "max_abs_log_mispricing": 0.6342462757590285,
+      "decisions": [
+        {
+          "day": 60,
+          "local_rate_response_median": 0.000166885123919042,
+          "local_rate_response_mean": 0.0001725989549807387,
+          "rate_slope": -0.00023496622637961191,
+          "yield_slope": -0.0008892333604293592,
+          "log_price_premium_slope": 0.01760625256432847,
+          "impact_share": 0.197,
+          "impact_wealth_share": 0.20500064079205094
+        },
+        {
+          "day": 120,
+          "local_rate_response_median": 0.00017814624274342092,
+          "local_rate_response_mean": 0.00018359101353585954,
+          "rate_slope": -0.00031261226669788956,
+          "yield_slope": -0.0010844332808848064,
+          "log_price_premium_slope": 0.02286133638405514,
+          "impact_share": 0.201,
+          "impact_wealth_share": 0.20865079140266388
+        },
+        {
+          "day": 180,
+          "local_rate_response_median": 0.00017203346418453305,
+          "local_rate_response_mean": 0.00017620678895857088,
+          "rate_slope": -0.0004134044297795814,
+          "yield_slope": -0.0012790787771041342,
+          "log_price_premium_slope": 0.02752299274525551,
+          "impact_share": 0.216,
+          "impact_wealth_share": 0.2183875782512588
+        },
+        {
+          "day": 240,
+          "local_rate_response_median": 0.00018424770979192718,
+          "local_rate_response_mean": 0.0001870348201869703,
+          "rate_slope": -0.00047589179005970867,
+          "yield_slope": -0.0014972806293523098,
+          "log_price_premium_slope": 0.0331198841672135,
+          "impact_share": 0.221,
+          "impact_wealth_share": 0.22182480240162514
+        },
+        {
+          "day": 300,
+          "local_rate_response_median": 0.00017333149641227602,
+          "local_rate_response_mean": 0.00017583551917356777,
+          "rate_slope": -0.0005519058522306656,
+          "yield_slope": -0.0017846359827261935,
+          "log_price_premium_slope": 0.03939147270461331,
+          "impact_share": 0.224,
+          "impact_wealth_share": 0.22519335994707057
+        },
+        {
+          "day": 360,
+          "local_rate_response_median": 0.00015875660807921813,
+          "local_rate_response_mean": 0.00016089756660054498,
+          "rate_slope": -0.0005938651454594155,
+          "yield_slope": -0.002040801720326091,
+          "log_price_premium_slope": 0.040701769080681995,
+          "impact_share": 0.223,
+          "impact_wealth_share": 0.22475091563795763
+        },
+        {
+          "day": 420,
+          "local_rate_response_median": 0.00017681550118379762,
+          "local_rate_response_mean": 0.0001793806721205646,
+          "rate_slope": -0.0008519779624044985,
+          "yield_slope": -0.0032938747943614057,
+          "log_price_premium_slope": 0.05606332242183862,
+          "impact_share": 0.223,
+          "impact_wealth_share": 0.2250699090612809
+        },
+        {
+          "day": 480,
+          "local_rate_response_median": 0.00017659922885142115,
+          "local_rate_response_mean": 0.00017549186686625467,
+          "rate_slope": -0.0007917843489111189,
+          "yield_slope": -0.0029688828163952755,
+          "log_price_premium_slope": 0.05249904767843499,
+          "impact_share": 0.226,
+          "impact_wealth_share": 0.23078010289927622
+        },
+        {
+          "day": 540,
+          "local_rate_response_median": 0.00019799674234624874,
+          "local_rate_response_mean": 0.0001990065044690715,
+          "rate_slope": -0.0007556415940332813,
+          "yield_slope": -0.0024682652852800985,
+          "log_price_premium_slope": 0.04361894639727496,
+          "impact_share": 0.228,
+          "impact_wealth_share": 0.233606431197346
+        },
+        {
+          "day": 600,
+          "local_rate_response_median": 0.00019698499240596498,
+          "local_rate_response_mean": 0.00020225802333089155,
+          "rate_slope": -0.0007566722799560532,
+          "yield_slope": -0.002075972063077351,
+          "log_price_premium_slope": 0.039565857826391104,
+          "impact_share": 0.225,
+          "impact_wealth_share": 0.23028242132465676
+        },
+        {
+          "day": 660,
+          "local_rate_response_median": 0.0002084893995431798,
+          "local_rate_response_mean": 0.00021279315141393778,
+          "rate_slope": -0.0007888178603744484,
+          "yield_slope": -0.001993290106521064,
+          "log_price_premium_slope": 0.041695317655531985,
+          "impact_share": 0.231,
+          "impact_wealth_share": 0.23672791723861214
+        },
+        {
+          "day": 720,
+          "local_rate_response_median": 0.00021492799981608903,
+          "local_rate_response_mean": 0.00021773528617599294,
+          "rate_slope": -0.0009050795587838052,
+          "yield_slope": -0.0021274344162131374,
+          "log_price_premium_slope": 0.04730657632634012,
+          "impact_share": 0.24,
+          "impact_wealth_share": 0.24689179191901137
+        },
+        {
+          "day": 780,
+          "local_rate_response_median": 0.00019797501067101626,
+          "local_rate_response_mean": 0.00020065579280038672,
+          "rate_slope": -0.0010129182949165287,
+          "yield_slope": -0.0024299809893962173,
+          "log_price_premium_slope": 0.05256953878152605,
+          "impact_share": 0.246,
+          "impact_wealth_share": 0.2539809105072951
+        },
+        {
+          "day": 840,
+          "local_rate_response_median": 0.0001877789857250961,
+          "local_rate_response_mean": 0.0001893818423174857,
+          "rate_slope": -0.0009023267184614527,
+          "yield_slope": -0.0027713801570118175,
+          "log_price_premium_slope": 0.04527217700370106,
+          "impact_share": 0.258,
+          "impact_wealth_share": 0.2617990901786859
+        },
+        {
+          "day": 900,
+          "local_rate_response_median": 0.0002203859002484953,
+          "local_rate_response_mean": 0.00022273117788940437,
+          "rate_slope": -0.0008023007513658283,
+          "yield_slope": -0.0025867084435299927,
+          "log_price_premium_slope": 0.04333929009272121,
+          "impact_share": 0.255,
+          "impact_wealth_share": 0.26118938409587783
+        },
+        {
+          "day": 960,
+          "local_rate_response_median": 0.0002276583792210347,
+          "local_rate_response_mean": 0.00023294840345805128,
+          "rate_slope": -0.0007080168040221077,
+          "yield_slope": -0.0024354768258860113,
+          "log_price_premium_slope": 0.04622962685821283,
+          "impact_share": 0.255,
+          "impact_wealth_share": 0.2609789238340854
+        },
+        {
+          "day": 1020,
+          "local_rate_response_median": 0.00024053798020985342,
+          "local_rate_response_mean": 0.0002445714897609315,
+          "rate_slope": -0.0005878537814803381,
+          "yield_slope": -0.0025013115625982544,
+          "log_price_premium_slope": 0.05156720257135986,
+          "impact_share": 0.259,
+          "impact_wealth_share": 0.26233673170420246
+        },
+        {
+          "day": 1080,
+          "local_rate_response_median": 0.000206057748602447,
+          "local_rate_response_mean": 0.00021280111795404322,
+          "rate_slope": -0.0006267840583732083,
+          "yield_slope": -0.0026161072245902764,
+          "log_price_premium_slope": 0.055351620895217585,
+          "impact_share": 0.259,
+          "impact_wealth_share": 0.2626209338207102
+        },
+        {
+          "day": 1140,
+          "local_rate_response_median": 0.00022386667011809865,
+          "local_rate_response_mean": 0.00022967405532775298,
+          "rate_slope": -0.0006468154541189633,
+          "yield_slope": -0.0028946899613607364,
+          "log_price_premium_slope": 0.059593764364889557,
+          "impact_share": 0.272,
+          "impact_wealth_share": 0.2678501134228553
+        },
+        {
+          "day": 1200,
+          "local_rate_response_median": 0.00019707377226325977,
+          "local_rate_response_mean": 0.00020141199560744962,
+          "rate_slope": -0.0005311279940676636,
+          "yield_slope": -0.002985122513710807,
+          "log_price_premium_slope": 0.06059053578892346,
+          "impact_share": 0.279,
+          "impact_wealth_share": 0.2727842643439065
+        }
+      ]
+    },
+    {
+      "taste": 0.1,
+      "seed": 28001,
+      "status": "complete",
+      "fingerprint": "7663b9c9bace0194b49403bb4b216b409606feea049fbd09d09b526b9d672ef1",
+      "seconds": 154.70091849996243,
+      "price_cap_hits": 2,
+      "max_abs_log_mispricing": 1.0179910294368082,
+      "decisions": [
+        {
+          "day": 60,
+          "local_rate_response_median": 0.0003362696979427282,
+          "local_rate_response_mean": 0.0003496334782056066,
+          "rate_slope": -0.0005063426485581558,
+          "yield_slope": -0.002035679542963353,
+          "log_price_premium_slope": 0.04314992458474896,
+          "impact_share": 0.208,
+          "impact_wealth_share": 0.20843471178631273
+        },
+        {
+          "day": 120,
+          "local_rate_response_median": 0.0003519531130548707,
+          "local_rate_response_mean": 0.0003617135803261548,
+          "rate_slope": -0.0006117485086795143,
+          "yield_slope": -0.002450104636744441,
+          "log_price_premium_slope": 0.05436728575407897,
+          "impact_share": 0.225,
+          "impact_wealth_share": 0.22484964322386392
+        },
+        {
+          "day": 180,
+          "local_rate_response_median": 0.00033855764966194183,
+          "local_rate_response_mean": 0.0003491442775349849,
+          "rate_slope": -0.0006881709482474755,
+          "yield_slope": -0.0027882310303039407,
+          "log_price_premium_slope": 0.06286860563746065,
+          "impact_share": 0.228,
+          "impact_wealth_share": 0.2271604383146744
+        },
+        {
+          "day": 240,
+          "local_rate_response_median": 0.00031451652805304783,
+          "local_rate_response_mean": 0.0003268486939445584,
+          "rate_slope": -0.0008345573568357482,
+          "yield_slope": -0.0031785955809002786,
+          "log_price_premium_slope": 0.07163496410082787,
+          "impact_share": 0.235,
+          "impact_wealth_share": 0.23260221567708034
+        },
+        {
+          "day": 300,
+          "local_rate_response_median": 0.00021560352337182258,
+          "local_rate_response_mean": 0.00022730764774403487,
+          "rate_slope": -0.0009600441302626017,
+          "yield_slope": -0.005214471330088897,
+          "log_price_premium_slope": 0.06811219291513071,
+          "impact_share": 0.246,
+          "impact_wealth_share": 0.24387885045681612
+        },
+        {
+          "day": 360,
+          "local_rate_response_median": 0.00033403057072598614,
+          "local_rate_response_mean": 0.0003465101677336343,
+          "rate_slope": -0.000998626331958969,
+          "yield_slope": -0.005447660658220298,
+          "log_price_premium_slope": 0.06380918895752098,
+          "impact_share": 0.239,
+          "impact_wealth_share": 0.24104517534648084
+        },
+        {
+          "day": 420,
+          "local_rate_response_median": 0.0004179765093499643,
+          "local_rate_response_mean": 0.00043631843900018385,
+          "rate_slope": -0.001041952957456751,
+          "yield_slope": -0.005363793096225608,
+          "log_price_premium_slope": 0.07436569417454761,
+          "impact_share": 0.239,
+          "impact_wealth_share": 0.24096988619998083
+        },
+        {
+          "day": 480,
+          "local_rate_response_median": 0.0004458207444631862,
+          "local_rate_response_mean": 0.00046301330893247554,
+          "rate_slope": -0.0011581201507497169,
+          "yield_slope": -0.005053949016690756,
+          "log_price_premium_slope": 0.08387186062727828,
+          "impact_share": 0.239,
+          "impact_wealth_share": 0.24086352719653087
+        },
+        {
+          "day": 540,
+          "local_rate_response_median": 0.00044631014565112544,
+          "local_rate_response_mean": 0.00045588974513410466,
+          "rate_slope": -0.0012385114564469359,
+          "yield_slope": -0.0048282541038425705,
+          "log_price_premium_slope": 0.09090258406355335,
+          "impact_share": 0.239,
+          "impact_wealth_share": 0.24076959722088348
+        },
+        {
+          "day": 600,
+          "local_rate_response_median": 0.00044031314308787934,
+          "local_rate_response_mean": 0.0004505239183721643,
+          "rate_slope": -0.0012554770074052657,
+          "yield_slope": -0.004687230851812232,
+          "log_price_premium_slope": 0.09687084174244368,
+          "impact_share": 0.239,
+          "impact_wealth_share": 0.2407294895955144
+        },
+        {
+          "day": 660,
+          "local_rate_response_median": 0.0004081381740842253,
+          "local_rate_response_mean": 0.000419356615799709,
+          "rate_slope": -0.0011567753869683047,
+          "yield_slope": -0.004647796790122974,
+          "log_price_premium_slope": 0.09990638728134608,
+          "impact_share": 0.239,
+          "impact_wealth_share": 0.2404895445185098
+        },
+        {
+          "day": 720,
+          "local_rate_response_median": 0.00036896522189968034,
+          "local_rate_response_mean": 0.00037843133844191255,
+          "rate_slope": -0.0011325870667637484,
+          "yield_slope": -0.004612404017743458,
+          "log_price_premium_slope": 0.09897373435061514,
+          "impact_share": 0.236,
+          "impact_wealth_share": 0.23841065100182998
+        },
+        {
+          "day": 780,
+          "local_rate_response_median": 0.00038095080959397445,
+          "local_rate_response_mean": 0.0003910841854772621,
+          "rate_slope": -0.0010990695744374787,
+          "yield_slope": -0.0046089724122292015,
+          "log_price_premium_slope": 0.09625667484273642,
+          "impact_share": 0.242,
+          "impact_wealth_share": 0.24574711979856237
+        },
+        {
+          "day": 840,
+          "local_rate_response_median": 0.00036124438818675383,
+          "local_rate_response_mean": 0.0003719807885525768,
+          "rate_slope": -0.0010456045111061397,
+          "yield_slope": -0.004265029660002636,
+          "log_price_premium_slope": 0.09326102972116948,
+          "impact_share": 0.242,
+          "impact_wealth_share": 0.2456252448372978
+        },
+        {
+          "day": 900,
+          "local_rate_response_median": 0.0003463202562741961,
+          "local_rate_response_mean": 0.00036131836269712544,
+          "rate_slope": -0.00116564840265087,
+          "yield_slope": -0.005016142328125428,
+          "log_price_premium_slope": 0.1009935858236432,
+          "impact_share": 0.242,
+          "impact_wealth_share": 0.2461770537729806
+        },
+        {
+          "day": 960,
+          "local_rate_response_median": 0.00020003325267809374,
+          "local_rate_response_mean": 0.00024461959749631584,
+          "rate_slope": -0.0011135106104556507,
+          "yield_slope": -0.007605544764726674,
+          "log_price_premium_slope": 0.09709307294373197,
+          "impact_share": 0.267,
+          "impact_wealth_share": 0.26633916753360964
+        },
+        {
+          "day": 1020,
+          "local_rate_response_median": 0.00031836635472243116,
+          "local_rate_response_mean": 0.0003413645094332315,
+          "rate_slope": -0.0009621392441933527,
+          "yield_slope": -0.0069846393210553324,
+          "log_price_premium_slope": 0.08094400735797573,
+          "impact_share": 0.277,
+          "impact_wealth_share": 0.27587693173516475
+        },
+        {
+          "day": 1080,
+          "local_rate_response_median": 0.0004242181700657053,
+          "local_rate_response_mean": 0.0004467473731312444,
+          "rate_slope": -0.000984536054628488,
+          "yield_slope": -0.006031040695293377,
+          "log_price_premium_slope": 0.08328808278265948,
+          "impact_share": 0.282,
+          "impact_wealth_share": 0.2825384494529563
+        },
+        {
+          "day": 1140,
+          "local_rate_response_median": 0.00045405565825371984,
+          "local_rate_response_mean": 0.0004833243375378934,
+          "rate_slope": -0.0009451889111705634,
+          "yield_slope": -0.005461438276684704,
+          "log_price_premium_slope": 0.08937956288814601,
+          "impact_share": 0.285,
+          "impact_wealth_share": 0.29072596449233545
+        },
+        {
+          "day": 1200,
+          "local_rate_response_median": 0.0004382715761707391,
+          "local_rate_response_mean": 0.00047875630004871466,
+          "rate_slope": -0.0008368247486735582,
+          "yield_slope": -0.004716228219011219,
+          "log_price_premium_slope": 0.08843853154014088,
+          "impact_share": 0.283,
+          "impact_wealth_share": 0.28979014260872193
+        }
+      ]
+    },
+    {
+      "taste": 0.1,
+      "seed": 28002,
+      "status": "complete",
+      "fingerprint": "d10b3708fddb46a4919d01788768501a90acdd38ce6c9fe8cd27ad25e6b44317",
+      "seconds": 156.22416550002526,
+      "price_cap_hits": 2,
+      "max_abs_log_mispricing": 1.0550448980155185,
+      "decisions": [
+        {
+          "day": 60,
+          "local_rate_response_median": 0.0002466516227079607,
+          "local_rate_response_mean": 0.00025595120341345793,
+          "rate_slope": -0.00034564053012861796,
+          "yield_slope": -0.0015701351399020319,
+          "log_price_premium_slope": 0.03294989003444353,
+          "impact_share": 0.21,
+          "impact_wealth_share": 0.18709197579455283
+        },
+        {
+          "day": 120,
+          "local_rate_response_median": 0.00026971725692906835,
+          "local_rate_response_mean": 0.00027658088419799077,
+          "rate_slope": -0.0004308685763138841,
+          "yield_slope": -0.0020538449863179995,
+          "log_price_premium_slope": 0.04471295621831119,
+          "impact_share": 0.223,
+          "impact_wealth_share": 0.20581952444512122
+        },
+        {
+          "day": 180,
+          "local_rate_response_median": 0.0002869225579771807,
+          "local_rate_response_mean": 0.000296629417318661,
+          "rate_slope": -0.0004737375500403009,
+          "yield_slope": -0.0023787449656347435,
+          "log_price_premium_slope": 0.0539007953993224,
+          "impact_share": 0.241,
+          "impact_wealth_share": 0.21997968285877303
+        },
+        {
+          "day": 240,
+          "local_rate_response_median": 0.0002999148694447397,
+          "local_rate_response_mean": 0.00030934445010191226,
+          "rate_slope": -0.0005558967767056794,
+          "yield_slope": -0.002738416528143874,
+          "log_price_premium_slope": 0.05989502989884231,
+          "impact_share": 0.253,
+          "impact_wealth_share": 0.22748762915438916
+        },
+        {
+          "day": 300,
+          "local_rate_response_median": 0.0002187653998247775,
+          "local_rate_response_mean": 0.00023334808049160576,
+          "rate_slope": -0.00044020513073641404,
+          "yield_slope": -0.0031516201700695435,
+          "log_price_premium_slope": 0.04829052133428584,
+          "impact_share": 0.258,
+          "impact_wealth_share": 0.23065813222801887
+        },
+        {
+          "day": 360,
+          "local_rate_response_median": 0.00016900563644720826,
+          "local_rate_response_mean": 0.00018910692605340044,
+          "rate_slope": -0.0004830762205909361,
+          "yield_slope": -0.005049503390799559,
+          "log_price_premium_slope": 0.05428341242230339,
+          "impact_share": 0.249,
+          "impact_wealth_share": 0.21987572665411212
+        },
+        {
+          "day": 420,
+          "local_rate_response_median": 0.00027126684491130123,
+          "local_rate_response_mean": 0.0002818406022544394,
+          "rate_slope": -0.0006057784180543347,
+          "yield_slope": -0.007010600287110771,
+          "log_price_premium_slope": 0.07543077380505851,
+          "impact_share": 0.237,
+          "impact_wealth_share": 0.21178239799276988
+        },
+        {
+          "day": 480,
+          "local_rate_response_median": 0.00031646333037229946,
+          "local_rate_response_mean": 0.00032677463416712495,
+          "rate_slope": -0.0006116622960157316,
+          "yield_slope": -0.006051528197254355,
+          "log_price_premium_slope": 0.08218565709205752,
+          "impact_share": 0.236,
+          "impact_wealth_share": 0.21073225734770631
+        },
+        {
+          "day": 540,
+          "local_rate_response_median": 0.0003273877887036132,
+          "local_rate_response_mean": 0.00033877415771297687,
+          "rate_slope": -0.0005478214253064576,
+          "yield_slope": -0.004922805411614748,
+          "log_price_premium_slope": 0.08124279334383748,
+          "impact_share": 0.24,
+          "impact_wealth_share": 0.21467957203467697
+        },
+        {
+          "day": 600,
+          "local_rate_response_median": 0.00034645006028234855,
+          "local_rate_response_mean": 0.0003611881142120985,
+          "rate_slope": -0.0003924600950946694,
+          "yield_slope": -0.004358068384082924,
+          "log_price_premium_slope": 0.08238454146096914,
+          "impact_share": 0.254,
+          "impact_wealth_share": 0.2239588793642191
+        },
+        {
+          "day": 660,
+          "local_rate_response_median": 0.0003402515160542974,
+          "local_rate_response_mean": 0.0003542719834590997,
+          "rate_slope": -0.000252821636444712,
+          "yield_slope": -0.003980970261913273,
+          "log_price_premium_slope": 0.08131193080040561,
+          "impact_share": 0.254,
+          "impact_wealth_share": 0.22406336403695873
+        },
+        {
+          "day": 720,
+          "local_rate_response_median": 0.00030410459744645394,
+          "local_rate_response_mean": 0.00031593598895536285,
+          "rate_slope": -0.00021067161792275753,
+          "yield_slope": -0.0038353181712341496,
+          "log_price_premium_slope": 0.0815715306580096,
+          "impact_share": 0.268,
+          "impact_wealth_share": 0.237015361840196
+        },
+        {
+          "day": 780,
+          "local_rate_response_median": 0.00034665317887154295,
+          "local_rate_response_mean": 0.00036207394165852267,
+          "rate_slope": -0.0002615736628432872,
+          "yield_slope": -0.0038192271083843654,
+          "log_price_premium_slope": 0.08350427669790211,
+          "impact_share": 0.277,
+          "impact_wealth_share": 0.2459311591840677
+        },
+        {
+          "day": 840,
+          "local_rate_response_median": 0.000338659901254454,
+          "local_rate_response_mean": 0.00035464117573154227,
+          "rate_slope": -0.00030131194117115784,
+          "yield_slope": -0.0037323501283078797,
+          "log_price_premium_slope": 0.08331054191241664,
+          "impact_share": 0.279,
+          "impact_wealth_share": 0.2474250406641226
+        },
+        {
+          "day": 900,
+          "local_rate_response_median": 0.0003235148396637951,
+          "local_rate_response_mean": 0.00034470555185384084,
+          "rate_slope": -0.00021863000105961988,
+          "yield_slope": -0.003898835629501837,
+          "log_price_premium_slope": 0.08530353300025882,
+          "impact_share": 0.289,
+          "impact_wealth_share": 0.26137386512796923
+        },
+        {
+          "day": 960,
+          "local_rate_response_median": 0.0003517286247872863,
+          "local_rate_response_mean": 0.00037747539488194924,
+          "rate_slope": -0.00018696004847214864,
+          "yield_slope": -0.004177433749611535,
+          "log_price_premium_slope": 0.09137163233153416,
+          "impact_share": 0.304,
+          "impact_wealth_share": 0.278787318483221
+        },
+        {
+          "day": 1020,
+          "local_rate_response_median": 0.00031206682861542704,
+          "local_rate_response_mean": 0.0003260776948195967,
+          "rate_slope": -0.00011829878908629905,
+          "yield_slope": -0.004878712469544483,
+          "log_price_premium_slope": 0.08760808375340812,
+          "impact_share": 0.319,
+          "impact_wealth_share": 0.2907671823191988
+        },
+        {
+          "day": 1080,
+          "local_rate_response_median": 0.0003358579814219763,
+          "local_rate_response_mean": 0.000352533953400408,
+          "rate_slope": 5.6969828445430484e-05,
+          "yield_slope": -0.005169063136052517,
+          "log_price_premium_slope": 0.07836825351832231,
+          "impact_share": 0.317,
+          "impact_wealth_share": 0.2893580531418816
+        },
+        {
+          "day": 1140,
+          "local_rate_response_median": 0.0003802980752653618,
+          "local_rate_response_mean": 0.0004063987702902233,
+          "rate_slope": 3.831309444148325e-05,
+          "yield_slope": -0.005022656132432659,
+          "log_price_premium_slope": 0.08290134664389165,
+          "impact_share": 0.312,
+          "impact_wealth_share": 0.28138859000531025
+        },
+        {
+          "day": 1200,
+          "local_rate_response_median": 0.00040968341214886884,
+          "local_rate_response_mean": 0.0004462664111252749,
+          "rate_slope": -0.00012140718947710329,
+          "yield_slope": -0.0049365629531212315,
+          "log_price_premium_slope": 0.09194286160439163,
+          "impact_share": 0.324,
+          "impact_wealth_share": 0.297228565038252
+        }
+      ]
+    },
+    {
+      "taste": 0.1,
+      "seed": 28003,
+      "status": "complete",
+      "fingerprint": "bf9891210e108687f366bb51acbc34d62ba9d4cc32c0d75635998a5ccdaeb9a5",
+      "seconds": 154.70225840003695,
+      "price_cap_hits": 0,
+      "max_abs_log_mispricing": 0.6250628331103478,
+      "decisions": [
+        {
+          "day": 60,
+          "local_rate_response_median": 0.00030297675500674446,
+          "local_rate_response_mean": 0.00033065159335750327,
+          "rate_slope": -0.00038768515170777533,
+          "yield_slope": -0.0016011403791223108,
+          "log_price_premium_slope": 0.031233041331193354,
+          "impact_share": 0.197,
+          "impact_wealth_share": 0.20519256838014713
+        },
+        {
+          "day": 120,
+          "local_rate_response_median": 0.000355227633723163,
+          "local_rate_response_mean": 0.00038547763307453074,
+          "rate_slope": -0.000548114975448144,
+          "yield_slope": -0.002139150780629976,
+          "log_price_premium_slope": 0.04442720189349064,
+          "impact_share": 0.211,
+          "impact_wealth_share": 0.22574306466344277
+        },
+        {
+          "day": 180,
+          "local_rate_response_median": 0.00036889271431276964,
+          "local_rate_response_mean": 0.0003974712304212695,
+          "rate_slope": -0.000752266604452399,
+          "yield_slope": -0.002825906465877924,
+          "log_price_premium_slope": 0.06038371052673161,
+          "impact_share": 0.238,
+          "impact_wealth_share": 0.24918587708828832
+        },
+        {
+          "day": 240,
+          "local_rate_response_median": 0.0004078631411195949,
+          "local_rate_response_mean": 0.00043732630967595256,
+          "rate_slope": -0.0009105050308716785,
+          "yield_slope": -0.0034972158617821896,
+          "log_price_premium_slope": 0.0774536964150846,
+          "impact_share": 0.254,
+          "impact_wealth_share": 0.2626462777124032
+        },
+        {
+          "day": 300,
+          "local_rate_response_median": 0.00038450029468703185,
+          "local_rate_response_mean": 0.0004098397544907812,
+          "rate_slope": -0.0010409194274449691,
+          "yield_slope": -0.004049743446965116,
+          "log_price_premium_slope": 0.08977984935609741,
+          "impact_share": 0.269,
+          "impact_wealth_share": 0.2729300524101593
+        },
+        {
+          "day": 360,
+          "local_rate_response_median": 0.00036763537350036464,
+          "local_rate_response_mean": 0.00038459536559481874,
+          "rate_slope": -0.0011529094655198437,
+          "yield_slope": -0.0047449504049178306,
+          "log_price_premium_slope": 0.09687570504926334,
+          "impact_share": 0.271,
+          "impact_wealth_share": 0.27494301059236803
+        },
+        {
+          "day": 420,
+          "local_rate_response_median": 0.0004036849013783503,
+          "local_rate_response_mean": 0.00042156080612566017,
+          "rate_slope": -0.001717177696255502,
+          "yield_slope": -0.007720878915845769,
+          "log_price_premium_slope": 0.13700955300419432,
+          "impact_share": 0.274,
+          "impact_wealth_share": 0.2773331113070486
+        },
+        {
+          "day": 480,
+          "local_rate_response_median": 0.0004612405359710411,
+          "local_rate_response_mean": 0.00047059764737596003,
+          "rate_slope": -0.001776744202622998,
+          "yield_slope": -0.008088830380913214,
+          "log_price_premium_slope": 0.14542941154571756,
+          "impact_share": 0.314,
+          "impact_wealth_share": 0.32880291198298545
+        },
+        {
+          "day": 540,
+          "local_rate_response_median": 0.0005364757219888637,
+          "local_rate_response_mean": 0.0005406421042158418,
+          "rate_slope": -0.0015836536284018566,
+          "yield_slope": -0.007224346143215663,
+          "log_price_premium_slope": 0.12406194927393774,
+          "impact_share": 0.319,
+          "impact_wealth_share": 0.3360524673760853
+        },
+        {
+          "day": 600,
+          "local_rate_response_median": 0.0005574949107413061,
+          "local_rate_response_mean": 0.0005687280188221136,
+          "rate_slope": -0.0014182183296949952,
+          "yield_slope": -0.00598783937273697,
+          "log_price_premium_slope": 0.10815997664327652,
+          "impact_share": 0.313,
+          "impact_wealth_share": 0.33140540945237784
+        },
+        {
+          "day": 660,
+          "local_rate_response_median": 0.0005712597637525038,
+          "local_rate_response_mean": 0.0005857120944225624,
+          "rate_slope": -0.0013768520220798343,
+          "yield_slope": -0.005563608912572972,
+          "log_price_premium_slope": 0.11099429225357704,
+          "impact_share": 0.31,
+          "impact_wealth_share": 0.3283919618760645
+        },
+        {
+          "day": 720,
+          "local_rate_response_median": 0.0005558751174740762,
+          "local_rate_response_mean": 0.0005660782559303422,
+          "rate_slope": -0.0015373854443472715,
+          "yield_slope": -0.005601596987631916,
+          "log_price_premium_slope": 0.12000167466371424,
+          "impact_share": 0.314,
+          "impact_wealth_share": 0.33014868486336585
+        },
+        {
+          "day": 780,
+          "local_rate_response_median": 0.0005124893803266318,
+          "local_rate_response_mean": 0.0005283132390667206,
+          "rate_slope": -0.0015848301218377625,
+          "yield_slope": -0.005990869960390698,
+          "log_price_premium_slope": 0.12670841086530968,
+          "impact_share": 0.322,
+          "impact_wealth_share": 0.3418244461563294
+        },
+        {
+          "day": 840,
+          "local_rate_response_median": 0.0005093506936325292,
+          "local_rate_response_mean": 0.0005210103565927949,
+          "rate_slope": -0.0016109743755802427,
+          "yield_slope": -0.0076589737587047435,
+          "log_price_premium_slope": 0.1319151108207582,
+          "impact_share": 0.338,
+          "impact_wealth_share": 0.35767195866246804
+        },
+        {
+          "day": 900,
+          "local_rate_response_median": 0.0005513824131505928,
+          "local_rate_response_mean": 0.0005759243180355463,
+          "rate_slope": -0.0016058335461059867,
+          "yield_slope": -0.007820179032855104,
+          "log_price_premium_slope": 0.13442017764998093,
+          "impact_share": 0.338,
+          "impact_wealth_share": 0.35771645282885306
+        },
+        {
+          "day": 960,
+          "local_rate_response_median": 0.0005652458522731178,
+          "local_rate_response_mean": 0.0005881055433775866,
+          "rate_slope": -0.0014738758138390974,
+          "yield_slope": -0.006938773207117255,
+          "log_price_premium_slope": 0.13220841758643453,
+          "impact_share": 0.34,
+          "impact_wealth_share": 0.3578320526272994
+        },
+        {
+          "day": 1020,
+          "local_rate_response_median": 0.0005942928763914867,
+          "local_rate_response_mean": 0.0006220241050539684,
+          "rate_slope": -0.0014677936276917686,
+          "yield_slope": -0.006737796069015648,
+          "log_price_premium_slope": 0.13542553529308762,
+          "impact_share": 0.347,
+          "impact_wealth_share": 0.3604585024087527
+        },
+        {
+          "day": 1080,
+          "local_rate_response_median": 0.0004893017236887649,
+          "local_rate_response_mean": 0.0005118010202434685,
+          "rate_slope": -0.0015023838742737176,
+          "yield_slope": -0.006862182396242287,
+          "log_price_premium_slope": 0.1353485862945907,
+          "impact_share": 0.352,
+          "impact_wealth_share": 0.3654271139426264
+        },
+        {
+          "day": 1140,
+          "local_rate_response_median": 0.0005798855439256506,
+          "local_rate_response_mean": 0.0006108816294183929,
+          "rate_slope": -0.0015499305406620628,
+          "yield_slope": -0.007180894333728085,
+          "log_price_premium_slope": 0.13321625547116192,
+          "impact_share": 0.391,
+          "impact_wealth_share": 0.40387067283091554
+        },
+        {
+          "day": 1200,
+          "local_rate_response_median": 0.0005301088348493777,
+          "local_rate_response_mean": 0.0005619559784566986,
+          "rate_slope": -0.0014596232756600084,
+          "yield_slope": -0.007250966058120143,
+          "log_price_premium_slope": 0.13528846180098134,
+          "impact_share": 0.411,
+          "impact_wealth_share": 0.41811396754184443
+        }
+      ]
+    },
+    {
+      "taste": 0.2,
+      "seed": 28001,
+      "status": "complete",
+      "fingerprint": "433c8f227b09ce29c8f1361a1cac586d9e62a6ee8bc6cd2dc5894d3d878f2250",
+      "seconds": 154.581365799997,
+      "price_cap_hits": 3,
+      "max_abs_log_mispricing": 1.4636829691122732,
+      "decisions": [
+        {
+          "day": 60,
+          "local_rate_response_median": 0.0005817731328556387,
+          "local_rate_response_mean": 0.0006610152335736078,
+          "rate_slope": -0.0009060721384330537,
+          "yield_slope": -0.0036992655560213927,
+          "log_price_premium_slope": 0.07986192764920798,
+          "impact_share": 0.208,
+          "impact_wealth_share": 0.20955764204687258
+        },
+        {
+          "day": 120,
+          "local_rate_response_median": 0.0007528225422787143,
+          "local_rate_response_mean": 0.0008571952625754639,
+          "rate_slope": -0.0013264906359202258,
+          "yield_slope": -0.005339810290051442,
+          "log_price_premium_slope": 0.12097099268754319,
+          "impact_share": 0.276,
+          "impact_wealth_share": 0.28023653252319136
+        },
+        {
+          "day": 180,
+          "local_rate_response_median": 0.0008797171239198316,
+          "local_rate_response_mean": 0.0009809564320748172,
+          "rate_slope": -0.0017607890398114508,
+          "yield_slope": -0.0071483856141502,
+          "log_price_premium_slope": 0.1646610315283474,
+          "impact_share": 0.343,
+          "impact_wealth_share": 0.33596234543876075
+        },
+        {
+          "day": 240,
+          "local_rate_response_median": 0.0009591214775944692,
+          "local_rate_response_mean": 0.0010398184318416448,
+          "rate_slope": -0.002255759413463973,
+          "yield_slope": -0.009258303508096852,
+          "log_price_premium_slope": 0.21145755792382653,
+          "impact_share": 0.418,
+          "impact_wealth_share": 0.39603753233721845
+        },
+        {
+          "day": 300,
+          "local_rate_response_median": 0.0006903506571124308,
+          "local_rate_response_mean": 0.0007781458871082157,
+          "rate_slope": -0.002590222181335201,
+          "yield_slope": -0.01460115708440869,
+          "log_price_premium_slope": 0.21090533619932741,
+          "impact_share": 0.473,
+          "impact_wealth_share": 0.4431660804467579
+        },
+        {
+          "day": 360,
+          "local_rate_response_median": 0.0010395433722525604,
+          "local_rate_response_mean": 0.001132593219242568,
+          "rate_slope": -0.0030722682126952307,
+          "yield_slope": -0.018926442065530496,
+          "log_price_premium_slope": 0.24486773183694913,
+          "impact_share": 0.46,
+          "impact_wealth_share": 0.4320247734312836
+        },
+        {
+          "day": 420,
+          "local_rate_response_median": 0.0015444158258612452,
+          "local_rate_response_mean": 0.001651248535260254,
+          "rate_slope": -0.0035732296217431316,
+          "yield_slope": -0.020456922497128188,
+          "log_price_premium_slope": 0.2973978108080768,
+          "impact_share": 0.499,
+          "impact_wealth_share": 0.479727033003766
+        },
+        {
+          "day": 480,
+          "local_rate_response_median": 0.001799078960091339,
+          "local_rate_response_mean": 0.0018640261550232629,
+          "rate_slope": -0.003993233059144414,
+          "yield_slope": -0.019995722490837073,
+          "log_price_premium_slope": 0.33172257320235665,
+          "impact_share": 0.513,
+          "impact_wealth_share": 0.4951373653417736
+        },
+        {
+          "day": 540,
+          "local_rate_response_median": 0.001884136197529113,
+          "local_rate_response_mean": 0.0019113386033661188,
+          "rate_slope": -0.004232597104396044,
+          "yield_slope": -0.019854716627787317,
+          "log_price_premium_slope": 0.3592603652160849,
+          "impact_share": 0.525,
+          "impact_wealth_share": 0.5050696226053136
+        },
+        {
+          "day": 600,
+          "local_rate_response_median": 0.0019185519526128574,
+          "local_rate_response_mean": 0.001922833789633186,
+          "rate_slope": -0.004402817571959396,
+          "yield_slope": -0.019602411290385903,
+          "log_price_premium_slope": 0.37732449412485086,
+          "impact_share": 0.524,
+          "impact_wealth_share": 0.5043800128584935
+        },
+        {
+          "day": 660,
+          "local_rate_response_median": 0.0018089316047721125,
+          "local_rate_response_mean": 0.0018231069321348022,
+          "rate_slope": -0.004454698105211778,
+          "yield_slope": -0.019758672974547153,
+          "log_price_premium_slope": 0.38440912272098765,
+          "impact_share": 0.527,
+          "impact_wealth_share": 0.5060024627563389
+        },
+        {
+          "day": 720,
+          "local_rate_response_median": 0.0016533914270823176,
+          "local_rate_response_mean": 0.0016774174258550878,
+          "rate_slope": -0.004418799413890883,
+          "yield_slope": -0.020200699346902613,
+          "log_price_premium_slope": 0.3873603683842787,
+          "impact_share": 0.526,
+          "impact_wealth_share": 0.5042538100214103
+        },
+        {
+          "day": 780,
+          "local_rate_response_median": 0.0016852771814693484,
+          "local_rate_response_mean": 0.0017284911545841178,
+          "rate_slope": -0.004523300597865636,
+          "yield_slope": -0.02135621562455432,
+          "log_price_premium_slope": 0.38581962542981496,
+          "impact_share": 0.522,
+          "impact_wealth_share": 0.5032401869876131
+        },
+        {
+          "day": 840,
+          "local_rate_response_median": 0.0017046507315735472,
+          "local_rate_response_mean": 0.0017452826647256115,
+          "rate_slope": -0.004520033842557856,
+          "yield_slope": -0.0207113130815272,
+          "log_price_premium_slope": 0.388397982327289,
+          "impact_share": 0.544,
+          "impact_wealth_share": 0.5309012759930148
+        },
+        {
+          "day": 900,
+          "local_rate_response_median": 0.0017447934468673113,
+          "local_rate_response_mean": 0.0018000411703416048,
+          "rate_slope": -0.004542707883064017,
+          "yield_slope": -0.021483266155866126,
+          "log_price_premium_slope": 0.37845791136431456,
+          "impact_share": 0.565,
+          "impact_wealth_share": 0.5503330352918043
+        },
+        {
+          "day": 960,
+          "local_rate_response_median": 0.0008580704162880571,
+          "local_rate_response_mean": 0.0012003827385944515,
+          "rate_slope": -0.00481442160498341,
+          "yield_slope": -0.03369588556755992,
+          "log_price_premium_slope": 0.38386913604025946,
+          "impact_share": 0.599,
+          "impact_wealth_share": 0.5778491961761216
+        },
+        {
+          "day": 1020,
+          "local_rate_response_median": 0.0015509629164956933,
+          "local_rate_response_mean": 0.001657302290446967,
+          "rate_slope": -0.004452737170792298,
+          "yield_slope": -0.03337517568088044,
+          "log_price_premium_slope": 0.35112730526338737,
+          "impact_share": 0.616,
+          "impact_wealth_share": 0.6032800803700933
+        },
+        {
+          "day": 1080,
+          "local_rate_response_median": 0.0020153804067214315,
+          "local_rate_response_mean": 0.0021476242379517654,
+          "rate_slope": -0.004561060300184763,
+          "yield_slope": -0.029930593829397372,
+          "log_price_premium_slope": 0.36385365311164647,
+          "impact_share": 0.638,
+          "impact_wealth_share": 0.6229792438864028
+        },
+        {
+          "day": 1140,
+          "local_rate_response_median": 0.002304798576736153,
+          "local_rate_response_mean": 0.002301190990773935,
+          "rate_slope": -0.004801033120110677,
+          "yield_slope": -0.027765331064706023,
+          "log_price_premium_slope": 0.38321393111218577,
+          "impact_share": 0.653,
+          "impact_wealth_share": 0.6453969495713978
+        },
+        {
+          "day": 1200,
+          "local_rate_response_median": 0.0024342358165912095,
+          "local_rate_response_mean": 0.002428485748280274,
+          "rate_slope": -0.004660047172145836,
+          "yield_slope": -0.025631839319490674,
+          "log_price_premium_slope": 0.38630935322094573,
+          "impact_share": 0.688,
+          "impact_wealth_share": 0.694352426216511
+        }
+      ]
+    },
+    {
+      "taste": 0.2,
+      "seed": 28002,
+      "status": "complete",
+      "fingerprint": "49ff39bbf697b40da0fb196b27280f1a075b132cb036e73bade7215a08217534",
+      "seconds": 152.05690620001405,
+      "price_cap_hits": 0,
+      "max_abs_log_mispricing": 1.9438271145605226,
+      "decisions": [
+        {
+          "day": 60,
+          "local_rate_response_median": 0.0003993999197236071,
+          "local_rate_response_mean": 0.0004511781133772883,
+          "rate_slope": -0.000614883564848558,
+          "yield_slope": -0.0027436730009659975,
+          "log_price_premium_slope": 0.058081900847397235,
+          "impact_share": 0.21,
+          "impact_wealth_share": 0.18815334764475386
+        },
+        {
+          "day": 120,
+          "local_rate_response_median": 0.0006300229461931633,
+          "local_rate_response_mean": 0.0007001528658004369,
+          "rate_slope": -0.0011087373976084159,
+          "yield_slope": -0.004968780761347849,
+          "log_price_premium_slope": 0.10806351495991111,
+          "impact_share": 0.288,
+          "impact_wealth_share": 0.2823183601949389
+        },
+        {
+          "day": 180,
+          "local_rate_response_median": 0.0007665188846982014,
+          "local_rate_response_mean": 0.0008185687377376402,
+          "rate_slope": -0.0014143417304152608,
+          "yield_slope": -0.0063464968658219455,
+          "log_price_premium_slope": 0.14315050034769056,
+          "impact_share": 0.35,
+          "impact_wealth_share": 0.3367875923377288
+        },
+        {
+          "day": 240,
+          "local_rate_response_median": 0.001001122641277124,
+          "local_rate_response_mean": 0.0010491662002029558,
+          "rate_slope": -0.0020211123741235284,
+          "yield_slope": -0.009174598080582482,
+          "log_price_premium_slope": 0.19341114192767828,
+          "impact_share": 0.411,
+          "impact_wealth_share": 0.43793014817508535
+        },
+        {
+          "day": 300,
+          "local_rate_response_median": 0.0006563938062680919,
+          "local_rate_response_mean": 0.0007429421092003124,
+          "rate_slope": -0.002370291081203376,
+          "yield_slope": -0.014382324461855875,
+          "log_price_premium_slope": 0.21221991398018145,
+          "impact_share": 0.468,
+          "impact_wealth_share": 0.4901377777060374
+        },
+        {
+          "day": 360,
+          "local_rate_response_median": 0.0007373409597318417,
+          "local_rate_response_mean": 0.0008056815138107018,
+          "rate_slope": -0.0027619521019528197,
+          "yield_slope": -0.02197688806068451,
+          "log_price_premium_slope": 0.249476774586583,
+          "impact_share": 0.527,
+          "impact_wealth_share": 0.5739944924645015
+        },
+        {
+          "day": 420,
+          "local_rate_response_median": 0.0013654683914454118,
+          "local_rate_response_mean": 0.001412216524444354,
+          "rate_slope": -0.0030784169311284517,
+          "yield_slope": -0.02587880065233081,
+          "log_price_premium_slope": 0.29040045972909057,
+          "impact_share": 0.578,
+          "impact_wealth_share": 0.62388655422768
+        },
+        {
+          "day": 480,
+          "local_rate_response_median": 0.0019205112043010866,
+          "local_rate_response_mean": 0.0019438802787077472,
+          "rate_slope": -0.0036433642760196738,
+          "yield_slope": -0.027535366583808153,
+          "log_price_premium_slope": 0.34297686470972005,
+          "impact_share": 0.623,
+          "impact_wealth_share": 0.6631256303030497
+        },
+        {
+          "day": 540,
+          "local_rate_response_median": 0.001969479964163257,
+          "local_rate_response_mean": 0.001970936480796786,
+          "rate_slope": -0.0038234224790832647,
+          "yield_slope": -0.025575415203991515,
+          "log_price_premium_slope": 0.35906729977070284,
+          "impact_share": 0.583,
+          "impact_wealth_share": 0.6221681805425112
+        },
+        {
+          "day": 600,
+          "local_rate_response_median": 0.0018272219473149344,
+          "local_rate_response_mean": 0.001846908098249409,
+          "rate_slope": -0.003705478102793756,
+          "yield_slope": -0.022393938916745182,
+          "log_price_premium_slope": 0.35391920139725247,
+          "impact_share": 0.523,
+          "impact_wealth_share": 0.5424891875826646
+        },
+        {
+          "day": 660,
+          "local_rate_response_median": 0.0016554651940547266,
+          "local_rate_response_mean": 0.001662264864144556,
+          "rate_slope": -0.003482229453629065,
+          "yield_slope": -0.019904356976155536,
+          "log_price_premium_slope": 0.33782161763796453,
+          "impact_share": 0.464,
+          "impact_wealth_share": 0.4936713229125753
+        },
+        {
+          "day": 720,
+          "local_rate_response_median": 0.0013092654880602296,
+          "local_rate_response_mean": 0.00132422331060838,
+          "rate_slope": -0.0032621265855422034,
+          "yield_slope": -0.018330229092394974,
+          "log_price_premium_slope": 0.3259015514020148,
+          "impact_share": 0.43,
+          "impact_wealth_share": 0.45631658348333476
+        },
+        {
+          "day": 780,
+          "local_rate_response_median": 0.0013705508699918185,
+          "local_rate_response_mean": 0.0013920502652144428,
+          "rate_slope": -0.0031604740757502172,
+          "yield_slope": -0.016980011220749314,
+          "log_price_premium_slope": 0.3106677490023669,
+          "impact_share": 0.4,
+          "impact_wealth_share": 0.41219283503651327
+        },
+        {
+          "day": 840,
+          "local_rate_response_median": 0.0012457765036043996,
+          "local_rate_response_mean": 0.0012768263204401432,
+          "rate_slope": -0.0030155088013493906,
+          "yield_slope": -0.015433004097048482,
+          "log_price_premium_slope": 0.2903061072125756,
+          "impact_share": 0.371,
+          "impact_wealth_share": 0.38829103995893827
+        },
+        {
+          "day": 900,
+          "local_rate_response_median": 0.0010075893560589108,
+          "local_rate_response_mean": 0.0010823533301198925,
+          "rate_slope": -0.0023201517251761677,
+          "yield_slope": -0.014812109638849906,
+          "log_price_premium_slope": 0.23574942259395357,
+          "impact_share": 0.357,
+          "impact_wealth_share": 0.37628720837616797
+        },
+        {
+          "day": 960,
+          "local_rate_response_median": 0.0010395524640059118,
+          "local_rate_response_mean": 0.0010965047205963646,
+          "rate_slope": -0.0016616130772519819,
+          "yield_slope": -0.011580536524090692,
+          "log_price_premium_slope": 0.19249628038773428,
+          "impact_share": 0.328,
+          "impact_wealth_share": 0.3498759466502455
+        },
+        {
+          "day": 1020,
+          "local_rate_response_median": 0.0010241629829669042,
+          "local_rate_response_mean": 0.0010848589708493928,
+          "rate_slope": -0.001709554059393504,
+          "yield_slope": -0.010750880972338362,
+          "log_price_premium_slope": 0.18997776503683908,
+          "impact_share": 0.32,
+          "impact_wealth_share": 0.3423831089111729
+        },
+        {
+          "day": 1080,
+          "local_rate_response_median": 0.0009749730316527822,
+          "local_rate_response_mean": 0.001058685717367767,
+          "rate_slope": -0.001873524300990137,
+          "yield_slope": -0.01250233189895393,
+          "log_price_premium_slope": 0.21071623409164095,
+          "impact_share": 0.353,
+          "impact_wealth_share": 0.3650326356792735
+        },
+        {
+          "day": 1140,
+          "local_rate_response_median": 0.0011762155315342229,
+          "local_rate_response_mean": 0.001253541518447405,
+          "rate_slope": -0.002026024200479886,
+          "yield_slope": -0.013352375167211834,
+          "log_price_premium_slope": 0.22474278938362782,
+          "impact_share": 0.388,
+          "impact_wealth_share": 0.4023642792431575
+        },
+        {
+          "day": 1200,
+          "local_rate_response_median": 0.0013481854988333475,
+          "local_rate_response_mean": 0.0013772768320609724,
+          "rate_slope": -0.002291616075886439,
+          "yield_slope": -0.013712345319232516,
+          "log_price_premium_slope": 0.23218595105139397,
+          "impact_share": 0.428,
+          "impact_wealth_share": 0.4522496788473339
+        }
+      ]
+    },
+    {
+      "taste": 0.2,
+      "seed": 28003,
+      "status": "complete",
+      "fingerprint": "98ce61841bb022fafacbfbd07c2e50bb2411d1571fad1c3146fbf863510711a4",
+      "seconds": 155.8142684000195,
+      "price_cap_hits": 0,
+      "max_abs_log_mispricing": 1.1524118467487545,
+      "decisions": [
+        {
+          "day": 60,
+          "local_rate_response_median": 0.0004859073012117364,
+          "local_rate_response_mean": 0.000603805858774781,
+          "rate_slope": -0.0005736139414311933,
+          "yield_slope": -0.002528851681352931,
+          "log_price_premium_slope": 0.047250549553058054,
+          "impact_share": 0.197,
+          "impact_wealth_share": 0.2053069926028648
+        },
+        {
+          "day": 120,
+          "local_rate_response_median": 0.0005470990539828503,
+          "local_rate_response_mean": 0.0006795940068541528,
+          "rate_slope": -0.0008010331224250511,
+          "yield_slope": -0.003342379362511688,
+          "log_price_premium_slope": 0.06698107277762347,
+          "impact_share": 0.206,
+          "impact_wealth_share": 0.218583490058346
+        },
+        {
+          "day": 180,
+          "local_rate_response_median": 0.0006945874064340947,
+          "local_rate_response_mean": 0.0008426665187776808,
+          "rate_slope": -0.0013796692199453126,
+          "yield_slope": -0.005687624792399257,
+          "log_price_premium_slope": 0.11957376748510992,
+          "impact_share": 0.27,
+          "impact_wealth_share": 0.28688172430649905
+        },
+        {
+          "day": 240,
+          "local_rate_response_median": 0.0009043410597710832,
+          "local_rate_response_mean": 0.0010490290328692105,
+          "rate_slope": -0.0019368429875019169,
+          "yield_slope": -0.008119412773432056,
+          "log_price_premium_slope": 0.17793781821751659,
+          "impact_share": 0.344,
+          "impact_wealth_share": 0.3552423491058503
+        },
+        {
+          "day": 300,
+          "local_rate_response_median": 0.0010292205372517877,
+          "local_rate_response_mean": 0.00113124055364456,
+          "rate_slope": -0.0024647939506875923,
+          "yield_slope": -0.01040003579586187,
+          "log_price_premium_slope": 0.2299488927296171,
+          "impact_share": 0.408,
+          "impact_wealth_share": 0.41575133380942786
+        },
+        {
+          "day": 360,
+          "local_rate_response_median": 0.001076868153087697,
+          "local_rate_response_mean": 0.0011623552995268507,
+          "rate_slope": -0.0029731751802777873,
+          "yield_slope": -0.013215328739251722,
+          "log_price_premium_slope": 0.2679859116401153,
+          "impact_share": 0.47,
+          "impact_wealth_share": 0.4692158819247977
+        },
+        {
+          "day": 420,
+          "local_rate_response_median": 0.0012450935152844562,
+          "local_rate_response_mean": 0.0013223133061095777,
+          "rate_slope": -0.004076261702336141,
+          "yield_slope": -0.020160801812358988,
+          "log_price_premium_slope": 0.34988224719674865,
+          "impact_share": 0.507,
+          "impact_wealth_share": 0.5011810645554496
+        },
+        {
+          "day": 480,
+          "local_rate_response_median": 0.0014196646084531995,
+          "local_rate_response_mean": 0.0014397303380450754,
+          "rate_slope": -0.0044625042673714505,
+          "yield_slope": -0.022486745571187836,
+          "log_price_premium_slope": 0.3876461360952584,
+          "impact_share": 0.556,
+          "impact_wealth_share": 0.5523623506329898
+        },
+        {
+          "day": 540,
+          "local_rate_response_median": 0.0016797714147406412,
+          "local_rate_response_mean": 0.0016899091165958912,
+          "rate_slope": -0.004689654974213958,
+          "yield_slope": -0.024215866619006494,
+          "log_price_premium_slope": 0.39751268572339843,
+          "impact_share": 0.581,
+          "impact_wealth_share": 0.578715981003524
+        },
+        {
+          "day": 600,
+          "local_rate_response_median": 0.0018283489110232495,
+          "local_rate_response_mean": 0.0018632735154111846,
+          "rate_slope": -0.004764061413970304,
+          "yield_slope": -0.0244845100597073,
+          "log_price_premium_slope": 0.40160906769025156,
+          "impact_share": 0.591,
+          "impact_wealth_share": 0.5984681324848421
+        },
+        {
+          "day": 660,
+          "local_rate_response_median": 0.0019445872553626499,
+          "local_rate_response_mean": 0.0019666727492351314,
+          "rate_slope": -0.004685618076180118,
+          "yield_slope": -0.023415848545191343,
+          "log_price_premium_slope": 0.407659974075139,
+          "impact_share": 0.581,
+          "impact_wealth_share": 0.5893210611518975
+        },
+        {
+          "day": 720,
+          "local_rate_response_median": 0.0018519229998494539,
+          "local_rate_response_mean": 0.0018668465066449592,
+          "rate_slope": -0.004670308762671474,
+          "yield_slope": -0.02178206916402863,
+          "log_price_premium_slope": 0.40031314638085114,
+          "impact_share": 0.572,
+          "impact_wealth_share": 0.5750903894194359
+        },
+        {
+          "day": 780,
+          "local_rate_response_median": 0.0016820109563159468,
+          "local_rate_response_mean": 0.0016751137478969152,
+          "rate_slope": -0.004577638247855052,
+          "yield_slope": -0.02275780965852377,
+          "log_price_premium_slope": 0.4052071622612486,
+          "impact_share": 0.574,
+          "impact_wealth_share": 0.5765136938715074
+        },
+        {
+          "day": 840,
+          "local_rate_response_median": 0.0016605078934135735,
+          "local_rate_response_mean": 0.0016663823800715358,
+          "rate_slope": -0.00401756583037593,
+          "yield_slope": -0.02430987726783532,
+          "log_price_premium_slope": 0.35154913443545754,
+          "impact_share": 0.579,
+          "impact_wealth_share": 0.5811857806875602
+        },
+        {
+          "day": 900,
+          "local_rate_response_median": 0.001724402334449437,
+          "local_rate_response_mean": 0.0017278139596985953,
+          "rate_slope": -0.003867995430614572,
+          "yield_slope": -0.023257119441096315,
+          "log_price_premium_slope": 0.3380416363245392,
+          "impact_share": 0.573,
+          "impact_wealth_share": 0.555865617450475
+        },
+        {
+          "day": 960,
+          "local_rate_response_median": 0.0016967797454760967,
+          "local_rate_response_mean": 0.0017744183330446791,
+          "rate_slope": -0.003563119575506599,
+          "yield_slope": -0.02025354159788032,
+          "log_price_premium_slope": 0.3257819109861659,
+          "impact_share": 0.575,
+          "impact_wealth_share": 0.5571072749845142
+        },
+        {
+          "day": 1020,
+          "local_rate_response_median": 0.0019808011033576513,
+          "local_rate_response_mean": 0.0020311510305029874,
+          "rate_slope": -0.0036199527456939854,
+          "yield_slope": -0.020455608813851594,
+          "log_price_premium_slope": 0.34733341249802185,
+          "impact_share": 0.603,
+          "impact_wealth_share": 0.5901866940507682
+        },
+        {
+          "day": 1080,
+          "local_rate_response_median": 0.00175923316720102,
+          "local_rate_response_mean": 0.0017413228870877926,
+          "rate_slope": -0.0037003749631329304,
+          "yield_slope": -0.02112846124720011,
+          "log_price_premium_slope": 0.3526208724246665,
+          "impact_share": 0.635,
+          "impact_wealth_share": 0.6169971660259693
+        },
+        {
+          "day": 1140,
+          "local_rate_response_median": 0.0020151454055661083,
+          "local_rate_response_mean": 0.0019740757051423777,
+          "rate_slope": -0.0035696961750862747,
+          "yield_slope": -0.021544452128459613,
+          "log_price_premium_slope": 0.3370999702682541,
+          "impact_share": 0.67,
+          "impact_wealth_share": 0.6527448994304171
+        },
+        {
+          "day": 1200,
+          "local_rate_response_median": 0.0018505437935463663,
+          "local_rate_response_mean": 0.0018131311755256634,
+          "rate_slope": -0.003739116370540036,
+          "yield_slope": -0.0237275124110193,
+          "log_price_premium_slope": 0.3585956176386319,
+          "impact_share": 0.705,
+          "impact_wealth_share": 0.6814707546632527
+        }
+      ]
+    },
+    {
+      "taste": 0.4,
+      "seed": 28001,
+      "status": "complete",
+      "fingerprint": "e4023c646ee9bd2800ca5c51feb42de42b590aae153a5c86699984f59a5629ae",
+      "seconds": 153.5554193999851,
+      "price_cap_hits": 4,
+      "max_abs_log_mispricing": 2.623774063764138,
+      "decisions": [
+        {
+          "day": 60,
+          "local_rate_response_median": 0.0007811623013232898,
+          "local_rate_response_mean": 0.0011139108506180537,
+          "rate_slope": -0.0014376830477405148,
+          "yield_slope": -0.005817905815527297,
+          "log_price_premium_slope": 0.13240856392784814,
+          "impact_share": 0.208,
+          "impact_wealth_share": 0.21322965017122525
+        },
+        {
+          "day": 120,
+          "local_rate_response_median": 0.0010331061849660303,
+          "local_rate_response_mean": 0.0013891819183883202,
+          "rate_slope": -0.0020727030897605206,
+          "yield_slope": -0.00830618274878979,
+          "log_price_premium_slope": 0.198666327131025,
+          "impact_share": 0.284,
+          "impact_wealth_share": 0.2977945165101103
+        },
+        {
+          "day": 180,
+          "local_rate_response_median": 0.0011975929168038836,
+          "local_rate_response_mean": 0.0015332697490188518,
+          "rate_slope": -0.002699938538581446,
+          "yield_slope": -0.011122736273493805,
+          "log_price_premium_slope": 0.2657850135452365,
+          "impact_share": 0.351,
+          "impact_wealth_share": 0.36053857514218385
+        },
+        {
+          "day": 240,
+          "local_rate_response_median": 0.0013916727759351456,
+          "local_rate_response_mean": 0.0016248894805018003,
+          "rate_slope": -0.003353558490982889,
+          "yield_slope": -0.01457874657268374,
+          "log_price_premium_slope": 0.3322663401699754,
+          "impact_share": 0.425,
+          "impact_wealth_share": 0.42627632433816814
+        },
+        {
+          "day": 300,
+          "local_rate_response_median": 0.0009944747417051304,
+          "local_rate_response_mean": 0.0012213609038141575,
+          "rate_slope": -0.003935574943215676,
+          "yield_slope": -0.021992431092654117,
+          "log_price_premium_slope": 0.3498063176027364,
+          "impact_share": 0.479,
+          "impact_wealth_share": 0.47482895461375957
+        },
+        {
+          "day": 360,
+          "local_rate_response_median": 0.0014746100991135272,
+          "local_rate_response_mean": 0.001735279542011865,
+          "rate_slope": -0.004714353795872437,
+          "yield_slope": -0.030859871526358114,
+          "log_price_premium_slope": 0.41909711198812427,
+          "impact_share": 0.531,
+          "impact_wealth_share": 0.5357615915090851
+        },
+        {
+          "day": 420,
+          "local_rate_response_median": 0.00247832329754481,
+          "local_rate_response_mean": 0.002734711313365886,
+          "rate_slope": -0.005507718607050355,
+          "yield_slope": -0.036704794960609945,
+          "log_price_premium_slope": 0.49965015585174755,
+          "impact_share": 0.589,
+          "impact_wealth_share": 0.603324492069853
+        },
+        {
+          "day": 480,
+          "local_rate_response_median": 0.0033548446306603972,
+          "local_rate_response_mean": 0.0035105334092129926,
+          "rate_slope": -0.0064072791401473305,
+          "yield_slope": -0.0416162574805758,
+          "log_price_premium_slope": 0.569081338404561,
+          "impact_share": 0.633,
+          "impact_wealth_share": 0.6615122499504187
+        },
+        {
+          "day": 540,
+          "local_rate_response_median": 0.003744561000570209,
+          "local_rate_response_mean": 0.003832571660185399,
+          "rate_slope": -0.007192919513084986,
+          "yield_slope": -0.047772875485123885,
+          "log_price_premium_slope": 0.6329722758359696,
+          "impact_share": 0.676,
+          "impact_wealth_share": 0.7009204060904158
+        },
+        {
+          "day": 600,
+          "local_rate_response_median": 0.004137111611872789,
+          "local_rate_response_mean": 0.0041562535908529,
+          "rate_slope": -0.00774793660319455,
+          "yield_slope": -0.052674550334832815,
+          "log_price_premium_slope": 0.6733024881909921,
+          "impact_share": 0.708,
+          "impact_wealth_share": 0.731171159958529
+        },
+        {
+          "day": 660,
+          "local_rate_response_median": 0.004223572558980289,
+          "local_rate_response_mean": 0.0041287601045759525,
+          "rate_slope": -0.00814450191317873,
+          "yield_slope": -0.05803154754124713,
+          "log_price_premium_slope": 0.6980232760010804,
+          "impact_share": 0.736,
+          "impact_wealth_share": 0.7546142345807656
+        },
+        {
+          "day": 720,
+          "local_rate_response_median": 0.004034919738473279,
+          "local_rate_response_mean": 0.004113352034288718,
+          "rate_slope": -0.008455719610994726,
+          "yield_slope": -0.06371345128874305,
+          "log_price_premium_slope": 0.7195556630269807,
+          "impact_share": 0.762,
+          "impact_wealth_share": 0.7722355603175973
+        },
+        {
+          "day": 780,
+          "local_rate_response_median": 0.004296657258179688,
+          "local_rate_response_mean": 0.004409263020697173,
+          "rate_slope": -0.008938288293827047,
+          "yield_slope": -0.07239120046483778,
+          "log_price_premium_slope": 0.751355717052681,
+          "impact_share": 0.767,
+          "impact_wealth_share": 0.7757193452266391
+        },
+        {
+          "day": 840,
+          "local_rate_response_median": 0.0045445456228731425,
+          "local_rate_response_mean": 0.004610343600497643,
+          "rate_slope": -0.009288033194148993,
+          "yield_slope": -0.07421631319335174,
+          "log_price_premium_slope": 0.7753999403444579,
+          "impact_share": 0.798,
+          "impact_wealth_share": 0.8053747905433506
+        },
+        {
+          "day": 900,
+          "local_rate_response_median": 0.00468477808721327,
+          "local_rate_response_mean": 0.004738164230371397,
+          "rate_slope": -0.009141782854043618,
+          "yield_slope": -0.07958035745684762,
+          "log_price_premium_slope": 0.7626727620022424,
+          "impact_share": 0.817,
+          "impact_wealth_share": 0.817792596968566
+        },
+        {
+          "day": 960,
+          "local_rate_response_median": 0.003011560479296648,
+          "local_rate_response_mean": 0.0034098336151802753,
+          "rate_slope": -0.00830402034778307,
+          "yield_slope": -0.10400654163179168,
+          "log_price_premium_slope": 0.7019609978273127,
+          "impact_share": 0.827,
+          "impact_wealth_share": 0.8248761315924877
+        },
+        {
+          "day": 1020,
+          "local_rate_response_median": 0.004114111581774592,
+          "local_rate_response_mean": 0.004243302353936086,
+          "rate_slope": -0.00779584996169876,
+          "yield_slope": -0.09516878094012465,
+          "log_price_premium_slope": 0.6536973923297542,
+          "impact_share": 0.813,
+          "impact_wealth_share": 0.8144447769009586
+        },
+        {
+          "day": 1080,
+          "local_rate_response_median": 0.004899349742560261,
+          "local_rate_response_mean": 0.004881875602834866,
+          "rate_slope": -0.00796477381195637,
+          "yield_slope": -0.08392059546045078,
+          "log_price_premium_slope": 0.6637479766395534,
+          "impact_share": 0.818,
+          "impact_wealth_share": 0.8192249443382436
+        },
+        {
+          "day": 1140,
+          "local_rate_response_median": 0.005304577021598665,
+          "local_rate_response_mean": 0.005053320230320755,
+          "rate_slope": -0.00847009414587833,
+          "yield_slope": -0.08234230108618856,
+          "log_price_premium_slope": 0.6945405070403843,
+          "impact_share": 0.831,
+          "impact_wealth_share": 0.8394030360525632
+        },
+        {
+          "day": 1200,
+          "local_rate_response_median": 0.005616558719384165,
+          "local_rate_response_mean": 0.0052994070973605345,
+          "rate_slope": -0.008494829745127415,
+          "yield_slope": -0.0842585307630546,
+          "log_price_premium_slope": 0.7191631815155469,
+          "impact_share": 0.856,
+          "impact_wealth_share": 0.870874115228178
+        }
+      ]
+    },
+    {
+      "taste": 0.4,
+      "seed": 28002,
+      "status": "complete",
+      "fingerprint": "cdf58777d8d2458259286a69831365a2a00df8905a961a2913e5db278eafe583",
+      "seconds": 155.07716270000674,
+      "price_cap_hits": 2,
+      "max_abs_log_mispricing": 2.4635793052921366,
+      "decisions": [
+        {
+          "day": 60,
+          "local_rate_response_median": 0.00044804138749335754,
+          "local_rate_response_mean": 0.0005818961878397889,
+          "rate_slope": -0.0008624055936306662,
+          "yield_slope": -0.003802601252660469,
+          "log_price_premium_slope": 0.08277862706020492,
+          "impact_share": 0.21,
+          "impact_wealth_share": 0.19638337988389876
+        },
+        {
+          "day": 120,
+          "local_rate_response_median": 0.0006849465083067561,
+          "local_rate_response_mean": 0.0008661891244134536,
+          "rate_slope": -0.0014784458005106514,
+          "yield_slope": -0.006769612646083296,
+          "log_price_premium_slope": 0.14459579374491285,
+          "impact_share": 0.288,
+          "impact_wealth_share": 0.3052868689886615
+        },
+        {
+          "day": 180,
+          "local_rate_response_median": 0.0007952254703568744,
+          "local_rate_response_mean": 0.0009616718757218276,
+          "rate_slope": -0.0018208608903236766,
+          "yield_slope": -0.008737559791299476,
+          "log_price_premium_slope": 0.1827469655190912,
+          "impact_share": 0.35,
+          "impact_wealth_share": 0.3782500884755324
+        },
+        {
+          "day": 240,
+          "local_rate_response_median": 0.0010010751028759436,
+          "local_rate_response_mean": 0.001169574119862313,
+          "rate_slope": -0.0024674751231215475,
+          "yield_slope": -0.013226885536577734,
+          "log_price_premium_slope": 0.23122845594419955,
+          "impact_share": 0.411,
+          "impact_wealth_share": 0.4923000675822567
+        },
+        {
+          "day": 300,
+          "local_rate_response_median": 0.0006347705851538128,
+          "local_rate_response_mean": 0.0007879300880535522,
+          "rate_slope": -0.0026465120244173112,
+          "yield_slope": -0.019545233506785376,
+          "log_price_premium_slope": 0.24109128858179102,
+          "impact_share": 0.468,
+          "impact_wealth_share": 0.5456074252078246
+        },
+        {
+          "day": 360,
+          "local_rate_response_median": 0.0007361090996421218,
+          "local_rate_response_mean": 0.0009019040906256728,
+          "rate_slope": -0.0029187253973939026,
+          "yield_slope": -0.029100789085764606,
+          "log_price_premium_slope": 0.27376052166413695,
+          "impact_share": 0.527,
+          "impact_wealth_share": 0.6253209507153824
+        },
+        {
+          "day": 420,
+          "local_rate_response_median": 0.0013680097215304737,
+          "local_rate_response_mean": 0.0015209049981917827,
+          "rate_slope": -0.003220733060349606,
+          "yield_slope": -0.03707212405144294,
+          "log_price_premium_slope": 0.31371029937882605,
+          "impact_share": 0.578,
+          "impact_wealth_share": 0.6727878096278844
+        },
+        {
+          "day": 480,
+          "local_rate_response_median": 0.002079747485454352,
+          "local_rate_response_mean": 0.002213467035150763,
+          "rate_slope": -0.003795563280584337,
+          "yield_slope": -0.04427555469184991,
+          "log_price_premium_slope": 0.36536461964655714,
+          "impact_share": 0.623,
+          "impact_wealth_share": 0.7070368793120331
+        },
+        {
+          "day": 540,
+          "local_rate_response_median": 0.002317061464182711,
+          "local_rate_response_mean": 0.00244360500279281,
+          "rate_slope": -0.0040890577372365575,
+          "yield_slope": -0.04471434395370751,
+          "log_price_premium_slope": 0.3840810020165731,
+          "impact_share": 0.594,
+          "impact_wealth_share": 0.6714217918622525
+        },
+        {
+          "day": 600,
+          "local_rate_response_median": 0.0024890530561645684,
+          "local_rate_response_mean": 0.002567361941779983,
+          "rate_slope": -0.004086538949603213,
+          "yield_slope": -0.038668347334489664,
+          "log_price_premium_slope": 0.3811696048365523,
+          "impact_share": 0.533,
+          "impact_wealth_share": 0.5840669517907126
+        },
+        {
+          "day": 660,
+          "local_rate_response_median": 0.002371705771813255,
+          "local_rate_response_mean": 0.0024930331030970894,
+          "rate_slope": -0.004080262949993292,
+          "yield_slope": -0.03447837186861034,
+          "log_price_premium_slope": 0.377595055406685,
+          "impact_share": 0.474,
+          "impact_wealth_share": 0.5285259021618877
+        },
+        {
+          "day": 720,
+          "local_rate_response_median": 0.001918344395356902,
+          "local_rate_response_mean": 0.0020918622533018967,
+          "rate_slope": -0.003991353567362483,
+          "yield_slope": -0.03000417805544309,
+          "log_price_premium_slope": 0.368465416676143,
+          "impact_share": 0.43,
+          "impact_wealth_share": 0.4748869502217171
+        },
+        {
+          "day": 780,
+          "local_rate_response_median": 0.0019398251948334385,
+          "local_rate_response_mean": 0.0022055793728307325,
+          "rate_slope": -0.003787387466824225,
+          "yield_slope": -0.02521112896419133,
+          "log_price_premium_slope": 0.342959670743334,
+          "impact_share": 0.381,
+          "impact_wealth_share": 0.40551722515474875
+        },
+        {
+          "day": 840,
+          "local_rate_response_median": 0.0018223586630262915,
+          "local_rate_response_mean": 0.0020765800050880846,
+          "rate_slope": -0.003632340676976209,
+          "yield_slope": -0.022045335631263787,
+          "log_price_premium_slope": 0.3253585292780982,
+          "impact_share": 0.34,
+          "impact_wealth_share": 0.37419831297307743
+        },
+        {
+          "day": 900,
+          "local_rate_response_median": 0.0015776169579735828,
+          "local_rate_response_mean": 0.0018369549556366313,
+          "rate_slope": -0.002924676426481893,
+          "yield_slope": -0.018113014366712726,
+          "log_price_premium_slope": 0.27799231729984075,
+          "impact_share": 0.306,
+          "impact_wealth_share": 0.3451027327841299
+        },
+        {
+          "day": 960,
+          "local_rate_response_median": 0.0013868175664205021,
+          "local_rate_response_mean": 0.001655561843421499,
+          "rate_slope": -0.0024130357029303797,
+          "yield_slope": -0.014738731942490467,
+          "log_price_premium_slope": 0.2438349238921852,
+          "impact_share": 0.278,
+          "impact_wealth_share": 0.31831245573172123
+        },
+        {
+          "day": 1020,
+          "local_rate_response_median": 0.0012454505153120469,
+          "local_rate_response_mean": 0.0015303133103128962,
+          "rate_slope": -0.0025041138584278983,
+          "yield_slope": -0.015161887608518075,
+          "log_price_premium_slope": 0.24397183833986497,
+          "impact_share": 0.276,
+          "impact_wealth_share": 0.31769347267492193
+        },
+        {
+          "day": 1080,
+          "local_rate_response_median": 0.001099571730728713,
+          "local_rate_response_mean": 0.001432019734210639,
+          "rate_slope": -0.0025927406874716157,
+          "yield_slope": -0.018191177260306546,
+          "log_price_premium_slope": 0.2556923121098127,
+          "impact_share": 0.309,
+          "impact_wealth_share": 0.34110432702565613
+        },
+        {
+          "day": 1140,
+          "local_rate_response_median": 0.001571845989684401,
+          "local_rate_response_mean": 0.0018832806984953592,
+          "rate_slope": -0.00263345768222736,
+          "yield_slope": -0.01941931324105905,
+          "log_price_premium_slope": 0.2597439917414498,
+          "impact_share": 0.352,
+          "impact_wealth_share": 0.3881531082780131
+        },
+        {
+          "day": 1200,
+          "local_rate_response_median": 0.0018232608461002955,
+          "local_rate_response_mean": 0.0021004861148944238,
+          "rate_slope": -0.00278564722575936,
+          "yield_slope": -0.018907476523066864,
+          "log_price_premium_slope": 0.2638298444192586,
+          "impact_share": 0.392,
+          "impact_wealth_share": 0.4375959300207294
+        }
+      ]
+    },
+    {
+      "taste": 0.4,
+      "seed": 28003,
+      "status": "complete",
+      "fingerprint": "5a319675cd02104d04d6a34141c814577ec83ee4d554f26034ce2984b88a562a",
+      "seconds": 155.0068080999772,
+      "price_cap_hits": 1,
+      "max_abs_log_mispricing": 1.964507984600796,
+      "decisions": [
+        {
+          "day": 60,
+          "local_rate_response_median": 0.0006046718414589385,
+          "local_rate_response_mean": 0.0010339102930314167,
+          "rate_slope": -0.0008741912043113206,
+          "yield_slope": -0.004079242270718798,
+          "log_price_premium_slope": 0.07299385518258326,
+          "impact_share": 0.197,
+          "impact_wealth_share": 0.20473973358132963
+        },
+        {
+          "day": 120,
+          "local_rate_response_median": 0.000610779837099084,
+          "local_rate_response_mean": 0.0010611213560103446,
+          "rate_slope": -0.001160332513436879,
+          "yield_slope": -0.005053252583391059,
+          "log_price_premium_slope": 0.09939643220050033,
+          "impact_share": 0.194,
+          "impact_wealth_share": 0.20482843108301915
+        },
+        {
+          "day": 180,
+          "local_rate_response_median": 0.0008024983227930037,
+          "local_rate_response_mean": 0.001316676236520078,
+          "rate_slope": -0.0020405175305647574,
+          "yield_slope": -0.008803012511711937,
+          "log_price_premium_slope": 0.18522386901757765,
+          "impact_share": 0.277,
+          "impact_wealth_share": 0.2976374430857291
+        },
+        {
+          "day": 240,
+          "local_rate_response_median": 0.001083377043409066,
+          "local_rate_response_mean": 0.001560320994849655,
+          "rate_slope": -0.002779957951422777,
+          "yield_slope": -0.012419925042118531,
+          "log_price_premium_slope": 0.2648437542051519,
+          "impact_share": 0.353,
+          "impact_wealth_share": 0.37933659939273934
+        },
+        {
+          "day": 300,
+          "local_rate_response_median": 0.001279127399349365,
+          "local_rate_response_mean": 0.0016660315685977137,
+          "rate_slope": -0.003467630960783815,
+          "yield_slope": -0.01598963992996333,
+          "log_price_premium_slope": 0.3318656716750647,
+          "impact_share": 0.415,
+          "impact_wealth_share": 0.44185999397437503
+        },
+        {
+          "day": 360,
+          "local_rate_response_median": 0.0013714943909808068,
+          "local_rate_response_mean": 0.0017068170944432664,
+          "rate_slope": -0.004124003287995453,
+          "yield_slope": -0.02047123186861339,
+          "log_price_premium_slope": 0.3807912319417466,
+          "impact_share": 0.476,
+          "impact_wealth_share": 0.4949995368908242
+        },
+        {
+          "day": 420,
+          "local_rate_response_median": 0.0016908332053985407,
+          "local_rate_response_mean": 0.0019753074680006395,
+          "rate_slope": -0.005203750495441771,
+          "yield_slope": -0.03024540499375775,
+          "log_price_premium_slope": 0.4581954767886707,
+          "impact_share": 0.527,
+          "impact_wealth_share": 0.5485177330814605
+        },
+        {
+          "day": 480,
+          "local_rate_response_median": 0.0019791492342835846,
+          "local_rate_response_mean": 0.0022276791711639717,
+          "rate_slope": -0.005820834745949616,
+          "yield_slope": -0.03624894745731759,
+          "log_price_premium_slope": 0.515286709594476,
+          "impact_share": 0.573,
+          "impact_wealth_share": 0.5961103775362088
+        },
+        {
+          "day": 540,
+          "local_rate_response_median": 0.0025546481729984212,
+          "local_rate_response_mean": 0.002778885696306253,
+          "rate_slope": -0.006434517006983575,
+          "yield_slope": -0.043117680796494855,
+          "log_price_premium_slope": 0.5609009426312808,
+          "impact_share": 0.617,
+          "impact_wealth_share": 0.6410279713019325
+        },
+        {
+          "day": 600,
+          "local_rate_response_median": 0.0030095604201641627,
+          "local_rate_response_mean": 0.00316301393275643,
+          "rate_slope": -0.00703112882688908,
+          "yield_slope": -0.048792779895021794,
+          "log_price_premium_slope": 0.6094005791407048,
+          "impact_share": 0.656,
+          "impact_wealth_share": 0.6921009613952526
+        },
+        {
+          "day": 660,
+          "local_rate_response_median": 0.0034187803224951996,
+          "local_rate_response_mean": 0.0035473031066163823,
+          "rate_slope": -0.007518890898515516,
+          "yield_slope": -0.05306397596675257,
+          "log_price_premium_slope": 0.6555184966992259,
+          "impact_share": 0.687,
+          "impact_wealth_share": 0.7152011297815306
+        },
+        {
+          "day": 720,
+          "local_rate_response_median": 0.003621336917185431,
+          "local_rate_response_mean": 0.0037278972257115822,
+          "rate_slope": -0.007831943116277468,
+          "yield_slope": -0.05650669198156003,
+          "log_price_premium_slope": 0.6764017846364142,
+          "impact_share": 0.721,
+          "impact_wealth_share": 0.7414811682260745
+        },
+        {
+          "day": 780,
+          "local_rate_response_median": 0.0035221674625120535,
+          "local_rate_response_mean": 0.003559730736987651,
+          "rate_slope": -0.008250357177651005,
+          "yield_slope": -0.06554918322540115,
+          "log_price_premium_slope": 0.7160311455746867,
+          "impact_share": 0.751,
+          "impact_wealth_share": 0.7689522825788003
+        },
+        {
+          "day": 840,
+          "local_rate_response_median": 0.003567703988097175,
+          "local_rate_response_mean": 0.0036054573535260165,
+          "rate_slope": -0.007444341091419955,
+          "yield_slope": -0.07233818794123267,
+          "log_price_premium_slope": 0.6461421447677452,
+          "impact_share": 0.762,
+          "impact_wealth_share": 0.7815496152030957
+        },
+        {
+          "day": 900,
+          "local_rate_response_median": 0.003681600430245054,
+          "local_rate_response_mean": 0.0038356365388315422,
+          "rate_slope": -0.007335089491991378,
+          "yield_slope": -0.0687551961145663,
+          "log_price_premium_slope": 0.6306698576838708,
+          "impact_share": 0.751,
+          "impact_wealth_share": 0.7524208663815142
+        },
+        {
+          "day": 960,
+          "local_rate_response_median": 0.003898824291942749,
+          "local_rate_response_mean": 0.004042776187095796,
+          "rate_slope": -0.007269309253181885,
+          "yield_slope": -0.06460767123480242,
+          "log_price_premium_slope": 0.6406135061003269,
+          "impact_share": 0.752,
+          "impact_wealth_share": 0.754059946893045
+        },
+        {
+          "day": 1020,
+          "local_rate_response_median": 0.004470481198008892,
+          "local_rate_response_mean": 0.004439668582219603,
+          "rate_slope": -0.007365915539560302,
+          "yield_slope": -0.06459096171888465,
+          "log_price_premium_slope": 0.6641751368856503,
+          "impact_share": 0.781,
+          "impact_wealth_share": 0.7772190033524593
+        },
+        {
+          "day": 1080,
+          "local_rate_response_median": 0.003984687803228623,
+          "local_rate_response_mean": 0.0038523961357279767,
+          "rate_slope": -0.007344614925965444,
+          "yield_slope": -0.06721306626635766,
+          "log_price_premium_slope": 0.6637889443872972,
+          "impact_share": 0.805,
+          "impact_wealth_share": 0.7964360628582634
+        },
+        {
+          "day": 1140,
+          "local_rate_response_median": 0.0043314461952210035,
+          "local_rate_response_mean": 0.004169964715254747,
+          "rate_slope": -0.006943889861757433,
+          "yield_slope": -0.06701559730596363,
+          "log_price_premium_slope": 0.6297558178150383,
+          "impact_share": 0.822,
+          "impact_wealth_share": 0.8084399240511588
+        },
+        {
+          "day": 1200,
+          "local_rate_response_median": 0.0036329944751395133,
+          "local_rate_response_mean": 0.003570168634706157,
+          "rate_slope": -0.007039662398402533,
+          "yield_slope": -0.07142091550873315,
+          "log_price_premium_slope": 0.6408453246788768,
+          "impact_share": 0.841,
+          "impact_wealth_share": 0.8205416872986301
+        }
+      ]
+    },
+    {
+      "taste": 0.8,
+      "seed": 28001,
+      "status": "complete",
+      "fingerprint": "ac390ed6240700d80f55a760faacb222519bbd93b724a42465a24d3cf0b64e6e",
+      "seconds": 154.98544099996798,
+      "price_cap_hits": 14,
+      "max_abs_log_mispricing": 3.3125776560087083,
+      "decisions": [
+        {
+          "day": 60,
+          "local_rate_response_median": 0.0006376748039696805,
+          "local_rate_response_mean": 0.001406852712743396,
+          "rate_slope": -0.0017294630101989577,
+          "yield_slope": -0.00697481135226485,
+          "log_price_premium_slope": 0.17040433553095857,
+          "impact_share": 0.208,
+          "impact_wealth_share": 0.22607437538467048
+        },
+        {
+          "day": 120,
+          "local_rate_response_median": 0.0008537849244199647,
+          "local_rate_response_mean": 0.0016264376452076097,
+          "rate_slope": -0.0024196811829612303,
+          "yield_slope": -0.010088146100229069,
+          "log_price_premium_slope": 0.24719008404003792,
+          "impact_share": 0.284,
+          "impact_wealth_share": 0.3313711873367773
+        },
+        {
+          "day": 180,
+          "local_rate_response_median": 0.0009003220881537339,
+          "local_rate_response_mean": 0.0016820829924414546,
+          "rate_slope": -0.0030158393621824097,
+          "yield_slope": -0.01365439432631782,
+          "log_price_premium_slope": 0.311232500816939,
+          "impact_share": 0.351,
+          "impact_wealth_share": 0.4147323898852935
+        },
+        {
+          "day": 240,
+          "local_rate_response_median": 0.0010392209056690404,
+          "local_rate_response_mean": 0.001800103517743114,
+          "rate_slope": -0.00362438375843879,
+          "yield_slope": -0.01855249695346478,
+          "log_price_premium_slope": 0.36514567507179874,
+          "impact_share": 0.425,
+          "impact_wealth_share": 0.4918354045286881
+        },
+        {
+          "day": 300,
+          "local_rate_response_median": 0.0008741898482945175,
+          "local_rate_response_mean": 0.0016770993523688481,
+          "rate_slope": -0.0039649528493896705,
+          "yield_slope": -0.024635944495106428,
+          "log_price_premium_slope": 0.37137525349804695,
+          "impact_share": 0.479,
+          "impact_wealth_share": 0.5383012466863668
+        },
+        {
+          "day": 360,
+          "local_rate_response_median": 0.0010600807977231563,
+          "local_rate_response_mean": 0.00204302260490897,
+          "rate_slope": -0.004282097100224838,
+          "yield_slope": -0.032248282370764325,
+          "log_price_premium_slope": 0.3942267727346099,
+          "impact_share": 0.531,
+          "impact_wealth_share": 0.5968526644886348
+        },
+        {
+          "day": 420,
+          "local_rate_response_median": 0.0014833116934153743,
+          "local_rate_response_mean": 0.0029204408117153823,
+          "rate_slope": -0.004839618002391488,
+          "yield_slope": -0.04156295038147889,
+          "log_price_premium_slope": 0.4504701747283162,
+          "impact_share": 0.589,
+          "impact_wealth_share": 0.6599279658169943
+        },
+        {
+          "day": 480,
+          "local_rate_response_median": 0.0019566481202358895,
+          "local_rate_response_mean": 0.003554508202988509,
+          "rate_slope": -0.00551866346079076,
+          "yield_slope": -0.05399536477710089,
+          "log_price_premium_slope": 0.5085154021534023,
+          "impact_share": 0.633,
+          "impact_wealth_share": 0.7168061501320319
+        },
+        {
+          "day": 540,
+          "local_rate_response_median": 0.002122352340736871,
+          "local_rate_response_mean": 0.0036667176894384897,
+          "rate_slope": -0.005994531466803382,
+          "yield_slope": -0.06743630788517657,
+          "log_price_premium_slope": 0.5506675629190645,
+          "impact_share": 0.676,
+          "impact_wealth_share": 0.7553578132928447
+        },
+        {
+          "day": 600,
+          "local_rate_response_median": 0.0025366832288011036,
+          "local_rate_response_mean": 0.00437020357045911,
+          "rate_slope": -0.006286587434785277,
+          "yield_slope": -0.07956147147008957,
+          "log_price_premium_slope": 0.5829445270405864,
+          "impact_share": 0.708,
+          "impact_wealth_share": 0.7819479720814275
+        },
+        {
+          "day": 660,
+          "local_rate_response_median": 0.0027260797956875985,
+          "local_rate_response_mean": 0.004683238038435674,
+          "rate_slope": -0.006609482957211765,
+          "yield_slope": -0.0917453848141279,
+          "log_price_premium_slope": 0.6135870499932765,
+          "impact_share": 0.736,
+          "impact_wealth_share": 0.8016891288985271
+        },
+        {
+          "day": 720,
+          "local_rate_response_median": 0.003118542036144203,
+          "local_rate_response_mean": 0.005108691593824572,
+          "rate_slope": -0.006846472746139017,
+          "yield_slope": -0.10208284499021861,
+          "log_price_premium_slope": 0.6359042158182451,
+          "impact_share": 0.762,
+          "impact_wealth_share": 0.8174379406163759
+        },
+        {
+          "day": 780,
+          "local_rate_response_median": 0.0034127623878882395,
+          "local_rate_response_mean": 0.005708964462876716,
+          "rate_slope": -0.007082756580107136,
+          "yield_slope": -0.11428367804887377,
+          "log_price_premium_slope": 0.656408204149361,
+          "impact_share": 0.783,
+          "impact_wealth_share": 0.82803520694425
+        },
+        {
+          "day": 840,
+          "local_rate_response_median": 0.003857111564013435,
+          "local_rate_response_mean": 0.006237811763203494,
+          "rate_slope": -0.00751828574980729,
+          "yield_slope": -0.11888944027849373,
+          "log_price_premium_slope": 0.6880475897931111,
+          "impact_share": 0.811,
+          "impact_wealth_share": 0.8462845670915956
+        },
+        {
+          "day": 900,
+          "local_rate_response_median": 0.004288784669234975,
+          "local_rate_response_mean": 0.006465916239515214,
+          "rate_slope": -0.007438951348699845,
+          "yield_slope": -0.12602489553638177,
+          "log_price_premium_slope": 0.6897549660945187,
+          "impact_share": 0.825,
+          "impact_wealth_share": 0.8534836292330049
+        },
+        {
+          "day": 960,
+          "local_rate_response_median": 0.0038200386774998266,
+          "local_rate_response_mean": 0.006010653824004487,
+          "rate_slope": -0.007116888613617502,
+          "yield_slope": -0.14107159433106362,
+          "log_price_premium_slope": 0.6735069255079404,
+          "impact_share": 0.834,
+          "impact_wealth_share": 0.8594036232079484
+        },
+        {
+          "day": 1020,
+          "local_rate_response_median": 0.0039044524077444112,
+          "local_rate_response_mean": 0.006204680565110603,
+          "rate_slope": -0.006991879090652401,
+          "yield_slope": -0.1382115148775389,
+          "log_price_premium_slope": 0.6603019803592114,
+          "impact_share": 0.84,
+          "impact_wealth_share": 0.8642558466662409
+        },
+        {
+          "day": 1080,
+          "local_rate_response_median": 0.00401934497390803,
+          "local_rate_response_mean": 0.006335032559719062,
+          "rate_slope": -0.006861077031970395,
+          "yield_slope": -0.12935597963151343,
+          "log_price_premium_slope": 0.652593660595993,
+          "impact_share": 0.845,
+          "impact_wealth_share": 0.8676876741087338
+        },
+        {
+          "day": 1140,
+          "local_rate_response_median": 0.004025416376425946,
+          "local_rate_response_mean": 0.006042077773881282,
+          "rate_slope": -0.006705850003724599,
+          "yield_slope": -0.13111400190233197,
+          "log_price_premium_slope": 0.637097643915522,
+          "impact_share": 0.85,
+          "impact_wealth_share": 0.8789991255820419
+        },
+        {
+          "day": 1200,
+          "local_rate_response_median": 0.004303911124663301,
+          "local_rate_response_mean": 0.005913952913354564,
+          "rate_slope": -0.006388160823033417,
+          "yield_slope": -0.12606062611775887,
+          "log_price_premium_slope": 0.6147618764224857,
+          "impact_share": 0.848,
+          "impact_wealth_share": 0.8777143905935277
+        }
+      ]
+    },
+    {
+      "taste": 0.8,
+      "seed": 28002,
+      "status": "complete",
+      "fingerprint": "8910d7471b66e651107b45ab6ee5d78da6b50d9cf668dffa7b1e96fc4ff1e816",
+      "seconds": 155.7087668000022,
+      "price_cap_hits": 2,
+      "max_abs_log_mispricing": 2.5484144805840447,
+      "decisions": [
+        {
+          "day": 60,
+          "local_rate_response_median": 0.0003047964435776077,
+          "local_rate_response_mean": 0.0004668027784356137,
+          "rate_slope": -0.0008002970955183733,
+          "yield_slope": -0.003577278551123994,
+          "log_price_premium_slope": 0.07943349679504451,
+          "impact_share": 0.21,
+          "impact_wealth_share": 0.2175880902018583
+        },
+        {
+          "day": 120,
+          "local_rate_response_median": 0.00043620289946035636,
+          "local_rate_response_mean": 0.0006710161250700083,
+          "rate_slope": -0.0013032163617961647,
+          "yield_slope": -0.006686125473710293,
+          "log_price_premium_slope": 0.12760365236267623,
+          "impact_share": 0.288,
+          "impact_wealth_share": 0.34627753613014434
+        },
+        {
+          "day": 180,
+          "local_rate_response_median": 0.00042796658266228057,
+          "local_rate_response_mean": 0.0006601931513189924,
+          "rate_slope": -0.0014903825133431195,
+          "yield_slope": -0.00856565480745481,
+          "log_price_premium_slope": 0.15039577171795543,
+          "impact_share": 0.35,
+          "impact_wealth_share": 0.43524538764681564
+        },
+        {
+          "day": 240,
+          "local_rate_response_median": 0.0004973840479140894,
+          "local_rate_response_mean": 0.0007431969278202447,
+          "rate_slope": -0.0018278590346775118,
+          "yield_slope": -0.012919348504938278,
+          "log_price_premium_slope": 0.17575858216602477,
+          "impact_share": 0.411,
+          "impact_wealth_share": 0.5514627961156314
+        },
+        {
+          "day": 300,
+          "local_rate_response_median": 0.00031943844071343896,
+          "local_rate_response_mean": 0.000510032341433936,
+          "rate_slope": -0.0017078874182572103,
+          "yield_slope": -0.016335081185289042,
+          "log_price_premium_slope": 0.16883677680317075,
+          "impact_share": 0.468,
+          "impact_wealth_share": 0.6009732802202539
+        },
+        {
+          "day": 360,
+          "local_rate_response_median": 0.000344057464206662,
+          "local_rate_response_mean": 0.0005380705065366485,
+          "rate_slope": -0.0016660124713906805,
+          "yield_slope": -0.022688945934301465,
+          "log_price_premium_slope": 0.1761387067816868,
+          "impact_share": 0.527,
+          "impact_wealth_share": 0.6716044141465533
+        },
+        {
+          "day": 420,
+          "local_rate_response_median": 0.0004975996790045024,
+          "local_rate_response_mean": 0.00083730046302807,
+          "rate_slope": -0.0017685384533606145,
+          "yield_slope": -0.03250285829077508,
+          "log_price_premium_slope": 0.1997605002866264,
+          "impact_share": 0.578,
+          "impact_wealth_share": 0.7150238727881411
+        },
+        {
+          "day": 480,
+          "local_rate_response_median": 0.0007657113159887713,
+          "local_rate_response_mean": 0.0012458368867393848,
+          "rate_slope": -0.002029647595176382,
+          "yield_slope": -0.044493218186224766,
+          "log_price_premium_slope": 0.23103684969020408,
+          "impact_share": 0.623,
+          "impact_wealth_share": 0.7464769134251021
+        },
+        {
+          "day": 540,
+          "local_rate_response_median": 0.0009331592690499373,
+          "local_rate_response_mean": 0.001591011842912356,
+          "rate_slope": -0.002256832403018904,
+          "yield_slope": -0.05644135140565005,
+          "log_price_premium_slope": 0.2577589573624946,
+          "impact_share": 0.641,
+          "impact_wealth_share": 0.7563890198231994
+        },
+        {
+          "day": 600,
+          "local_rate_response_median": 0.0012088154634231625,
+          "local_rate_response_mean": 0.0021681814810113214,
+          "rate_slope": -0.0024806955745852667,
+          "yield_slope": -0.06864376349533576,
+          "log_price_premium_slope": 0.29307675420254026,
+          "impact_share": 0.659,
+          "impact_wealth_share": 0.7683616156238267
+        },
+        {
+          "day": 660,
+          "local_rate_response_median": 0.0012500720065916715,
+          "local_rate_response_mean": 0.002451644157848559,
+          "rate_slope": -0.002738511363389702,
+          "yield_slope": -0.07034041155153839,
+          "log_price_premium_slope": 0.316068896775832,
+          "impact_share": 0.6,
+          "impact_wealth_share": 0.7103825084209563
+        },
+        {
+          "day": 720,
+          "local_rate_response_median": 0.0012477794013601277,
+          "local_rate_response_mean": 0.0025041625346735098,
+          "rate_slope": -0.0030778993762354077,
+          "yield_slope": -0.06059795555730469,
+          "log_price_premium_slope": 0.32110052250171833,
+          "impact_share": 0.539,
+          "impact_wealth_share": 0.6316616848209227
+        },
+        {
+          "day": 780,
+          "local_rate_response_median": 0.0014881683516928643,
+          "local_rate_response_mean": 0.003260054251432881,
+          "rate_slope": -0.0029900781485221175,
+          "yield_slope": -0.045609414140928846,
+          "log_price_premium_slope": 0.29716628043146653,
+          "impact_share": 0.484,
+          "impact_wealth_share": 0.54436632052127
+        },
+        {
+          "day": 840,
+          "local_rate_response_median": 0.0016992808774018643,
+          "local_rate_response_mean": 0.003782825495674678,
+          "rate_slope": -0.0032305064106581695,
+          "yield_slope": -0.03520882193820012,
+          "log_price_premium_slope": 0.3041938411350275,
+          "impact_share": 0.435,
+          "impact_wealth_share": 0.5029168040143701
+        },
+        {
+          "day": 900,
+          "local_rate_response_median": 0.0016332506166998656,
+          "local_rate_response_mean": 0.003518730979272136,
+          "rate_slope": -0.002994243188263286,
+          "yield_slope": -0.02717603584007475,
+          "log_price_premium_slope": 0.28730144264523033,
+          "impact_share": 0.394,
+          "impact_wealth_share": 0.4500624413010475
+        },
+        {
+          "day": 960,
+          "local_rate_response_median": 0.0014850396696396055,
+          "local_rate_response_mean": 0.00309113986880853,
+          "rate_slope": -0.0027799853394713963,
+          "yield_slope": -0.022172652246942856,
+          "log_price_premium_slope": 0.27317421785208146,
+          "impact_share": 0.359,
+          "impact_wealth_share": 0.41899437673718026
+        },
+        {
+          "day": 1020,
+          "local_rate_response_median": 0.0012792774105442476,
+          "local_rate_response_mean": 0.002855864656458165,
+          "rate_slope": -0.0026201069646602324,
+          "yield_slope": -0.01897565373525643,
+          "log_price_premium_slope": 0.2566480910744899,
+          "impact_share": 0.336,
+          "impact_wealth_share": 0.4058478820157576
+        },
+        {
+          "day": 1080,
+          "local_rate_response_median": 0.0012427140560858007,
+          "local_rate_response_mean": 0.0026022755960409902,
+          "rate_slope": -0.0025681224560590845,
+          "yield_slope": -0.02058626885454011,
+          "log_price_premium_slope": 0.2573778506855795,
+          "impact_share": 0.394,
+          "impact_wealth_share": 0.46291110968092103
+        },
+        {
+          "day": 1140,
+          "local_rate_response_median": 0.001319455540555083,
+          "local_rate_response_mean": 0.0028699114719536794,
+          "rate_slope": -0.002507297350478613,
+          "yield_slope": -0.021824541263123727,
+          "log_price_premium_slope": 0.25308022462953567,
+          "impact_share": 0.457,
+          "impact_wealth_share": 0.5161873229429897
+        },
+        {
+          "day": 1200,
+          "local_rate_response_median": 0.0014465985537104149,
+          "local_rate_response_mean": 0.0030367432505547117,
+          "rate_slope": -0.002800089164035609,
+          "yield_slope": -0.026257143991785022,
+          "log_price_premium_slope": 0.27734049102597946,
+          "impact_share": 0.517,
+          "impact_wealth_share": 0.5911783735123219
+        }
+      ]
+    },
+    {
+      "taste": 0.8,
+      "seed": 28003,
+      "status": "complete",
+      "fingerprint": "c19df65cbff1faae1fd674062835b3d1529de305c670c54c114b8ffddcecbb9a",
+      "seconds": 154.960079600045,
+      "price_cap_hits": 58,
+      "max_abs_log_mispricing": 2.58018760054674,
+      "decisions": [
+        {
+          "day": 60,
+          "local_rate_response_median": 0.000401624919312724,
+          "local_rate_response_mean": 0.0014212384427697295,
+          "rate_slope": -0.0013177558174986214,
+          "yield_slope": -0.0062545712638985606,
+          "log_price_premium_slope": 0.11443140441386267,
+          "impact_share": 0.197,
+          "impact_wealth_share": 0.20778354842147356
+        },
+        {
+          "day": 120,
+          "local_rate_response_median": 0.000567709089646991,
+          "local_rate_response_mean": 0.0017995978527776757,
+          "rate_slope": -0.0022281942998645127,
+          "yield_slope": -0.0103192763845247,
+          "log_price_premium_slope": 0.20226039912221433,
+          "impact_share": 0.281,
+          "impact_wealth_share": 0.3207775183512143
+        },
+        {
+          "day": 180,
+          "local_rate_response_median": 0.0006162857668631415,
+          "local_rate_response_mean": 0.0017782769437848583,
+          "rate_slope": -0.0029637994869167747,
+          "yield_slope": -0.014366400532508861,
+          "log_price_premium_slope": 0.27850843703100664,
+          "impact_share": 0.355,
+          "impact_wealth_share": 0.4261432916887723
+        },
+        {
+          "day": 240,
+          "local_rate_response_median": 0.0007352976436631653,
+          "local_rate_response_mean": 0.0019547160418741786,
+          "rate_slope": -0.0036282966336209014,
+          "yield_slope": -0.01956944978885549,
+          "log_price_premium_slope": 0.3432658681790417,
+          "impact_share": 0.423,
+          "impact_wealth_share": 0.5159205779573567
+        },
+        {
+          "day": 300,
+          "local_rate_response_median": 0.0008793142958642617,
+          "local_rate_response_mean": 0.0020605390134629258,
+          "rate_slope": -0.004260740644579186,
+          "yield_slope": -0.025584850559105497,
+          "log_price_premium_slope": 0.3965089459479481,
+          "impact_share": 0.476,
+          "impact_wealth_share": 0.5723918482511803
+        },
+        {
+          "day": 360,
+          "local_rate_response_median": 0.0010244006160661633,
+          "local_rate_response_mean": 0.0022599202643261186,
+          "rate_slope": -0.00467365327161526,
+          "yield_slope": -0.03218475208164823,
+          "log_price_premium_slope": 0.4224840780510368,
+          "impact_share": 0.529,
+          "impact_wealth_share": 0.6144556487084998
+        },
+        {
+          "day": 420,
+          "local_rate_response_median": 0.0012134029892856024,
+          "local_rate_response_mean": 0.0026107489380450145,
+          "rate_slope": -0.0052564576011548125,
+          "yield_slope": -0.04458568310260282,
+          "log_price_premium_slope": 0.4668756202502032,
+          "impact_share": 0.575,
+          "impact_wealth_share": 0.6589839824020247
+        },
+        {
+          "day": 480,
+          "local_rate_response_median": 0.0013694695380703018,
+          "local_rate_response_mean": 0.0028035435674165954,
+          "rate_slope": -0.00564527919324643,
+          "yield_slope": -0.0546044832417312,
+          "log_price_premium_slope": 0.506742814503474,
+          "impact_share": 0.617,
+          "impact_wealth_share": 0.7007236357924004
+        },
+        {
+          "day": 540,
+          "local_rate_response_median": 0.0018177006394880148,
+          "local_rate_response_mean": 0.0033190245238826975,
+          "rate_slope": -0.005940632922750152,
+          "yield_slope": -0.06826209695076599,
+          "log_price_premium_slope": 0.5385237284957878,
+          "impact_share": 0.658,
+          "impact_wealth_share": 0.7428259392961939
+        },
+        {
+          "day": 600,
+          "local_rate_response_median": 0.002215080400862621,
+          "local_rate_response_mean": 0.003696510610887523,
+          "rate_slope": -0.006283359633869499,
+          "yield_slope": -0.08048870497383037,
+          "log_price_premium_slope": 0.5704130494539525,
+          "impact_share": 0.691,
+          "impact_wealth_share": 0.7845777343231763
+        },
+        {
+          "day": 660,
+          "local_rate_response_median": 0.002555810479441978,
+          "local_rate_response_mean": 0.004428167561802433,
+          "rate_slope": -0.0066282002706986275,
+          "yield_slope": -0.09123490288649048,
+          "log_price_premium_slope": 0.6071211633129318,
+          "impact_share": 0.718,
+          "impact_wealth_share": 0.8019282750651681
+        },
+        {
+          "day": 720,
+          "local_rate_response_median": 0.002661226519543835,
+          "local_rate_response_mean": 0.004833480153197443,
+          "rate_slope": -0.007013267280612964,
+          "yield_slope": -0.10247619596822402,
+          "log_price_premium_slope": 0.6507121251549132,
+          "impact_share": 0.747,
+          "impact_wealth_share": 0.8202228305844629
+        },
+        {
+          "day": 780,
+          "local_rate_response_median": 0.0030915712761011615,
+          "local_rate_response_mean": 0.004643907268687832,
+          "rate_slope": -0.006942534576247716,
+          "yield_slope": -0.11912027859966094,
+          "log_price_premium_slope": 0.6622961928838287,
+          "impact_share": 0.775,
+          "impact_wealth_share": 0.8388610126831894
+        },
+        {
+          "day": 840,
+          "local_rate_response_median": 0.0031410264729758966,
+          "local_rate_response_mean": 0.005159232889651362,
+          "rate_slope": -0.006356012607789415,
+          "yield_slope": -0.11446363746627372,
+          "log_price_premium_slope": 0.6105276740219151,
+          "impact_share": 0.757,
+          "impact_wealth_share": 0.8198752095792017
+        },
+        {
+          "day": 900,
+          "local_rate_response_median": 0.0025218499294432724,
+          "local_rate_response_mean": 0.004921236316517747,
+          "rate_slope": -0.006257343852603963,
+          "yield_slope": -0.08809846178944747,
+          "log_price_premium_slope": 0.5742715078526118,
+          "impact_share": 0.689,
+          "impact_wealth_share": 0.7273420738349886
+        },
+        {
+          "day": 960,
+          "local_rate_response_median": 0.002302503533303287,
+          "local_rate_response_mean": 0.004511483075805577,
+          "rate_slope": -0.0057513487005519445,
+          "yield_slope": -0.06518810161245768,
+          "log_price_premium_slope": 0.5190835785391475,
+          "impact_share": 0.617,
+          "impact_wealth_share": 0.6522333831990705
+        },
+        {
+          "day": 1020,
+          "local_rate_response_median": 0.0024241976256604097,
+          "local_rate_response_mean": 0.004296027202720274,
+          "rate_slope": -0.005265018261062088,
+          "yield_slope": -0.052504875100320134,
+          "log_price_premium_slope": 0.4755090029219026,
+          "impact_share": 0.588,
+          "impact_wealth_share": 0.6295871316920784
+        },
+        {
+          "day": 1080,
+          "local_rate_response_median": 0.0021540328879910177,
+          "local_rate_response_mean": 0.003819346517261374,
+          "rate_slope": -0.00496343157321064,
+          "yield_slope": -0.049478831364403716,
+          "log_price_premium_slope": 0.4453703316007725,
+          "impact_share": 0.603,
+          "impact_wealth_share": 0.6477846653950224
+        },
+        {
+          "day": 1140,
+          "local_rate_response_median": 0.002455224015979064,
+          "local_rate_response_mean": 0.0041419676194264145,
+          "rate_slope": -0.004700648871918184,
+          "yield_slope": -0.04791413639132239,
+          "log_price_premium_slope": 0.42444268621945946,
+          "impact_share": 0.642,
+          "impact_wealth_share": 0.6774304406747013
+        },
+        {
+          "day": 1200,
+          "local_rate_response_median": 0.0024563596088252623,
+          "local_rate_response_mean": 0.0037733220323023092,
+          "rate_slope": -0.0045507209243682446,
+          "yield_slope": -0.04903685784418181,
+          "log_price_premium_slope": 0.4136122368414322,
+          "impact_share": 0.673,
+          "impact_wealth_share": 0.7040150766064345
+        }
+      ]
+    }
+  ],
+  "scope": "Pre-policy pricing only; actions, inflation and policy outcomes were not read."
+}
