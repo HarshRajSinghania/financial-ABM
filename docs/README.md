@@ -2,24 +2,24 @@
 
 > **English summary.** This repository contains two lines of work. (1) A single-asset artificial stock market (Stage 1–3) with a frozen, audited Stage 1. (2) An in-progress multi-agent *disclosure game*: heterogeneous investors (profit-maximizing vs impact) trade 200 firms that choose between real improvement, greenwashing and doing nothing, under audits, fines and transparency policies. The domain (ESG, AI-washing, …) is a JSON config. The market layer is built and audited; the empirical starting point is calibrated to the CSI 300 (scores, book equity, market cap); the agent and policy layers are the current focus. Nothing here is a confirmed policy result yet — see “当前状态” below.
 
-## 当前状态（2026-10-13）
+## 当前状态（2026-10-14，阶段 D 之后）
 
 | 层面 | 状态 |
 |---|---|
 | 多资产市场 | 已完成并冻结，只修 bug。60 个固定世界的审计结果为 57 PASS / 3 FAIL（保留记录）；订单流重放 60/60 逐字节复现 |
 | 经验起点 | 沪深 300 的评分、半年报账面权益、市值三项都是 300/300；初始分布、规模相关和价值离散度都已校准 |
-| 企业智能体（NPV） | 已实现。开发实验中企业从不漂绿；原因已查明：模型罚款约为法定上限的 50 倍，融资收益偏小 10–30 倍 |
-| 企业智能体（强化学习） | 已实现，但训练覆盖不达标，未用于任何结论 |
-| 投资者演化 | 已实现，但零偏好对照中影响力投资者占比仍上升，模仿可能主要是噪声漂移，待诊断 |
+| 企业智能体（NPV） | 已实现。阶段 B 改用定额罚款（每次查处 1000 万元），校准了偏好强度，并加入评分饱和（报告不能超过满分）。开发网格中 33% 的政策窗口决策选择漂绿，大企业多于小企业；漂绿以继续已有案件为主（边际威慑失效）。见[阶段 B 第二版](../reports/disclosure_saturation_diagnosis_20261013/README.md)和[第一版](../reports/disclosure_fixed_fine_diagnosis_20261013/README.md) |
+| 企业智能体（强化学习） | 阶段 D 未通过验收。诊断发现，在校准的融资溢价下，最优动作只比“维持”多约 0.07 个基点市值，远小于奖励噪声，从实际账目中几乎学不出来。修复可修复的部分后，覆盖门槛仍未通过（政策后大企业组样本不足）；学习型企业的行为主要由训练路径决定：同一环境下两张独立训练的表，漂绿占比分别约 69% 和 15%。不进入阶段 F 主实验。见 [D.1 诊断](../reports/disclosure_rl_diagnosis_20261013/README.md)和 [D.2 比较](../reports/disclosure_rl_comparison_20261013/README.md) |
+| 投资者演化 | 已实现。阶段 C 查明，原模仿规则缺少“随机抽取比较对象”这一步，噪声会把影响力投资者占比推向 ½。按 Schlag 原意修正后，零偏好时没有漂移；偏好带来的扩张约为每 14 年 2–3 个百分点，市场自身的转型动力很小。见[阶段 C 报告](../reports/disclosure_imitation_diagnosis_20261013/README.md) |
 | 政策实验 | 只有开发规模的结果；正式实验尚未运行 |
-| 全量测试 | 821 项通过 |
+| 全量测试 | 863 项通过（含阶段 B 新增的 15 项定额罚款测试、8 项评分饱和测试，阶段 C 的 5 项模仿规则测试，以及阶段 D 的 14 项学习设定测试） |
 
-下一步见[现行计划](plan_20261013.md)的阶段 B：实现定额罚款，写出检查博弈的两个命题，确认漂绿会发生。
+[现行计划](plan_20261013.md)的阶段 B 已于 2026-10-13 通过验收：漂绿出现，信息与惩罚政策的对比不再机械地为 0。评分天花板已按研究契约第 17 节处理。第二版报告第 4 节还列出三个待研究决定的问题：罚款记账方式、比例罚对照的量级、自然衰减与成本假设。阶段 C 也已通过验收：主设定改用修正的模仿规则，偏好强度重新校准为 0.0724（研究契约第 18 节）。阶段 B 的结果是在原规则下得到的，是否用新主设定重跑待定。阶段 D 未通过验收（研究契约第 19 节）：覆盖门槛未达到，学习型企业的政策排序与训练随机性无法区分；在同一网格上，两种 NPV 企业都显示信息政策优于惩罚政策、两者都优于基准。按计划顺序，下一步是阶段 F（核心实验），企业使用 NPV 规则。
 
 ## 从哪里开始读
 
 1. [现行计划](plan_20261013.md)：为什么从“拟真市场”转向“多智能体演化”，各阶段的验收标准，以及博弈论如何接入。
-2. [研究契约](disclosure_research_contract.md)：研究规则和固定设定。第 14、15 节是最新的设定（2026-10-12/13）。
+2. [研究契约](disclosure_research_contract.md)：研究规则和固定设定。第 14–18 节是最新的设定（2026-10-12/13）。
 3. [经验量级检索](disclosure_empirical_magnitudes_20261012.md)：罚则、执法强度、ESG 融资成本的出处和换算，每条都标注了可信度。
 4. 最新诊断：[漂绿条件诊断](../reports/disclosure_wash_diagnosis_20261012/README.md)、[主设定与对照的开发实验](../reports/disclosure_csi300_variants_20261012/README.md)、[沪深 300 同池联合样本](../reports/disclosure_public_data_20261011/csi300_joint_20261009/README.md)。
 
@@ -33,6 +33,7 @@
 |---|---|---|
 | [plan_20261013.md](plan_20261013.md) | 智能体层的阶段计划与博弈论基准 | 现行 |
 | [disclosure_research_contract.md](disclosure_research_contract.md) | 研究规则、指标、实验矩阵、固定设定；第 13 节是 2026-10-11 的证据快照 | 现行（开发草案） |
+| [disclosure_inspection_propositions.md](disclosure_inspection_propositions.md) | 检查博弈中企业一方的两个命题：定额罚款下的漂绿条件、透明度门槛 | 参考 |
 | [disclosure_empirical_magnitudes_20261012.md](disclosure_empirical_magnitudes_20261012.md) | 法条、执法数据、融资成本文献及换算到模型单位 | 现行 |
 | [disclosure_information_design.md](disclosure_information_design.md) | 信息政策的最小机制设计与验收契约 | 参考 |
 | [disclosure_q_learning_design.md](disclosure_q_learning_design.md) | 企业 Q-learning 的可比设计与训练预算 | 参考（覆盖未达标） |
@@ -70,7 +71,7 @@
 | 市场层 | [60 世界审计](../reports/disclosure_market_qualification_20261011/audit_report.md)、[订单流重放](../reports/disclosure_market_qualification_20261011/flow_replay/interpretation.md)、[初日守恒修复](../reports/disclosure_market_qualification_20261011/initial_conservation_fix/README.md)、[2500 日速度](../reports/disclosure_market_qualification_20261011/performance_2500/README.md)、[预测写法诊断](../reports/disclosure_market_qualification_20261011/predictor_diagnostic/interpretation.md)、[市场校准](../reports/disclosure_market_calibration_20261011/interpretation.md)、[公开行情核查](../reports/disclosure_market_public_20261011/report.md) |
 | 数据与校准 | [公开数据总览](../reports/disclosure_public_data_20261011/README.md)、[华证评分快照](../reports/disclosure_public_data_20261011/csi300_huazheng_latest/README.md)、[沪深 300 联合样本](../reports/disclosure_public_data_20261011/csi300_joint_20261009/README.md)、[WBA 社会维度](../reports/disclosure_calibration_20261011/README.md)、[中兴财务试点](../reports/disclosure_public_data_20261011/zte_financial_pilot/README.md) |
 | 机制开发实验 | [基础开发](../reports/disclosure_development_20261011_v1/report.md)、[融资 v2](../reports/disclosure_financing_development_20261011_v2/report.md)、[信息机制](../reports/disclosure_information_development_20261011_v1/interpretation.md)、[报告频率](../reports/disclosure_reporting_development_20261011_v1/report.md)、[相图 v2](../reports/disclosure_phase_development_20261011_v2/report.md)、[动作网格检查](../reports/disclosure_action_grid_checks_20261011/interpretation.md)、[Q-learning 检查](../reports/disclosure_q_learning_checks_20261011/interpretation.md)、[AI-washing 迁移](../reports/disclosure_generality_financing_20261011/ai_washing/report.md) |
-| 最新诊断 | [主设定与对照](../reports/disclosure_csi300_variants_20261012/README.md)、[漂绿条件](../reports/disclosure_wash_diagnosis_20261012/README.md) |
+| 最新诊断 | [阶段 D.2：学习型企业比较](../reports/disclosure_rl_comparison_20261013/README.md)、[阶段 D.1：Q-learning 覆盖诊断](../reports/disclosure_rl_diagnosis_20261013/README.md)、[阶段 C：模仿机制](../reports/disclosure_imitation_diagnosis_20261013/README.md)、[阶段 B 第二版：评分饱和](../reports/disclosure_saturation_diagnosis_20261013/README.md)、[阶段 B：定额罚款与插桩诊断](../reports/disclosure_fixed_fine_diagnosis_20261013/README.md)、[偏好强度校准](../reports/disclosure_premium_calibration_20261013/README.md)、[主设定与对照](../reports/disclosure_csi300_variants_20261012/README.md)、[漂绿条件](../reports/disclosure_wash_diagnosis_20261012/README.md) |
 
 开发实验都使用小规模和已经观察过的种子，只用于检查机制，不是政策结论。
 
