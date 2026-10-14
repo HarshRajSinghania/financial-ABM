@@ -13,6 +13,8 @@ from pathlib import Path
 from typing import Any, Mapping
 
 TRADING_DAYS_PER_YEAR = 252
+IMITATION_RULES = ("type_mean", "pairwise")
+LEARNING_CONTEXTS = ("exposure", "signal_tercile")
 
 
 @dataclass(frozen=True, slots=True)
@@ -114,19 +116,33 @@ class MarketConfig:
     initial_impact_share: float = 0.0
     taste_median: float = 0.02
     taste_log_sd: float = 0.5
-    # Pairwise proportional imitation every imitation_interval days (see
-    # game.py). Intensity multiplies the difference in mean wealth growth over
-    # the window; growth differences are fractions of a percent to a few
-    # percent, so intensity must be of order 100 for switching to respond.
-    # Only a fraction of investors reconsiders each time.
+    # Proportional imitation every imitation_interval days (see game.py).
+    # Intensity multiplies the difference in mean wealth growth over the
+    # window; growth differences are fractions of a percent to a few percent,
+    # so intensity must be of order 100 for switching to respond. Only a
+    # fraction of investors reconsiders each time. "type_mean" compares the
+    # two type means directly; "pairwise" first samples one other investor
+    # and imitates only a partner of the other type (Schlag 1998).
     imitation_interval: int = 60
     imitation_intensity: float = 100.0
     imitation_update_fraction: float = 0.1
+    imitation_rule: str = "type_mean"
 
     # Firms decide on the attribute every firm_decision_interval days.
     firm_decision_interval: int = 60
     firm_policy: str = "npv"
     firm_action_fractions: tuple[float, ...] = (.01,)
+    # Q-learning only. The first state feature is the financing exposure share
+    # ("exposure") or the tercile of the firm's own public signal among all
+    # firms ("signal_tercile"), which carries delayed real improvements. With
+    # a positive power w the step size of a table entry after n updates is
+    # n ** -w (Even-Dar and Mansour 2003); zero keeps the constant rate.
+    firm_learning_context: str = "exposure"
+    firm_learning_rate_power: float = 0.0
+    # Shared-grid rules only (npv_discrete, q_learning): a positive value makes
+    # a candidate illegal when its resource cost exceeds this fraction of the
+    # current market cap. Zero keeps the value-anchor rule alone.
+    firm_cost_budget_fraction: float = 0.0
     # Fixed financing exposure, in units of initial market cap. These are
     # exploratory contract assumptions, not estimates from observed scores.
     financing_exposure_fraction: float = 0.5
@@ -138,6 +154,14 @@ class MarketConfig:
     def __post_init__(self) -> None:
         if self.firm_policy not in ("npv", "npv_discrete", "q_learning"):
             raise ValueError("firm_policy must be 'npv', 'npv_discrete' or 'q_learning'")
+        if self.imitation_rule not in IMITATION_RULES:
+            raise ValueError(f"imitation_rule must be one of {IMITATION_RULES}")
+        if self.firm_learning_context not in LEARNING_CONTEXTS:
+            raise ValueError(f"firm_learning_context must be one of {LEARNING_CONTEXTS}")
+        if not 0 <= self.firm_learning_rate_power <= 1:
+            raise ValueError("firm_learning_rate_power must be in [0, 1]")
+        if not 0 <= self.firm_cost_budget_fraction <= 1:
+            raise ValueError("firm_cost_budget_fraction must be in [0, 1]")
         fractions = tuple(self.firm_action_fractions)
         if (not fractions or any(not math.isfinite(value) or not 0 < value <= 1 for value in fractions)
                 or any(left >= right for left, right in zip(fractions, fractions[1:]))):
@@ -203,6 +227,15 @@ class MarketConfig:
             payload.pop("firm_action_fractions")
         else:
             payload["firm_action_fractions"] = list(self.firm_action_fractions)
+        # Defaults are omitted so that identities from before these options stay unchanged.
+        if self.imitation_rule == "type_mean":
+            payload.pop("imitation_rule")
+        if self.firm_learning_context == "exposure":
+            payload.pop("firm_learning_context")
+        if self.firm_learning_rate_power == 0.0:
+            payload.pop("firm_learning_rate_power")
+        if self.firm_cost_budget_fraction == 0.0:
+            payload.pop("firm_cost_budget_fraction")
         return payload
 
     @classmethod

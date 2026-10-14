@@ -91,6 +91,9 @@ def compute_metrics(
         fractions[name] = values
     if not np.isin(actions[checked], [IMPROVE, INFLATE, MAINTAIN]).all():
         raise ValueError("unknown firm action in the metric window")
+    detections = np.asarray(result.detections)
+    if detections.shape != actions.shape:
+        raise ValueError("detections must match the action history")
     if ((actions[checked] == MAINTAIN) & (fractions["cost_fraction"][checked] != 0)).any():
         raise ValueError("maintenance actions must have zero resource cost")
 
@@ -141,6 +144,8 @@ def compute_metrics(
         raise ValueError("pricing_slope contains infinite decision observations")
     finite_slope = selected_slope[np.isfinite(selected_slope)]
     missing_slope = int(selected_slope.size - finite_slope.size)
+    window_actions = actions[selected]
+    washing = window_actions == INFLATE
 
     metrics = {
         "window": {
@@ -174,6 +179,19 @@ def compute_metrics(
             "mean_absolute_raw_gap": float(raw_gap.mean()),
             "final_absolute_raw_gap": float(raw_gap[-1].mean()),
             "mean_range_fraction": float(raw_gap.mean() / (domain.raw_upper - domain.raw_lower)),
+        },
+        "actions": {
+            "scope": "Firm decisions in (start_day, end_day]; detections are that day's audits that found inflation.",
+            "decisions": int(window_actions.size),
+            "improve": int((window_actions == IMPROVE).sum()),
+            "wash": int(washing.sum()),
+            "maintain": int((window_actions == MAINTAIN).sum()),
+            "detections": int(detections[selected].sum()),
+            "firms_washing": int(washing.any(axis=0).sum()),
+            "wash_share_by_size": {
+                name: float(washing[:, size_class == index].mean()) if washing.size and (size_class == index).any() else None
+                for index, name in enumerate(SIZE_CLASS_NAMES)
+            },
         },
         "impact": {
             "initial_share": float(impact[start]),

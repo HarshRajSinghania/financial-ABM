@@ -5,7 +5,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-from dataclasses import asdict, replace
+from dataclasses import replace
 from pathlib import Path
 from typing import Iterable
 
@@ -224,8 +224,11 @@ def train_and_evaluate(
                            "group_common_state_share_threshold": .01, "unobserved_group_status": "not_observed"}}
     if coverage_target:
         budget["coverage_target"] = coverage_target
+    if config.firm_learning_rate_power:
+        budget["learning_rate_power"] = config.firm_learning_rate_power
+        budget["step_size_rule"] = "min(1, k * (n + k) ** -learning_rate_power) per batch of k same-key samples; learning_rate unused"
     spec = {"schema_version": 1, "purpose": "development", "contract": contract,
-            "config": config.to_dict(), "domain": domain.to_dict(), "policy": asdict(policy), "budget": budget,
+            "config": config.to_dict(), "domain": domain.to_dict(), "policy": policy.to_dict(), "budget": budget,
             "comparison_scope": "within_scenario_algorithm_comparison",
             "discount_rule": "exp(-firm_discount_rate * elapsed_days / 252); learner.discount is unused",
             "resumable": False}
@@ -236,6 +239,7 @@ def train_and_evaluate(
     destination.mkdir(parents=True, exist_ok=False)
     runner.write_json(destination / "experiment.json", {**spec, "experiment_id": experiment_id})
     learner = CompanyQLearner(groups=6, actions=choice_count, epsilon=1.0, learning_rate=.1)
+    learner.learning_rate_power = config.firm_learning_rate_power
     if common_source is not None:
         learner.values[:3] = common_source.values[:3]
         learner.counts[:3] = common_source.counts[:3]

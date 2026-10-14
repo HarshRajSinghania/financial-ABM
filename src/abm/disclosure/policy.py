@@ -6,6 +6,10 @@ Instruments act through distinct channels:
   checked; a detected inflation is removed and fined;
 * ``penalty`` – fine per standard deviation of detected inflation, as a
   fraction of market cap;
+* ``fixed_fine`` – a lump-sum fine per detected case in model money units
+  (mean initial firm value = 1), whatever the amount inflated. One audit
+  that finds inflation closes one case, so inflation added to a report that
+  is already inflated and undetected adds no fixed fine;
 * ``transparency`` – weight investors put on the true attribute rather than
   the report (``signal = true + (1 - transparency) * inflation``);
 * ``subsidy`` – payment per standard deviation of real improvement, as a
@@ -24,8 +28,9 @@ penalty and subsidy individually fixed.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, replace
+from dataclasses import asdict, dataclass, replace
 from math import isfinite
+from typing import Any
 
 from .domain import DomainSpec
 
@@ -40,12 +45,15 @@ class PolicyRegime:
     disclosure_delay_days: int | None = None
     publish_audit_results: bool = False
     reporting_interval_days: int = 1
+    fixed_fine: float = 0.0
 
     def __post_init__(self) -> None:
         if not 0 <= self.audit_probability <= 1 or not 0 <= self.transparency <= 1:
             raise ValueError("audit_probability and transparency must be in [0, 1]")
         if self.penalty < 0 or self.subsidy < 0:
             raise ValueError("penalty and subsidy must be nonnegative")
+        if not isfinite(self.fixed_fine) or self.fixed_fine < 0:
+            raise ValueError("fixed_fine must be finite and nonnegative")
         if not isfinite(self.disclosure_noise_sd) or self.disclosure_noise_sd < 0:
             raise ValueError("disclosure_noise_sd must be finite and nonnegative")
         if self.disclosure_delay_days is not None and (
@@ -64,7 +72,15 @@ class PolicyRegime:
             penalty=domain.baseline_penalty,
             transparency=domain.baseline_transparency,
             subsidy=domain.baseline_subsidy,
+            fixed_fine=domain.baseline_fixed_fine,
         )
+
+    def to_dict(self) -> dict[str, Any]:
+        """Serialized regime; a zero fixed fine is omitted so earlier identities are unchanged."""
+        payload = asdict(self)
+        if not self.fixed_fine:
+            payload.pop("fixed_fine")
+        return payload
 
 
 @dataclass(frozen=True, slots=True)
@@ -83,6 +99,11 @@ class PolicySchedule:
         if self.intervention is not None and day >= self.start_day:
             return self.intervention
         return self.baseline
+
+    def to_dict(self) -> dict[str, Any]:
+        return {"baseline": self.baseline.to_dict(),
+                "intervention": None if self.intervention is None else self.intervention.to_dict(),
+                "start_day": self.start_day}
 
     @classmethod
     def constant(cls, domain: DomainSpec) -> "PolicySchedule":

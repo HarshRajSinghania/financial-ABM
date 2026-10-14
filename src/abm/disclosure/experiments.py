@@ -9,7 +9,7 @@ import os
 import re
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from contextlib import contextmanager
-from dataclasses import asdict, replace
+from dataclasses import replace
 from importlib.metadata import version
 from pathlib import Path
 
@@ -52,7 +52,7 @@ def freeze_spec(path: str | Path) -> dict:
             if set(policy_spec) - {"baseline"}:
                 policy = policy.with_intervention(policy_spec["start_day"], **policy_spec["changes"])
         scenarios.append({"name": scenario["name"], "config": config.to_dict(),
-                          "domain": scenario_domain.to_dict(), "policy": asdict(policy)})
+                          "domain": scenario_domain.to_dict(), "policy": policy.to_dict()})
     names = [scenario["name"] for scenario in scenarios]
     if not names or len(names) != len(set(names)):
         raise ValueError("scenario names must be nonempty and unique")

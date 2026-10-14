@@ -57,17 +57,19 @@ def discrete_candidates(
     wash_value_per_sd: FloatArray, fine_value_per_sd: FloatArray,
     amplitude_fraction: float = CANDIDATE_FRACTION,
     amplitude_fractions: tuple[float, ...] | None = None,
+    fixed_fine_value: FloatArray | float = 0.0,
 ) -> CandidateSet:
+    """Candidate values; ``fixed_fine_value`` is a lump sum on every positive wash amplitude."""
     fractions = (amplitude_fraction,) if amplitude_fractions is None else amplitude_fractions
     if (not all(math.isfinite(value) and value > 0 for value in (max_change_per_period, wash_cost_ratio))
             or not fractions or any(not math.isfinite(value) or not 0 < value <= 1 for value in fractions)
             or any(left >= right for left, right in zip(fractions, fractions[1:]))):
         raise ValueError("candidate scale and cost ratio must be positive; amplitude fraction must lie in (0,1]")
-    real_cap, wash_cap, c, s, real, displaced, wash, fine = _vectors(
+    real_cap, wash_cap, c, s, real, displaced, wash, fine, fixed = _vectors(
         improve_capacity, inflate_capacity, marginal_cost, subsidy, real_value_per_sd,
-        displaced_real_value_per_sd, wash_value_per_sd, fine_value_per_sd,
+        displaced_real_value_per_sd, wash_value_per_sd, fine_value_per_sd, fixed_fine_value,
     )
-    if np.any(c <= 0) or any(np.any(value < 0) for value in (s, real, displaced, wash, fine)):
+    if np.any(c <= 0) or any(np.any(value < 0) for value in (s, real, displaced, wash, fine, fixed)):
         raise ValueError("cost must be positive and subsidy/benefit/fine coefficients nonnegative")
     kinds = action_kinds(2 * len(fractions) + 1)
     real_columns, wash_columns = np.flatnonzero(kinds == IMPROVE), np.flatnonzero(kinds == INFLATE)
@@ -84,6 +86,8 @@ def discrete_candidates(
     values[:, real_columns] = real[:, None] * np.minimum(real_amount, report_room) + displaced[:, None] * np.maximum(real_amount - report_room, 0)
     values[:, wash_columns] = (wash - fine)[:, None] * wash_amount
     values = values + subsidies - costs
+    if np.any(fixed):
+        values[:, wash_columns] -= fixed[:, None] * (wash_amount > 0)
     valid = amounts > 0
     valid[:, MAINTAIN] = True
     for columns in (real_columns, wash_columns):
@@ -105,7 +109,9 @@ def context_states(
     *, financing_exposure: FloatArray, prices: FloatArray, inflation: FloatArray,
     marginal_cost: FloatArray, real_cost_scale: float, max_change_per_period: float,
     pending_due_days: FloatArray, pending_cash_amount: FloatArray, decision_days: int,
+    own_signal: FloatArray | None = None,
 ) -> IntArray:
+    """Four ternary features; ``own_signal`` replaces the exposure share by the firm's signal tercile."""
     exposure, prices, inflation, cost, due, cash = _vectors(
         financing_exposure, prices, inflation, marginal_cost, pending_due_days, pending_cash_amount,
     )
@@ -115,8 +121,16 @@ def context_states(
         raise ValueError("invalid financing, attribute, cost or pending context")
     stage = np.where(due >= 0, 2.0, 0.0)
     stage[((due >= 0) & (due <= decision_days)) | (cash != 0)] = 1.0
-    features = np.column_stack((exposure / (exposure + prices), inflation, np.log(cost / real_cost_scale), stage))
-    return ternary_states(features, ((.25, .50), (1e-12, max_change_per_period), (-.5, .5), (.5, 1.5)))
+    first, cuts = exposure / (exposure + prices), (.25, .50)
+    if own_signal is not None:
+        (signal,) = _vectors(own_signal)
+        if signal.shape != exposure.shape:
+            raise ValueError("own signal must match the firm vector")
+        # Rank share in (0, 1), ties broken by firm order, cut into thirds.
+        first = (np.argsort(np.argsort(signal, kind="stable"), kind="stable") + .5) / signal.size
+        cuts = (1 / 3, 2 / 3)
+    features = np.column_stack((first, inflation, np.log(cost / real_cost_scale), stage))
+    return ternary_states(features, (cuts, (1e-12, max_change_per_period), (-.5, .5), (.5, 1.5)))
 
 
 def period_discount(annual_discount_rate: float, elapsed_days: Any) -> FloatArray:
@@ -235,12 +249,15 @@ def batch_update(
     future = np.where(valid, old[next_groups, next_states], -np.inf).max(axis=1)
     targets = rewards + discount * np.where(terminated, 0.0, future)
     keys, inverse = np.unique(np.column_stack((groups, states, actions)), axis=0, return_inverse=True)
+    power = learner.learning_rate_power
     for index, key in enumerate(keys):
         member = inverse == index
         count = int(member.sum())
         mean = math.fsum(np.sort(targets[member])) / count
         address = tuple(key)
-        learner.values[address] = old[address] + learner.learning_rate * (mean - old[address])
+        # A batch of k same-key samples after n updates moves by min(1, k (n + k) ** -power); power 1 is the running mean.
+        step = learner.learning_rate if not power else min(1.0, count * float(learner.counts[address] + count) ** -power)
+        learner.values[address] = old[address] + step * (mean - old[address])
         learner.counts[address] += count
 
 
@@ -256,9 +273,11 @@ def table_fingerprint(learner: CompanyQLearner, *, prefix_groups: int | None = N
 def save_frozen(path: str | Path, learner: CompanyQLearner, metadata: Mapping[str, Any]) -> str:
     if learner.values.ndim != 3 or learner.values.shape[1] != 81 or learner.values.shape[2] < 3 or learner.values.shape[2] % 2 != 1 or learner.counts.shape != learner.values.shape or not np.issubdtype(learner.counts.dtype, np.integer) or not np.isfinite(learner.values).all() or np.any(learner.counts < 0):
         raise ValueError("cannot freeze an invalid Q table")
-    payload = json.dumps({"format_version": 1 if learner.values.shape[2] == 3 else 2, "metadata": dict(metadata),
-                          "learning_rate": learner.learning_rate, "discount": learner.discount},
-                         sort_keys=True, ensure_ascii=False, allow_nan=False)
+    fields = {"format_version": 1 if learner.values.shape[2] == 3 else 2, "metadata": dict(metadata),
+              "learning_rate": learner.learning_rate, "discount": learner.discount}
+    if learner.learning_rate_power:
+        fields["learning_rate_power"] = learner.learning_rate_power
+    payload = json.dumps(fields, sort_keys=True, ensure_ascii=False, allow_nan=False)
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("xb") as handle:
@@ -283,6 +302,7 @@ def load_frozen(
     if expected_metadata is not None and any(metadata.get(key) != value for key, value in expected_metadata.items()):
         raise ValueError("frozen model metadata mismatch")
     learner = CompanyQLearner(groups=values.shape[0], epsilon=0, learning_rate=payload["learning_rate"], discount=payload["discount"], actions=values.shape[2])
+    learner.learning_rate_power = float(payload.get("learning_rate_power", 0.0))
     learner.values, learner.counts = values, counts
     learner.values.flags.writeable = learner.counts.flags.writeable = False
     return learner, metadata

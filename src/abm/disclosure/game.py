@@ -16,7 +16,11 @@ ledger rewards with the same discrete action candidates:
   immediately visible. The optimum is piecewise quadratic;
 * inflate: financing savings survive until an audit changes the quote used
   at the next repricing. Cash flows are discounted daily over an explicit
-  finite horizon; the eventual fine remains a discounted liability.
+  finite horizon; the eventual fine remains a discounted liability. A fixed
+  fine is owed once per detected case, so it counts only if the new report
+  opens a case: inflation added while earlier inflation is still undetected
+  joins that case and adds no fixed fine. Being a lump sum, it decides
+  whether to inflate, not how much.
 
 Changes respect the period cap and remaining capacity including pending
 actions. The dividend-yield proxy ``k_i = yield * V_i / P_i`` and its
@@ -29,19 +33,24 @@ fees are accrued, not paid from a cash account. Relative to the initial
 fee already embedded in the value anchor, changes in fees adjust value
 once. No separate quote gain is added to the firm's objective.
 
-Investors imitate by pairwise proportional imitation (Schlag 1998): every
-imitation period a fraction of investors reconsiders, and switches to the
-other type with probability ``intensity * max(0, growth_other - growth_own)``
-using the two types' mean wealth growth over the period. With equal
-performance shares stay put. A logit re-draw (the application's rule) instead
-pulls the impact share towards one half whenever performance is similar,
-which would manufacture a "transition" out of the update rule itself.
+Investors imitate by proportional imitation: every imitation period a
+fraction of investors reconsiders, and switches to the other type with
+probability ``intensity * max(0, growth_other - growth_own)`` using the two
+types' mean wealth growth over the period. Under ``imitation_rule="type_mean"``
+every reviewer makes this comparison, so noisy performance differences pull
+the impact share towards one half: the larger type always has more reviewers
+ready to leave. Under ``"pairwise"`` (Schlag 1998) a reviewer first samples
+one other investor and can imitate only a partner of the other type; the
+expected change is the replicator dynamic ``s * (1 - s) * E[advantage]``,
+with no drift when the types perform equally. A logit re-draw (the
+application's rule) would pull the share towards one half even then, which
+would manufacture a "transition" out of the update rule itself.
 """
 
 from __future__ import annotations
 
 import hashlib
-from dataclasses import asdict, dataclass, field
+from dataclasses import dataclass, field
 from statistics import NormalDist
 
 import numpy as np
@@ -73,6 +82,8 @@ class AttributeState:
     inflation: FloatArray
     cost_scale: FloatArray
     pending: list[tuple[int, int, IntArray, FloatArray]] = field(default_factory=list)
+    # The domain's observation_ceiling: signals saturate there and reports stop at it.
+    ceiling: float | None = None
 
     @classmethod
     def initialize(cls, domain: DomainSpec, size_class: IntArray, rng: np.random.Generator,
@@ -105,10 +116,18 @@ class AttributeState:
             goodness=goodness,
             inflation=np.zeros(size),
             cost_scale=domain.real_cost_scale * multipliers * dispersion,
+            ceiling=domain.observation_ceiling,
         )
 
     def observed(self, transparency: float) -> FloatArray:
-        return self.goodness + (1.0 - transparency) * self.inflation
+        signal = self.goodness + (1.0 - transparency) * self.inflation
+        # Reports stop at the ceiling, so only true values drawn above it are cut.
+        return signal if self.ceiling is None else np.minimum(signal, self.ceiling)
+
+    def certified(self, firms: IntArray | NDArray[np.bool_]) -> FloatArray:
+        """True values as a published audit shows them."""
+        values = self.goodness[firms]
+        return values if self.ceiling is None else np.minimum(values, self.ceiling)
 
     def marginal_cost(self, domain: DomainSpec) -> FloatArray:
         return self.cost_scale * np.exp(domain.cost_level_elasticity * self.goodness)
@@ -131,8 +150,10 @@ class AttributeState:
             else:
                 self.inflation[firms] += amounts
         self.pending = remaining
-        # A report cannot exceed the scale's upper end.
-        np.minimum(self.inflation, high - self.goodness, out=self.inflation)
+        # A report cannot exceed the scale's upper end, or the observable
+        # maximum when signals saturate; real improvement replaces inflation.
+        top = high if self.ceiling is None else self.ceiling
+        np.minimum(self.inflation, top - self.goodness, out=self.inflation)
         np.maximum(self.inflation, 0.0, out=self.inflation)
 
 
@@ -159,8 +180,14 @@ def npv_choices(
     repricing_interval: int = 60,
     decision_day: int = 0,
     published_now: NDArray[np.bool_] | None = None,
+    new_case_fine: FloatArray | None = None,
 ) -> FirmChoices:
-    """Choose using annual financing savings per initial SD / current cap."""
+    """Choose using annual financing savings per initial SD / current cap.
+
+    ``new_case_fine`` is the fixed fine as a fraction of current cap, times
+    the probability that a new report opens a case; detection discounts it
+    like the proportional fine.
+    """
     disclosure_delay = domain.disclosure_delay_days if regime.disclosure_delay_days is None else regime.disclosure_delay_days
     real_annuity, displaced_annuity, wash_annuity, detection = financing_signal_factors(
         cost_of_capital, decision_day=decision_day, horizon_days=horizon_days,
@@ -193,9 +220,12 @@ def npv_choices(
     inflate_amount = np.minimum(inflate_gain / (2.0 * wash_cost), inflate_cap)
     real_value = (improve_benefit * np.minimum(improve_amount, inflate_cap)
                   + displaced_benefit * np.maximum(improve_amount - inflate_cap, 0.0))
+    wash_value = inflate_gain * inflate_amount - wash_cost * inflate_amount**2
+    if new_case_fine is not None:
+        wash_value = wash_value - np.where(inflate_amount > 0, new_case_fine * detection, 0.0)
     values = np.column_stack((
         real_value + regime.subsidy * improve_amount - marginal_cost * improve_amount**2,
-        inflate_gain * inflate_amount - wash_cost * inflate_amount**2,
+        wash_value,
         np.zeros_like(benefit),
     ))
     actions = np.argmax(values, axis=1)
@@ -209,6 +239,33 @@ def npv_choices(
     )
     subsidy_fraction = np.where(actions == IMPROVE, regime.subsidy * amounts, 0.0)
     return FirmChoices(actions, amounts, np.where(actions == MAINTAIN, 0.0, best), cost_fraction, subsidy_fraction)
+
+
+def new_case_probability(
+    inflation: FloatArray, pending: list[tuple[int, int, IntArray, FloatArray]], *,
+    decision_day: int, wash_due: int, period_days: int, audit_probability: float,
+) -> FloatArray:
+    """Probability that inflation decided now opens a new case instead of joining one.
+
+    Inflation still undetected when the new amount is disclosed on ``wash_due``
+    is the same case, which one audit closes with one fixed fine. Pending
+    inflation arrives before that day's audit; audits strictly before
+    ``wash_due`` can close the earlier case first. The current regime is
+    assumed to persist. The report bound (scale end, or observable maximum),
+    against which real improvement can also clear inflation, is ignored.
+    """
+    open_case = (np.asarray(inflation) > 0).astype(np.float64)
+    arrivals: dict[int, list[IntArray]] = {}
+    for due_day, kind, firms, amounts in pending:
+        if kind == INFLATE and decision_day < due_day <= wash_due:
+            arrivals.setdefault(due_day, []).append(firms[amounts > 0])
+    audits = range((decision_day // period_days + 1) * period_days, wash_due, period_days)
+    for day in sorted(set(arrivals) | set(audits)):
+        for firms in arrivals.get(day, ()):
+            open_case[firms] = 1.0
+        if day % period_days == 0 and day < wash_due:
+            open_case *= 1.0 - audit_probability
+    return 1.0 - open_case
 
 
 def pricing_slope(cost_of_capital: FloatArray, signal_z: FloatArray) -> float:
@@ -306,6 +363,8 @@ class DisclosureMarket(CrossSectionMarket):
                 raise ValueError("a policy intervention requires six learner groups")
             if not np.isfinite(learner.values).all() or not np.issubdtype(learner.counts.dtype, np.integer) or np.any(learner.counts < 0):
                 raise ValueError("learner values and visit counts must be valid")
+            if learner.learning_rate_power != config.firm_learning_rate_power:
+                raise ValueError("learner step-size power must match firm_learning_rate_power")
             writable = learner.values.flags.writeable and learner.counts.flags.writeable
             if training and not writable:
                 raise ValueError("training requires a writable learner")
@@ -321,7 +380,7 @@ class DisclosureMarket(CrossSectionMarket):
         self.coverage_target = coverage_target
         self.common_prepolicy_sha256 = common_prepolicy_sha256
         identity = {
-            "config": config.to_dict(), "domain": domain.to_dict(), "policy": asdict(self.policy),
+            "config": config.to_dict(), "domain": domain.to_dict(), "policy": self.policy.to_dict(),
         }
         if learner is not None:
             identity["learning"] = {"training": training, "table_fingerprint": table_fingerprint(learner),
@@ -341,6 +400,7 @@ class DisclosureMarket(CrossSectionMarket):
         self.firm_rng = np.random.default_rng(firm_seed)
         self.attributes = AttributeState.initialize(domain, self.firms.size_class, self.attribute_rng,
                                                     intrinsic_value=self.firms.intrinsic_value)
+        self.report_bound = domain.report_bound
 
         investors = self.investors
         self.latent_taste = config.taste_median * self.learning_rng.lognormal(
@@ -542,22 +602,33 @@ class DisclosureMarket(CrossSectionMarket):
         self.slope_history[day] = pricing_slope(k, self.signal_z(day))
         selected = self.audit_rng.random(state.inflation.size) < regime.audit_probability
         caught = selected & (state.inflation > 0)
-        penalty = np.where(caught, regime.penalty * state.inflation, 0.0)
+        # One detected case: the proportional fine on its size plus one fixed fine.
+        penalty = np.where(caught, regime.penalty * state.inflation + regime.fixed_fine / self.prices, 0.0)
         state.inflation[caught] = 0.0
         self.report_cache[selected] = state.observed(regime.transparency)[selected] + self.disclosure_error_history[day, selected]
         published = selected & regime.publish_audit_results
         self.audit_selected_history[period] = selected
         self.publication_history[period] = published
-        self.verified_goodness_history[period, published] = state.goodness[published]
+        self.verified_goodness_history[period, published] = state.certified(published)
         self.planning_signal_history[day] = self._public_signal(day)
 
-        high = self.domain.goodness_bounds[1]
+        # Room up to the highest possible report: the scale end, or the observable maximum.
+        high = self.report_bound
         improve_capacity = high - state.goodness
         inflate_capacity = high - state.goodness - state.inflation
         for _, kind, firms, amounts in state.pending:
             if kind == IMPROVE:
                 np.subtract.at(improve_capacity, firms, amounts)
             np.subtract.at(inflate_capacity, firms, amounts)
+        real_due = day + max(1, self.domain.implementation_delay_days)
+        disclosure_delay = self.domain.disclosure_delay_days if regime.disclosure_delay_days is None else regime.disclosure_delay_days
+        wash_due = day + max(1, disclosure_delay)
+        new_case_fine = None
+        if regime.fixed_fine:
+            new_case_fine = regime.fixed_fine / self.prices * new_case_probability(
+                state.inflation, state.pending, decision_day=day, wash_due=wash_due,
+                period_days=self.config.firm_decision_interval, audit_probability=regime.audit_probability,
+            )
         if self.config.firm_policy == "npv":
             choices = npv_choices(
                 benefit=self.marginal_financing_saving(),
@@ -572,15 +643,13 @@ class DisclosureMarket(CrossSectionMarket):
                 repricing_interval=self.config.financing_repricing_interval,
                 decision_day=day,
                 published_now=published,
+                new_case_fine=new_case_fine,
             )
         else:
             choices = self._discrete_decision(day, period, regime, published, penalty,
-                                              improve_capacity, inflate_capacity)
+                                              improve_capacity, inflate_capacity, new_case_fine)
         improve = np.flatnonzero(choices.actions == IMPROVE)
         inflate = np.flatnonzero(choices.actions == INFLATE)
-        real_due = day + max(1, self.domain.implementation_delay_days)
-        disclosure_delay = self.domain.disclosure_delay_days if regime.disclosure_delay_days is None else regime.disclosure_delay_days
-        wash_due = day + max(1, disclosure_delay)
         state.schedule(real_due, IMPROVE, improve, choices.amounts[improve])
         state.schedule(wash_due, INFLATE, inflate, choices.amounts[inflate])
         self.action_due_history[period, improve] = real_due
@@ -607,6 +676,7 @@ class DisclosureMarket(CrossSectionMarket):
     def _discrete_decision(
         self, day: int, period: int, regime: PolicyRegime, published: NDArray[np.bool_],
         penalty: FloatArray, improve_capacity: FloatArray, inflate_capacity: FloatArray,
+        new_case_fine: FloatArray | None = None,
     ) -> FirmChoices:
         cfg, domain, state = self.config, self.domain, self.attributes
         disclosure_delay = domain.disclosure_delay_days if regime.disclosure_delay_days is None else regime.disclosure_delay_days
@@ -628,11 +698,14 @@ class DisclosureMarket(CrossSectionMarket):
             real_value_per_sd=benefit * real, displaced_real_value_per_sd=benefit * displaced,
             wash_value_per_sd=benefit * (1 - regime.transparency) * wash,
             fine_value_per_sd=regime.penalty * fine,
+            fixed_fine_value=0.0 if new_case_fine is None else new_case_fine * fine,
             amplitude_fractions=cfg.firm_action_fractions,
         )
         changes = (candidates.subsidy_fraction - candidates.cost_fraction - penalty[:, None]) * self.prices[:, None]
         ratio = 1.0 + (changes + self.pending_value_change[:, None]) / self.firms.intrinsic_value[:, None]
         candidates.valid_actions[:] &= np.isfinite(ratio) & (ratio > 0)
+        if cfg.firm_cost_budget_fraction:
+            candidates.valid_actions[:] &= candidates.cost_fraction <= cfg.firm_cost_budget_fraction
         if not candidates.valid_actions.any(axis=1).all():
             raise ValueError(f"no feasible firm action preserves the value anchor on day {day}")
         due = np.full(cfg.n_firms, np.inf)
@@ -645,6 +718,7 @@ class DisclosureMarket(CrossSectionMarket):
             marginal_cost=marginal_cost, real_cost_scale=domain.real_cost_scale,
             max_change_per_period=domain.max_change_per_period, pending_due_days=due,
             pending_cash_amount=known_cash, decision_days=cfg.firm_decision_interval,
+            own_signal=self.planning_signal_history[day] if cfg.firm_learning_context == "signal_tercile" else None,
         )
         epoch = int(self.policy.intervention is not None and day >= self.policy.start_day)
         groups = self.firms.size_class + 3 * epoch
@@ -707,6 +781,10 @@ class DisclosureMarket(CrossSectionMarket):
         chosen = self.learning_rng.choice(investors.size, size=count, replace=False)
         own_advantage = np.where(impact[chosen], advantage, -advantage)
         switch_probability = np.clip(-cfg.imitation_intensity * own_advantage, 0.0, 1.0)
+        if cfg.imitation_rule == "pairwise":
+            # Each reviewer meets one other investor; only a partner of the other type is imitated.
+            partner = (chosen + self.learning_rng.integers(1, investors.size, size=count)) % investors.size
+            switch_probability = np.where(impact[partner] != impact[chosen], switch_probability, 0.0)
         switches = chosen[self.learning_rng.random(count) < switch_probability]
         becomes_impact = ~impact[switches]
         investors.investor_type[switches] = np.where(becomes_impact, IMPACT_INVESTOR, PROFIT_MAXIMIZER)

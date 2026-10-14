@@ -84,7 +84,7 @@ def test_terminal_summary_uses_exactly_last_252_state_days(result):
         result, market=replace(result.market, prices=np.ones((254, 3))),
         true_goodness=true, inflation=inflation,
         impact_share=np.full(254, .2), impact_wealth_share=np.full(254, .2),
-        pricing_slope=np.full(254, np.nan), actions=decisions,
+        pricing_slope=np.full(254, np.nan), actions=decisions, detections=np.zeros((127, 3), dtype=np.int64),
         cost_fraction=np.zeros((127, 3)), penalty_fraction=np.zeros((127, 3)),
         subsidy_fraction=np.zeros((127, 3)),
     )

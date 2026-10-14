@@ -52,6 +52,8 @@ class CompanyQLearner:
         if groups < 1 or actions < 1 or not 0 <= epsilon <= 1 or not 0 < learning_rate <= 1 or not 0 <= discount < 1:
             raise ValueError("invalid Q-learning parameters")
         self.epsilon, self.learning_rate, self.discount = epsilon, learning_rate, discount
+        # Positive power: the disclosure batch update uses step n ** -power instead of learning_rate.
+        self.learning_rate_power = 0.0
         self.values = np.zeros((groups, 81, actions), dtype=np.float64)
         self.counts = np.zeros((groups, 81, actions), dtype=np.int64)
 

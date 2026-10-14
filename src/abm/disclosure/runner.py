@@ -8,7 +8,7 @@ import json
 import platform
 import time
 import zipfile
-from dataclasses import MISSING, asdict, fields
+from dataclasses import MISSING, fields
 from pathlib import Path
 from typing import Any
 
@@ -48,7 +48,7 @@ def learning_contract(
         "exploration": "uniform_legal_kind_then_uniform_legal_amplitude",
         "feasibility": "positive_value_anchor_after_known_commitments_v1",
         "groups": 6, "config": environment, "domain": domain.to_dict(),
-        "policy": asdict(policy), "source_hashes": source_hashes(),
+        "policy": policy.to_dict(), "source_hashes": source_hashes(),
         "python_version": platform.python_version(), "numpy_version": np.__version__,
     }
     if coverage_target:
@@ -92,6 +92,8 @@ def load_common_prepolicy(
             or metadata.get("initial_table") != initial or budget.get("initial_table") != initial
             or budget.get("training_worlds") != len(seeds["training_seeds"])
             or budget.get("learning_rate") != source.learning_rate or source.learning_rate != .1 or source.discount != .9
+            or budget.get("learning_rate_power", 0.0) != source.learning_rate_power
+            or source.learning_rate_power != config.firm_learning_rate_power
             or list(source.values.shape) != shape or source.values.dtype != np.float64 or source.counts.dtype != np.int64
             or np.any(source.values[3:] != 0) or np.any(source.counts[3:] != 0)
             or int(source.counts.sum()) != expected_samples):
@@ -109,7 +111,7 @@ def run_identity(
         "schema_version": 1,
         "config": config.to_dict(),
         "domain": domain.to_dict(),
-        "policy": asdict(policy),
+        "policy": policy.to_dict(),
         "source_hashes": source_hashes(),
         "python_version": platform.python_version(),
         "numpy_version": np.__version__,
@@ -307,7 +309,8 @@ def run_and_archive(
             source, expected_origin = load_common_prepolicy(origin["model_path"], common_prepolicy_sha256,
                                                            config, domain, policy, coverage_target=coverage_target)
             if (origin != expected_origin or table_fingerprint(learner, prefix_groups=3) != origin["table_fingerprint"]
-                    or learner.learning_rate != source.learning_rate or learner.discount != source.discount):
+                    or learner.learning_rate != source.learning_rate or learner.discount != source.discount
+                    or learner.learning_rate_power != source.learning_rate_power):
                 raise ValueError("common pre-policy table or provenance mismatch")
             used = set(origin["training_seeds"] + origin["validation_seeds"])
             current = learning_metadata.get("budget", {})
@@ -318,6 +321,8 @@ def run_and_archive(
         learning = {"training": training, "metadata": learning_metadata,
                     "initial_table_fingerprint": table_fingerprint(learner), "epsilon": learner.epsilon,
                     "learning_rate": learner.learning_rate, "discount": learner.discount}
+        if learner.learning_rate_power:
+            learning["learning_rate_power"] = learner.learning_rate_power
         if coverage_target:
             learning["coverage_target"] = coverage_target
         if common_prepolicy_sha256 is not None:

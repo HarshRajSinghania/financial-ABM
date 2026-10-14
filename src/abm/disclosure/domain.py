@@ -5,7 +5,9 @@ initial cross-sectional distribution and signed so that higher is better.
 A domain maps raw scores (a rating, an intensity, ...) to goodness and supplies costs, delays and the baseline regulatory regime. All
 costs are fractions of the firm's market capitalisation: quadratic resource
 cost coefficients are per squared standard deviation of goodness, while
-penalties and subsidies are per standard deviation. Direct size differences
+penalties and subsidies are per standard deviation. The exception is
+``baseline_fixed_fine``, a money amount per detected case, so its weight
+relative to market cap falls with firm size. Direct size differences
 in resource costs enter through ``size_cost_multipliers``.
 
 By default goodness is a linear standardization of the raw score, so the raw
@@ -15,6 +17,12 @@ image under the empirical quantile map of ``initial_empirical_distribution``:
 a raw score at the top of the scale is then a saturated observation, not a cap
 on the latent attribute. ``initial_size_rank_correlation`` sets a Gaussian
 copula between initial latent goodness and log intrinsic value.
+
+With ``signal_saturation`` (quantile link only) investors and published
+audits see the attribute through the raw scale: values above the goodness of
+the best raw end look the same. Reports, and the changes firms choose, then
+stop at that observable maximum, as the scale ends bound them under the
+linear link; true values drawn above it stay latent.
 """
 
 from __future__ import annotations
@@ -78,6 +86,11 @@ class DomainSpec:
     # Gaussian-copula correlation between initial latent goodness and the
     # standardized log intrinsic value; only valid with the quantile link.
     initial_size_rank_correlation: float = 0.0
+    # Lump-sum fine per detected case, in model money units (mean initial
+    # firm value = 1), unlike the per-SD market-cap fraction baseline_penalty.
+    baseline_fixed_fine: float = 0.0
+    # Signals saturate at the best raw end; quantile link only.
+    signal_saturation: bool = False
 
     def __post_init__(self) -> None:
         if not self.name or not self.attribute_label:
@@ -93,7 +106,7 @@ class DomainSpec:
         if not self.raw_lower <= self.initial_mean <= self.raw_upper:
             raise ValueError("initial_mean must lie within the raw bounds")
         for name in ("natural_decay", "real_cost_log_sd", "cost_level_elasticity",
-                     "baseline_penalty", "baseline_subsidy"):
+                     "baseline_penalty", "baseline_subsidy", "baseline_fixed_fine"):
             if getattr(self, name) < 0:
                 raise ValueError(f"{name} must be nonnegative")
         for name in ("real_cost_scale", "wash_cost_ratio", "max_change_per_period"):
@@ -134,6 +147,17 @@ class DomainSpec:
             raise ValueError("initial_size_rank_correlation must be in (-1, 1)")
         if self.initial_size_rank_correlation and self.observation_link != "empirical_quantile":
             raise ValueError("initial_size_rank_correlation requires the empirical quantile link")
+        if type(self.signal_saturation) is not bool:
+            raise ValueError("signal_saturation must be boolean")
+        if self.signal_saturation:
+            if self.observation_link != "empirical_quantile":
+                raise ValueError("signal_saturation requires the empirical quantile link")
+            worst, best = sorted(self.to_goodness(np.array([self.raw_lower, self.raw_upper])))
+            if best >= LATENT_GOODNESS_BOUND:
+                raise ValueError("signal_saturation needs empirical mass at the best scale end")
+            if worst > -LATENT_GOODNESS_BOUND:
+                # Improvements would then become visible only above the floor, which the decision rules lack.
+                raise ValueError("signal saturation at the worst scale end is not modelled")
 
     @property
     def goodness_bounds(self) -> tuple[float, float]:
@@ -141,6 +165,19 @@ class DomainSpec:
             return -LATENT_GOODNESS_BOUND, LATENT_GOODNESS_BOUND
         ends = sorted(self.to_goodness(np.array([self.raw_lower, self.raw_upper])))
         return float(ends[0]), float(ends[1])
+
+    @property
+    def observation_ceiling(self) -> float | None:
+        """Goodness of the best raw end when signals saturate there, else None."""
+        if not self.signal_saturation:
+            return None
+        return float(max(self.to_goodness(np.array([self.raw_lower, self.raw_upper]))))
+
+    @property
+    def report_bound(self) -> float:
+        """Highest report a firm can make; also bounds the changes it chooses."""
+        ceiling = self.observation_ceiling
+        return self.goodness_bounds[1] if ceiling is None else ceiling
 
     def quantile_knots(self) -> tuple[FloatArray, FloatArray]:
         """Increasing raw knots and their latent normal scores (mid-rank CDF).
@@ -185,6 +222,8 @@ class DomainSpec:
             if (item.name != "initial_empirical_distribution" or self.initial_empirical_distribution)
             and (item.name != "observation_link" or self.observation_link != "linear")
             and (item.name != "initial_size_rank_correlation" or self.initial_size_rank_correlation)
+            and (item.name != "baseline_fixed_fine" or self.baseline_fixed_fine)
+            and (item.name != "signal_saturation" or self.signal_saturation)
         }
 
     @classmethod
