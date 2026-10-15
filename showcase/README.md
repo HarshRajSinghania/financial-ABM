@@ -1,6 +1,11 @@
-# GitHub 展示层 · Financial ABM Observatory
+# GitHub 展示层 · Financial ABM
 
-这是独立于 `web/` 的只读研究展厅，不连接 FastAPI，不启动 Python 模拟，不改动正式验收协议，不解封任何种子。
+独立于 `web/` 的静态站点，不连接 FastAPI，不在构建时运行模拟。两个页面：
+
+| 页面 | 内容 |
+|---|---|
+| `_site/index.html`（首页） | 漂绿政策沙盘（计划阶段 G）：面板 ① 企业单期决策，面板 ② 简化动态（无市场反馈，非研究结果），面板 ③ 阶段 F 完整模型结果。中英切换，ESG / AI-washing 切换 |
+| `_site/stage1/index.html` | 阶段 1 展厅：历史 v13/v14 机制报告（原首页，内容不变），中英切换 |
 
 ## 预览
 
@@ -11,35 +16,43 @@ python showcase/build.py --output _site
 python -m http.server 8080 --directory _site
 ```
 
-访问 `http://localhost:8080`，也可以直接用浏览器打开生成的 `_site/index.html`。输出已内联 CSS、JavaScript 与数据，无 CDN、在线字体、遥测或外部图表库依赖。需要 Python 3.12+，构建只使用标准库，无须安装 ABM 或 npm 依赖。
+访问 `http://localhost:8080`，也可以直接打开 `_site/index.html`。输出内联全部 CSS、JavaScript 与数据，没有 CDN、在线字体、遥测或外部图表库。构建只用 Python 3.12+ 标准库。
+
+## 沙盘的数据与一致性
+
+| 文件 | 来源 |
+|---|---|
+| `data/sandbox_firms.json` | [导出脚本](../reports/disclosure_stage_g_20261015/export.py)：新种子 51001 按阶段 F 主设定运行，第 1200 日快照 200 家合成企业；AI-washing 领域同样快照 |
+| `data/stage_f.json` | 从已提交的 `confirmatory_v1_analysis.json` 复制，附 `experiment_id`、SHA-256 与提交号 |
+| `data/simplification.json` | [对照脚本](../reports/disclosure_stage_g_20261015/compare.py)：简化动态与完整模型的差距（“简化的代价”） |
+| `sandbox/core.js` | 决策核心与简化动态，移植自 `src/abm/disclosure` 与 `sandbox/reference.py` |
+| `sandbox/fixtures/*.json` | [夹具脚本](../reports/disclosure_stage_g_20261015/fixtures.py)：由 Python 模型代码生成的期望值 |
+
+构建会核对 `stage_f.json` 与分析文件的 SHA-256、导出时的阶段 F 配置和 AI-washing 领域文件，任何一处变化都会拒绝构建。企业字段只允许模型自己的数值列，不含任何真实公司信息。
+
+```sh
+node showcase/sandbox/check_core.js          # JavaScript 与 Python 逐项一致（相对误差 ≤ 1e-12）
+python -m unittest discover -s showcase -p 'test_*.py'
+python -m pytest tests/test_sandbox_reference.py   # 夹具仍与当前模型代码一致（需要安装 abm）
+```
+
+`sandbox/reference.py` 放在 `src/abm` 之外：包内源码哈希是每个冻结实验身份的一部分。
 
 ## GitHub Pages
 
-仓库启用 Pages 后，`GitHub showcase` 工作流会部署到 GitHub Pages。首次由仓库管理员在 **Settings → Pages → Build and deployment → Source** 中选择 **GitHub Actions**，然后在 Actions 中运行 `GitHub showcase`。
+仓库启用 Pages 后，`GitHub showcase` 工作流部署 `_site`。首次由仓库管理员在 **Settings → Pages → Build and deployment → Source** 中选择 **GitHub Actions**，然后运行 `GitHub showcase`。未启用 Pages 时，CI 仍验证页面并提供名为 `github-showcase` 的离线产物；PR 只构建检查，不发布。
 
-未启用 Pages 时，CI 仍验证页面并提供名为 `github-showcase` 的离线展示产物；发布任务明确跳过，不伪报“已上线”。PR 只构建检查，不发布。
+## 阶段 1 展厅的数据约定
 
-## 内容与数据约定
-
-`build.py` 从三个已提交的历史 v13/v14 `mechanism_report.json` 读取原始数据，保留报告代码版本、SHA-256 和精确源文件链接。它不重算模拟。2026-08-14 正式归档为 18/22，开发与 holdout 各为 22/22；此后[冻结 v15](../reports/stage1_iter6_20260926/formal/final_decision.json)于 2026-09-26 正式验收 22/22。本展厅仍展示历史实验，合并后的源码没有在此重新运行正式协议。
-
-分布图使用报告的跨种子中位数与 Q10–Q90，不是时序数据或置信区间。不补造证据：同名 evidence 缺失时明确提示查看原报告。示意图不表示投资者社交网络或真实资金流。
+`build.py` 从三个已提交的历史 v13/v14 `mechanism_report.json` 读取原始数据，保留报告代码版本、SHA-256 和源文件链接，不重算模拟。2026-08-14 正式归档为 18/22，开发与 holdout 各为 22/22；此后[冻结 v15](../reports/stage1_iter6_20260926/formal/final_decision.json)于 2026-09-26 正式验收 22/22。分布图使用跨种子中位数与 Q10–Q90，不是时序数据或置信区间。
 
 ## 修改入口
 
 | 文件 | 内容 |
 |---|---|
-| `index.html` | 页面语义结构与中文文案 |
-| `styles.css` | 深色视觉系统、响应式与减少动效 |
-| `app.js` | 机制链路、报告/指标切换、验收明细、数据导出 |
-| `build.py` | 数据读取、来源验证、离线单页构建 |
+| `sandbox/index.html`、`styles.css` | 首页结构与样式 |
+| `sandbox/i18n.js` | 中英文案；`test_showcase.py` 检查两种语言的键一致，并检查模板中没有未接入切换的中文 |
+| `sandbox/app.js` | 政策调节、图表与交互（模型计算都在 `core.js`） |
+| `stage1/` | 阶段 1 展厅的模板、样式与脚本；文案在 `stage1/i18n.js` |
+| `build.py` | 数据核对与离线单页构建 |
 | `test_showcase.py` | 数据与静态构建回归 |
-| `../.github/assets/disclosure-cover.svg` | GitHub README 封面（多智能体披露研究） |
-| `../.github/assets/observatory.svg` | 原 Stage 1 单资产市场封面（保留） |
-
-```sh
-python -m unittest discover -s showcase -p 'test_*.py'
-node --check showcase/app.js
-```
-
-现有 `web/`、`src/abm/`、配置、报告和冻结清单均不由展示构建改写。后续 Codex 可独立优化本地 Web；两者只共享概念与报告，不共享会话或运行控制逻辑。

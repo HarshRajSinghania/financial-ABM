@@ -1,4 +1,9 @@
-"""Build a self-contained, read-only exhibit from checked-in reports. No simulation."""
+"""Build the static site from checked-in files. No simulation runs here.
+
+  _site/index.html         greenwashing policy sandbox (plan stage G): exported synthetic firms, the
+                           browser decision core and stage F results, each traced to a committed file
+  _site/stage1/index.html  the archived stage 1 exhibit (historical v13/v14 mechanism reports)
+"""
 from __future__ import annotations
 
 import argparse
@@ -88,6 +93,59 @@ def export_report(root: Path, report_id: str, directory: str) -> dict:
     }
 
 
+SANDBOX_FIRM_FIELDS = {"size_class", "market_cap", "cost_scale", "benefit", "initial_goodness", "goodness",
+                       "inflation", "pending", "full_model_decision"}
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def sandbox_payload(root: Path, revision: str) -> dict:
+    """Sandbox data, checked against the committed files it was exported from."""
+    data = root / "showcase" / "data"
+    firms = read_json(data / "sandbox_firms.json")
+    stage_f = read_json(data / "stage_f.json")
+    simplification = read_json(data / "simplification.json")
+    source = stage_f["source"]
+    analysis_path = root / source["path"]
+    if sha256_file(analysis_path) != source["sha256"]:
+        raise ValueError(f"stage F numbers no longer match {source['path']}; rerun the export")
+    if read_json(analysis_path)["experiment_id"] != source["experiment_id"]:
+        raise ValueError("stage F experiment_id disagrees with its analysis file")
+    if sha256_file(root / firms["experiment_spec"]) != firms["experiment_spec_sha256"]:
+        raise ValueError("sandbox firms were exported from a different stage F specification")
+    ai = firms["domains"]["ai_washing"]
+    if sha256_file(root / ai["domain_file"]) != ai["domain_file_sha256"]:
+        raise ValueError("the AI-washing domain file changed after the export")
+    for key, domain in firms["domains"].items():
+        columns = domain["firms"]
+        # Synthetic firms only: no names or identifiers beyond the model's own firm order.
+        if set(columns) != SANDBOX_FIRM_FIELDS:
+            raise ValueError(f"unexpected sandbox firm fields in {key}: {sorted(set(columns) ^ SANDBOX_FIRM_FIELDS)}")
+        lengths = {len(columns[name]) for name in SANDBOX_FIRM_FIELDS - {"pending", "full_model_decision"}}
+        if lengths != {200}:
+            raise ValueError(f"{key}: every firm column needs 200 rows")
+    return {"schema_version": 1, "source_commit": revision, "firms": firms, "stage_f": stage_f, "simplification": simplification}
+
+
+def inline(template: str, replacements: dict[str, str]) -> str:
+    for marker, value in replacements.items():
+        if template.count(marker) != 1:
+            raise ValueError(f"Template marker missing or duplicated: {marker}")
+        if marker.startswith("/* ") and not marker.endswith("_CSS */") and "</script" in value.lower():
+            raise ValueError(f"inline script for {marker} contains a closing script tag")
+        template = template.replace(marker, value)
+    if re.search(r'<(?:script|link)[^>]+(?:src|href)=["\']https?://', template):
+        raise ValueError("Exhibit must not require third-party scripts/styles/fonts")
+    return template
+
+
+def serialize(payload: dict) -> str:
+    # Escape raw-text HTML delimiters even if a report string contains markup.
+    return json.dumps(payload, ensure_ascii=False, allow_nan=False, separators=(",", ":")).replace("<", "\\u003c")
+
+
 def build(output: Path, root: Path = ROOT) -> dict:
     try:
         revision = subprocess.check_output(
@@ -101,24 +159,31 @@ def build(output: Path, root: Path = ROOT) -> dict:
         "notice": "Historical v13 failed 18/22; frozen v15 passed 22/22 on 2026-09-26. Neither is a rerun of merged source.",
         "reports": [export_report(root, key, directory) for key, directory in REPORTS.items()],
     }
-    source = root / "showcase"
-    template = (source / "index.html").read_text(encoding="utf-8")
-    for marker in ("/* SHOWCASE_CSS */", "/* SHOWCASE_JS */", '{"reports":[]}'):
-        if template.count(marker) != 1:
-            raise ValueError(f"Template marker missing or duplicated: {marker}")
-    # Escape raw-text HTML delimiters even if a report string contains markup.
-    serialized = json.dumps(snapshot, ensure_ascii=False, allow_nan=False).replace("<", "\\u003c")
-    html = template.replace("/* SHOWCASE_CSS */", (source / "styles.css").read_text(encoding="utf-8"))
-    html = html.replace("/* SHOWCASE_JS */", (source / "app.js").read_text(encoding="utf-8"))
-    html = html.replace('{"reports":[]}', serialized)
-    if re.search(r'<(?:script|link)[^>]+(?:src|href)=["\']https?://', html):
-        raise ValueError("Exhibit must not require third-party scripts/styles/fonts")
-    output.mkdir(parents=True, exist_ok=True)
-    (output / "index.html").write_text(html, encoding="utf-8")
-    (output / "data.json").write_text(json.dumps(snapshot, indent=2, ensure_ascii=False, allow_nan=False) + "\n", encoding="utf-8")
+    stage1 = root / "showcase" / "stage1"
+    stage1_html = inline((stage1 / "index.html").read_text(encoding="utf-8"), {
+        "/* SHOWCASE_CSS */": (stage1 / "styles.css").read_text(encoding="utf-8"),
+        "/* SHOWCASE_TEXT */": (stage1 / "i18n.js").read_text(encoding="utf-8"),
+        "/* SHOWCASE_JS */": (stage1 / "app.js").read_text(encoding="utf-8"),
+        '{"reports":[]}': json.dumps(snapshot, ensure_ascii=False, allow_nan=False).replace("<", "\\u003c"),
+    })
+    sandbox = root / "showcase" / "sandbox"
+    payload = sandbox_payload(root, revision)
+    sandbox_html = inline((sandbox / "index.html").read_text(encoding="utf-8"), {
+        "/* SANDBOX_CSS */": (sandbox / "styles.css").read_text(encoding="utf-8"),
+        "/* SANDBOX_CORE */": (sandbox / "core.js").read_text(encoding="utf-8"),
+        "/* SANDBOX_TEXT */": (sandbox / "i18n.js").read_text(encoding="utf-8"),
+        "/* SANDBOX_APP */": (sandbox / "app.js").read_text(encoding="utf-8"),
+        '{"sandbox":null}': serialize(payload),
+    })
+    (output / "stage1").mkdir(parents=True, exist_ok=True)
+    (output / "index.html").write_text(sandbox_html, encoding="utf-8")
+    (output / "sandbox-data.json").write_text(json.dumps(payload, ensure_ascii=False, allow_nan=False) + "\n", encoding="utf-8")
+    (output / "stage1" / "index.html").write_text(stage1_html, encoding="utf-8")
+    (output / "stage1" / "data.json").write_text(json.dumps(snapshot, indent=2, ensure_ascii=False, allow_nan=False) + "\n", encoding="utf-8")
     (output / ".nojekyll").touch()
-    print(f"Built {output / 'index.html'}: {len(html.encode()):,} bytes; 3 archived reports; no simulation executed")
-    return snapshot
+    print(f"Built {output / 'index.html'}: {len(sandbox_html.encode()):,} bytes (sandbox); "
+          f"{output / 'stage1' / 'index.html'}: {len(stage1_html.encode()):,} bytes; no simulation executed")
+    return {"stage1": snapshot, "sandbox": payload}
 
 
 if __name__ == "__main__":
