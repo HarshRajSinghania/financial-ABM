@@ -11,8 +11,10 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from abm.disclosure.experiments import _inputs, freeze_spec
+from abm.disclosure.config import MarketConfig
+from abm.disclosure.domain import load_domain
 from abm.disclosure.game import DisclosureMarket
+from abm.disclosure.policy import PolicyRegime, PolicySchedule
 
 ROOT = Path(__file__).resolve().parents[1]
 SANDBOX = ROOT / "showcase" / "sandbox"
@@ -56,34 +58,43 @@ def test_committed_fixtures_still_follow_the_model_code(regenerated):
 
 
 def test_snapshot_reading_leaves_the_full_model_run_unchanged():
-    scenarios = {row["name"]: row for row in freeze_spec(ROOT / "configs" / "disclosure_stage_f_confirmatory_v1.json")["scenarios"]}
-    config, domain, policy = _inputs(scenarios["F"], 51001)
-    config = replace(config, n_investors=120, n_firms=24, trading_days=360, burn_in_days=180)
-    policy = replace(policy, start_day=181)
+    # The committed AI-washing domain with the stage F market; the CSI 300 domain is not in the repository.
+    spec = json.loads((ROOT / "configs" / "disclosure_stage_f_confirmatory_v1.json").read_text(encoding="utf-8"))
+    config = MarketConfig.from_dict({**spec["market"], "seed": 51001, "n_investors": 120, "n_firms": 24,
+                                     "trading_days": 360, "burn_in_days": 180})
+    domain = load_domain(ROOT / "configs" / "domains" / "ai_washing.json")
+    # No proportional fine and a small fixed fine: 5 of 24 firms inflate and 5 have open cases on day 180,
+    # so the snapshot decision covers washing, new cases and cases joined without a new fine.
+    baseline = replace(PolicyRegime.baseline(domain), penalty=0.0, fixed_fine=0.05 * 4.5614908036639594e-05)
+    policy = PolicySchedule(baseline).with_intervention(181, transparency=0.6)
     market = reference.SnapshotMarket(config, domain, policy, snapshot_day=180)
     result = reference.take_snapshot(market)
     assert result.fingerprint() == DisclosureMarket(config, domain, policy).run().fingerprint()
     snapshot = market.snapshot
     firms = reference.SandboxFirms(market.firms.size_class.copy(), market.initial_goodness,
                                    market.attributes.cost_scale.copy(), snapshot["prices"], snapshot["benefit"])
-    choices, _ = reference.decide(reference.snapshot_state(
-        {"goodness": snapshot["goodness"], "inflation": snapshot["inflation"], "cost_scale": market.attributes.cost_scale,
-         "pending": [{"due_day": d, "kind": k, "firms": f, "amounts": a} for d, k, f, a in snapshot["pending"]]}, domain),
-        firms, domain, policy.at(180), 180)
-    assert np.array_equal(choices.actions, snapshot["actions"])
-    np.testing.assert_allclose(choices.amounts, snapshot["amounts"], rtol=1e-12, atol=0)
+    state = {"goodness": snapshot["goodness"], "inflation": snapshot["inflation"], "cost_scale": market.attributes.cost_scale,
+             "pending": [{"due_day": d, "kind": k, "firms": f, "amounts": a} for d, k, f, a in snapshot["pending"]]}
+    exported = reference.domain_from({name: list(value) if name == "goodness_bounds" else value
+                                      for name, value in ((name, getattr(domain, name)) for name in reference.SANDBOX_DOMAIN_FIELDS)})
+    assert (snapshot["actions"] == 1).any() and (snapshot["inflation"] > 0).any()
+    for stand_in in (domain, exported):
+        choices, _ = reference.decide(reference.snapshot_state(state, stand_in), firms, stand_in, policy.at(180), 180)
+        assert np.array_equal(choices.actions, snapshot["actions"])
+        np.testing.assert_allclose(choices.amounts, snapshot["amounts"], rtol=1e-12, atol=0)
 
 
 def test_exported_domains_match_their_configuration_files():
     sandbox = json.loads((ROOT / "showcase" / "data" / "sandbox_firms.json").read_text(encoding="utf-8"))
-    for key, domain in reference.load_domains(ROOT).items():
+    available = reference.load_domains(ROOT)
+    assert "ai_washing" in available
+    for key, domain in available.items():
         payload = sandbox["domains"][key]
         assert payload["name"] == domain.name
-        for name in ("natural_decay", "cost_level_elasticity", "max_change_per_period", "wash_cost_ratio",
-                     "implementation_delay_days", "disclosure_delay_days", "observation_ceiling", "report_bound"):
-            assert payload[name] == getattr(domain, name), name
-        assert tuple(payload["goodness_bounds"]) == domain.goodness_bounds
+        assert reference.exported_parameters_match(payload, domain), key
         assert len(payload["firms"]["benefit"]) == 200
+    if "esg" not in available:
+        pytest.skip("the CSI 300 domain file is vendor-derived and not in the repository; checked where it exists")
 
 
 def test_exported_firms_record_the_code_that_produced_them():

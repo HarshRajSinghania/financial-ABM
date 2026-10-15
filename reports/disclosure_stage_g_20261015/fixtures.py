@@ -27,7 +27,7 @@ from abm.disclosure.financing import financing_signal_factors  # noqa: E402
 from abm.disclosure.game import new_case_probability, npv_choices  # noqa: E402
 from abm.disclosure.policy import PolicyRegime  # noqa: E402
 from reference import (  # noqa: E402
-    Mulberry32, decide, firms_from, load_domains, schedule_from, simulate, snapshot_state, window_metrics,
+    Mulberry32, decide, domain_from, firms_from, schedule_from, simulate, snapshot_state, window_metrics,
 )
 
 OUT = ROOT / "showcase" / "sandbox" / "fixtures"
@@ -189,8 +189,9 @@ def write(path: Path, payload: dict) -> None:
 
 
 def build() -> tuple[dict, dict]:
-    domains = load_domains(ROOT)
     sandbox = json.loads((ROOT / "showcase" / "data" / "sandbox_firms.json").read_text(encoding="utf-8"))
+    # Exported domain parameters: the CSI 300 domain file is vendor-derived and not in the repository.
+    domains = {key: domain_from(payload) for key, payload in sandbox["domains"].items()}
     rng = np.random.default_rng(INPUT_SEED)
     note = "Expected values from the Python model code; see reports/disclosure_stage_g_20261015/fixtures.py."
     core = {"schema_version": 1, "note": note, "input_seed": INPUT_SEED,

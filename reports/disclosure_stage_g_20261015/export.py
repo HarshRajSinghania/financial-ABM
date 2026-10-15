@@ -14,6 +14,10 @@ SHA-256 and last commit.
 
 Writes showcase/data/sandbox_firms.json, showcase/data/stage_f.json and, next to this script,
 full_model_seed51001.json (same-seed full-model metrics for the simplification table).
+
+Running it needs configs/domains/csi300_huazheng_esg_quantile_copula_fixed_fine_saturated.json, which is
+derived from vendor scores and kept out of the repository (rebuild it with the collection scripts). The
+outputs hold only model-scale values and the domain parameters the firm side reads, not the scores.
 """
 
 from __future__ import annotations

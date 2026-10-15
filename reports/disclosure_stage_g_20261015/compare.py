@@ -27,7 +27,7 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT / "showcase" / "sandbox"))
 
 from abm.platform_tuning import disable_power_throttling  # noqa: E402
-from reference import firms_from, load_domains, schedule_from, simulate, window_metrics  # noqa: E402
+from reference import domain_from, firms_from, schedule_from, simulate, window_metrics  # noqa: E402
 
 F1 = 4.5614908036639594e-05
 AUDIT_SEEDS = list(range(1, 31))
@@ -48,7 +48,7 @@ def run(policy: str, decay: float, seed: int) -> tuple[str, float, int, dict]:
     payload = sandbox["domains"]["esg"]
     firms = firms_from(payload["firms"])
     baseline = {**payload["baseline_policy"], "disclosure_delay_days": None}
-    result = simulate(firms, load_domains(ROOT)["esg"], schedule_from(schedule(baseline, POLICIES[policy])),
+    result = simulate(firms, domain_from(payload), schedule_from(schedule(baseline, POLICIES[policy])),
                       natural_decay=decay, audit_seed=seed)
     return policy, decay, seed, window_metrics(result, firms)
 

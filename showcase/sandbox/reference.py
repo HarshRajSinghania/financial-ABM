@@ -163,7 +163,7 @@ def decision_capacities(state: AttributeState, report_bound: float) -> tuple[Flo
     return improve_capacity, inflate_capacity
 
 
-def decide(state: AttributeState, firms: SandboxFirms, domain: DomainSpec, regime: PolicyRegime, day: int,
+def decide(state: AttributeState, firms: SandboxFirms, domain: DomainSpec | SandboxDomain, regime: PolicyRegime, day: int,
            published: NDArray[np.bool_] | None = None):
     """One period's NPV choices for every firm, with the full model's inputs except B and price."""
     if regime.publish_audit_results or regime.reporting_interval_days != 1:
@@ -188,7 +188,7 @@ def decide(state: AttributeState, firms: SandboxFirms, domain: DomainSpec, regim
     return choices, wash_due
 
 
-def simulate(firms: SandboxFirms, domain: DomainSpec, schedule: PolicySchedule, *, natural_decay: float,
+def simulate(firms: SandboxFirms, domain: DomainSpec | SandboxDomain, schedule: PolicySchedule, *, natural_decay: float,
              audit_seed: int, trading_days: int = TRADING_DAYS, window_start: int = SNAPSHOT_DAY) -> dict:
     """Days 1..trading_days from the initial true levels, with no inflation or pending actions.
 
@@ -279,7 +279,7 @@ def firms_from(payload: dict) -> SandboxFirms:
     )
 
 
-def snapshot_state(payload: dict, domain: DomainSpec) -> AttributeState:
+def snapshot_state(payload: dict, domain: DomainSpec | SandboxDomain) -> AttributeState:
     """The post-audit state the full model's firms decided on at the snapshot day."""
     return AttributeState(
         goodness=np.asarray(payload["goodness"], dtype=np.float64),
@@ -291,9 +291,43 @@ def snapshot_state(payload: dict, domain: DomainSpec) -> AttributeState:
     )
 
 
+@dataclass(frozen=True, slots=True)
+class SandboxDomain:
+    """The domain parameters the firm side reads, as exported with the snapshot.
+
+    It stands in for ``DomainSpec`` in ``AttributeState``, ``npv_choices`` and the dynamics above,
+    so fixtures and tests run without the CSI 300 domain file, which is derived from vendor data
+    and kept out of the repository. ``exported_parameters_match`` checks it against that file
+    wherever the file exists.
+    """
+
+    natural_decay: float
+    cost_level_elasticity: float
+    max_change_per_period: float
+    wash_cost_ratio: float
+    implementation_delay_days: int
+    disclosure_delay_days: int
+    goodness_bounds: tuple[float, float]
+    observation_ceiling: float | None
+    report_bound: float
+
+
+SANDBOX_DOMAIN_FIELDS = tuple(SandboxDomain.__dataclass_fields__)
+
+
+def domain_from(payload: dict) -> SandboxDomain:
+    return SandboxDomain(**{name: tuple(payload[name]) if name == "goodness_bounds" else payload[name]
+                            for name in SANDBOX_DOMAIN_FIELDS})
+
+
 DOMAIN_FILES = {"esg": "configs/domains/csi300_huazheng_esg_quantile_copula_fixed_fine_saturated.json",
                 "ai_washing": "configs/domains/ai_washing.json"}
 
 
 def load_domains(root: str | Path) -> dict[str, DomainSpec]:
-    return {key: load_domain(Path(root) / path) for key, path in DOMAIN_FILES.items()}
+    """The full domain specifications; the CSI 300 file exists only where the vendor data was rebuilt."""
+    return {key: load_domain(Path(root) / path) for key, path in DOMAIN_FILES.items() if (Path(root) / path).is_file()}
+
+
+def exported_parameters_match(payload: dict, domain: DomainSpec | SandboxDomain) -> bool:
+    return domain_from(payload) == SandboxDomain(**{name: getattr(domain, name) for name in SANDBOX_DOMAIN_FIELDS})

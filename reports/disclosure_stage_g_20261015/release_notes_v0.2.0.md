@@ -31,7 +31,7 @@ Report: `reports/disclosure_stage_f_20261014/README.md` (Chinese). Contract: `do
 
 ```sh
 python -m pip install -c requirements-lock.txt -e ".[all,dev]"
-python reports/disclosure_stage_g_20261015/export.py     # about 2 min with 9 workers
+python reports/disclosure_stage_g_20261015/export.py     # about 2 min; needs the locally rebuilt CSI 300 domain file
 python reports/disclosure_stage_g_20261015/fixtures.py
 python reports/disclosure_stage_g_20261015/compare.py
 node showcase/sandbox/check_core.js
