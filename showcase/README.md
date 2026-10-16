@@ -40,7 +40,7 @@ python -m pytest tests/test_sandbox_reference.py   # 夹具仍与当前模型代
 
 ## GitHub Pages
 
-仓库启用 Pages 后，`GitHub showcase` 工作流部署 `_site`。首次由仓库管理员在 **Settings → Pages → Build and deployment → Source** 中选择 **GitHub Actions**，然后运行 `GitHub showcase`。未启用 Pages 时，CI 仍验证页面并提供名为 `github-showcase` 的离线产物；PR 只构建检查，不发布。
+线上地址：[https://kanzaler123.github.io/financial-ABM/](https://kanzaler123.github.io/financial-ABM/)。Pages 已于 2026-10-16 启用（Source: GitHub Actions），`GitHub showcase` 工作流在 master 更新时部署 `_site`。未启用 Pages 时，CI 仍验证页面并提供名为 `github-showcase` 的离线产物；PR 只构建检查，不发布。
 
 ## 阶段 1 展厅的数据约定
 

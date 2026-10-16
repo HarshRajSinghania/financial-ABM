@@ -1,12 +1,12 @@
-# v0.2.0 Release 说明（草稿）
+# v0.2.0 Release 说明（2026-10-16 发布）
 
-草稿，尚未发布。发布前需要你逐项确认：推送、启用 GitHub Pages、打 tag `v0.2.0`、发布 Release。Zenodo DOI 由你在 Zenodo 上操作。下方英文部分可直接作为 GitHub Release 正文。
+推送、启用 GitHub Pages、打 tag `v0.2.0` 与发布 Release 已于 2026-10-16 经你确认完成。Zenodo DOI 由你在 Zenodo 上操作。下方英文部分是 GitHub Release 的正文。
 
 ---
 
 ## Financial ABM v0.2.0: stage F results and a browser policy sandbox
 
-A multi-agent artificial market for ESG disclosure and greenwashing policy. This release adds the pre-registered confirmatory experiment (stage F) and an in-browser policy sandbox.
+A multi-agent artificial market for ESG disclosure and greenwashing policy. This release adds the pre-registered confirmatory experiment (stage F) and an in-browser policy sandbox: **https://kanzaler123.github.io/financial-ABM/**
 
 ### Stage F: confirmatory policy experiment
 

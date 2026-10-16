@@ -1,6 +1,6 @@
 # 阶段 G：展示与发布（2026-10-15）
 
-对应[现行计划](../../docs/plan_20261013.md)阶段 G 的细化计划 G.1–G.6。站点首页改为“漂绿政策沙盘”，阶段 1 展厅移到子页面 `stage1/`。所有对外动作（推送、启用 Pages、打 tag、发布 Release）都还没有做，需要逐项确认。
+对应[现行计划](../../docs/plan_20261013.md)阶段 G 的细化计划 G.1–G.6。站点首页改为“漂绿政策沙盘”，阶段 1 展厅移到子页面 `stage1/`。经你确认，2026-10-16 推送 master、启用 GitHub Pages（[https://kanzaler123.github.io/financial-ABM/](https://kanzaler123.github.io/financial-ABM/)）、打 tag `v0.2.0` 并发布 Release。
 
 ## 验收
 
@@ -11,7 +11,7 @@
 | G.3 简化动态 | (a) 与 Python 参考实现逐期一致；(b) 在 B/I/F/IF × 衰减 {0, 0.2} 上与阶段 F 对照，差距写在页面上 | 通过。(a) 10 条轨迹、580 个决策期的行动逐家相同；(b) 见第 3 节，表格在面板 ② 的“简化的代价”中 |
 | G.4 页面 | 展厅测试、`node --check`、跨语言一致性测试都在 CI 中；本地预览检查 | 通过本地检查（CI 尚未在远端运行）。见第 4 节 |
 | G.5 文字 | README 中英“阶段 F 发现”；X 线程草稿 | 完成。数字按衰减区间表述，只有主设定的数值注明衰减假设 |
-| G.6 发布准备 | `CITATION.cff` 0.2.0，Release 说明草稿；对外动作逐项确认 | 文件已准备；对外动作待你确认 |
+| G.6 发布准备 | `CITATION.cff` 0.2.0，Release 说明草稿；对外动作逐项确认 | 完成（2026-10-16）。Zenodo DOI 由你操作 |
 
 ## 1. 数据导出（G.1）
 
@@ -81,4 +81,4 @@
 - [X 线程草稿](x_thread_draft.md)：中英各 7 条，按 X 计数规则替换链接后都不超过 280。
 - `CITATION.cff` 与 `pyproject.toml` 升到 0.2.0；[Release 说明草稿](release_notes_v0.2.0.md)。
 
-**待你确认的对外动作**（逐项）：推送 `master` → 在仓库设置中启用 Pages（Source: GitHub Actions）→ 运行 `GitHub showcase` 工作流 → 打 tag `v0.2.0` → 发布 Release。Zenodo DOI 由你操作。
+**发布（2026-10-16，逐项经你确认）：** 推送 `master` → 启用 Pages（Source: GitHub Actions）→ `GitHub showcase` 工作流部署 → 打 tag `v0.2.0` → 发布 Release。线上页面已核对：三个面板与本地一致，阶段 1 展厅在 `stage1/`。Zenodo DOI 由你操作；X 线程由你发布。

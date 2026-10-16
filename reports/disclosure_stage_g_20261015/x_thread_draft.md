@@ -1,6 +1,6 @@
 # X 线程草稿（由你发布）
 
-草稿，未发布。数字与[阶段 F 报告](../disclosure_stage_f_20261014/README.md)一致，量级按研究契约第 20.14 条以“自然衰减 0 到 0.2 SD/年”的区间表述。`<沙盘链接>` 在 GitHub Pages 启用后替换。按 X 的计数规则（链接计 23，中文每字计 2），替换链接后每条都不超过 280。
+草稿，由你发布。数字与[阶段 F 报告](../disclosure_stage_f_20261014/README.md)一致，量级按研究契约第 20.14 条以“自然衰减 0 到 0.2 SD/年”的区间表述。沙盘链接已替换为 GitHub Pages 地址。按 X 的计数规则（链接计 23，中文每字计 2），替换链接后每条都不超过 280。
 
 ## English
 
@@ -28,7 +28,7 @@ Result 4: the size gap comes from greenwashing, not costs. A CNY 10 m fine is no
 
 **7/7**
 Try it in your browser: set transparency, fines and audits; watch 200 synthetic firms decide. The rule matches the Python model to 1e-12, and the page shows where the simplification falls short.
-<沙盘链接>
+https://kanzaler123.github.io/financial-ABM/
 Code, pre-registration, all numbers: https://github.com/kanzaler123/financial-ABM
 
 ## 中文
@@ -53,5 +53,5 @@ Code, pre-registration, all numbers: https://github.com/kanzaler123/financial-AB
 
 **7/7**
 可以在浏览器里试：调节透明度、罚款和核查，看 200 家合成企业怎么选。决策规则与 Python 模型一致到 10⁻¹²，页面也写明了简化在哪里失真。
-<沙盘链接>
+https://kanzaler123.github.io/financial-ABM/
 代码、预登记和每个数字的出处：https://github.com/kanzaler123/financial-ABM

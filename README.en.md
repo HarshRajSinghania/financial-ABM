@@ -12,7 +12,7 @@
   Multi-agent artificial market · evolving investor types · firm disclosure game · policy experiments · auditable evidence
 </p>
 
-<p align="center"><a href="README.md"><b>中文</b></a> · <a href="#stage-f-findings"><b>Stage F findings</b></a> · <a href="docs/README.md"><b>Docs index (Chinese)</b></a></p>
+<p align="center"><a href="README.md"><b>中文</b></a> · <a href="https://kanzaler123.github.io/financial-ABM/"><b>Policy sandbox</b></a> · <a href="#stage-f-findings"><b>Stage F findings</b></a> · <a href="docs/README.md"><b>Docs index (Chinese)</b></a></p>
 
 ---
 
@@ -59,7 +59,7 @@ The disclosure game, a true attribute versus a reported attribute, is not specif
 
 **Limits.** Only NPV firms: the learning firms did not pass stage D. Audit intensity, targeted audits and the implementation costs of policy are not modelled. 37 runs hit the price cap; they stay in the statistics, and excluding them changes nothing. Full tables: [stage F report (Chinese)](reports/disclosure_stage_f_20261014/README.md).
 
-**In-browser policy sandbox.** [`showcase/`](showcase/README.md) brings the firm decision layer into the browser: move transparency, fines and audits to see how 200 synthetic firms choose (panel ①) and a 14-year simplified dynamic without market feedback (panel ②); panel ③ shows the stage F results above with their sources. The decision rule matches the Python model term by term (1,200 random inputs, relative error at most 10⁻¹²), and the page states how far the simplified dynamics are from the full model. An AI-washing switch shows the same mechanism in another domain. To preview: `python showcase/build.py --output _site`, then open `_site/index.html`.
+**In-browser policy sandbox.** [`showcase/`](showcase/README.md) brings the firm decision layer into the browser: move transparency, fines and audits to see how 200 synthetic firms choose (panel ①) and a 14-year simplified dynamic without market feedback (panel ②); panel ③ shows the stage F results above with their sources. The decision rule matches the Python model term by term (1,200 random inputs, relative error at most 10⁻¹²), and the page states how far the simplified dynamics are from the full model. An AI-washing switch shows the same mechanism in another domain. Live: [https://kanzaler123.github.io/financial-ABM/](https://kanzaler123.github.io/financial-ABM/); to preview locally: `python showcase/build.py --output _site`, then open `_site/index.html`.
 
 ## Early diagnostics (before stage B)
 
@@ -82,7 +82,7 @@ The disclosure game, a true attribute versus a reported attribute, is not specif
 - [x] Learning firms: compared; they did not pass acceptance and are excluded from the formal experiment (stage D)
 - [ ] New agents: risk-based regulator, assurance providers, rating disagreement
 - [x] Formal experiments: information vs enforcement, phase diagrams, size divide (fresh seeds, design frozen before running; stage F)
-- [ ] In-browser policy sandbox (GitHub Pages): page and cross-language tests done, not yet published
+- [x] In-browser policy sandbox: [GitHub Pages](https://kanzaler123.github.io/financial-ABM/), v0.2.0 (2026-10-16)
 
 ## Research standards
 
