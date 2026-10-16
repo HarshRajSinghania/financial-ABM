@@ -1,0 +1,47 @@
+concurrent.futures.process._RemoteTraceback: 
+"""
+Traceback (most recent call last):
+  File "C:\Users\kanzaler\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\process.py", line 264, in _process_worker
+    r = call_item.fn(*call_item.args, **call_item.kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kanzaler\Desktop\ABM\src\abm\disclosure\experiments.py", line 103, in _run_trial
+    if run_identity(config, domain, policy)["run_id"] != expected_id:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kanzaler\Desktop\ABM\src\abm\disclosure\runner.py", line 115, in run_identity
+    "source_hashes": source_hashes(),
+                     ^^^^^^^^^^^^^^^
+  File "C:\Users\kanzaler\Desktop\ABM\src\abm\disclosure\runner.py", line 32, in source_hashes
+    return {path.relative_to(package.parent).as_posix(): sha256_file(path)
+                                                         ^^^^^^^^^^^^^^^^^
+  File "C:\Users\kanzaler\Desktop\ABM\src\abm\manifest.py", line 28, in sha256_file
+    for block in iter(lambda: source.read(1024 * 1024), b""):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kanzaler\Desktop\ABM\src\abm\manifest.py", line 28, in <lambda>
+    for block in iter(lambda: source.read(1024 * 1024), b""):
+                              ^^^^^^^^^^^^^^^^^^^^^^^^
+MemoryError
+"""
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\kanzaler\Desktop\ABM\src\abm\disclosure\experiments.py", line 417, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "C:\Users\kanzaler\Desktop\ABM\src\abm\disclosure\experiments.py", line 412, in main
+    print(run_experiment(args.spec, args.output, workers=args.workers, resume=args.resume))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kanzaler\Desktop\ABM\src\abm\disclosure\experiments.py", line 396, in run_experiment
+    return _run_frozen_experiment(frozen, destination, workers)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kanzaler\Desktop\ABM\src\abm\disclosure\experiments.py", line 342, in _run_frozen_experiment
+    print(json.dumps(future.result()), flush=True)
+                     ^^^^^^^^^^^^^^^
+  File "C:\Users\kanzaler\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kanzaler\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 401, in __get_result
+    raise self._exception
+MemoryError

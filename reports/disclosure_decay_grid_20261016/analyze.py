@@ -12,13 +12,16 @@ from __future__ import annotations
 
 import json
 import sys
+from collections import Counter
 from pathlib import Path
 
 import numpy as np
+from _no_wmi import prefill_uname
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
 sys.path.insert(0, str(ROOT / "src"))
+prefill_uname()  # importing scipy.stats otherwise blocks on the hung WMI service (see _no_wmi.py)
 from abm.disclosure.experiments import paired_statistics  # noqa: E402
 
 STAGE_F = ROOT / "reports" / "disclosure_stage_f_20261014" / "confirmatory_v1"
@@ -57,6 +60,23 @@ def first_cap_day(run: Path, record: dict) -> int | None:
     with np.load(run / record["path"] / "result.npz") as data:
         hits = np.flatnonzero(data["market_price_cap_hits"])
     return int(hits[0]) if hits.size else None
+
+
+def attempts_not_complete(records: list[dict]) -> dict:
+    """Earlier failed or interrupted attempts of each trial; they stay in the archive (contract 20.9)."""
+    counts: Counter = Counter()
+    trials = []
+    for record in records:
+        bad = [a for a in record["attempts"] if a["status"] != "complete"]
+        if bad:
+            trials.append(f"{record['scenario']}/{record['seed']}")
+        for attempt in bad:
+            manifest = GRID / attempt["path"] / "manifest.json"
+            kind = (json.loads(manifest.read_text(encoding="utf-8")).get("error_type", "unknown")
+                    if manifest.exists() else "no manifest")
+            counts[f"{attempt['status']}: {kind}"] += 1
+    return {"trials": len(trials), "attempts": dict(sorted(counts.items())),
+            "trials_by_scenario": dict(sorted(Counter(t.split("/")[0] for t in trials).items()))}
 
 
 def stat(values: list[float]) -> dict:
@@ -117,6 +137,7 @@ def main() -> None:
               "planned": grid_summary["planned_trials"], "complete": grid_summary["complete_trials"],
               "failed": [{"scenario": r["scenario"], "seed": r["seed"], "error": r.get("error")}
                          for r in grid_summary["records"] if r["status"] != "complete"],
+              "attempts_not_complete": attempts_not_complete(grid_summary["records"]),
               "failing_core_validation": grid_summary["trials_failing_core_validation"],
               "metric_windows": sorted(windows), "pre_switch_pairing": pairing}
 
