@@ -35,6 +35,8 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
+import platform
 import sys
 import time
 import traceback
@@ -42,8 +44,18 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 from dataclasses import replace
 from pathlib import Path
 
-import numpy as np
-from scipy import stats
+
+def _no_wmi(*args, **kwargs):
+    raise OSError("WMI not queried")
+
+
+# On 2026-10-16 the machine's WMI service hung after a memory exhaustion, and Python 3.12's platform
+# module (queried when numpy is imported) waited on it forever. Its own fallback reads the
+# environment; no experiment identity depends on it. Spawned workers re-run this before numpy loads.
+platform._wmi_query = _no_wmi
+
+import numpy as np  # noqa: E402
+from scipy import stats  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
@@ -316,6 +328,10 @@ def execute(seeds: list[int], recorded: list[str], settings: list[str], archive:
     record_dir, replay_dir = out / "records", out / "replays"
     jobs = [(name, seed) for name in recorded for seed in seeds
             if not (record_dir / f"{name}__{seed}.json").exists()]
+    # Single-threaded BLAS in the workers, as the stage F runner sets it; each multithreaded OpenBLAS
+    # pool also commits about 0.75 GB, which on 2026-10-16 helped exhaust the machine's commit memory.
+    for name in ("OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS", "OMP_NUM_THREADS"):
+        os.environ[name] = "1"
     started = time.perf_counter()
     with ProcessPoolExecutor(max_workers=workers, initializer=disable_power_throttling) as pool:
         futures = [pool.submit(record_task, scenarios[name], seed, records[(name, seed)]["result_fingerprint"], str(out))
