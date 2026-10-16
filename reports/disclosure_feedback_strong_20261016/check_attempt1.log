@@ -1,0 +1,45 @@
+[2026-10-16 19:41:42] experiment_id 17b7394fec7624476ee622a836c320b5af97aea8db65b9ca411b0b477e2372aa; stage F 90ee860663d4 reproduces; archive development_v1; 1 seeds, cells ['t0p1448_s0p8'], policies ('B', 'I', 'F'), 3 workers
+concurrent.futures.process._RemoteTraceback: 
+"""
+Traceback (most recent call last):
+  File "C:\Users\kanzaler\Desktop\ABM\reports\disclosure_feedback_strong_20261016\strong.py", line 149, in record_task
+    "seconds": round(time.perf_counter() - started, 1), "worker_peak_commit_gb": peak_commit_gb(),
+                                                                                 ^^^^^^^^^^^^^^^^
+  File "C:\Users\kanzaler\Desktop\ABM\reports\disclosure_feedback_strong_20261016\strong.py", line 107, in peak_commit_gb
+    if not kernel32.K32GetProcessMemoryInfo(kernel32.GetCurrentProcess(), ctypes.byref(counters), counters.cb):
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ctypes.ArgumentError: argument 1: OverflowError: int too long to convert
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\kanzaler\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\process.py", line 264, in _process_worker
+    r = call_item.fn(*call_item.args, **call_item.kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kanzaler\Desktop\ABM\reports\disclosure_feedback_strong_20261016\strong.py", line 175, in record_task
+    "worker_peak_commit_gb": peak_commit_gb()}
+                             ^^^^^^^^^^^^^^^^
+  File "C:\Users\kanzaler\Desktop\ABM\reports\disclosure_feedback_strong_20261016\strong.py", line 107, in peak_commit_gb
+    if not kernel32.K32GetProcessMemoryInfo(kernel32.GetCurrentProcess(), ctypes.byref(counters), counters.cb):
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ctypes.ArgumentError: argument 1: OverflowError: int too long to convert
+"""
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\kanzaler\Desktop\ABM\reports\disclosure_feedback_strong_20261016\strong.py", line 549, in <module>
+    main()
+  File "C:\Users\kanzaler\Desktop\ABM\reports\disclosure_feedback_strong_20261016\strong.py", line 541, in main
+    check()
+  File "C:\Users\kanzaler\Desktop\ABM\reports\disclosure_feedback_strong_20261016\strong.py", line 269, in check
+    execute([CHECK_SEED], [cell], POLICIES, cf.DEV_ARCHIVE, out, workers=3, frozen_id=None)
+  File "C:\Users\kanzaler\Desktop\ABM\reports\disclosure_feedback_strong_20261016\strong.py", line 241, in execute
+    row = future.result()
+          ^^^^^^^^^^^^^^^
+  File "C:\Users\kanzaler\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kanzaler\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 401, in __get_result
+    raise self._exception
+ctypes.ArgumentError: argument 1: OverflowError: int too long to convert
