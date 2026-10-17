@@ -1,96 +1,208 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="color-scheme" content="dark">
-<meta name="description" content="漂绿政策沙盘：调节透明度、罚款和核查，看 200 家合成企业在真实改善与虚报之间怎样选择；完整模型结果来自阶段 F 确认性实验。Greenwashing policy sandbox with stage F results.">
-<title>漂绿政策沙盘 · Financial ABM</title>
+<meta name="color-scheme" content="light">
+<meta name="description" content="Greenwashing policy desk: move transparency, fines and audits and watch 200 synthetic firms choose between real improvement and inflated reports; full-model results from the stage F confirmatory experiment.">
+<title>Greenwashing policy desk · Financial ABM</title>
 <style>/* SANDBOX_CSS */</style>
 </head>
 <body>
-<a class="skip" href="#levers" data-i18n="skip">跳到政策调节</a>
-<header class="topbar wrap">
-  <a class="brand" href="#top" aria-label="Financial ABM"><span class="brand-mark" aria-hidden="true">⌘</span> FINANCIAL<span class="muted">/</span>ABM</a>
-  <nav data-i18n-aria="navLabel" aria-label="主导航">
-    <a href="#decision" data-i18n="navDecision">企业决策</a><a href="#dynamics" data-i18n="navDynamics">简化动态</a><a href="#results" data-i18n="navResults">完整模型结果</a><a href="#method" data-i18n="navMethod">方法与边界</a><a href="stage1/" data-lang-link="stage1/" data-i18n="navStage1">阶段 1 展厅</a>
-  </nav>
-  <div class="top-actions">
-    <button id="lang-toggle" class="chip" type="button" data-i18n="langToggle" data-i18n-aria="langToggleLabel" aria-label="Switch to English">EN</button>
-    <a class="repo-link" href="https://github.com/kanzaler123/financial-ABM">GitHub <span aria-hidden="true">↗</span></a>
+<a class="skip" href="#levers" data-i18n="skip">Skip to the policy levers</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="#top" aria-label="Financial ABM">
+      <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="8.6"/><ellipse cx="12" cy="12" rx="3.6" ry="8.6"/><path d="M3.8 9.2h16.4M3.8 14.8h16.4"/></svg></span>
+      <span class="brand-name">FINANCIAL<span class="slash">/</span>ABM</span>
+      <span class="brand-sub" data-i18n="brandSub">Policy desk</span>
+    </a>
+    <nav data-i18n-aria="navLabel" aria-label="Main navigation">
+      <a href="#desk" data-i18n="navDesk">Desk</a><a href="#decision" data-i18n="navDecision">Firm decision</a><a href="#dynamics" data-i18n="navDynamics">Simplified dynamics</a><a href="#results" data-i18n="navResults">Full-model results</a><a href="#method" data-i18n="navMethod">Method and limits</a><a href="stage1/" data-lang-link="stage1/" data-i18n="navStage1">Stage 1 exhibit</a>
+    </nav>
+    <div class="top-actions">
+      <span class="core-pill"><i aria-hidden="true"></i><span data-i18n="corePill">JS core ≡ Python model</span></span>
+      <button id="lang-toggle" class="chip" type="button" data-i18n="langToggle" data-i18n-aria="langToggleLabel" aria-label="切换到中文">中文</button>
+      <a class="repo-link" href="https://github.com/kanzaler123/financial-ABM">GitHub <span aria-hidden="true">↗</span></a>
+    </div>
   </div>
 </header>
-<main id="top">
-<noscript><p class="notice wrap" data-i18n="noscript">交互需要 JavaScript。阶段 F 的完整结果见仓库中的报告。</p></noscript>
-<p id="load-error" class="notice wrap" hidden data-i18n="loadError">展示数据未载入。请使用 build.py 生成的页面。</p>
 
-<section class="hero wrap" aria-labelledby="hero-title">
-  <div class="hero-copy">
-    <p class="eyebrow"><span class="signal-dot"></span> <span data-i18n="heroEyebrow">阶段 F · 漂绿政策沙盘</span></p>
-    <h1 id="hero-title"><span data-i18n="heroTitleA">罚得更重，</span><br><em data-i18n="heroTitleB">还是看得更清？</em></h1>
-    <p class="lede" data-i18n="heroLede">200 家匿名合成企业，每 60 个交易日在真实改善、虚报和维持现状之间按净现值作选择。</p>
-    <div class="hero-actions"><a class="button primary" href="#levers"><span data-i18n="heroCta">开始调节</span> <span aria-hidden="true">↓</span></a><a class="text-link" href="#results"><span data-i18n="heroCtaResults">看完整模型结果</span> <span aria-hidden="true">→</span></a></div>
+<div class="policy-bar" id="policy-bar" hidden>
+  <div class="policy-bar-inner">
+    <span class="micro" data-i18n="policyBarLabel">Policy</span>
+    <span class="policy-summary" id="policy-summary"></span>
+    <div class="segmented presets" role="group" data-i18n-aria="presetLabel" aria-label="Presets">
+      <button type="button" data-preset="B" data-i18n="presetB">B baseline</button><button type="button" data-preset="I" data-i18n="presetI">I information</button><button type="button" data-preset="F" data-i18n="presetF">F penalty</button><button type="button" data-preset="IF" data-i18n="presetIF">IF both</button><button type="button" data-preset="zero" data-i18n="presetZero">No fines</button>
+    </div>
+    <a class="micro-link" href="#levers" data-i18n="backToDesk">Adjust levers ↑</a>
   </div>
-  <ol class="findings" aria-label="Stage F">
-    <li><span class="finding-no mono">01</span><p class="finding-label" data-i18n="finding1Label">排序稳健</p><p class="finding-value" data-i18n="finding1Value">信息 &gt; 惩罚 &gt; 基准</p><p class="finding-text" data-i18n="finding1Text"></p></li>
-    <li><span class="finding-no mono">02</span><p class="finding-label" data-i18n="finding2Label">透明度门槛</p><p class="finding-value" id="finding2-value"></p><p class="finding-text" data-i18n="finding2Text"></p></li>
-    <li><span class="finding-no mono">03</span><p class="finding-label" data-i18n="finding3Label">量级是区间</p><p class="finding-value" id="finding3-value"></p><p class="finding-text" data-i18n="finding3Text"></p></li>
-  </ol>
-</section>
+</div>
 
-<section class="levers" id="levers" aria-labelledby="levers-title">
-  <div class="wrap">
-    <div class="levers-head">
-      <div><p class="eyebrow" data-i18n="leversEyebrow">政策调节</p><h2 id="levers-title" data-i18n="leversTitle">同一组政策，作用于下面的面板 ① 和 ②</h2></div>
-      <div class="lever-groups">
-        <div class="segmented" role="group" data-i18n-aria="domainLabel" aria-label="领域">
-          <button type="button" data-domain="esg" aria-pressed="true" data-i18n="domainEsg">ESG 漂绿</button><button type="button" data-domain="ai_washing" aria-pressed="false" data-i18n="domainAi">AI-washing（示意）</button>
+<main id="top">
+<noscript><p class="notice" data-i18n="noscript">Interaction needs JavaScript. The full stage F results are in the repository’s report.</p></noscript>
+<p id="load-error" class="notice" hidden data-i18n="loadError">Exhibit data did not load. Use the page generated by build.py.</p>
+
+<section class="desk" id="desk" aria-labelledby="hero-title">
+  <div class="desk-head">
+    <div class="desk-title">
+      <p class="eyebrow"><span class="live-dot" aria-hidden="true"></span><span data-i18n="heroEyebrow">Stage F · Greenwashing policy desk</span></p>
+      <h1 id="hero-title"><span data-i18n="heroTitleA">Heavier fines,</span><em data-i18n="heroTitleB">or clearer sight?</em></h1>
+      <p class="lede" data-i18n="heroLede">Two hundred anonymous synthetic firms choose every 60 trading days between real improvement, inflating their report and doing nothing, by net present value.</p>
+    </div>
+    <section class="findings" aria-labelledby="findings-title">
+      <p class="micro findings-head"><span id="findings-title" data-i18n="findingsTitle">Full-model results · stage F</span><span class="tag good" data-i18n="p3Tag">Research result · sourced</span><a class="micro-link" href="#results" data-i18n="findingsMore">Details ↓</a></p>
+      <ol>
+        <li><span class="finding-no">01</span><p class="finding-label" data-i18n="finding1Label">Robust ordering</p><p class="finding-value" data-i18n="finding1Value">Information &gt; penalty &gt; baseline</p><p class="finding-text" data-i18n="finding1Short"></p></li>
+        <li><span class="finding-no">02</span><p class="finding-label" data-i18n="finding2Label">Transparency threshold</p><p class="finding-value" id="finding2-value"></p><p class="finding-text" data-i18n="finding2Short"></p></li>
+        <li><span class="finding-no">03</span><p class="finding-label" data-i18n="finding3Label">Magnitudes are a range</p><p class="finding-value" id="finding3-value"></p><p class="finding-text" data-i18n="finding3Short"></p></li>
+      </ol>
+    </section>
+  </div>
+
+  <div class="wire" aria-labelledby="wire-label">
+    <p class="wire-label"><span class="live-dot" aria-hidden="true"></span><span id="wire-label" data-i18n="wireLabel">Live wire</span></p>
+    <ol class="wire-feed" id="wire-feed"></ol>
+    <span class="wire-tag" data-i18n="wireTag">Replay · simplified dynamics · not a research result</span>
+  </div>
+
+
+  <div class="stage" id="stage">
+    <canvas id="sphere" class="sphere-canvas" role="img" aria-label="Firm sphere"></canvas>
+    <div class="orbiter" id="orbit-regulator" aria-hidden="true"></div>
+    <div class="orbiter sleeper" id="orbit-investors" aria-hidden="true"><span class="zz">z</span><span class="zz">z</span></div>
+
+    <aside class="levers panel" id="levers" aria-labelledby="levers-title">
+      <header class="panel-head"><p class="micro"><span class="idx">01</span><span id="levers-title" data-i18n="leversTitle">Policy signals</span></p><span class="panel-note" data-i18n="leversNote">One policy drives the whole page</span></header>
+      <div class="segmented domain" role="group" data-i18n-aria="domainLabel" aria-label="Domain">
+        <button type="button" data-domain="esg" aria-pressed="true" data-i18n="domainEsg">ESG greenwashing</button><button type="button" data-domain="ai_washing" aria-pressed="false" data-i18n="domainAi">AI-washing (illustrative)</button>
+      </div>
+      <div class="segmented presets" role="group" data-i18n-aria="presetLabel" aria-label="Presets">
+        <button type="button" data-preset="B" data-i18n="presetB">B baseline</button><button type="button" data-preset="I" data-i18n="presetI">I information</button><button type="button" data-preset="F" data-i18n="presetF">F penalty</button><button type="button" data-preset="IF" data-i18n="presetIF">IF both</button><button type="button" data-preset="zero" data-i18n="presetZero">No fines</button>
+      </div>
+      <div class="lever-list">
+        <label class="lever" data-lever="tau"><span class="lever-name" data-i18n="leverTau">Transparency τ</span><output id="out-tau"></output>
+          <span class="range-wrap"><input id="lever-tau" type="range" min="0" max="1" step="0.01"><span id="tau-star-tick" class="tick" aria-hidden="true"></span></span>
+          <span class="lever-help" data-i18n="leverTauHelp"></span><span class="lever-help strong" id="tau-star-note"></span><span class="port" aria-hidden="true"></span></label>
+        <label class="lever" data-lever="fixed"><span class="lever-name" data-i18n="leverFixed">Fixed fine</span><output id="out-fixed"></output>
+          <span class="range-wrap"><input id="lever-fixed" type="range" min="0" max="8" step="0.5"></span>
+          <span class="lever-help" data-i18n="leverFixedHelp"></span><span class="port" aria-hidden="true"></span></label>
+        <label class="lever" data-lever="prop"><span class="lever-name" data-i18n="leverProp">Proportional fine</span><output id="out-prop"></output>
+          <span class="range-wrap"><input id="lever-prop" type="range" min="0" max="90" step="1"></span>
+          <span class="lever-help" data-i18n="leverPropHelp"></span><span class="port" aria-hidden="true"></span></label>
+        <label class="lever" data-lever="audit"><span class="lever-name" data-i18n="leverAudit">Audit probability</span><output id="out-audit"></output>
+          <span class="range-wrap"><input id="lever-audit" type="range" min="0" max="0.2" step="0.005"></span>
+          <span class="lever-help" data-i18n="leverAuditHelp"></span><span class="port" aria-hidden="true"></span></label>
+        <label class="lever" data-lever="decay"><span class="lever-name" data-i18n="leverDecay">Natural decay</span><output id="out-decay"></output>
+          <span class="range-wrap"><input id="lever-decay" type="range" min="0" max="0.4" step="0.01"><span class="tick bracket" style="left:0%" aria-hidden="true"></span><span class="tick bracket" style="left:50%" aria-hidden="true"></span></span>
+          <span class="lever-help" data-i18n="leverDecayHelp"></span><span class="port" aria-hidden="true"></span></label>
+      </div>
+      <p id="ai-note" class="domain-note" hidden data-i18n="aiNote"></p>
+    </aside>
+
+    <div class="hud">
+      <div class="hud-top">
+        <div>
+          <p class="micro"><span class="idx">02</span><span data-i18n="sphereTitle">The firm sphere</span></p>
+          <p class="hud-sub" data-i18n="sphereSub">200 synthetic firms · colour = this period’s choice · size = market cap</p>
+          <div class="legend" id="sphere-legend"></div>
         </div>
-        <div class="segmented presets" role="group" data-i18n-aria="presetLabel" aria-label="预设">
-          <button type="button" data-preset="B" data-i18n="presetB">B 基准</button><button type="button" data-preset="I" data-i18n="presetI">I 信息</button><button type="button" data-preset="F" data-i18n="presetF">F 惩罚</button><button type="button" data-preset="IF" data-i18n="presetIF">IF 组合</button><button type="button" data-preset="zero" data-i18n="presetZero">无罚款</button>
+        <div class="clock">
+          <span class="micro" data-i18n="clockLabel">Simulated day</span>
+          <strong id="clock-day">0</strong>
+          <span class="clock-sub" id="clock-sub"></span>
+          <span class="phase-chip" id="clock-phase"></span>
+        </div>
+      </div>
+      <div class="hud-bottom">
+        <div class="transport" role="group" data-i18n-aria="transportLabel" aria-label="Replay controls">
+          <button id="play" type="button" class="icon-button primary" aria-label="Play"><svg class="icon-play" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 2.8v10.4L13 8z"/></svg><svg class="icon-pause" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.8h2.8v10.4H4zM9.2 2.8H12v10.4H9.2z"/></svg></button>
+          <button id="restart" type="button" class="icon-button" data-i18n-aria="restartLabel" aria-label="Replay from the start"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.3 6.2A5 5 0 1 1 3 9.6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M2.4 2.6v4.2h4.2z"/></svg></button>
+          <div class="scrub-wrap"><input id="scrub" type="range" min="0" max="3500" step="1" value="0" data-i18n-aria="scrubLabel" aria-label="Replay position"><span class="scrub-switch" id="scrub-switch" aria-hidden="true"></span></div>
+          <div class="segmented speed" role="group" data-i18n-aria="speedLabel" aria-label="Speed">
+            <button type="button" data-speed="0.5">0.5×</button><button type="button" data-speed="1" aria-pressed="true">1×</button><button type="button" data-speed="2">2×</button><button type="button" data-speed="4">4×</button>
+          </div>
+        </div>
+        <div class="hud-row">
+          <div class="seed-control"><label for="audit-seed" data-i18n="seedLabel">Audit seed</label><input id="audit-seed" type="number" min="1" max="4294967295" step="1" value="1"><button id="seed-next" type="button" class="small-button" data-i18n="seedNext">Draw other audits</button></div>
+          <p class="hud-hint" data-i18n="sphereHint">Drag to rotate · click a firm</p>
         </div>
       </div>
     </div>
-    <div class="lever-grid">
-      <label class="lever"><span class="lever-name" data-i18n="leverTau">透明度 τ</span><output id="out-tau" class="mono"></output>
-        <span class="range-wrap"><input id="lever-tau" type="range" min="0" max="1" step="0.01"><span id="tau-star-tick" class="tick" aria-hidden="true"></span></span>
-        <span class="lever-help" data-i18n="leverTauHelp"></span><span class="lever-help strong" id="tau-star-note"></span></label>
-      <label class="lever"><span class="lever-name" data-i18n="leverFixed">定额罚款</span><output id="out-fixed" class="mono"></output>
-        <span class="range-wrap"><input id="lever-fixed" type="range" min="0" max="8" step="0.5"></span>
-        <span class="lever-help" data-i18n="leverFixedHelp"></span></label>
-      <label class="lever"><span class="lever-name" data-i18n="leverProp">比例罚</span><output id="out-prop" class="mono"></output>
-        <span class="range-wrap"><input id="lever-prop" type="range" min="0" max="90" step="1"></span>
-        <span class="lever-help" data-i18n="leverPropHelp"></span></label>
-      <label class="lever"><span class="lever-name" data-i18n="leverAudit">核查概率</span><output id="out-audit" class="mono"></output>
-        <span class="range-wrap"><input id="lever-audit" type="range" min="0" max="0.2" step="0.005"></span>
-        <span class="lever-help" data-i18n="leverAuditHelp"></span></label>
-      <label class="lever"><span class="lever-name" data-i18n="leverDecay">自然衰减</span><output id="out-decay" class="mono"></output>
-        <span class="range-wrap"><input id="lever-decay" type="range" min="0" max="0.4" step="0.01"><span class="tick bracket" style="left:0%" aria-hidden="true"></span><span class="tick bracket" style="left:50%" aria-hidden="true"></span></span>
-        <span class="lever-help" data-i18n="leverDecayHelp"></span></label>
-    </div>
-    <p id="ai-note" class="domain-note" hidden data-i18n="aiNote"></p>
+
+    <aside class="ticket panel" aria-labelledby="ticket-title">
+      <div class="ticket-main">
+        <header class="panel-head"><p class="micro"><span class="idx">03</span><span id="ticket-title" data-i18n="ticketTitle">Decision ticket</span></p></header>
+        <label class="firm-select"><span class="sr-only" data-i18n="firmLabel">Firm</span><select id="ticket-select"></select></label>
+        <div class="ticket-choice" id="ticket-choice" aria-live="polite"></div>
+        <dl class="facts compact" id="ticket-facts"></dl>
+      </div>
+      <div class="ticket-side">
+        <figure class="ticket-figure">
+          <div class="legend" id="ticket-legend"></div>
+          <div id="ticket-chart" class="chart"></div>
+        </figure>
+        <div class="ticket-strip"><p class="micro" data-i18n="ticketStrip">58 decisions over 14 years</p><div id="ticket-strip" class="strip"></div></div>
+        <a class="micro-link" href="#decision" id="ticket-more" data-i18n="ticketMore">NPV breakdown on day 1200 ↓</a>
+      </div>
+    </aside>
+  </div>
+
+  <ul class="agents" data-i18n-aria="agentsLabel" aria-label="Agents">
+    <li class="agent" id="agent-regulator"><span class="avatar" aria-hidden="true"></span><div class="agent-body"><p class="agent-name"><span data-i18n="agentRegulator">Regulator</span><span class="agent-tag" data-i18n="agentRegulatorTag">sets policy</span></p><p class="agent-stat"></p><p class="agent-sub"></p></div><svg class="spark" aria-hidden="true"></svg></li>
+    <li class="agent" id="agent-investors"><span class="avatar" aria-hidden="true"></span><div class="agent-body"><p class="agent-name"><span data-i18n="agentInvestors">Investors</span><span class="agent-tag" data-i18n="agentInvestorsTag">frozen here</span></p><p class="agent-stat" data-i18n="agentInvestorsStat">Fixed at the day-1200 snapshot</p><p class="agent-sub" data-i18n="agentInvestorsNote">Prices respond only in the full model</p></div></li>
+    <li class="agent" id="agent-threshold"><span class="gauge" aria-hidden="true"></span><div class="agent-body"><p class="agent-name"><span data-i18n="agentThreshold">Threshold τ*</span><span class="agent-tag" data-i18n="agentThresholdTag">Proposition 2</span></p><p class="agent-stat"></p><p class="agent-sub"></p></div></li>
+    <li class="agent" id="agent-large"><span class="avatar" aria-hidden="true"></span><div class="agent-body"><p class="agent-name"><span data-i18n="agentLarge">Large firms</span><span class="agent-tag"></span></p><p class="agent-stat"></p><p class="agent-bar"></p></div><svg class="spark" aria-hidden="true"></svg></li>
+    <li class="agent" id="agent-mid"><span class="avatar" aria-hidden="true"></span><div class="agent-body"><p class="agent-name"><span data-i18n="agentMid">Mid firms</span><span class="agent-tag"></span></p><p class="agent-stat"></p><p class="agent-bar"></p></div><svg class="spark" aria-hidden="true"></svg></li>
+    <li class="agent" id="agent-small"><span class="avatar" aria-hidden="true"></span><div class="agent-body"><p class="agent-name"><span data-i18n="agentSmall">Small firms</span><span class="agent-tag"></span></p><p class="agent-stat"></p><p class="agent-bar"></p></div><svg class="spark" aria-hidden="true"></svg></li>
+  </ul>
+
+  <div class="desk-bottom">
+    <article class="panel window" aria-labelledby="window-title">
+      <header class="panel-head"><p class="micro"><span class="idx">04</span><span id="window-title" data-i18n="windowTitle">Policy window · days 1200–3500</span></p><span class="tag warn" data-i18n="p2Tag">No market feedback · not a research result</span></header>
+      <div class="tiles" id="dynamics-tiles" aria-live="polite"></div>
+      <div class="legend" id="window-legend"></div>
+      <div id="window-chart" class="chart"></div>
+      <p class="window-now" id="window-now"></p>
+    </article>
+    <article class="panel spectro" aria-labelledby="spectro-title">
+      <header class="panel-head"><p class="micro"><span class="idx">05</span><span id="spectro-title" data-i18n="spectroTitle">Decision spectrogram</span></p><div class="legend" id="spectro-legend"></div></header>
+      <p class="panel-sub" data-i18n="spectroSub">Rows: 200 firms by size class and market cap · columns: 58 decisions over 14 years</p>
+      <div class="spectro-wrap"><canvas id="spectro" role="img" aria-label="Decision spectrogram" tabindex="0"></canvas></div>
+      <details class="data-table"><summary data-i18n="chartTable">Show data table</summary><div id="spectro-table"></div></details>
+    </article>
+    <article class="panel trace" aria-labelledby="trace-title">
+      <header class="panel-head"><p class="micro"><span class="idx">06</span><span id="trace-title" data-i18n="traceTitle">Audits and turns</span></p><span class="trace-total" id="trace-total"></span></header>
+      <div class="trace-scroll">
+        <table class="trace-table">
+          <thead><tr><th scope="col" data-i18n="traceDay">Day</th><th scope="col" data-i18n="traceFirm">Firm</th><th scope="col" data-i18n="traceEvent">Event</th><th scope="col" class="num" data-i18n="traceDetail">Detail</th></tr></thead>
+          <tbody id="trace-body"></tbody>
+        </table>
+        <p class="trace-empty" id="trace-empty" data-i18n="traceEmpty">No audit has caught anyone yet.</p>
+      </div>
+    </article>
   </div>
 </section>
 
-<section class="panel-section wrap" id="decision" aria-labelledby="decision-title">
+<section class="section wrap" id="decision" aria-labelledby="decision-title">
   <div class="section-head">
-    <div><p class="eyebrow"><span data-i18n="p1Eyebrow">面板 ①</span></p><h2 id="decision-title"><span data-i18n="p1Title">企业决策</span> <span class="tag" data-i18n="p1Tag">单期 · 实时</span></h2></div>
+    <div><p class="eyebrow" data-i18n="p1Eyebrow">Panel ①</p><h2 id="decision-title"><span data-i18n="p1Title">Firm decision</span> <span class="tag" data-i18n="p1Tag">One period · live</span></h2></div>
     <p class="section-note" data-i18n="p1Lede"></p>
   </div>
   <div class="decision-grid">
     <article class="panel">
-      <div class="panel-heading"><h3 data-i18n="scatterTitle">每个点是一家企业</h3><p class="summary-line" id="decision-summary" aria-live="polite"></p></div>
+      <div class="panel-heading"><h3 data-i18n="scatterTitle">Each dot is one firm</h3><p class="summary-line" id="decision-summary" aria-live="polite"></p></div>
       <div class="legend" id="action-legend"></div>
       <div id="scatter" class="chart scatter-chart"></div>
       <p class="footnote" data-i18n="scatterHint"></p>
-      <h4 class="sub" data-i18n="sizeTitle">按规模档的选择</h4>
+      <h4 class="sub" data-i18n="sizeTitle">Choices by size class</h4>
       <div id="size-bars" class="size-bars"></div>
       <p id="agreement" class="check-line"></p>
     </article>
     <article class="panel firm-panel">
-      <label class="firm-select"><span data-i18n="firmLabel">企业</span><select id="firm-select"></select></label>
+      <label class="firm-select"><span data-i18n="firmLabel">Firm</span><select id="firm-select"></select></label>
       <dl id="firm-facts" class="facts"></dl>
-      <h4 class="sub" data-i18n="npvTitle">这一期每个选项值多少</h4>
+      <h4 class="sub" data-i18n="npvTitle">What each option is worth this period</h4>
       <div class="legend" id="npv-legend"></div>
       <div id="npv-chart" class="chart npv-chart"></div>
       <p id="firm-why" class="why" aria-live="polite"></p>
@@ -98,99 +210,101 @@
   </div>
 </section>
 
-<section class="panel-section wrap" id="dynamics" aria-labelledby="dynamics-title">
+<section class="section wrap" id="dynamics" aria-labelledby="dynamics-title">
   <div class="section-head">
-    <div><p class="eyebrow" data-i18n="p2Eyebrow">面板 ②</p><h2 id="dynamics-title"><span data-i18n="p2Title">简化动态</span> <span class="tag warn" data-i18n="p2Tag">无市场反馈 · 非研究结果</span></h2></div>
+    <div><p class="eyebrow" data-i18n="p2Eyebrow">Panel ②</p><h2 id="dynamics-title"><span data-i18n="p2Title">Simplified dynamics</span> <span class="tag warn" data-i18n="p2Tag">No market feedback · not a research result</span></h2></div>
     <p class="section-note" data-i18n="p2Lede"></p>
   </div>
   <div class="panel">
-    <div class="dynamics-toolbar">
-      <div class="legend" id="dynamics-legend"></div>
-      <div class="seed-control"><label for="audit-seed" data-i18n="seedLabel">核查随机数种子</label><input id="audit-seed" type="number" min="1" max="4294967295" step="1" value="1"><button id="seed-next" type="button" class="small-button" data-i18n="seedNext">换一组核查</button></div>
-    </div>
-    <div class="tiles" id="dynamics-tiles" aria-live="polite"></div>
+    <div class="legend" id="dynamics-legend"></div>
     <div class="twin-charts">
-      <figure><figcaption data-i18n="chartGoodness">平均真实水平（SD）</figcaption><div id="chart-goodness" class="chart line-chart"></div></figure>
-      <figure><figcaption data-i18n="chartInflation">平均虚报（SD）</figcaption><div id="chart-inflation" class="chart line-chart"></div></figure>
+      <figure><figcaption data-i18n="chartGoodness">Mean true level (SD)</figcaption><div id="chart-goodness" class="chart line-chart"></div></figure>
+      <figure><figcaption data-i18n="chartInflation">Mean inflation (SD)</figcaption><div id="chart-inflation" class="chart line-chart"></div></figure>
     </div>
-    <details class="data-table"><summary data-i18n="chartTable">查看数据表</summary><div id="dynamics-table"></div></details>
+    <details class="data-table"><summary data-i18n="chartTable">Show data table</summary><div id="dynamics-table"></div></details>
   </div>
   <details class="panel cost" id="cost" open>
-    <summary><span data-i18n="costTitle">简化的代价：与完整模型对照</span></summary>
+    <summary><span data-i18n="costTitle">The cost of simplification: against the full model</span></summary>
     <p class="section-note" data-i18n="costLede"></p>
     <div id="cost-tables" class="table-scroll"></div>
   </details>
 </section>
 
-<section class="panel-section wrap" id="results" aria-labelledby="results-title">
+<section class="section wrap" id="results" aria-labelledby="results-title">
   <div class="section-head">
-    <div><p class="eyebrow" data-i18n="p3Eyebrow">面板 ③</p><h2 id="results-title"><span data-i18n="p3Title">完整模型结果（阶段 F）</span> <span class="tag good" data-i18n="p3Tag">研究结果 · 有出处</span></h2></div>
+    <div><p class="eyebrow" data-i18n="p3Eyebrow">Panel ③</p><h2 id="results-title"><span data-i18n="p3Title">Full-model results (stage F)</span> <span class="tag good" data-i18n="p3Tag">Research result · sourced</span></h2></div>
     <p class="section-note" data-i18n="p3Lede"></p>
   </div>
   <p id="results-ai" class="notice" hidden data-i18n="p3AiNote"></p>
   <div id="results-body">
+    <ol class="finding-list">
+      <li><span class="finding-no">01</span><div><p class="finding-label" data-i18n="finding1Label">Robust ordering</p><p class="finding-text" data-i18n="finding1Text"></p></div></li>
+      <li><span class="finding-no">02</span><div><p class="finding-label" data-i18n="finding2Label">Transparency threshold</p><p class="finding-text" data-i18n="finding2Text"></p></div></li>
+      <li><span class="finding-no">03</span><div><p class="finding-label" data-i18n="finding3Label">Magnitudes are a range</p><p class="finding-text" data-i18n="finding3Text"></p></div></li>
+    </ol>
     <div class="results-grid">
       <article class="panel">
-        <h3 data-i18n="bracketTitle">量级取决于自然衰减，排序不取决于它</h3>
+        <h3 data-i18n="bracketTitle">Decay sets the magnitude; the ordering agrees at both tested ends</h3>
         <p class="panel-intro" data-i18n="bracketLede"></p>
         <div class="legend" id="bracket-legend"></div>
         <div id="bracket-chart" class="chart bracket-chart"></div>
-        <details class="data-table"><summary data-i18n="chartTable">查看数据表</summary><div id="bracket-table"></div></details>
+        <details class="data-table"><summary data-i18n="chartTable">Show data table</summary><div id="bracket-table"></div></details>
       </article>
       <article class="panel">
-        <h3 data-i18n="primaryTitle">四个主要问题（Holm 校正）</h3>
+        <h3 data-i18n="primaryTitle">Four primary questions (Holm-adjusted)</h3>
         <div id="primary-table" class="table-scroll"></div>
       </article>
     </div>
     <article class="panel">
-      <h3 data-i18n="doseTitle">剂量—反应</h3>
+      <h3 data-i18n="doseTitle">Dose–response</h3>
       <div class="dose-grid" id="dose-grid"></div>
     </article>
     <div class="results-grid">
       <article class="panel">
-        <h3 data-i18n="phaseTitle">相图 2</h3>
+        <h3 data-i18n="phaseTitle">Phase map 2</h3>
         <p class="panel-intro" data-i18n="phaseLede"></p>
         <div id="phase2" class="table-scroll"></div>
       </article>
       <article class="panel">
-        <h3 data-i18n="phase1Title">相图 1</h3>
+        <h3 data-i18n="phase1Title">Phase map 1</h3>
         <p class="panel-intro" data-i18n="phase1Lede"></p>
         <div id="phase1" class="table-scroll"></div>
         <p class="footnote" data-i18n="phaseCounts"></p>
       </article>
     </div>
     <article class="panel provenance">
-      <h3 data-i18n="provTitle">出处</h3>
+      <h3 data-i18n="provTitle">Source</h3>
       <dl id="provenance" class="facts wide"></dl>
     </article>
   </div>
 </section>
 
-<section class="panel-section wrap" id="method" aria-labelledby="method-title">
-  <div class="section-head"><div><p class="eyebrow" data-i18n="methodEyebrow">方法与边界</p><h2 id="method-title" data-i18n="methodTitle">这个沙盘是什么，不是什么</h2></div></div>
+<section class="section wrap" id="method" aria-labelledby="method-title">
+  <div class="section-head"><div><p class="eyebrow" data-i18n="methodEyebrow">Method and limits</p><h2 id="method-title" data-i18n="methodTitle">What this sandbox is, and is not</h2></div></div>
   <div class="method-grid">
     <ol class="method-list">
-      <li data-i18n="method1"></li><li data-i18n="method2"></li><li data-i18n="method3"></li><li data-i18n="method4"></li>
+      <li data-i18n="method1"></li><li data-i18n="method2"></li><li data-i18n="method3"></li><li data-i18n="method4"></li><li data-i18n="method5"></li>
     </ol>
     <div class="panel">
-      <h3 data-i18n="methodLinks">源代码、报告与复现步骤</h3>
+      <h3 data-i18n="methodLinks">Source code, reports and reproduction</h3>
       <ul class="link-list">
-        <li><a href="https://github.com/kanzaler123/financial-ABM/tree/master/src/abm/disclosure" data-i18n="linkCode">模型源代码</a></li>
-        <li><a href="https://github.com/kanzaler123/financial-ABM/blob/master/reports/disclosure_stage_f_20261014/README.md" data-i18n="linkReport">阶段 F 报告</a></li>
-        <li><a href="https://github.com/kanzaler123/financial-ABM/tree/master/showcase/sandbox" data-i18n="linkSandbox">沙盘参考实现与一致性测试</a></li>
-        <li><a href="stage1/" data-lang-link="stage1/" data-i18n="linkStage1">阶段 1 展厅</a></li>
+        <li><a href="https://github.com/kanzaler123/financial-ABM/tree/master/src/abm/disclosure" data-i18n="linkCode">Model source code</a></li>
+        <li><a href="https://github.com/kanzaler123/financial-ABM/blob/master/reports/disclosure_stage_f_20261014/README.md" data-i18n="linkReport">Stage F report</a></li>
+        <li><a href="https://github.com/kanzaler123/financial-ABM/tree/master/showcase/sandbox" data-i18n="linkSandbox">Sandbox reference and consistency tests</a></li>
+        <li><a href="stage1/" data-lang-link="stage1/" data-i18n="linkStage1">Stage 1 exhibit (single-asset market)</a></li>
       </ul>
-      <h4 class="sub" data-i18n="reproduceTitle">本地预览</h4>
+      <h4 class="sub" data-i18n="reproduceTitle">Preview locally</h4>
       <pre class="terminal">python showcase/build.py --output _site
 python -m http.server 8080 --directory _site</pre>
     </div>
   </div>
 </section>
 </main>
-<footer class="wrap"><span class="brand">FINANCIAL<span class="muted">/</span>ABM</span><span data-i18n="footerNote">研究展示，不构成投资建议。</span><a href="#top" data-i18n="footerTop">返回顶部 ↑</a></footer>
+<footer class="footer wrap"><span class="brand-name">FINANCIAL<span class="slash">/</span>ABM</span><span data-i18n="footerNote">A research exhibit, not investment advice.</span><a href="#top" data-i18n="footerTop">Back to top ↑</a></footer>
 <div id="tooltip" class="tooltip" role="status" hidden></div>
 <script id="sandbox-data" type="application/json">{"sandbox":null}</script>
 <script>/* SANDBOX_CORE */</script>
+<script>/* SANDBOX_DESK */</script>
 <script>/* SANDBOX_TEXT */</script>
 <script>/* SANDBOX_APP */</script>
 </body></html>

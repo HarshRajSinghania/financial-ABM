@@ -30,7 +30,7 @@ jobs:
         with:
           node-version: '22'
       - name: Check JavaScript
-        run: for file in showcase/stage1/i18n.js showcase/stage1/app.js showcase/sandbox/core.js showcase/sandbox/i18n.js showcase/sandbox/app.js showcase/sandbox/check_core.js; do node --check "$file"; done
+        run: for file in showcase/stage1/i18n.js showcase/stage1/app.js showcase/sandbox/core.js showcase/sandbox/desk.js showcase/sandbox/i18n.js showcase/sandbox/app.js showcase/sandbox/check_core.js; do node --check "$file"; done
       - name: Sandbox core matches the Python model (committed fixtures)
         run: node showcase/sandbox/check_core.js
       - name: Test source data and offline build

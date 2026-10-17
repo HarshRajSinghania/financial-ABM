@@ -9,7 +9,7 @@
     get: () => { try { return localStorage.getItem('abm-lang'); } catch { return null; } },
     set: value => { try { localStorage.setItem('abm-lang', value); } catch { /* file:// may refuse */ } },
   };
-  let lang = ['zh', 'en'].includes(query.get('lang')) ? query.get('lang') : storage.get() === 'en' ? 'en' : 'zh';
+  let lang = ['zh', 'en'].includes(query.get('lang')) ? query.get('lang') : storage.get() === 'zh' ? 'zh' : 'en';
   const t = (key, vars = {}) => String(TEXT[lang][key] ?? TEXT.zh[key] ?? key)
     .replace(/\{(\w+)\}/g, (_, name) => (name in vars ? String(vars[name]) : `{${name}}`));
   const known = key => key in TEXT.zh;

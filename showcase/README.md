@@ -4,8 +4,8 @@
 
 | 页面 | 内容 |
 |---|---|
-| `_site/index.html`（首页） | 漂绿政策沙盘（计划阶段 G）：面板 ① 企业单期决策，面板 ② 简化动态（无市场反馈，非研究结果），面板 ③ 阶段 F 完整模型结果。中英切换，ESG / AI-washing 切换 |
-| `_site/stage1/index.html` | 阶段 1 展厅：历史 v13/v14 机制报告（原首页，内容不变），中英切换 |
+| `_site/index.html`（首页） | 漂绿政策沙盘（计划阶段 G）：首屏作战台回放面板 ② 的 14 年简化动态（企业球、决策频谱、事件流、核查日志，标注为非研究结果）；面板 ① 企业单期决策，面板 ② 简化动态（无市场反馈，非研究结果），面板 ③ 阶段 F 完整模型结果。默认英文，可切换中文；ESG / AI-washing 切换 |
+| `_site/stage1/index.html` | 阶段 1 展厅：历史 v13/v14 机制报告（原首页，内容不变），默认英文，可切换中文 |
 
 ## 预览
 
@@ -52,7 +52,8 @@ python -m pytest tests/test_sandbox_reference.py   # 夹具仍与当前模型代
 |---|---|
 | `sandbox/index.html`、`styles.css` | 首页结构与样式 |
 | `sandbox/i18n.js` | 中英文案；`test_showcase.py` 检查两种语言的键一致，并检查模板中没有未接入切换的中文 |
-| `sandbox/app.js` | 政策调节、图表与交互（模型计算都在 `core.js`） |
+| `sandbox/app.js` | 政策调节、作战台回放、图表与交互（模型计算都在 `core.js`） |
+| `sandbox/desk.js` | 作战台的绘制：企业球（canvas）、决策频谱、智能体角色与迷你走势线；只画图，不含文案和模型计算 |
 | `stage1/` | 阶段 1 展厅的模板、样式与脚本；文案在 `stage1/i18n.js` |
 | `build.py` | 数据核对与离线单页构建 |
 | `test_showcase.py` | 数据与静态构建回归 |
