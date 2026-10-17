@@ -18,7 +18,9 @@ setting (stage F's own scenarios B, I, F) and the sources of the full-model and 
 (3) analyze: per contrast, the full, frozen and Rbase values (full and Rbase per seed from contract 20.17's
     results.json, same seeds), the two channels with paired 95% t intervals, their shares, the classes and attribution
     of contract 20.19, the answer for I - B fixed in contract 20.20, and the paired difference of every channel from
-    20.19's cell (same seeds).
+    20.19's cell (same seeds). It stops before computing any channel when a task is incomplete or an identity fails
+    (record fingerprints, frozen B = B, type paths, tastes, audits, pre-switch path, own replay; channels.py
+    identity_failures), or when 20.19's stored contrasts no longer reproduce. Price caps do not stop it.
 
 Writes results.json, analysis.json and tables.md next to this script; per-task records and type paths stay in work/
 (local, regenerable). A failed record is moved to work/failed/ before its task is run again, never deleted.
@@ -207,6 +209,7 @@ def collect(out: Path) -> dict:
             checks["core_validation_failures"].setdefault(f"{form}_{policy}", []).append([seed, row["first_price_cap_day"]])
     if checks["failed"]:
         raise RuntimeError(f"incomplete tasks: {checks['failed']}")
+    ch.require_identities(checks, "record_vs_20_17_full_max")
     checks["seconds_median"] = float(np.median(seconds))
     for policy in POLICIES:
         for seed in SEEDS:
@@ -324,6 +327,9 @@ def analyze(out: Path, dest: Path = HERE) -> None:
     keep = np.array([seed not in failing for seed in SEEDS])
     robust = ch.contrast_rows(values, keep) if not keep.all() else None
     cell_rows = ch.contrast_rows(json.loads((CELL_DIR / "results.json").read_text(encoding="utf-8"))["values"])
+    cell_difference = cell_reproduction(cell_rows)
+    if cell_difference != 0.0:
+        raise RuntimeError(f"20.19's results.json no longer reproduces its analysis.json (max difference {cell_difference:.3e})")
     ordering = {}
     for form in FORMS:
         i, f, b = (np.asarray(values[form][p]["true_change"]) for p in ("I", "F", "B"))
@@ -351,7 +357,7 @@ def analyze(out: Path, dest: Path = HERE) -> None:
         "verdict": {name: {"attribution": contrasts[name]["attribution"]["label"],
                            "reading": ATTRIBUTION_TEXT[contrasts[name]["attribution"]["label"]]} for name in JUDGED},
         "comparison_with_cell": {"cell": CELL_LABEL, "source": "reports/disclosure_feedback_channels_20261017/results.json (contract 20.19)",
-                                 "cell_contrasts_reproduce_20_19_max_difference": cell_reproduction(cell_rows),
+                                 "cell_contrasts_reproduce_20_19_max_difference": cell_difference,
                                  "cell_contrasts": {name: {"channels": row["channels"], "classes": row["classes"],
                                                            "attribution": row["attribution"]["label"]} for name, row in cell_rows.items()},
                                  "cell_answer_by_20_20_rule": answer(cell_rows[QUESTION]),

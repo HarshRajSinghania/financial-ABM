@@ -384,12 +384,41 @@ def collect(out: Path) -> dict:
             checks["core_validation_failures"].setdefault(f"{form}_{policy}", []).append([seed, row["first_price_cap_day"]])
     if checks["failed"]:
         raise RuntimeError(f"incomplete tasks: {checks['failed']}")
+    require_identities(checks, "record_vs_20_18_full_max")
     checks["seconds_median"] = float(np.median(seconds))
     for policy in POLICIES:
         for seed in SEEDS:
             for metric in METRICS:
                 values["frozen"][policy][metric].append(rows[("frozen", policy, seed)]["full"][metric])
     return {"values": values, "checks": checks, "rows": rows}
+
+
+def identity_failures(checks: dict, record_vs_full: str) -> list[str]:
+    """The identities the channel arithmetic rests on (contracts 20.19 and 20.20), each required exactly.
+
+    Without them frozen - Rbase and full - frozen are not the two channels: a record B that misses the archive's
+    fingerprint or the stored full-model B, a frozen B that is not B, or a frozen run whose type path, tastes, audits or
+    pre-switch path differ from B's mixes other changes into the split. Core validation (price caps) is not an identity
+    here; contracts 20.19 and 20.20 keep those runs and report a robustness check without them.
+    """
+    n = len(SEEDS)
+    counts = {"record_runs": n, "record_fingerprints_matching_stage_f": n, "frozen_runs": n * len(POLICIES),
+              "frozen_B_fingerprints_equal_B": n, "impact_share_paths_equal_B": n * len(POLICIES),
+              "latent_tastes_equal_B": n * len(POLICIES), "pre_switch_equal_B": n * len(POLICIES),
+              "audits_equal_B": n * len(POLICIES), "own_actions_identical": n * (1 + len(POLICIES)),
+              "frozen_B_own_step_differs_total": 0, "pre_switch_own_step_differs_total": 0}
+    zeros = {record_vs_full: checks[record_vs_full], "frozen_B_vs_B_metrics_max": checks["frozen_B_vs_B_metrics_max"],
+             "metric_function_max": checks["metric_function_max"],
+             **{f"own_max_abs.{key}": value for key, value in checks["own_max_abs"].items()}}
+    return ([f"{key} = {checks[key]}, expected {want}" for key, want in counts.items() if checks[key] != want]
+            + [f"{key} = {value:.3e}, expected 0" for key, value in zeros.items() if value != 0.0])
+
+
+def require_identities(checks: dict, record_vs_full: str) -> None:
+    """Stop before any channel, class or attribution is computed when an identity fails."""
+    failures = identity_failures(checks, record_vs_full)
+    if failures:
+        raise RuntimeError("identity checks failed, no channels computed:\n  " + "\n  ".join(failures))
 
 
 def excludes_zero(row: dict) -> bool:

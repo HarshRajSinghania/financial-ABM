@@ -8,6 +8,10 @@ threshold, so this script adds a paired 95% interval for every share, in the mai
 descriptive and changes no class, attribution or answer. The interval is the ratio estimator's linearization: with
 r = mean(c) / mean(e) and z_i = c_i - r e_i per seed, r +- t(0.975, n - 1) sd(z) / (sqrt(n) |mean(e)|).
 
+The same interval is given for the evolution share of the feedback (E / (full - Rbase)), the ratio 20.19's attribution
+compares with 1/3 and 2/3. In 20.19's cell F - B labels "mainly price and demand" at a point share of 31%, and the
+interval shows whether that class is statistically settled or only a point classification.
+
 Reads results.json here and in reports/disclosure_feedback_channels_20261017/; writes share_intervals.json.
 """
 
@@ -51,7 +55,9 @@ def shares(values: dict, keep: np.ndarray | None = None) -> dict:
         series = {form: np.asarray(values[form][plus][metric]) - np.asarray(values[form][minus][metric]) for form in ("full", "frozen", "Rbase")}
         if keep is not None:
             series = {form: s[keep] for form, s in series.items()}
-        out[name] = {channel: share_interval(series[a] - series[b], series["full"]) for channel, a, b in CHANNELS}
+        parts = {channel: series[a] - series[b] for channel, a, b in CHANNELS}
+        out[name] = {channel: share_interval(part, series["full"]) for channel, part in parts.items()}
+        out[name]["evolution_over_feedback"] = share_interval(parts["evolution"], parts["feedback"])
     return out
 
 
@@ -76,6 +82,13 @@ def main() -> None:
             cells = [payload["main"][name][channel], payload["main_core_validation_pass_only"]["shares"][name][channel],
                      payload["cell_20_19"][name][channel]]
             print(f"| {name} | {channel} | " + " | ".join(f"{c['share']:+.1%} [{c['ci_low']:+.1%}, {c['ci_high']:+.1%}]" for c in cells) + " |")
+    print()
+    print("| 对比 | 演化 / 反馈：主设定 | 主设定（n = 29） | 格点 |")
+    print("|---|---|---|---|")
+    for name in CONTRASTS:
+        cells = [payload["main"][name], payload["main_core_validation_pass_only"]["shares"][name], payload["cell_20_19"][name]]
+        print(f"| {name} | " + " | ".join(f"{c['evolution_over_feedback']['share']:+.1%} [{c['evolution_over_feedback']['ci_low']:+.1%}, "
+                                          f"{c['evolution_over_feedback']['ci_high']:+.1%}]" for c in cells) + " |")
 
 
 if __name__ == "__main__":
