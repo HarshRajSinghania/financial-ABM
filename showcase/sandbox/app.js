@@ -358,7 +358,8 @@
 
     const curves = valueCurves(d, i, r, factors, room, probability);
     const container = $('npv-chart');
-    const f = frame(container, 560, 250, [16, 18, 40, 58]);
+    // The top margin holds the y-axis title on its own row, so optimum labels near the top never meet it.
+    const f = frame(container, 560, 270, [36, 18, 40, 58]);
     f.svg.setAttribute('aria-label', t('npvTitle'));
     const xHi = Math.max(curves.improveCap, curves.inflateCap, 0.01);
     const samples = 120;
@@ -372,13 +373,15 @@
     const pad = (yHi - yLo) * 0.08;
     const yTicks = ticks(yLo - pad, yHi + pad, 5);
     yLo = Math.min(yLo - pad, yTicks.values[0]); yHi = Math.max(yHi + pad, yTicks.values.at(-1));
-    const x = scale(0, xHi, f.left, f.right), y = scale(yLo, yHi, f.bottom, f.top);
-    yAxis(f, y, yLo, yHi, 5, v => wan(v));
+    // Δ = 0 sits a little right of the tick labels, so a marker there does not cover them.
+    const x0 = f.left + 12;
+    const x = scale(0, xHi, x0, f.right), y = scale(yLo, yHi, f.bottom, f.top);
+    const yStep = ticks(yLo, yHi, 5).step;
+    yAxis(f, y, yLo, yHi, 5, v => (yStep >= 1 ? minus(grouped(v)) : fixed(v, decimals(yStep))));
     xAxis(f, x, ticks(0, xHi, 5).values, v => v.toFixed(decimals(niceStep(xHi, 5))));
     svgNode('line', { x1: f.left, x2: f.right, y1: y(0), y2: y(0), class: 'baseline' }, f.svg);
-    svgNode('text', { x: f.right, y: y(0) - 6, 'text-anchor': 'end' }, f.svg, t('npvMaintain'));
     svgNode('text', { x: f.right, y: f.bottom + 34, 'text-anchor': 'end', class: 'axis-title' }, f.svg, t('npvX'));
-    svgNode('text', { x: f.left, y: f.top - 4, class: 'axis-title' }, f.svg, t('npvY'));
+    const yTitle = svgNode('text', { x: f.left, y: 14, class: 'axis-title' }, f.svg, t('npvY'));
     for (const s of series) {
       if (s.cap <= 0) continue;
       // A fixed fine is a jump at Δ > 0: the curve starts just right of zero.
@@ -386,27 +389,52 @@
       const line = svgNode('path', { d: path, fill: 'none', 'stroke-width': 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }, f.svg);
       line.style.stroke = s.color;
     }
-    const labels = [];
+    // Optima: markers first, then each label at the first spot around its point that stays inside the plot
+    // and clear of the axis title, the markers and the labels already placed. Optima often sit together
+    // at Δ ≈ 0; the halo keeps a curve that passes behind a label from striking through it.
+    const taken = [yTitle.getBBox()];
+    const marks = [];
     for (const s of series) {
       if (s.best <= 0) continue;
       const value = toWan(d, i, s.fn(s.best));
       const chosen = (s.key === 'improve' && c.action === core.IMPROVE) || (s.key === 'wash' && c.action === core.INFLATE);
-      const dot = svgNode('circle', { cx: x(s.best), cy: y(value), r: chosen ? 5.5 : 4.5, class: 'dot' }, f.svg);
+      const px = x(s.best), py = y(value);
+      const dot = svgNode('circle', { cx: px, cy: py, r: chosen ? 5.5 : 4.5, class: 'dot' }, f.svg);
       dot.style.fill = s.color;
-      if (chosen) svgNode('circle', { cx: x(s.best), cy: y(value), r: 9, class: 'selected-ring' }, f.svg);
-      const right = x(s.best) > (f.left + f.right) / 2;
-      labels.push({ x: x(s.best) + (right ? -12 : 12), y: y(value) - 10, anchor: right ? 'end' : 'start', text: `${s.label} Δ=${s.best.toFixed(3)} · ${wan(value)}` });
+      if (chosen) svgNode('circle', { cx: px, cy: py, r: 9, class: 'selected-ring' }, f.svg);
+      marks.push({ s, value, chosen, px, py });
     }
-    // Two optima close together: move the lower label below its point.
-    if (labels.length === 2 && Math.abs(labels[0].y - labels[1].y) < 15) {
-      const lower = labels[0].y > labels[1].y ? labels[0] : labels[1];
-      lower.y += 30;
+    // Two optima on top of each other are labelled as one cluster: the labels stack beside it, higher point first.
+    const [first, second] = marks;
+    if (second && Math.abs(first.px - second.px) < 24 && Math.abs(first.py - second.py) < 24) {
+      first.group = second.group = { left: Math.min(first.px, second.px), right: Math.max(first.px, second.px) };
     }
-    for (const l of labels) svgNode('text', { x: l.x, y: l.y, 'text-anchor': l.anchor, class: 'label' }, f.svg, l.text);
+    for (const m of marks) taken.push({ x: m.px - 11, y: m.py - 11, width: 22, height: 22, owner: m.group ?? m });
+    // A label's spots are offsets from its own marker (or cluster), so only the other markers count against it.
+    const clear = (b, owner) => b.x >= f.left && b.x + b.width <= f.right && b.y >= f.top - 16 && b.y + b.height <= f.bottom
+      && taken.every(o => o.owner === owner || b.x > o.x + o.width + 3 || o.x > b.x + b.width + 3 || b.y > o.y + o.height + 1 || o.y > b.y + b.height + 1);
+    const place = (text, className, px, py, spots, owner = null) => {
+      const label = svgNode('text', { class: className }, f.svg, text);
+      const at = ([dx, dy, anchor]) => {
+        label.setAttribute('x', px + dx); label.setAttribute('y', py + dy); label.setAttribute('text-anchor', anchor);
+        return label.getBBox();
+      };
+      taken.push(at(spots.find(spot => clear(at(spot), owner)) ?? spots[0]));
+    };
+    for (const m of marks.sort((a, b) => b.chosen - a.chosen || a.py - b.py)) {
+      const side = m.px > (f.left + f.right) / 2 ? -1 : 1;
+      const near = side > 0 ? 'start' : 'end', far = side > 0 ? 'end' : 'start';
+      const px = m.group ? (side > 0 ? m.group.right : m.group.left) : m.px;
+      place(`${m.s.label} Δ=${m.s.best.toFixed(3)} · ${wan(m.value)}`, 'label halo', px, m.py, [
+        [12 * side, -10, near], [12 * side, 20, near], [-12 * side, -10, far], [-12 * side, 20, far],
+        [12 * side, 36, near], [12 * side, -26, near], [12 * side, 52, near],
+      ], m.group ?? m);
+    }
+    place(t('npvMaintain'), 'halo', f.right, y(0), [[0, -6, 'end'], [0, 14, 'end']]);
     const hit = svgNode('rect', { x: f.left, y: f.top, width: f.right - f.left, height: f.bottom - f.top, class: 'hit' }, f.svg);
     const cross = svgNode('line', { y1: f.top, y2: f.bottom, class: 'crosshair', visibility: 'hidden' }, f.svg);
     hit.addEventListener('pointermove', event => {
-      const delta = Math.min(Math.max((pointer(f.svg, event).x - f.left) / (f.right - f.left) * xHi, 0), xHi);
+      const delta = Math.min(Math.max((pointer(f.svg, event).x - x0) / (f.right - x0) * xHi, 0), xHi);
       cross.setAttribute('x1', x(delta)); cross.setAttribute('x2', x(delta)); cross.setAttribute('visibility', 'visible');
       showTip(event, `Δ = ${delta.toFixed(3)} SD`, series.filter(s => delta <= s.cap + 1e-12 && s.cap > 0)
         .map(s => ({ color: s.color, value: wan(toWan(d, i, s.fn(delta))), label: t(s.key === 'improve' ? 'actionImprove' : 'actionWash') })));

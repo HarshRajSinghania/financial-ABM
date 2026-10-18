@@ -64,7 +64,7 @@
   }));
   // Decorative topology only: these are not sampled agents or telemetry.
   const svgNS = 'http://www.w3.org/2000/svg';
-  const colors = ['#c6f590', '#75d8df', '#bca5eb'];
+  const colors = ['#2a78d6', '#eb6834', '#1baf7a']; // value, trend, noise: --value/--trend/--noise in styles.css
   for (let i = 0; i < 48; i++) {
     const a = i * 2.3999632297, r = 97 + (i % 9) * 12;
     const x = 280 + Math.cos(a) * r * 1.06, y = 247 + Math.sin(a) * r * .88;
