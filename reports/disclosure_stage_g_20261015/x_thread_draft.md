@@ -1,6 +1,6 @@
 # X 线程草稿（由你发布）
 
-草稿，由你发布。数字与[阶段 F 报告](../disclosure_stage_f_20261014/README.md)一致，量级按研究契约第 20.14 条以“自然衰减 0 到 0.2 SD/年”的区间表述。沙盘链接已替换为 GitHub Pages 地址。按 X 的计数规则（链接计 23，中文每字计 2），替换链接后每条都不超过 280。
+草稿，由你发布。数字与[阶段 F 报告](../disclosure_stage_f_20261014/README.md)一致，量级按研究契约第 20.14 条以“自然衰减 0 到 0.2 SD/年”的区间表述。沙盘链接已替换为 GitHub Pages 地址。2026-10-18 按[稳健性补充报告](../disclosure_robustness_20261018/README.md)修改了第 3–5 条：排序不变，补上量级、门槛和罚款平台各自依赖的假设。按 X 的计数规则（链接计 23，中文每字计 2），替换链接后每条都不超过 280。
 
 ## English
 
@@ -13,15 +13,15 @@ I built a multi-agent artificial market to test it: 1,000 investors, 200 firms, 
 Firms choose each period between real ESG improvement (costly, slow), inflating their report (cheap, fast, might be audited), or doing nothing. Impact investors pay more for good reported ESG, which lowers firms' financing costs. That is the incentive to look green.
 
 **3/7**
-Result 1: the ordering is robust. Information policy (transparency) > penalty policy (fines) > baseline, across 30 paired seeds and every robustness control.
+Result 1: the ordering is robust. Information (transparency) > penalty (fines) > baseline, across 30 paired seeds and every robustness check so far.
 
-The magnitude is a range: +0.04 to +0.33 SD for information vs baseline, depending on an uncalibrated decay assumption.
+The gap's size is not: +0.04 to +0.33 SD for information vs baseline under uniform decay, far less if ESG levels mean-revert.
 
 **4/7**
-Result 2: transparency has a threshold. Above τ* ≈ 0.57, greenwashing stops entirely and fines stop mattering. A closed-form prediction from an inspection game called the threshold correctly in all 16 grid cells.
+Result 2: transparency has a threshold, if every firm has the same washing cost and real improvement lasts: greenwashing stops above τ* ≈ 0.57, as an inspection-game formula predicted in all 16 grid cells. With firm-specific costs it fades gradually (7% left at 0.6).
 
 **5/7**
-Result 3 (assuming 0.2 SD/yr decay): fixed fines lose bite fast. No fine to CNY 10 m (China's statutory cap) cuts greenwashing decisions from 91% to 22%; 2×, 4×, 8× the fine: 16%, 13%, 13%. A firm already hiding a case adds new inflation to it and faces no new fine.
+Result 3 (assuming 0.2 SD/yr decay): fixed fines lose bite fast. No fine to CNY 10 m (China's statutory cap) cuts greenwashing decisions from 91% to 22%; 2×, 4×, 8×: 16%, 13%, 13%, since new inflation joins an undetected case for free. Fine each false report and 8× reaches 0.8%.
 
 **6/7**
 Result 4: the size gap comes from greenwashing, not costs. A CNY 10 m fine is noise for a giant: large firms greenwash in 66% of decisions vs 6% for small ones (same decay assumption). And none of this works without investor preference: no green taste, no effect from any policy.
@@ -40,13 +40,13 @@ Code, pre-registration, all numbers: https://github.com/kanzaler123/financial-AB
 企业每期在三者中选择：真实改善 ESG（贵、慢），在报告里虚报（便宜、快，可能被查），或者不动。影响力投资者愿意为好看的 ESG 披露付更高的价格，从而降低企业的融资成本，这就是“看起来绿”的激励。
 
 **3/7**
-结论一：排序稳健。信息政策（透明度）> 惩罚政策（罚款）> 基准，在 30 个配对种子和所有稳健性对照下都成立。量级是一个区间：信息政策比基准高 0.04 到 0.33 个标准差，取决于一个尚未校准的衰减假设。
+结论一：排序稳健。信息政策（透明度）> 惩罚政策（罚款）> 基准，在 30 个配对种子和已检验的稳健性对照下都成立。差距大小并不稳健：统一衰减下信息政策比基准高 0.04 到 0.33 个标准差；若 ESG 水平向均值回归，差距小得多。
 
 **4/7**
-结论二：透明度有门槛。超过 τ* ≈ 0.57 后，漂绿完全停止，罚款也不再起作用。检查博弈推出的闭式预测，在 16 个格点上全部判断正确。
+结论二：透明度有门槛，但有两个前提：企业漂绿成本相同、真实改善持久。此时超过 τ* ≈ 0.57 漂绿完全停止，检查博弈的闭式预测在 16 个格点上全部正确。企业成本各不相同时，漂绿随透明度逐步下降，0.6 时仍有 7%。
 
 **5/7**
-结论三（假设每年衰减 0.2 个标准差）：定额罚款的威慑很快见顶。从不罚到罚 1000 万元（法定上限），漂绿决策占比从 91% 降到 22%；罚 2、4、8 倍，只降到 16%、13%、13%。已有案件没被查出的企业，新虚报并入旧案，不再面对新的罚款。
+结论三（假设每年衰减 0.2 个标准差）：一案一罚下，定额罚款的威慑很快见顶。从不罚到罚 1000 万元（法定上限），漂绿决策从 91% 降到 22%；罚 2、4、8 倍只降到 16%、13%、13%，因为新虚报并入未查出的旧案不另罚。若每份虚假报告各罚一笔，8 倍可降到 0.8%。
 
 **6/7**
 结论四：规模鸿沟来自漂绿，而不是成本。1000 万元对大企业不痛不痒：大企业 66% 的决策在漂绿，小企业只有 6%（同一衰减假设）。而这一切都以投资者偏好为前提：没有绿色偏好，任何政策都没有效果。
