@@ -67,6 +67,28 @@ def untranslated(page: str, dynamic_ids: set[str]) -> list[str]:
     return parser.problems
 
 
+SITE_URL = "https://kanzaler123.github.io/financial-ABM/"
+PREVIEW_TAGS = ("og:title", "og:description", "og:type", "og:url", "og:image", "og:image:width", "og:image:height",
+                "og:image:alt", "twitter:card", "twitter:title", "twitter:description", "twitter:image")
+
+
+class MetaTags(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.tags = []
+
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        if tag == "meta" and "content" in attrs and (attrs.get("property") or attrs.get("name")):
+            self.tags.append((attrs.get("property") or attrs.get("name"), attrs["content"]))
+
+
+def head_meta(html: str) -> list[tuple[str, str]]:
+    parser = MetaTags()
+    parser.feed(html.split("</head>", 1)[0])
+    return parser.tags
+
+
 class ShowcaseTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -213,6 +235,37 @@ class ShowcaseTests(unittest.TestCase):
                 self.assertIn(f"+{low:.{low_digits}f}{joiner}+{high:.{high_digits}f} SD", text, path)
             self.assertIn(f"+{p1['mean']:.2f} SD [+{p1['ci_low']:.2f}, +{p1['ci_high']:.2f}]", text, path)
             self.assertIn(f"τ* ≈ {tau:.2f}", text, path)
+
+    # -- link previews (Open Graph / X cards) ----------------------------------------
+    def test_pages_declare_english_link_previews_with_the_copied_card(self):
+        card = self.output / "social-card.png"
+        self.assertEqual(card.read_bytes(), (HERE / "social" / "social-card.png").read_bytes())
+        self.assertEqual(build_module.png_size(card), (1200, 630))
+        self.assertLess(card.stat().st_size, 5_000_000)  # X's limit for card images
+        for page, html in (("", self.sandbox_html), ("stage1/", self.html)):
+            with self.subTest(page=page or "home"):
+                pairs = head_meta(html)
+                keys = [key for key, _ in pairs]
+                self.assertEqual([key for key in PREVIEW_TAGS if keys.count(key) != 1], [])
+                tags = dict(pairs)
+                self.assertEqual(tags["og:type"], "website")
+                self.assertEqual(tags["og:url"], SITE_URL + page)
+                self.assertEqual(tags["twitter:card"], "summary_large_image")
+                # Crawlers need an absolute URL, and it must name the file the build copied.
+                self.assertEqual(tags["og:image"], SITE_URL + card.name)
+                self.assertEqual(tags["twitter:image"], tags["og:image"])
+                self.assertEqual((int(tags["og:image:width"]), int(tags["og:image:height"])), build_module.png_size(card))
+                self.assertLessEqual(len(tags["twitter:title"]), 70)
+                self.assertLessEqual(len(tags["twitter:description"]), 200)
+                self.assertLessEqual(len(tags["og:image:alt"]), 420)
+                for key, value in pairs:
+                    self.assertTrue(value.strip(), key)
+                    self.assertIsNone(CJK.search(value), f"{key} should be English")
+
+    def test_repository_social_preview_is_ready_to_upload(self):
+        preview = build_module.ROOT / ".github" / "assets" / "social-preview.png"
+        self.assertEqual(build_module.png_size(preview), (1280, 640))
+        self.assertLess(preview.stat().st_size, 1_000_000)  # GitHub refuses social previews of 1 MB or more
 
     def test_build_rejects_stage_f_numbers_from_another_analysis(self):
         payload = self.data["sandbox"]
