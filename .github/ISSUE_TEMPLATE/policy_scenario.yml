@@ -1,0 +1,28 @@
+name: Policy scenario
+description: Propose or share a policy experiment, for example a new transparency, audit or fine design.
+labels: [scenario]
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: The question
+      description: What would you like to learn? For example, "Does a targeted audit of large firms beat a higher fixed fine?"
+    validations:
+      required: true
+  - type: textarea
+    id: design
+    attributes:
+      label: Scenarios and comparison
+      description: Which scenarios, and which paired comparison answers the question? A spec snippet based on configs/disclosure_quickstart_v1.json is welcome.
+      render: json
+  - type: textarea
+    id: results
+    attributes:
+      label: Results so far (optional)
+      description: Paste report.md, or a policy desk link. Development runs are fine; say how many seeds you used.
+  - type: checkboxes
+    id: rules
+    attributes:
+      label: Research rules
+      options:
+        - label: I understand that results from small or exploratory runs are development evidence, not research findings.

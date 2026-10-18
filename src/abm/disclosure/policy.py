@@ -9,7 +9,9 @@ Instruments act through distinct channels:
 * ``fixed_fine`` – a lump-sum fine per detected case in model money units
   (mean initial firm value = 1), whatever the amount inflated. One audit
   that finds inflation closes one case, so inflation added to a report that
-  is already inflated and undetected adds no fixed fine;
+  is already inflated and undetected adds no fixed fine. With
+  ``fixed_fine_basis="report"`` the audit instead charges one fixed fine for
+  every inflated report disclosed into the undetected stock;
 * ``transparency`` – weight investors put on the true attribute rather than
   the report (``signal = true + (1 - transparency) * inflation``);
 * ``subsidy`` – payment per standard deviation of real improvement, as a
@@ -34,6 +36,8 @@ from typing import Any
 
 from .domain import DomainSpec
 
+FIXED_FINE_BASES = ("case", "report")
+
 
 @dataclass(frozen=True, slots=True)
 class PolicyRegime:
@@ -46,8 +50,12 @@ class PolicyRegime:
     publish_audit_results: bool = False
     reporting_interval_days: int = 1
     fixed_fine: float = 0.0
+    # "case": one fixed fine per detected case; "report": one per inflated report in it.
+    fixed_fine_basis: str = "case"
 
     def __post_init__(self) -> None:
+        if self.fixed_fine_basis not in FIXED_FINE_BASES:
+            raise ValueError(f"fixed_fine_basis must be one of {FIXED_FINE_BASES}")
         if not 0 <= self.audit_probability <= 1 or not 0 <= self.transparency <= 1:
             raise ValueError("audit_probability and transparency must be in [0, 1]")
         if self.penalty < 0 or self.subsidy < 0:
@@ -76,10 +84,12 @@ class PolicyRegime:
         )
 
     def to_dict(self) -> dict[str, Any]:
-        """Serialized regime; a zero fixed fine is omitted so earlier identities are unchanged."""
+        """Serialized regime; a zero fixed fine and the per-case basis are omitted so earlier identities are unchanged."""
         payload = asdict(self)
         if not self.fixed_fine:
             payload.pop("fixed_fine")
+        if self.fixed_fine_basis == "case":
+            payload.pop("fixed_fine_basis")
         return payload
 
 

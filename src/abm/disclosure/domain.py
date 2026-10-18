@@ -23,6 +23,11 @@ audits see the attribute through the raw scale: values above the goodness of
 the best raw end look the same. Reports, and the changes firms choose, then
 stop at that observable maximum, as the scale ends bound them under the
 linear link; true values drawn above it stay latent.
+
+``natural_reversion`` replaces a pure downward drift by reversion towards the
+cross-sectional mean with stationary dispersion, so the attribute has no
+aggregate trend but individual firms drift back towards the middle.
+``wash_cost_log_sd`` gives each firm its own wash cost ratio.
 """
 
 from __future__ import annotations
@@ -91,6 +96,16 @@ class DomainSpec:
     baseline_fixed_fine: float = 0.0
     # Signals saturate at the best raw end; quantile link only.
     signal_saturation: bool = False
+    # Annual speed at which true values revert to the current equal-weight
+    # cross-sectional mean, with idiosyncratic shocks that keep the
+    # cross-sectional variance at its initial unit level (an
+    # Ornstein-Uhlenbeck process; see AttributeState.advance). Zero keeps
+    # the uniform natural_decay alone.
+    natural_reversion: float = 0.0
+    # Log dispersion of firm-level wash cost ratios around wash_cost_ratio
+    # (mean-preserving lognormal, like real_cost_log_sd). Zero gives every
+    # firm the same ratio.
+    wash_cost_log_sd: float = 0.0
 
     def __post_init__(self) -> None:
         if not self.name or not self.attribute_label:
@@ -106,7 +121,8 @@ class DomainSpec:
         if not self.raw_lower <= self.initial_mean <= self.raw_upper:
             raise ValueError("initial_mean must lie within the raw bounds")
         for name in ("natural_decay", "real_cost_log_sd", "cost_level_elasticity",
-                     "baseline_penalty", "baseline_subsidy", "baseline_fixed_fine"):
+                     "baseline_penalty", "baseline_subsidy", "baseline_fixed_fine",
+                     "natural_reversion", "wash_cost_log_sd"):
             if getattr(self, name) < 0:
                 raise ValueError(f"{name} must be nonnegative")
         for name in ("real_cost_scale", "wash_cost_ratio", "max_change_per_period"):
@@ -224,6 +240,8 @@ class DomainSpec:
             and (item.name != "initial_size_rank_correlation" or self.initial_size_rank_correlation)
             and (item.name != "baseline_fixed_fine" or self.baseline_fixed_fine)
             and (item.name != "signal_saturation" or self.signal_saturation)
+            and (item.name != "natural_reversion" or self.natural_reversion)
+            and (item.name != "wash_cost_log_sd" or self.wash_cost_log_sd)
         }
 
     @classmethod

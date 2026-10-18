@@ -84,6 +84,12 @@ class AttributeState:
     pending: list[tuple[int, int, IntArray, FloatArray]] = field(default_factory=list)
     # The domain's observation_ceiling: signals saturate there and reports stop at it.
     ceiling: float | None = None
+    # Firm-level wash cost ratios when the domain disperses them, else None.
+    wash_cost_ratio: FloatArray | None = None
+    # Inflated reports disclosed into each firm's undetected stock since it was last zero.
+    false_reports: IntArray | None = None
+    # Source of the idiosyncratic shocks that accompany mean reversion.
+    shock_rng: np.random.Generator | None = None
 
     @classmethod
     def initialize(cls, domain: DomainSpec, size_class: IntArray, rng: np.random.Generator,
@@ -112,11 +118,17 @@ class AttributeState:
             goodness = np.fromiter((normal.inv_cdf(p) for p in probabilities), dtype=np.float64, count=size)
         multipliers = np.asarray(domain.size_cost_multipliers)[size_class]
         dispersion = rng.lognormal(-0.5 * domain.real_cost_log_sd**2, domain.real_cost_log_sd, size)
+        # Drawn last, so the other initial draws stay those of a common ratio.
+        spread = domain.wash_cost_log_sd
+        wash_cost_ratio = domain.wash_cost_ratio * rng.lognormal(-0.5 * spread**2, spread, size) if spread else None
         return cls(
             goodness=goodness,
             inflation=np.zeros(size),
             cost_scale=domain.real_cost_scale * multipliers * dispersion,
             ceiling=domain.observation_ceiling,
+            wash_cost_ratio=wash_cost_ratio,
+            false_reports=np.zeros(size, dtype=np.int64),
+            shock_rng=rng if domain.natural_reversion else None,
         )
 
     def observed(self, transparency: float) -> FloatArray:
@@ -137,9 +149,26 @@ class AttributeState:
             self.pending.append((due_day, kind, firms, amounts))
 
     def advance(self, day: int, domain: DomainSpec) -> None:
-        """Natural decay, then improvements and inflations that fall due."""
+        """Natural decay and reversion, then improvements and inflations that fall due.
+
+        Under ``natural_reversion`` each deviation from the cross-sectional
+        mean shrinks by r = exp(-reversion / year) per day and a demeaned
+        normal shock of scale sqrt(1 - r^2) is added: the mean is unchanged
+        and, without actions, the cross-sectional variance stays at its
+        initial unit level.
+        """
         low, high = domain.goodness_bounds
         self.goodness = np.maximum(self.goodness - domain.natural_decay / TRADING_DAYS_PER_YEAR, low)
+        # Stand-ins for DomainSpec that only carry the decay (the showcase sandbox) never revert.
+        reversion = getattr(domain, "natural_reversion", 0.0)
+        if reversion:
+            if self.shock_rng is None:
+                raise ValueError("mean reversion needs a shock generator")
+            retention = np.exp(-reversion / TRADING_DAYS_PER_YEAR)
+            shock = self.shock_rng.standard_normal(self.goodness.size)
+            mean = self.goodness.mean()
+            self.goodness = np.clip(mean + retention * (self.goodness - mean)
+                                    + np.sqrt(1.0 - retention**2) * (shock - shock.mean()), low, high)
         remaining = []
         for item in self.pending:
             due_day, kind, firms, amounts = item
@@ -149,12 +178,49 @@ class AttributeState:
                 self.goodness[firms] = np.minimum(self.goodness[firms] + amounts, high)
             else:
                 self.inflation[firms] += amounts
+                if self.false_reports is not None:
+                    self.false_reports[firms[amounts > 0]] += 1
         self.pending = remaining
         # A report cannot exceed the scale's upper end, or the observable
         # maximum when signals saturate; real improvement replaces inflation.
         top = high if self.ceiling is None else self.ceiling
         np.minimum(self.inflation, top - self.goodness, out=self.inflation)
         np.maximum(self.inflation, 0.0, out=self.inflation)
+        if self.false_reports is not None:
+            self.false_reports[self.inflation <= 0] = 0
+
+
+def real_persistence(domain: DomainSpec, n_firms: int, horizon_days: int) -> FloatArray | None:
+    """Share of a firm's real change left d days after it lands, or None without reversion.
+
+    The change raises the cross-sectional mean by 1/n of itself, which stays;
+    the firm's deviation from that mean decays geometrically. Shocks are
+    independent of actions and drop out.
+    """
+    if not domain.natural_reversion:
+        return None
+    retention = np.exp(-domain.natural_reversion / TRADING_DAYS_PER_YEAR)
+    return 1.0 / n_firms + (1.0 - 1.0 / n_firms) * retention ** np.arange(horizon_days + 1)
+
+
+def expected_natural_path(domain: DomainSpec, initial: FloatArray, days: IntArray) -> FloatArray:
+    """Expected true values on ``days`` after day zero without any action (shocks average out)."""
+    days = np.asarray(days, dtype=np.int64)
+    low, _ = domain.goodness_bounds
+    if not domain.natural_reversion:
+        return np.maximum(np.asarray(initial)[None, :] - domain.natural_decay * days[:, None] / TRADING_DAYS_PER_YEAR, low)
+    retention = np.exp(-domain.natural_reversion / TRADING_DAYS_PER_YEAR)
+    values = np.asarray(initial, dtype=np.float64).copy()
+    path = np.empty((days.size, values.size))
+    wanted = {int(day): index for index, day in enumerate(days)}
+    for day in range(int(days.max(initial=0)) + 1):
+        if day:
+            values = np.maximum(values - domain.natural_decay / TRADING_DAYS_PER_YEAR, low)
+            mean = values.mean()
+            values = mean + retention * (values - mean)
+        if day in wanted:
+            path[wanted[day]] = values
+    return path
 
 
 @dataclass(frozen=True, slots=True)
@@ -181,12 +247,16 @@ def npv_choices(
     decision_day: int = 0,
     published_now: NDArray[np.bool_] | None = None,
     new_case_fine: FloatArray | None = None,
+    wash_cost_ratio: FloatArray | None = None,
+    real_persistence: FloatArray | None = None,
 ) -> FirmChoices:
     """Choose using annual financing savings per initial SD / current cap.
 
     ``new_case_fine`` is the fixed fine as a fraction of current cap, times
     the probability that a new report opens a case; detection discounts it
-    like the proportional fine.
+    like the proportional fine. ``wash_cost_ratio`` gives firm-level ratios
+    (default: the domain's common one); ``real_persistence`` discounts real
+    changes that revert (see ``financing_signal_factors``).
     """
     disclosure_delay = domain.disclosure_delay_days if regime.disclosure_delay_days is None else regime.disclosure_delay_days
     real_annuity, displaced_annuity, wash_annuity, detection = financing_signal_factors(
@@ -197,6 +267,7 @@ def npv_choices(
         transparency=regime.transparency, publish_audit_results=regime.publish_audit_results,
         published_now=published_now,
         reporting_interval_days=regime.reporting_interval_days,
+        real_persistence=real_persistence,
     )
     improve_benefit = benefit * real_annuity
     improve_gain = improve_benefit + regime.subsidy
@@ -207,7 +278,7 @@ def npv_choices(
         - regime.penalty * detection
     )
     inflate_gain = np.maximum(inflate_gain, 0.0)
-    wash_cost = domain.wash_cost_ratio * marginal_cost
+    wash_cost = (domain.wash_cost_ratio if wash_cost_ratio is None else wash_cost_ratio) * marginal_cost
     cap = domain.max_change_per_period
     improve_cap = cap if improve_capacity is None else np.clip(improve_capacity, 0.0, cap)
     inflate_cap = cap if inflate_capacity is None else np.clip(inflate_capacity, 0.0, cap)
@@ -313,6 +384,7 @@ class DisclosureResult:
     learning_choices: IntArray | None = None
     coverage_forced: NDArray[np.bool_] | None = None
     learning_update: NDArray[np.bool_] | None = None
+    wash_cost_ratio: FloatArray | None = None
 
     def fingerprint(self) -> str:
         digest = hashlib.sha256(self.market.fingerprint().encode("ascii"))
@@ -326,7 +398,7 @@ class DisclosureResult:
             self.applied_resource_cost, self.applied_fine, self.applied_subsidy,
             self.learning_states, self.learning_groups, self.valid_actions,
             self.learning_rewards, self.learning_transition, self.unvisited_state,
-            self.learning_choices, self.coverage_forced, self.learning_update,
+            self.learning_choices, self.coverage_forced, self.learning_update, self.wash_cost_ratio,
         ):
             if array is None:
                 continue
@@ -401,6 +473,12 @@ class DisclosureMarket(CrossSectionMarket):
         self.attributes = AttributeState.initialize(domain, self.firms.size_class, self.attribute_rng,
                                                     intrinsic_value=self.firms.intrinsic_value)
         self.report_bound = domain.report_bound
+        if domain.natural_reversion and any(
+            regime is not None and (regime.publish_audit_results or regime.reporting_interval_days != 1)
+            for regime in (policy.baseline, policy.intervention)
+        ):
+            raise ValueError("reverting true values are modelled only with daily reports and unpublished audits")
+        self.real_persistence = real_persistence(domain, config.n_firms, config.financing_horizon_days)
 
         investors = self.investors
         self.latent_taste = config.taste_median * self.learning_rng.lognormal(
@@ -602,9 +680,16 @@ class DisclosureMarket(CrossSectionMarket):
         self.slope_history[day] = pricing_slope(k, self.signal_z(day))
         selected = self.audit_rng.random(state.inflation.size) < regime.audit_probability
         caught = selected & (state.inflation > 0)
-        # One detected case: the proportional fine on its size plus one fixed fine.
-        penalty = np.where(caught, regime.penalty * state.inflation + regime.fixed_fine / self.prices, 0.0)
+        # One detected case: the proportional fine on its size plus one fixed
+        # fine, or one fixed fine per inflated report in it.
+        if regime.fixed_fine_basis == "report":
+            fixed = regime.fixed_fine * state.false_reports / self.prices
+            penalty = np.where(caught, regime.penalty * state.inflation + fixed, 0.0)
+        else:
+            penalty = np.where(caught, regime.penalty * state.inflation + regime.fixed_fine / self.prices, 0.0)
         state.inflation[caught] = 0.0
+        if state.false_reports is not None:
+            state.false_reports[caught] = 0
         self.report_cache[selected] = state.observed(regime.transparency)[selected] + self.disclosure_error_history[day, selected]
         published = selected & regime.publish_audit_results
         self.audit_selected_history[period] = selected
@@ -624,7 +709,10 @@ class DisclosureMarket(CrossSectionMarket):
         disclosure_delay = self.domain.disclosure_delay_days if regime.disclosure_delay_days is None else regime.disclosure_delay_days
         wash_due = day + max(1, disclosure_delay)
         new_case_fine = None
-        if regime.fixed_fine:
+        if regime.fixed_fine and regime.fixed_fine_basis == "report":
+            # Every new inflated report carries its own fine whatever the stock it joins.
+            new_case_fine = regime.fixed_fine / self.prices
+        elif regime.fixed_fine:
             new_case_fine = regime.fixed_fine / self.prices * new_case_probability(
                 state.inflation, state.pending, decision_day=day, wash_due=wash_due,
                 period_days=self.config.firm_decision_interval, audit_probability=regime.audit_probability,
@@ -644,6 +732,8 @@ class DisclosureMarket(CrossSectionMarket):
                 decision_day=day,
                 published_now=published,
                 new_case_fine=new_case_fine,
+                wash_cost_ratio=state.wash_cost_ratio,
+                real_persistence=self.real_persistence,
             )
         else:
             choices = self._discrete_decision(day, period, regime, published, penalty,
@@ -688,13 +778,15 @@ class DisclosureMarket(CrossSectionMarket):
             transparency=regime.transparency, publish_audit_results=regime.publish_audit_results,
             published_now=published,
             reporting_interval_days=regime.reporting_interval_days,
+            real_persistence=self.real_persistence,
         )
         benefit = self.marginal_financing_saving()
         marginal_cost = state.marginal_cost(domain)
         candidates = discrete_candidates(
             improve_capacity=improve_capacity, inflate_capacity=inflate_capacity,
             marginal_cost=marginal_cost, max_change_per_period=domain.max_change_per_period,
-            wash_cost_ratio=domain.wash_cost_ratio, subsidy=regime.subsidy,
+            wash_cost_ratio=domain.wash_cost_ratio if state.wash_cost_ratio is None else state.wash_cost_ratio,
+            subsidy=regime.subsidy,
             real_value_per_sd=benefit * real, displaced_real_value_per_sd=benefit * displaced,
             wash_value_per_sd=benefit * (1 - regime.transparency) * wash,
             fine_value_per_sd=regime.penalty * fine,
@@ -837,6 +929,7 @@ class DisclosureMarket(CrossSectionMarket):
                 ("learning_choices", self.choice_history if len(self.config.firm_action_fractions) > 1 else None),
                 ("coverage_forced", self.coverage_forced_history),
                 ("learning_update", self.learning_update_history),
+                ("wash_cost_ratio", self.attributes.wash_cost_ratio),
             )},
         )
 

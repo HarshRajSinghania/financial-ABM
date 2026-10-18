@@ -14,7 +14,7 @@ import numpy as np
 from .config import TRADING_DAYS_PER_YEAR, MarketConfig
 from .domain import DomainSpec
 from .firms import LARGE, SIZE_CLASS_NAMES, SMALL
-from .game import IMPROVE, INFLATE, MAINTAIN, DisclosureResult
+from .game import IMPROVE, INFLATE, MAINTAIN, DisclosureResult, expected_natural_path
 
 
 def compute_metrics(
@@ -30,6 +30,8 @@ def compute_metrics(
     gain above a bounded natural-decay baseline, with raw gains signed so
     improvement is positive, divided by total real resource expenditure.
     Fines and subsidies are reported separately as fiscal transfers.
+    With ``natural_reversion`` the no-action baseline is the expected path
+    (bounded decay, then reversion to the cross-sectional mean).
     Full-period changes use day zero. Terminal summaries average the last
     at most 252 state days relative to day zero; shorter histories are flagged.
     """
@@ -122,6 +124,10 @@ def compute_metrics(
         true[start] - domain.natural_decay * (end - start) / TRADING_DAYS_PER_YEAR,
         domain.goodness_bounds[0],
     )
+    if domain.natural_reversion:
+        # Reverting values: the expected no-action path from the same cross-section.
+        terminal_baseline = expected_natural_path(domain, true[0], terminal_days)
+        baseline = expected_natural_path(domain, true[start], np.array([end - start]))[0]
     gain = true[end] - baseline
     size = {}
     for index, name in enumerate(SIZE_CLASS_NAMES):

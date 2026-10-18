@@ -1,0 +1,27 @@
+name: New domain
+description: Model another disclosure problem (carbon claims, earnings management, AI-washing…) as a domain JSON.
+labels: [domain]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: The disclosure problem
+      description: What is the true attribute, what is reported, and how can a firm inflate the report?
+    validations:
+      required: true
+  - type: textarea
+    id: parameters
+    attributes:
+      label: Scale and parameters
+      description: Unit and range of the attribute, which direction is better, costs, decay and penalties. Mark each value as sourced or assumed.
+  - type: textarea
+    id: sources
+    attributes:
+      label: Sources
+      description: Laws, data sets or papers behind the numbers. Vendor data without a redistribution licence cannot be committed.
+  - type: checkboxes
+    id: help
+    attributes:
+      label: Contribution
+      options:
+        - label: I would like to write the domain JSON myself.

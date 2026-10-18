@@ -37,7 +37,7 @@
     <div class="top-actions">
       <span class="core-pill"><i aria-hidden="true"></i><span data-i18n="corePill">JS core ≡ Python model</span></span>
       <button id="lang-toggle" class="chip" type="button" data-i18n="langToggle" data-i18n-aria="langToggleLabel" aria-label="切换到中文">中文</button>
-      <a class="repo-link" href="https://github.com/kanzaler123/financial-ABM">GitHub <span aria-hidden="true">↗</span></a>
+      <a class="repo-link" href="https://github.com/kanzaler123/financial-ABM"><span aria-hidden="true">★ </span><span data-i18n="repoStar">Star on GitHub</span></a>
     </div>
   </div>
 </header>
@@ -112,6 +112,11 @@
           <span class="lever-help" data-i18n="leverDecayHelp"></span><span class="port" aria-hidden="true"></span></label>
       </div>
       <p id="ai-note" class="domain-note" hidden data-i18n="aiNote"></p>
+      <div class="share-row">
+        <button id="share-link" class="chip" type="button" data-i18n="shareLink">Copy a link to this policy</button>
+        <span id="share-status" class="share-status" role="status" aria-live="polite"></span>
+        <input id="share-field" class="share-field" type="text" readonly hidden data-i18n-aria="shareFieldLabel" aria-label="Link to this policy">
+      </div>
     </aside>
 
     <div class="hud">
@@ -306,6 +311,13 @@
         <li><a href="https://github.com/kanzaler123/financial-ABM/blob/master/reports/disclosure_stage_f_20261014/README.md" data-i18n="linkReport">Stage F report</a></li>
         <li><a href="https://github.com/kanzaler123/financial-ABM/tree/master/showcase/sandbox" data-i18n="linkSandbox">Sandbox reference and consistency tests</a></li>
         <li><a href="stage1/" data-lang-link="stage1/" data-i18n="linkStage1">Stage 1 exhibit (single-asset market)</a></li>
+      </ul>
+      <h4 class="sub" data-i18n="joinTitle">Take it further</h4>
+      <ul class="link-list">
+        <li><a href="https://github.com/kanzaler123/financial-ABM" data-i18n="joinStar">Star the repository to follow new results</a></li>
+        <li><a href="https://github.com/kanzaler123/financial-ABM/blob/master/README.md#quick-start" data-i18n="joinRun">Run the model yourself in a few minutes</a></li>
+        <li><a href="https://github.com/kanzaler123/financial-ABM/issues/new/choose" data-i18n="joinIssue">Propose a policy scenario or report a problem</a></li>
+        <li><a href="https://github.com/kanzaler123/financial-ABM/blob/master/CONTRIBUTING.md" data-i18n="joinContribute">Contribute: add a domain, a scenario or a fix</a></li>
       </ul>
       <h4 class="sub" data-i18n="reproduceTitle">Preview locally</h4>
       <pre class="terminal">python showcase/build.py --output _site

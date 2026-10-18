@@ -34,6 +34,16 @@ def test_freeze_retains_domain_provenance_and_resolves_inputs(spec_path):
     assert frozen["scenarios"][0]["config"]["firm_policy"] == "npv"
 
 
+def test_quickstart_spec_freezes_with_bundled_files_only():
+    # The README quick start must run from a fresh clone: no vendor-data domain.
+    path = Path(__file__).resolve().parents[1] / "configs" / "disclosure_quickstart_v1.json"
+    frozen = experiments.freeze_spec(path)
+    assert json.loads(path.read_text(encoding="utf-8"))["domain"] == "domains/esg.json"
+    assert [s["name"] for s in frozen["scenarios"]] == ["B", "I", "F"]
+    assert all(s["policy"]["baseline"]["penalty"] == 0.0 for s in frozen["scenarios"])
+    assert frozen["scenarios"][1]["policy"]["intervention"]["transparency"] == 0.6
+
+
 def test_initial_noise_and_later_reduction_share_pre_policy_history(spec_path):
     payload = json.loads(spec_path.read_text())
     payload["market"]["trading_days"] = 120

@@ -53,7 +53,7 @@ def financing_signal_factors(
     repricing_interval: int, period_days: int, implementation_delay: int,
     disclosure_delay: int, audit_probability: float, transparency: float,
     publish_audit_results: bool = False, published_now: NDArray[np.bool_] | None = None,
-    reporting_interval_days: int = 1,
+    reporting_interval_days: int = 1, real_persistence: NDArray[np.float64] | None = None,
 ) -> tuple[NDArray[np.float64], NDArray[np.float64], NDArray[np.float64], NDArray[np.float64]]:
     """Return low/high real-signal annuities, wash survival and the fine factor.
 
@@ -63,7 +63,14 @@ def financing_signal_factors(
     one decision period and contains an action only if it was implemented
     by the snapshot's observation date. ``published_now`` is the firm's
     known, just-completed audit; future checks remain random.
+
+    ``real_persistence[d]`` is the share of a real change still present d
+    days after it is implemented (reverting true values); displaced
+    inflation does not come back. It is supported with daily reports and
+    unpublished audits only.
     """
+    if real_persistence is not None and (publish_audit_results or reporting_interval_days != 1):
+        raise ValueError("reverting true values are modelled only with daily reports and unpublished audits")
     real, wash, fine = financing_discount_factors(
         discount_rate, decision_day=decision_day, horizon_days=horizon_days,
         repricing_interval=repricing_interval, period_days=period_days,
@@ -93,6 +100,11 @@ def financing_signal_factors(
     checks = np.maximum(0, (quoted_day - 1) // period_days - decision_day // period_days)
     old_survival = np.power(1.0 - audit_probability, checks)
     discount = np.exp(-times[:, None] * np.asarray(discount_rate)[None, :] / TRADING_DAYS_PER_YEAR)
+    if real_persistence is not None:
+        persistence = np.asarray(real_persistence, dtype=np.float64)
+        if persistence.ndim != 1 or persistence.size < horizon_days + 1 or not np.isfinite(persistence).all():
+            raise ValueError("real_persistence needs one finite value per day of the horizon")
+        real = (real_visible * persistence[np.clip(quoted_day - real_due, 0, None)]) @ discount / TRADING_DAYS_PER_YEAR
     if not publish_audit_results:
         displaced = real - (1.0 - transparency) * ((real_visible * old_survival) @ discount / TRADING_DAYS_PER_YEAR)
         return real, displaced, wash, fine
