@@ -42,6 +42,17 @@ python -m pytest tests/test_sandbox_reference.py   # 夹具仍与当前模型代
 
 线上地址：[https://kanzaler123.github.io/financial-ABM/](https://kanzaler123.github.io/financial-ABM/)。Pages 已于 2026-10-16 启用（Source: GitHub Actions），`GitHub showcase` 工作流在 master 更新时部署 `_site`。未启用 Pages 时，CI 仍验证页面并提供名为 `github-showcase` 的离线产物；PR 只构建检查，不发布。
 
+## 链接预览图
+
+两个页面的 `<head>` 里都有英文的 Open Graph 与 X（Twitter）卡片标签，`og:image` 指向 `https://kanzaler123.github.io/financial-ABM/social-card.png`。构建时会把 `social/social-card.png`（1200×630）复制进 `_site`；如果尺寸不是 1200×630，构建会直接失败。图上只写研究问题，不放研究数字和结论，所以结论更新时不必重做这张图。
+
+| 文件 | 内容 |
+|---|---|
+| `social/card.html` | 预览图源文件，用站点的配色与字体；右侧企业球取自 `.github/assets/disclosure-cover.svg`，只是结构示意 |
+| `social/render.py` | 用无头 Chrome / Edge 把源文件渲染成 `social/social-card.png`（1200×630）和 `../.github/assets/social-preview.png`（1280×640，仓库社交预览图，需要在 Settings → General → Social preview 手动上传） |
+
+改了 `card.html` 之后，运行 `python showcase/social/render.py`，然后提交两张 PNG。构建本身不会启动浏览器。现有图片是在 Windows 上渲染的；换到其他系统，字体会回落成别的字体，文字也会重新排版。
+
 ## 阶段 1 展厅的数据约定
 
 `build.py` 从三个已提交的历史 v13/v14 `mechanism_report.json` 读取原始数据，保留报告代码版本、SHA-256 和源文件链接，不重算模拟。2026-08-14 正式归档为 18/22，开发与 holdout 各为 22/22；此后[冻结 v15](../reports/stage1_iter6_20260926/formal/final_decision.json)于 2026-09-26 正式验收 22/22。分布图使用跨种子中位数与 Q10–Q90，不是时序数据或置信区间。
@@ -55,5 +66,6 @@ python -m pytest tests/test_sandbox_reference.py   # 夹具仍与当前模型代
 | `sandbox/app.js` | 政策调节、作战台回放、图表与交互（模型计算都在 `core.js`） |
 | `sandbox/desk.js` | 作战台的绘制：企业球（canvas）、决策频谱、智能体角色与迷你走势线；只画图，不含文案和模型计算 |
 | `stage1/` | 阶段 1 展厅的模板、样式与脚本；文案在 `stage1/i18n.js` |
+| `social/` | 链接预览图的源文件与渲染脚本（见上一节） |
 | `build.py` | 数据核对与离线单页构建 |
-| `test_showcase.py` | 数据与静态构建回归 |
+| `test_showcase.py` | 数据与静态构建回归；也检查链接预览标签和两张预览图的尺寸 |
