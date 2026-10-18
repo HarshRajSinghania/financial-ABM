@@ -171,6 +171,7 @@ def build(output: Path, root: Path = ROOT) -> dict:
     sandbox_html = inline((sandbox / "index.html").read_text(encoding="utf-8"), {
         "/* SANDBOX_CSS */": (sandbox / "styles.css").read_text(encoding="utf-8"),
         "/* SANDBOX_CORE */": (sandbox / "core.js").read_text(encoding="utf-8"),
+        "/* SANDBOX_DESK */": (sandbox / "desk.js").read_text(encoding="utf-8"),
         "/* SANDBOX_TEXT */": (sandbox / "i18n.js").read_text(encoding="utf-8"),
         "/* SANDBOX_APP */": (sandbox / "app.js").read_text(encoding="utf-8"),
         '{"sandbox":null}': serialize(payload),

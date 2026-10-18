@@ -1,8 +1,10 @@
 'use strict';
-// Greenwashing policy sandbox: page logic. Model arithmetic lives in core.js (cross-checked
-// against Python); this file only reads levers, calls the core and draws the results.
+// Greenwashing policy desk: page logic. Model arithmetic lives in core.js (cross-checked
+// against Python) and the desk's drawing in desk.js; this file reads the levers, calls the
+// core and hands the results to the page.
 (() => {
   const core = globalThis.SandboxCore;
+  const desk = globalThis.SandboxDesk;
   const TEXT = globalThis.SandboxText;
   const $ = id => document.getElementById(id);
   const SVG = 'http://www.w3.org/2000/svg';
@@ -10,26 +12,37 @@
 
   let payload = null;
   try { payload = JSON.parse($('sandbox-data').textContent); } catch (error) { payload = null; }
-  if (!payload || !payload.firms || !core || !TEXT) { $('load-error').hidden = false; return; }
+  if (!payload || !payload.firms || !core || !desk || !TEXT) { $('load-error').hidden = false; return; }
   const { firms: firmData, stage_f: stageF, simplification } = payload;
   const domains = firmData.domains;
   const F1 = domains.esg.baseline_policy.fixed_fine;     // CNY 10 m in model money units
   const YUAN_PER_UNIT = 1e7 / F1;                        // one unit = the CSI 300 mean market cap
   const BP = 1e-4;
   const SNAPSHOT_DAY = firmData.snapshot_day;
+  const css = (name, fallback) => getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fallback;
+  const COLOR = {
+    improve: css('--improve', '#2a78d6'), wash: css('--wash', '#eb6834'), neutral: css('--neutral', '#898781'),
+    idle: css('--idle', '#d8d6cd'), ink: css('--ink', '#0b0b0b'), surface: css('--surface', '#fcfcfb'),
+    violet: css('--regulator', '#6250d6'), investor: css('--investor', '#1baf7a'), axis: css('--axis', '#c3c2b7'),
+  };
+  const PALETTE = [COLOR.improve, COLOR.wash, COLOR.neutral, COLOR.idle];
+  const IDLE = 3;
   const ACTIONS = [
     { key: 'actionImprove', color: 'var(--improve)' },
     { key: 'actionWash', color: 'var(--wash)' },
     { key: 'actionMaintain', color: 'var(--neutral)' },
   ];
   const SIZES = ['sizeLarge', 'sizeMid', 'sizeSmall'];
+  const SERIES = { policy: { color: 'var(--ink)' }, baseline: { color: 'var(--faint)' } };
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // -- language ------------------------------------------------------------------------
+  // English first; a stored or linked choice of Chinese wins.
   const query = new URLSearchParams(location.search);
   const storage = { get: () => { try { return localStorage.getItem('abm-lang'); } catch (e) { return null; } },
     set: value => { try { localStorage.setItem('abm-lang', value); } catch (e) { /* file:// may refuse */ } } };
-  let lang = ['zh', 'en'].includes(query.get('lang')) ? query.get('lang') : storage.get() === 'en' ? 'en' : 'zh';
-  const t = (key, vars = {}) => String(TEXT[lang][key] ?? TEXT.zh[key] ?? key)
+  let lang = ['zh', 'en'].includes(query.get('lang')) ? query.get('lang') : storage.get() === 'zh' ? 'zh' : 'en';
+  const t = (key, vars = {}) => String(TEXT[lang][key] ?? TEXT.en[key] ?? key)
     .replace(/\{(\w+)\}/g, (_, name) => (name in vars ? String(vars[name]) : `{${name}}`));
   const minus = s => s.replace('-', '−');
   const fixed = (x, d) => minus(Number(x).toFixed(d));
@@ -43,6 +56,14 @@
     const digits = { '-': '⁻', 0: '⁰', 1: '¹', 2: '²', 3: '³', 4: '⁴', 5: '⁵', 6: '⁶', 7: '⁷', 8: '⁸', 9: '⁹' };
     return `${(p / 10 ** exponent).toFixed(0)}×10${String(exponent).replace(/./g, c => digits[c])}`;
   };
+  const money = yuan => {
+    const [big, mid] = lang === 'zh' ? [1e8, 1e4] : [1e9, 1e6];
+    if (yuan >= big) return t('moneyBig', { x: (yuan / big).toFixed(2) });
+    const v = yuan / mid;
+    return t('moneyMid', { x: v >= 100 ? v.toFixed(0) : v >= 10 ? v.toFixed(1) : v.toFixed(2) });
+  };
+  const firmId = i => String(i + 1).padStart(3, '0');
+  const clamp = (x, lo, hi) => Math.min(hi, Math.max(lo, x));
 
   // -- small DOM and SVG helpers -------------------------------------------------------------
   const node = (tag, className, text) => {
@@ -98,8 +119,8 @@
     container.replaceChildren();
     for (const item of items) {
       const entry = node('span');
-      const key = node('i', item.line ? 'key-line' : 'key-dot');
-      key.style.background = item.color;
+      const key = node('i', item.ring ? 'key-ring' : item.line ? 'key-line' : item.band ? 'key-band' : 'key-dot');
+      if (!item.ring) key.style.background = item.color;
       entry.append(key, document.createTextNode(item.label));
       container.append(entry);
     }
@@ -128,7 +149,7 @@
     tip.replaceChildren(node('div', 'tt-title', title));
     for (const row of rows) {
       const line = node('div', 'tt-row');
-      if (row.color) { const key = node('i', 'key-line'); key.style.background = row.color; line.append(key); }
+      if (row.color) { const key = node('i', row.ring ? 'key-ring' : 'key-line'); if (!row.ring) key.style.background = row.color; line.append(key); }
       line.append(node('strong', '', row.value), node('span', '', row.label ?? ''));
       tip.append(line);
     }
@@ -142,7 +163,7 @@
   const hideTip = () => { tip.hidden = true; };
 
   // -- levers ----------------------------------------------------------------------------
-  const state = { domain: 'esg', levers: null, firm: null, seed: 1 };
+  const state = { domain: 'esg', levers: null, firm: null, seed: 1, k: -1 };
   const domain = () => domains[state.domain];
   const baselineRegime = d => ({ ...d.baseline_policy, disclosure_delay_days: null });
   const policyLevers = d => ({ tau: d.baseline_policy.transparency, fixed: d.baseline_policy.fixed_fine / F1,
@@ -157,16 +178,25 @@
   const propFromPosition = k => (k <= 0 ? 0 : 1e-5 * 10 ** ((k - 1) * 3 / 89));
   const positionFromProp = p => (p <= 0 ? 0 : Math.min(90, Math.max(1, Math.round(1 + Math.log10(p / 1e-5) * 89 / 3))));
   const sameLevers = (a, b) => ['tau', 'fixed', 'prop', 'audit'].every(key => Math.abs(a[key] - b[key]) < 1e-15);
+  const leverText = l => ({
+    tau: l.tau.toFixed(2), fixed: l.fixed % 1 ? l.fixed.toFixed(1) : l.fixed.toFixed(0),
+    prop: l.prop ? Number((l.prop / BP).toPrecision(2)).toString() : '0', audit: (100 * l.audit).toFixed(1), decay: l.decay.toFixed(2),
+  });
+  const LEVERS = ['tau', 'fixed', 'prop', 'audit', 'decay'];
 
   const syncLevers = () => {
-    const l = state.levers;
+    const l = state.levers, text = leverText(l);
     $('lever-tau').value = l.tau; $('lever-fixed').value = l.fixed; $('lever-prop').value = positionFromProp(l.prop);
     $('lever-audit').value = l.audit; $('lever-decay').value = l.decay;
-    $('out-tau').textContent = l.tau.toFixed(2);
-    $('out-fixed').textContent = t('leverFixedValue', { x: l.fixed % 1 ? l.fixed.toFixed(1) : l.fixed.toFixed(0) });
-    $('out-prop').textContent = t('leverPropValue', { x: l.prop ? Number((l.prop / BP).toPrecision(2)).toString() : '0' });
-    $('out-audit').textContent = t('leverAuditValue', { x: (100 * l.audit).toFixed(1) });
-    $('out-decay').textContent = t('leverDecayValue', { x: l.decay.toFixed(2) });
+    for (const key of LEVERS) {
+      const input = $(`lever-${key}`);
+      input.style.setProperty('--fill', `${100 * (input.value - input.min) / (input.max - input.min)}%`);
+    }
+    $('out-tau').textContent = text.tau;
+    $('out-fixed').textContent = t('leverFixedValue', { x: text.fixed });
+    $('out-prop').textContent = t('leverPropValue', { x: text.prop });
+    $('out-audit').textContent = t('leverAuditValue', { x: text.audit });
+    $('out-decay').textContent = t('leverDecayValue', { x: text.decay });
     const star = core.tauStar(domain(), domain().market, regime());
     const tick = $('tau-star-tick');
     tick.hidden = !(star > 0 && star < 1);
@@ -177,15 +207,32 @@
     }
     for (const button of document.querySelectorAll('[data-domain]')) button.setAttribute('aria-pressed', String(button.dataset.domain === state.domain));
     $('ai-note').hidden = state.domain !== 'ai_washing';
+    $('policy-summary').textContent = t('policySummary', text);
+    renderPolicyAgents(star);
   };
-  const onLever = (id, apply) => $(id).addEventListener('input', event => { apply(Number(event.target.value)); update(); });
-  onLever('lever-tau', v => { state.levers.tau = v; });
-  onLever('lever-fixed', v => { state.levers.fixed = v; });
-  onLever('lever-prop', v => { state.levers.prop = propFromPosition(v); });
-  onLever('lever-audit', v => { state.levers.audit = v; });
-  onLever('lever-decay', v => { state.levers.decay = v; });
+  const flash = index => {
+    sphere.boost(index);
+    const lever = document.querySelectorAll('.lever')[index];
+    lever.classList.add('active');
+    clearTimeout(lever.flashTimer);
+    lever.flashTimer = setTimeout(() => lever.classList.remove('active'), 1400);
+  };
+  const onLever = (key, apply) => $(`lever-${key}`).addEventListener('input', event => {
+    apply(Number(event.target.value));
+    flash(LEVERS.indexOf(key));
+    update();
+  });
+  onLever('tau', v => { state.levers.tau = v; });
+  onLever('fixed', v => { state.levers.fixed = v; });
+  onLever('prop', v => { state.levers.prop = propFromPosition(v); });
+  onLever('audit', v => { state.levers.audit = v; });
+  onLever('decay', v => { state.levers.decay = v; });
   for (const button of document.querySelectorAll('[data-preset]')) {
-    button.addEventListener('click', () => { state.levers = { ...presetLevers(button.dataset.preset), decay: state.levers.decay }; update(); });
+    button.addEventListener('click', () => {
+      state.levers = { ...presetLevers(button.dataset.preset), decay: state.levers.decay };
+      LEVERS.forEach((_, k) => sphere.boost(k));
+      update();
+    });
   }
   for (const button of document.querySelectorAll('[data-domain]')) {
     button.addEventListener('click', () => { if (button.dataset.domain !== state.domain) setDomain(button.dataset.domain); });
@@ -201,6 +248,7 @@
     const washer = d.firms.full_model_decision.actions.findIndex((a, i) => a === core.INFLATE && d.firms.size_class[i] === 0);
     return washer >= 0 ? washer : Math.max(0, d.firms.size_class.indexOf(0));
   };
+  const firmOption = (d, i) => t('firmOption', { id: firmId(i), size: t(SIZES[d.firms.size_class[i]]), cap: grouped(capYi(d, i)) });
   let decision = null;
 
   const renderScatter = (d, choices) => {
@@ -241,7 +289,7 @@
       if (!p) { hideTip(); f.svg.style.cursor = 'default'; return; }
       f.svg.style.cursor = 'pointer';
       const c = choices[p.i];
-      showTip(event, t('firmOption', { id: String(p.i + 1).padStart(3, '0'), size: t(SIZES[d.firms.size_class[p.i]]), cap: grouped(capYi(d, p.i)) }), [
+      showTip(event, firmOption(d, p.i), [
         { color: ACTIONS[c.action].color, value: c.action === core.MAINTAIN ? t('actionMaintain') : t('factAmount', { action: t(ACTIONS[c.action].key), x: c.amount.toFixed(3) }) },
         { value: (d.firms.benefit[p.i] / BP).toFixed(2), label: t('factBenefit') },
       ]);
@@ -310,7 +358,8 @@
 
     const curves = valueCurves(d, i, r, factors, room, probability);
     const container = $('npv-chart');
-    const f = frame(container, 560, 250, [16, 18, 40, 58]);
+    // The top margin holds the y-axis title on its own row, so optimum labels near the top never meet it.
+    const f = frame(container, 560, 270, [36, 18, 40, 58]);
     f.svg.setAttribute('aria-label', t('npvTitle'));
     const xHi = Math.max(curves.improveCap, curves.inflateCap, 0.01);
     const samples = 120;
@@ -324,13 +373,15 @@
     const pad = (yHi - yLo) * 0.08;
     const yTicks = ticks(yLo - pad, yHi + pad, 5);
     yLo = Math.min(yLo - pad, yTicks.values[0]); yHi = Math.max(yHi + pad, yTicks.values.at(-1));
-    const x = scale(0, xHi, f.left, f.right), y = scale(yLo, yHi, f.bottom, f.top);
-    yAxis(f, y, yLo, yHi, 5, v => wan(v));
+    // Δ = 0 sits a little right of the tick labels, so a marker there does not cover them.
+    const x0 = f.left + 12;
+    const x = scale(0, xHi, x0, f.right), y = scale(yLo, yHi, f.bottom, f.top);
+    const yStep = ticks(yLo, yHi, 5).step;
+    yAxis(f, y, yLo, yHi, 5, v => (yStep >= 1 ? minus(grouped(v)) : fixed(v, decimals(yStep))));
     xAxis(f, x, ticks(0, xHi, 5).values, v => v.toFixed(decimals(niceStep(xHi, 5))));
     svgNode('line', { x1: f.left, x2: f.right, y1: y(0), y2: y(0), class: 'baseline' }, f.svg);
-    svgNode('text', { x: f.right, y: y(0) - 6, 'text-anchor': 'end' }, f.svg, t('npvMaintain'));
     svgNode('text', { x: f.right, y: f.bottom + 34, 'text-anchor': 'end', class: 'axis-title' }, f.svg, t('npvX'));
-    svgNode('text', { x: f.left, y: f.top - 4, class: 'axis-title' }, f.svg, t('npvY'));
+    const yTitle = svgNode('text', { x: f.left, y: 14, class: 'axis-title' }, f.svg, t('npvY'));
     for (const s of series) {
       if (s.cap <= 0) continue;
       // A fixed fine is a jump at Δ > 0: the curve starts just right of zero.
@@ -338,21 +389,52 @@
       const line = svgNode('path', { d: path, fill: 'none', 'stroke-width': 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }, f.svg);
       line.style.stroke = s.color;
     }
+    // Optima: markers first, then each label at the first spot around its point that stays inside the plot
+    // and clear of the axis title, the markers and the labels already placed. Optima often sit together
+    // at Δ ≈ 0; the halo keeps a curve that passes behind a label from striking through it.
+    const taken = [yTitle.getBBox()];
+    const marks = [];
     for (const s of series) {
       if (s.best <= 0) continue;
       const value = toWan(d, i, s.fn(s.best));
       const chosen = (s.key === 'improve' && c.action === core.IMPROVE) || (s.key === 'wash' && c.action === core.INFLATE);
-      const dot = svgNode('circle', { cx: x(s.best), cy: y(value), r: chosen ? 5.5 : 4.5, class: 'dot' }, f.svg);
+      const px = x(s.best), py = y(value);
+      const dot = svgNode('circle', { cx: px, cy: py, r: chosen ? 5.5 : 4.5, class: 'dot' }, f.svg);
       dot.style.fill = s.color;
-      if (chosen) svgNode('circle', { cx: x(s.best), cy: y(value), r: 9, class: 'selected-ring' }, f.svg);
-      const right = x(s.best) > (f.left + f.right) / 2;
-      svgNode('text', { x: x(s.best) + (right ? -12 : 12), y: y(value) - 10, 'text-anchor': right ? 'end' : 'start', class: 'label' }, f.svg,
-        `${s.label} Δ=${s.best.toFixed(3)} · ${wan(value)}`);
+      if (chosen) svgNode('circle', { cx: px, cy: py, r: 9, class: 'selected-ring' }, f.svg);
+      marks.push({ s, value, chosen, px, py });
     }
+    // Two optima on top of each other are labelled as one cluster: the labels stack beside it, higher point first.
+    const [first, second] = marks;
+    if (second && Math.abs(first.px - second.px) < 24 && Math.abs(first.py - second.py) < 24) {
+      first.group = second.group = { left: Math.min(first.px, second.px), right: Math.max(first.px, second.px) };
+    }
+    for (const m of marks) taken.push({ x: m.px - 11, y: m.py - 11, width: 22, height: 22, owner: m.group ?? m });
+    // A label's spots are offsets from its own marker (or cluster), so only the other markers count against it.
+    const clear = (b, owner) => b.x >= f.left && b.x + b.width <= f.right && b.y >= f.top - 16 && b.y + b.height <= f.bottom
+      && taken.every(o => o.owner === owner || b.x > o.x + o.width + 3 || o.x > b.x + b.width + 3 || b.y > o.y + o.height + 1 || o.y > b.y + b.height + 1);
+    const place = (text, className, px, py, spots, owner = null) => {
+      const label = svgNode('text', { class: className }, f.svg, text);
+      const at = ([dx, dy, anchor]) => {
+        label.setAttribute('x', px + dx); label.setAttribute('y', py + dy); label.setAttribute('text-anchor', anchor);
+        return label.getBBox();
+      };
+      taken.push(at(spots.find(spot => clear(at(spot), owner)) ?? spots[0]));
+    };
+    for (const m of marks.sort((a, b) => b.chosen - a.chosen || a.py - b.py)) {
+      const side = m.px > (f.left + f.right) / 2 ? -1 : 1;
+      const near = side > 0 ? 'start' : 'end', far = side > 0 ? 'end' : 'start';
+      const px = m.group ? (side > 0 ? m.group.right : m.group.left) : m.px;
+      place(`${m.s.label} Δ=${m.s.best.toFixed(3)} · ${wan(m.value)}`, 'label halo', px, m.py, [
+        [12 * side, -10, near], [12 * side, 20, near], [-12 * side, -10, far], [-12 * side, 20, far],
+        [12 * side, 36, near], [12 * side, -26, near], [12 * side, 52, near],
+      ], m.group ?? m);
+    }
+    place(t('npvMaintain'), 'halo', f.right, y(0), [[0, -6, 'end'], [0, 14, 'end']]);
     const hit = svgNode('rect', { x: f.left, y: f.top, width: f.right - f.left, height: f.bottom - f.top, class: 'hit' }, f.svg);
     const cross = svgNode('line', { y1: f.top, y2: f.bottom, class: 'crosshair', visibility: 'hidden' }, f.svg);
     hit.addEventListener('pointermove', event => {
-      const delta = Math.min(Math.max((pointer(f.svg, event).x - f.left) / (f.right - f.left) * xHi, 0), xHi);
+      const delta = Math.min(Math.max((pointer(f.svg, event).x - x0) / (f.right - x0) * xHi, 0), xHi);
       cross.setAttribute('x1', x(delta)); cross.setAttribute('x2', x(delta)); cross.setAttribute('visibility', 'visible');
       showTip(event, `Δ = ${delta.toFixed(3)} SD`, series.filter(s => delta <= s.cap + 1e-12 && s.cap > 0)
         .map(s => ({ color: s.color, value: wan(toWan(d, i, s.fn(delta))), label: t(s.key === 'improve' ? 'actionImprove' : 'actionWash') })));
@@ -372,6 +454,18 @@
     else if (r.fixed_fine > 0 && curves.newCaseValue > 0) notes.push(t('whyFine', { f: wan(toWan(d, i, curves.newCaseValue)) }));
     if (curves.inflateCap < 0.05) notes.push(t('whyCap', { x: curves.inflateCap.toFixed(3) }));
     for (const note of notes) why.append(node('span', '', note));
+  };
+
+  const fillSelect = (select, d, n) => {
+    if (select.options.length !== n || select.dataset.lang !== lang || select.dataset.domain !== state.domain) {
+      select.replaceChildren(...Array.from({ length: n }, (_, i) => {
+        const option = node('option', '', firmOption(d, i));
+        option.value = String(i);
+        return option;
+      }));
+      select.dataset.lang = lang; select.dataset.domain = state.domain;
+    }
+    select.value = String(state.firm);
   };
 
   const renderDecision = () => {
@@ -394,16 +488,7 @@
     const mismatches = agreement[state.domain];
     check.append(node('span', mismatches ? 'bad' : 'ok', mismatches ? '!' : '✓'),
       document.createTextNode(mismatches ? t('p1Disagreement', { n: mismatches }) : t('p1Agreement')));
-    const select = $('firm-select');
-    if (select.options.length !== choices.length || select.dataset.lang !== lang || select.dataset.domain !== state.domain) {
-      select.replaceChildren(...choices.map((_, i) => {
-        const option = node('option', '', t('firmOption', { id: String(i + 1).padStart(3, '0'), size: t(SIZES[d.firms.size_class[i]]), cap: grouped(capYi(d, i)) }));
-        option.value = String(i);
-        return option;
-      }));
-      select.dataset.lang = lang; select.dataset.domain = state.domain;
-    }
-    select.value = String(state.firm);
+    fillSelect($('firm-select'), d, choices.length);
     renderScatter(d, choices);
     renderSizeBars(d, choices);
     renderFirm(d, choices, factors, room, probability);
@@ -411,16 +496,20 @@
   const selectFirm = i => {
     state.firm = i;
     $('firm-select').value = String(i);
+    $('ticket-select').value = String(i);
+    sphere.select(i);
     renderScatter(domain(), decision.choices);
     renderFirm(domain(), decision.choices, decision.factors, decision.room, decision.probability);
+    if (replay) { renderTicket(); drawSpectro(); }
   };
   $('firm-select').addEventListener('change', event => selectFirm(Number(event.target.value)));
+  $('ticket-select').addEventListener('change', event => selectFirm(Number(event.target.value)));
 
-  // -- panel 2: simplified dynamics ----------------------------------------------------------
+  // -- panel 2 and the desk replay: simplified dynamics -----------------------------------------
   const baselineRuns = new Map();
-  const simulate = (d, intervention, decay, seed) => core.simulate(d.firms, d, d.market,
+  const simulate = (d, intervention, decay, seed, onPeriod = null) => core.simulate(d.firms, d, d.market,
     intervention ? { baseline: baselineRegime(d), intervention, start_day: d.market.burn_in_days + 1 } : { baseline: baselineRegime(d), intervention: null, start_day: 0 },
-    { naturalDecay: decay, auditSeed: seed });
+    { naturalDecay: decay, auditSeed: seed, onPeriod });
   const baselineRun = (d, decay, seed) => {
     const key = `${state.domain}|${decay}|${seed}`;
     if (!baselineRuns.has(key)) {
@@ -428,6 +517,68 @@
       baselineRuns.set(key, simulate(d, null, decay, seed));
     }
     return baselineRuns.get(key);
+  };
+
+  // Firms by size class (large first), largest market cap first within each class.
+  const sizeGroups = d => [0, 1, 2].map(k => d.firms.size_class.map((c, i) => (c === k ? i : -1)).filter(i => i >= 0)
+    .sort((a, b) => d.firms.market_cap[b] - d.firms.market_cap[a]));
+
+  const buildEvents = (d, run) => {
+    const events = [{ day: 0, type: 'start' }];
+    const switchAt = d.market.burn_in_days + 1;
+    let switched = false, caughtTotal = 0;
+    run.decisionDays.forEach((day, k) => {
+      if (!switched && day >= switchAt) { events.push({ day: switchAt, k, type: 'switch' }); switched = true; }
+      const caught = run.detections[k];
+      for (let i = 0; i < caught.length; i++) {
+        if (caught[i]) { events.push({ day, k, type: 'caught', i, fine: run.fines[k][i] * d.firms.market_cap[i] * YUAN_PER_UNIT }); caughtTotal += 1; }
+      }
+      const now = run.actions[k];
+      if (k === 0) {
+        const counts = [0, 0, 0];
+        for (const a of now) counts[a] += 1;
+        events.push({ day, k, type: 'first', counts });
+        return;
+      }
+      const before = run.actions[k - 1], groups = new Map();
+      for (let i = 0; i < now.length; i++) {
+        if (now[i] === before[i]) continue;
+        const key = before[i] * 3 + now[i];
+        if (!groups.has(key)) groups.set(key, []);
+        groups.get(key).push(i);
+      }
+      for (const [key, firms] of groups) events.push({ day, k, type: 'turn', from: Math.floor(key / 3), to: key % 3, firms });
+    });
+    events.push({ day: d.market.trading_days, type: 'end', total: caughtTotal });
+    return events;
+  };
+
+  let replay = null;
+  const computeReplay = () => {
+    const d = domain(), r = regime(), decay = state.levers.decay, seed = state.seed;
+    const goodness = [], inflation = [];
+    const run = simulate(d, r, decay, seed, (day, s) => {
+      goodness.push(Float32Array.from(s.goodness));
+      inflation.push(Float32Array.from(s.inflation));
+    });
+    const base = baselineRun(d, decay, seed);
+    const groups = sizeGroups(d);
+    const counts = run.actions.map(actions => {
+      const c = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
+      actions.forEach((a, i) => { c[d.firms.size_class[i]][a] += 1; });
+      return c;
+    });
+    const order = Int32Array.from(groups.flat());
+    const rowOf = new Int32Array(order.length);
+    order.forEach((i, j) => { rowOf[i] = j; });
+    const start = d.market.burn_in_days, end = d.market.trading_days;
+    return {
+      d, run, base, goodness, inflation, counts, groups, order, rowOf,
+      caughtPerPeriod: run.detections.map(c => c.reduce((s, v) => s + v, 0)),
+      switchK: run.decisionDays.findIndex(day => day > start),
+      events: buildEvents(d, run),
+      m: core.windowMetrics(run, d.firms, start, end), mb: core.windowMetrics(base, d.firms, start, end),
+    };
   };
 
   const lineChart = (container, series, label, format) => {
@@ -484,23 +635,8 @@
   };
 
   const renderDynamics = () => {
-    const d = domain(), decay = state.levers.decay, seed = state.seed;
-    const run = simulate(d, regime(), decay, seed);
-    const base = baselineRun(d, decay, seed);
-    const start = d.market.burn_in_days, end = d.market.trading_days;
-    const m = core.windowMetrics(run, d.firms, start, end), mb = core.windowMetrics(base, d.firms, start, end);
-    const tiles = $('dynamics-tiles');
-    tiles.replaceChildren();
-    const tile = (label, value, sub) => {
-      const item = node('div', 'tile');
-      item.append(node('p', 'tile-label', label), node('p', 'tile-value', value), node('p', 'tile-sub', sub));
-      tiles.append(item);
-    };
-    tile(t('tileChange'), `${signed(m.true_change_sd, 2)} SD`,
-      `${t('tileVsBase', { x: signed(mb.true_change_sd, 2) })} · ${t('tileDelta', { x: signed(m.true_change_sd - mb.true_change_sd, 3) })}`);
-    tile(t('tileWash'), pct(m.wash_share), t('tileVsBase', { x: pct(mb.wash_share) }));
-    tile(t('tileInflation'), `${m.inflation_mean_sd.toFixed(2)} SD`, t('tileVsBase', { x: mb.inflation_mean_sd.toFixed(2) }));
-    const policy = { label: t('legendPolicy'), color: 'var(--improve)' }, baseline = { label: t('legendBaseline'), color: 'var(--neutral)' };
+    const { run, base } = replay, end = domain().market.trading_days;
+    const policy = { label: t('legendPolicy'), ...SERIES.policy }, baseline = { label: t('legendBaseline'), ...SERIES.baseline };
     legend($('dynamics-legend'), [{ ...policy, line: true }, { ...baseline, line: true }]);
     lineChart($('chart-goodness'), [{ ...policy, values: run.meanGoodness }, { ...baseline, values: base.meanGoodness }], t('chartGoodness'), v => signed(v, 2));
     lineChart($('chart-inflation'), [{ ...policy, values: run.meanInflation }, { ...baseline, values: base.meanInflation }], t('chartInflation'), v => v.toFixed(2));
@@ -536,6 +672,478 @@
       `${signed(row.stage_f.mean, 3)} [${signed(row.stage_f.ci_low, 3)}, ${signed(row.stage_f.ci_high, 3)}]`,
     ]);
     container.append(table([t('costDecay'), t('costContrast'), t('costSimplified'), t('costFull'), t('costStageF')], contrasts, [2, 3, 4]));
+  };
+
+  // -- the desk ----------------------------------------------------------------------------------
+  const sphere = desk.createSphere($('sphere'), {
+    palette: PALETTE, ink: COLOR.ink, violet: COLOR.violet, pink: '#e87ba4', surface: COLOR.surface, reduced,
+    orbiters: { regulator: $('orbit-regulator'), investors: $('orbit-investors') },
+    onHover: (i, event) => {
+      if (i < 0 || !replay || !event) { hideTip(); return; }
+      const d = replay.d, k = state.k;
+      const a = k >= 0 ? replay.run.actions[k][i] : IDLE;
+      const g = k >= 0 ? replay.goodness[k][i] : d.firms.initial_goodness[i];
+      showTip(event, firmOption(d, i), [
+        { color: PALETTE[a], value: a === IDLE ? t('sphereIdle') : a === core.MAINTAIN ? t('actionMaintain') : t('factAmount', { action: t(ACTIONS[a].key), x: replay.run.amounts[k][i].toFixed(3) }) },
+        { value: t('factSdValue', { x: signed(g, 2) }), label: t('ticketTrue') },
+      ]);
+    },
+    onSelect: i => selectFirm(i),
+  });
+  const avatarColors = { ink: '#24232b', regulator: COLOR.violet, investor: COLOR.investor };
+  $('orbit-regulator').innerHTML = desk.avatar('regulator', 'open', avatarColors);
+  $('orbit-investors').insertAdjacentHTML('afterbegin', desk.avatar('investors', 'sleep', avatarColors));
+  const setAvatar = (element, kind, mood) => {
+    const key = `${kind}|${mood}`;
+    if (element.dataset.avatar === key) return;
+    element.dataset.avatar = key;
+    element.innerHTML = desk.avatar(kind, mood, avatarColors);
+  };
+  setAvatar($('agent-investors').querySelector('.avatar'), 'investors', 'sleep');
+  setAvatar($('agent-regulator').querySelector('.avatar'), 'regulator', 'open');
+
+  const play = { day: 0, playing: !reduced, speed: 1, hold: 0, cursor: 0 };
+  const DAYS_PER_SECOND = 60;     // one decision period per second at 1×
+  const periodIndex = day => Math.min(replay.run.decisionDays.length - 1, Math.floor(day / domain().market.firm_decision_interval) - 1);
+
+  const renderPolicyAgents = star => {
+    const l = state.levers, text = leverText(l);
+    const regulatorCard = $('agent-regulator');
+    regulatorCard.querySelector('.agent-stat').textContent = t('agentRegulatorStat', { tau: text.tau, audit: text.audit, fixed: text.fixed });
+    const card = $('agent-threshold');
+    const has = star > 0 && star < 1;
+    card.querySelector('.gauge').innerHTML = desk.gauge(l.tau, star, { wash: COLOR.wash, improve: COLOR.improve, ink: COLOR.ink, axis: COLOR.axis });
+    card.querySelector('.agent-stat').textContent = has ? t('agentThresholdStat', { tau: text.tau, star: star.toFixed(2) }) : `τ ${text.tau}`;
+    card.querySelector('.agent-sub').textContent = !has ? t('agentThresholdNone') : t(l.tau >= star ? 'agentThresholdAbove' : 'agentThresholdBelow');
+  };
+
+  const renderAgents = () => {
+    const rp = replay, k = state.k;
+    const caught = k >= 0 ? rp.caughtPerPeriod.slice(0, k + 1).reduce((s, v) => s + v, 0) : 0;
+    const regulatorCard = $('agent-regulator');
+    regulatorCard.querySelector('.agent-sub').textContent = t('agentCaught', { n: caught });
+    desk.spark(regulatorCard.querySelector('.spark'), rp.caughtPerPeriod, { color: COLOR.ink, current: k, bars: true, max: Math.max(3, ...rp.caughtPerPeriod) });
+    ['large', 'mid', 'small'].forEach((key, c) => {
+      const card = $(`agent-${key}`), members = rp.groups[c].length;
+      const counts = k >= 0 ? rp.counts[k][c] : null;
+      card.querySelector('.agent-tag').textContent = t('agentFirmTag', { n: members });
+      card.querySelector('.agent-stat').textContent = !counts ? t('agentFirmIdle')
+        : counts.map((n, a) => (n || a < 2 ? `${t(ACTIONS[a].key)} ${n}` : '')).filter(Boolean).join(' · ');
+      const mood = !counts ? 'open' : counts[1] / members >= 0.5 ? 'shifty' : counts[0] / members >= 0.6 ? 'happy' : 'open';
+      setAvatar(card.querySelector('.avatar'), key, mood);
+      const bar = card.querySelector('.agent-bar');
+      const parts = counts ? counts.map((n, a) => [n, PALETTE[a]]) : [[1, COLOR.idle]];
+      if (bar.children.length !== parts.length) bar.replaceChildren(...parts.map(() => node('span')));
+      parts.forEach(([n, color], a) => { bar.children[a].style.flexGrow = String(n); bar.children[a].style.background = color; });
+      desk.spark(card.querySelector('.spark'), rp.counts.map(p => p[c][1] / members), { color: COLOR.wash, current: k, max: 1 });
+    });
+  };
+
+  // Ticket: the selected firm through the replay.
+  let ticketChart = null;
+  const renderTicketChart = () => {
+    const rp = replay, d = rp.d, i = state.firm, days = rp.run.decisionDays;
+    const xs = [0, ...days];
+    const truth = [d.firms.initial_goodness[i], ...rp.goodness.map(g => g[i])];
+    const report = truth.map((g, k) => g + (k ? rp.inflation[k - 1][i] : 0));
+    const f = frame($('ticket-chart'), 300, 128, [8, 8, 20, 34]);
+    f.svg.setAttribute('aria-label', t('ticketChartLabel'));
+    const all = truth.concat(report);
+    let lo = Math.min(...all), hi = Math.max(...all);
+    const pad = (hi - lo || 1) * 0.12;
+    lo -= pad; hi += pad;
+    const x = scale(0, d.market.trading_days, f.left, f.right), y = scale(lo, hi, f.bottom, f.top);
+    yAxis(f, y, lo, hi, 3, v => fixed(v, 1));
+    const years = [];
+    for (let year = 0; year * 252 <= d.market.trading_days; year += 4) years.push(year * 252);
+    xAxis(f, x, years, v => String(v / 252));
+    const sw = d.market.burn_in_days + 1;
+    svgNode('line', { x1: x(sw), x2: x(sw), y1: f.top, y2: f.bottom, class: 'annotation' }, f.svg);
+    const path = values => values.map((v, k) => `${k ? 'L' : 'M'}${x(xs[k]).toFixed(1)},${y(v).toFixed(1)}`).join('');
+    const area = `${path(report)}${truth.map((v, k) => `L${x(xs[truth.length - 1 - k]).toFixed(1)},${y(truth[truth.length - 1 - k]).toFixed(1)}`).join('')}Z`;
+    svgNode('path', { d: area }, f.svg).style.fill = 'var(--wash-wash)';
+    svgNode('path', { d: path(report), fill: 'none', 'stroke-width': 1.6, 'stroke-linejoin': 'round' }, f.svg).style.stroke = 'var(--wash)';
+    svgNode('path', { d: path(truth), fill: 'none', 'stroke-width': 2, 'stroke-linejoin': 'round' }, f.svg).style.stroke = 'var(--ink)';
+    const head = svgNode('line', { y1: f.top, y2: f.bottom, class: 'playhead' }, f.svg);
+    const dot = svgNode('circle', { r: 3.6, class: 'dot' }, f.svg);
+    dot.style.fill = 'var(--ink)';
+    ticketChart = {
+      move: k => {
+        const at = k + 1;
+        head.setAttribute('x1', x(xs[at])); head.setAttribute('x2', x(xs[at]));
+        dot.setAttribute('cx', x(xs[at])); dot.setAttribute('cy', y(truth[at]));
+      },
+    };
+    legend($('ticket-legend'), [{ label: t('ticketTrue'), color: 'var(--ink)', line: true }, { label: t('ticketReport'), color: 'var(--wash)', line: true }]);
+  };
+  const renderStrip = () => {
+    const rp = replay, i = state.firm, k = state.k, strip = $('ticket-strip');
+    if (strip.children.length !== rp.run.actions.length) strip.replaceChildren(...rp.run.actions.map(() => node('span')));
+    rp.run.actions.forEach((actions, p) => {
+      const cell = strip.children[p];
+      cell.style.background = PALETTE[actions[i]];
+      cell.className = `${p > k ? 'future' : ''}${rp.run.detections[p][i] ? ' caught' : ''}${p === k ? ' now' : ''}`;
+      cell.title = `${rp.run.decisionDays[p]} · ${t(ACTIONS[actions[i]].key)}`;
+    });
+  };
+  $('ticket-strip').addEventListener('click', event => {
+    const p = [...$('ticket-strip').children].indexOf(event.target);
+    if (p >= 0) { setPlaying(false); setDay(replay.run.decisionDays[p], true); }
+  });
+  const renderTicket = () => {
+    const rp = replay, d = rp.d, i = state.firm, k = state.k;
+    fillSelect($('ticket-select'), d, d.firms.size_class.length);
+    const a = k >= 0 ? rp.run.actions[k][i] : IDLE;
+    const choice = $('ticket-choice');
+    const left = node('div');
+    const what = node('p', 'what');
+    const key = node('i');
+    key.style.background = PALETTE[a];
+    what.append(key, document.createTextNode(a === IDLE ? t('sphereIdle') : t(ACTIONS[a].key)));
+    left.append(node('p', 'when', k >= 0 ? t('ticketNow', { day: rp.run.decisionDays[k] }) : t('ticketIdle')), what);
+    choice.replaceChildren(left, node('span', 'amount', a === IDLE || a === core.MAINTAIN ? '' : `Δ ${rp.run.amounts[k][i].toFixed(3)} SD`));
+    let caught = 0, fines = 0;
+    for (let p = 0; p <= k; p++) if (rp.run.detections[p][i]) { caught += 1; fines += rp.run.fines[p][i] * d.firms.market_cap[i] * YUAN_PER_UNIT; }
+    const facts = $('ticket-facts');
+    facts.replaceChildren();
+    const fact = (label, value) => { const item = node('div'); item.append(node('dt', '', label), node('dd', '', value)); facts.append(item); };
+    fact(t('factSize'), t(SIZES[d.firms.size_class[i]]));
+    fact(t('factCap'), t('factCapValue', { x: grouped(capYi(d, i)) }));
+    fact(t('factBenefit'), t('factBenefitValue', { x: (d.firms.benefit[i] / BP).toFixed(2) }));
+    fact(t('ticketTrue'), t('factSdValue', { x: signed(k >= 0 ? rp.goodness[k][i] : d.firms.initial_goodness[i], 2) }));
+    fact(t('factInflation'), t('factSdValue', { x: (k >= 0 ? rp.inflation[k][i] : 0).toFixed(2) }));
+    fact(t('ticketCaught'), `${t('ticketCaughtValue', { n: caught })}${caught ? ` · ${money(fines)}` : ''}`);
+    if (!ticketChart || ticketChart.firm !== i || ticketChart.replay !== rp || ticketChart.lang !== lang) {
+      renderTicketChart();
+      Object.assign(ticketChart, { firm: i, replay: rp, lang });
+    }
+    ticketChart.move(k);
+    renderStrip();
+  };
+
+  // Policy window: hero figure, tiles and the mean true level with a playhead.
+  let windowChart = null;
+  const renderWindow = () => {
+    const { m, mb, run, base, d } = replay;
+    const tiles = $('dynamics-tiles');
+    tiles.replaceChildren();
+    const tile = (label, value, sub) => {
+      const item = node('div', 'tile');
+      item.append(node('p', 'tile-label', label), node('p', 'tile-value', value), node('p', 'tile-sub', sub));
+      tiles.append(item);
+    };
+    tile(t('tileChange'), `${signed(m.true_change_sd, 2)} SD`,
+      `${t('tileVsBase', { x: signed(mb.true_change_sd, 2) })} · ${t('tileDelta', { x: signed(m.true_change_sd - mb.true_change_sd, 3) })}`);
+    tile(t('tileWash'), pct(m.wash_share), t('tileVsBase', { x: pct(mb.wash_share) }));
+    tile(t('tileInflation'), `${m.inflation_mean_sd.toFixed(2)} SD`, t('tileVsBase', { x: mb.inflation_mean_sd.toFixed(2) }));
+    const policy = { label: t('legendPolicy'), ...SERIES.policy }, baseline = { label: t('legendBaseline'), ...SERIES.baseline };
+    legend($('window-legend'), [{ ...policy, line: true }, { ...baseline, line: true }]);
+    const f = frame($('window-chart'), 440, 156, [10, 12, 26, 40]);
+    f.svg.setAttribute('aria-label', t('chartGoodness'));
+    const days = d.market.trading_days;
+    const all = [...run.meanGoodness, ...base.meanGoodness];
+    let lo = Math.min(...all), hi = Math.max(...all);
+    const pad = (hi - lo || 1) * 0.1;
+    lo -= pad; hi += pad;
+    const x = scale(0, days, f.left, f.right), y = scale(lo, hi, f.bottom, f.top);
+    yAxis(f, y, lo, hi, 3, v => fixed(v, 1));
+    const years = [];
+    for (let year = 0; year * 252 <= days; year += 2) years.push(year * 252);
+    xAxis(f, x, years, v => String(v / 252));
+    const sw = d.market.burn_in_days + 1;
+    svgNode('rect', { x: x(sw), y: f.top, width: f.right - x(sw), height: f.bottom - f.top }, f.svg).style.fill = '#6250d60a';
+    svgNode('line', { x1: x(sw), x2: x(sw), y1: f.top, y2: f.bottom, class: 'annotation' }, f.svg);
+    svgNode('text', { x: x(sw) + 5, y: f.top + 9, class: 'annotation-text' }, f.svg, t('chartSwitch'));
+    for (const s of [{ ...baseline, values: base.meanGoodness }, { ...policy, values: run.meanGoodness }]) {
+      let path = '';
+      for (let day = 0; day <= days; day += 5) path += `${day ? 'L' : 'M'}${x(day).toFixed(1)},${y(s.values[day]).toFixed(1)}`;
+      path += `L${x(days).toFixed(1)},${y(s.values[days]).toFixed(1)}`;
+      svgNode('path', { d: path, fill: 'none', 'stroke-width': 2, 'stroke-linejoin': 'round' }, f.svg).style.stroke = s.color;
+    }
+    svgNode('text', { x: f.right, y: y(run.meanGoodness[days]) - 8, 'text-anchor': 'end', class: 'label' }, f.svg, signed(run.meanGoodness[days], 2));
+    const head = svgNode('line', { y1: f.top, y2: f.bottom, class: 'playhead' }, f.svg);
+    const dot = svgNode('circle', { r: 4, class: 'dot' }, f.svg);
+    dot.style.fill = 'var(--ink)';
+    const cross = svgNode('line', { y1: f.top, y2: f.bottom, class: 'crosshair', visibility: 'hidden' }, f.svg);
+    const hit = svgNode('rect', { x: f.left, y: f.top, width: f.right - f.left, height: f.bottom - f.top, class: 'hit' }, f.svg);
+    hit.addEventListener('pointermove', event => {
+      const day = Math.round(clamp((pointer(f.svg, event).x - f.left) / (f.right - f.left), 0, 1) * days);
+      cross.setAttribute('x1', x(day)); cross.setAttribute('x2', x(day)); cross.setAttribute('visibility', 'visible');
+      showTip(event, `${t('chartYears')} ${(day / 252).toFixed(1)} · day ${day}`, [
+        { color: policy.color, value: signed(run.meanGoodness[day], 2), label: policy.label },
+        { color: baseline.color, value: signed(base.meanGoodness[day], 2), label: baseline.label }]);
+    });
+    hit.addEventListener('pointerleave', () => { cross.setAttribute('visibility', 'hidden'); hideTip(); });
+    hit.addEventListener('click', event => {
+      setDay(Math.round(clamp((pointer(f.svg, event).x - f.left) / (f.right - f.left), 0, 1) * days), true);
+    });
+    windowChart = {
+      move: day => {
+        const at = Math.round(clamp(day, 0, days));
+        head.setAttribute('x1', x(at)); head.setAttribute('x2', x(at));
+        dot.setAttribute('cx', x(at)); dot.setAttribute('cy', y(run.meanGoodness[at]));
+      },
+    };
+  };
+
+  // Decision spectrogram.
+  let spectroHit = null;
+  const drawSpectro = () => {
+    const rp = replay;
+    spectroHit = desk.spectrogram($('spectro'), {
+      order: rp.order, groupStarts: [0, rp.groups[0].length, rp.groups[0].length + rp.groups[1].length],
+      groupLabels: SIZES.map(key => t(key)), actions: rp.run.actions, detections: rp.run.detections,
+      palette: PALETTE, ink: COLOR.ink, surface: COLOR.surface, violet: COLOR.violet, current: state.k, switchK: rp.switchK,
+      switchLabel: t('chartSwitch'), selectedRow: rp.rowOf[state.firm], days: rp.d.market.trading_days,
+      interval: rp.d.market.firm_decision_interval, yearLabel: t('chartYears'),
+    });
+    $('spectro').setAttribute('aria-label', t('spectroAria', { day: Math.round(play.day) }));
+  };
+  const spectroAt = event => { const box = $('spectro').getBoundingClientRect(); return spectroHit?.hit(event.clientX - box.left, event.clientY - box.top); };
+  $('spectro').addEventListener('pointermove', event => {
+    const at = spectroAt(event);
+    if (!at) { hideTip(); return; }
+    const rp = replay, d = rp.d, a = rp.run.actions[at.k][at.i];
+    const rows = [{ color: PALETTE[a], value: a === core.MAINTAIN ? t('actionMaintain') : t('factAmount', { action: t(ACTIONS[a].key), x: rp.run.amounts[at.k][at.i].toFixed(3) }) }];
+    if (rp.run.detections[at.k][at.i]) rows.push({ ring: true, color: COLOR.ink, value: money(rp.run.fines[at.k][at.i] * d.firms.market_cap[at.i] * YUAN_PER_UNIT), label: t('spectroCaught') });
+    showTip(event, `${firmOption(d, at.i)} · ${t('traceDay')} ${rp.run.decisionDays[at.k]}`, rows);
+  });
+  $('spectro').addEventListener('pointerleave', hideTip);
+  $('spectro').addEventListener('click', event => {
+    const at = spectroAt(event);
+    if (!at) return;
+    setPlaying(false);
+    selectFirm(at.i);
+    setDay(replay.run.decisionDays[at.k], true);
+  });
+  $('spectro').addEventListener('keydown', event => {
+    const keys = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] };
+    if (!(event.key in keys)) return;
+    event.preventDefault();
+    const [dk, dr] = keys[event.key], rp = replay;
+    if (dr) selectFirm(rp.order[clamp(rp.rowOf[state.firm] + dr, 0, rp.order.length - 1)]);
+    if (dk) { setPlaying(false); setDay(rp.run.decisionDays[clamp(state.k + dk, 0, rp.run.decisionDays.length - 1)], true); }
+  });
+  const renderSpectroTable = () => {
+    const { run } = replay;
+    legend($('spectro-legend'), [...ACTIONS.map(a => ({ label: t(a.key), color: a.color, band: true })), { label: t('spectroCaught'), ring: true }]);
+    const rows = run.decisionDays.map((day, k) => {
+      const c = [0, 0, 0];
+      for (const a of run.actions[k]) c[a] += 1;
+      return [day, c[0], c[1], c[2], replay.caughtPerPeriod[k]];
+    });
+    $('spectro-table').replaceChildren(table([t('spectroPeriod'), t('actionImprove'), t('actionWash'), t('actionMaintain'), t('spectroCaughtCount')], rows, [0, 1, 2, 3, 4]));
+  };
+
+  // Live wire and trace.
+  const sizeName = i => t(SIZES[replay.d.firms.size_class[i]]);
+  const eventItems = e => {
+    const text = l => leverText(l);
+    if (e.type === 'start') return [{ text: t('evStart'), mark: 'neutral' }];
+    if (e.type === 'end') return [{ text: t('evEnd', { n: e.total }), mark: 'neutral' }];
+    if (e.type === 'switch') return [{ text: t('evSwitch', text(state.levers)), mark: 'policy' }];
+    if (e.type === 'first') return [{ text: t('agentFirmStat', { improve: e.counts[0], wash: e.counts[1], maintain: e.counts[2] }), mark: 'neutral' }];
+    if (e.type === 'caught') return [{ text: t('evCaught', { id: firmId(e.i), size: sizeName(e.i), fine: money(e.fine) }), mark: 'caught' }];
+    const from = t(ACTIONS[e.from].key), to = t(ACTIONS[e.to].key);
+    if (e.firms.length <= 2) return e.firms.map(i => ({ text: t('evTurn', { id: firmId(i), size: sizeName(i), from, to }), color: PALETTE[e.to] }));
+    return [{ text: t('evTurnMany', { n: e.firms.length, from, to }), color: PALETTE[e.to] }];
+  };
+  const WIRE_MAX = 14, TRACE_MAX = 60;
+  const wireNode = (e, item) => {
+    const li = node('li');
+    const mark = node('i', `mark ${item.mark ?? ''}`);
+    if (item.color) mark.style.background = item.color;
+    if (item.mark === 'neutral') mark.style.background = COLOR.axis;
+    li.append(node('span', 'day', String(e.day).padStart(4, '0')), mark, document.createTextNode(item.text));
+    return li;
+  };
+  const traceRows = e => {
+    if (e.type === 'caught') return [[e.day, `${firmId(e.i)} · ${sizeName(e.i)}`, ['caught', t('traceCaught')], money(e.fine)]];
+    if (e.type === 'switch') return [[e.day, '—', ['policy', t('traceSwitch')], `τ ${state.levers.tau.toFixed(2)}`]];
+    if (e.type === 'turn') {
+      const detail = `${t(ACTIONS[e.from].key)} → ${t(ACTIONS[e.to].key)}`;
+      if (e.firms.length <= 2) return e.firms.map(i => [e.day, `${firmId(i)} · ${sizeName(i)}`, [PALETTE[e.to], t('traceTurn')], detail]);
+      return [[e.day, `× ${e.firms.length}`, [PALETTE[e.to], t('traceTurn')], detail]];
+    }
+    return [];
+  };
+  const traceNode = (cells, fresh) => {
+    const tr = node('tr', fresh ? 'fresh' : '');
+    cells.forEach((cell, c) => {
+      const td = node('td', c === 3 ? 'num' : '');
+      if (c === 2) {
+        const [kind, label] = cell;
+        const ev = node('span', 'ev');
+        const mark = node('i', kind === 'caught' || kind === 'policy' ? kind : '');
+        if (kind !== 'caught' && kind !== 'policy') mark.style.background = kind;
+        ev.append(mark, document.createTextNode(label));
+        td.append(ev);
+      } else td.textContent = String(cell);
+      tr.append(td);
+    });
+    return tr;
+  };
+  const traceTotals = () => {
+    let n = 0, total = 0;
+    for (let c = 0; c < play.cursor; c++) { const e = replay.events[c]; if (e.type === 'caught') { n += 1; total += e.fine; } }
+    $('trace-total').textContent = t('traceTotal', { n, x: money(total) });
+    $('trace-empty').hidden = n > 0;
+  };
+  const rebuildFeeds = () => {
+    const events = replay.events;
+    let cursor = 0;
+    while (cursor < events.length && events[cursor].day <= play.day) cursor += 1;
+    play.cursor = cursor;
+    const wire = [], trace = [];
+    for (let c = cursor - 1; c >= 0 && (wire.length < WIRE_MAX || trace.length < TRACE_MAX); c--) {
+      const e = events[c];
+      if (wire.length < WIRE_MAX) for (const item of eventItems(e).reverse()) if (wire.length < WIRE_MAX) wire.push(wireNode(e, item));
+      if (trace.length < TRACE_MAX) for (const cells of traceRows(e).reverse()) if (trace.length < TRACE_MAX) trace.push(traceNode(cells, false));
+    }
+    $('wire-feed').replaceChildren(...wire);
+    $('trace-body').replaceChildren(...trace);
+    traceTotals();
+  };
+  const pushEvents = until => {
+    const events = replay.events, wire = $('wire-feed'), trace = $('trace-body');
+    let added = false;
+    while (play.cursor < events.length && events[play.cursor].day <= until) {
+      const e = events[play.cursor];
+      play.cursor += 1;
+      for (const item of eventItems(e)) wire.prepend(wireNode(e, item));
+      for (const cells of traceRows(e)) trace.prepend(traceNode(cells, true));
+      added = true;
+    }
+    if (!added) return;
+    while (wire.children.length > WIRE_MAX) wire.lastElementChild.remove();
+    while (trace.children.length > TRACE_MAX) trace.lastElementChild.remove();
+    traceTotals();
+  };
+
+  // One decision period on every desk view.
+  const applyPeriod = (k, { ripple = false, beams = false } = {}) => {
+    const rp = replay;
+    state.k = k;
+    const n = rp.d.firms.size_class.length;
+    sphere.setColors(k >= 0 ? rp.run.actions[k] : new Array(n).fill(IDLE), { ripple });
+    if (beams && k >= 0) {
+      const caught = [];
+      rp.run.detections[k].forEach((v, i) => { if (v) caught.push(i); });
+      if (caught.length) sphere.beam(caught);
+    }
+    const counts = [0, 0, 0];
+    if (k >= 0) for (const a of rp.run.actions[k]) counts[a] += 1;
+    $('sphere').setAttribute('aria-label', t('sphereAria', { day: Math.round(play.day), improve: counts[0], wash: counts[1], maintain: counts[2] }));
+    renderAgents();
+    renderTicket();
+    drawSpectro();
+  };
+  let lastClock = -1;
+  const updateClock = () => {
+    const day = Math.round(play.day);
+    if (day === lastClock) return;
+    lastClock = day;
+    const d = replay.d, total = d.market.trading_days;
+    $('clock-day').textContent = grouped(day);
+    $('clock-sub').textContent = t('clockSub', { y: (day / 252).toFixed(1), total: grouped(total) });
+    const after = day > d.market.burn_in_days;
+    const chip = $('clock-phase');
+    chip.textContent = after ? t('legendPolicy') : t('legendBaseline');
+    chip.classList.toggle('after', after);
+    $('scrub').value = String(day);
+    $('scrub').style.setProperty('--fill', `${100 * day / total}%`);
+    windowChart?.move(day);
+    $('window-now').textContent = t('windowNow', { day, x: signed(replay.run.meanGoodness[day], 2) });
+  };
+  const setDay = (day, jump = false) => {
+    const previous = play.day;
+    play.day = clamp(day, 0, replay.d.market.trading_days);
+    const k = periodIndex(play.day);
+    if (jump || play.day < previous) {
+      rebuildFeeds();
+      applyPeriod(k);
+    } else {
+      pushEvents(play.day);
+      if (k !== state.k) applyPeriod(k, { ripple: true, beams: true });
+    }
+    updateClock();
+  };
+  const setPlaying = playing => {
+    play.playing = playing;
+    play.hold = 0;
+    const button = $('play');
+    button.classList.toggle('playing', playing);
+    button.setAttribute('aria-label', t(playing ? 'pauseLabel' : 'playLabel'));
+    wake();
+  };
+  $('play').addEventListener('click', () => {
+    if (!play.playing && play.day >= replay.d.market.trading_days) setDay(0, true);
+    setPlaying(!play.playing);
+  });
+  $('restart').addEventListener('click', () => { setDay(0, true); setPlaying(true); });
+  $('scrub').addEventListener('input', event => setDay(Number(event.target.value), true));
+  for (const button of document.querySelectorAll('[data-speed]')) {
+    button.addEventListener('click', () => {
+      play.speed = Number(button.dataset.speed);
+      for (const other of document.querySelectorAll('[data-speed]')) other.setAttribute('aria-pressed', String(other === button));
+    });
+  }
+
+  // Geometry of the stage for the canvas: sphere between the HUD rows, lever ports, ticket anchor.
+  const layoutStage = () => {
+    const box = $('sphere').getBoundingClientRect();
+    const rel = element => { const r = element.getBoundingClientRect(); return { x: r.left - box.left, y: r.top - box.top, w: r.width, h: r.height }; };
+    const hud = rel(document.querySelector('.hud'));
+    const top = rel(document.querySelector('.hud-top')), bottom = rel(document.querySelector('.hud-bottom'));
+    const areaTop = top.y + top.h + 6, areaBottom = bottom.y - 10;
+    const r = Math.max(70, Math.min(hud.w * (hud.w < 560 ? 0.42 : 0.34), (areaBottom - areaTop) / 2, 232));
+    const ports = [...document.querySelectorAll('.lever .port')].map(rel).filter(p => p.w > 0).map(p => ({ x: p.x + p.w / 2, y: p.y + p.h / 2 }));
+    const ticket = rel(document.querySelector('.ticket')), choice = rel($('ticket-choice'));
+    const cx = hud.x + hud.w / 2;
+    sphere.setGeometry({ cx, cy: (areaTop + areaBottom) / 2, r, ports,
+      ticket: ticket.x > cx ? { x: ticket.x, y: choice.y + choice.h / 2 } : null,
+      right: ticket.x > cx ? ticket.x - 8 : hud.x + hud.w });
+    const scrub = $('scrub');
+    $('scrub-switch').style.left = `${100 * (replay ? replay.d.market.burn_in_days + 1 : 1201) / Number(scrub.max)}%`;
+  };
+  new ResizeObserver(() => layoutStage()).observe($('stage'));
+
+  // The animation loop runs only while the stage is on screen.
+  let raf = 0, visible = true, lastNow = 0;
+  const loop = now => {
+    // Book the next frame first, so one failed frame cannot stop the desk.
+    raf = visible && !document.hidden ? requestAnimationFrame(loop) : 0;
+    const dt = lastNow ? Math.min(0.1, (now - lastNow) / 1000) : 0;
+    lastNow = now;
+    if (replay && play.playing) {
+      const end = replay.d.market.trading_days;
+      if (play.hold) {
+        if (now >= play.hold) { play.hold = 0; setDay(0, true); }
+      } else {
+        const next = play.day + dt * DAYS_PER_SECOND * play.speed;
+        if (next >= end) { setDay(end); play.hold = now + 2600; } else setDay(next);
+      }
+    }
+    sphere.frame(now);
+  };
+  const wake = () => { if (!raf && visible && !document.hidden) { lastNow = 0; raf = requestAnimationFrame(loop); } };
+  new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; wake(); }).observe($('stage'));
+  document.addEventListener('visibilitychange', wake);
+  const policyBar = $('policy-bar');
+  new IntersectionObserver(([entry]) => { policyBar.hidden = entry.isIntersecting || entry.boundingClientRect.top > 0; },
+    { rootMargin: '-52px 0px 0px 0px' }).observe($('levers'));
+
+  const renderDesk = () => {
+    legend($('sphere-legend'), ACTIONS.map(a => ({ label: t(a.key), color: a.color })));
+    sphere.setBandLabels(replay.groups.map((g, k) => t('bandLabel', { size: t(SIZES[k]), n: g.length })));
+    $('scrub').max = String(replay.d.market.trading_days);
+    renderWindow();
+    renderSpectroTable();
+    rebuildFeeds();
+    applyPeriod(periodIndex(play.day), { ripple: true });
+    lastClock = -1;
+    updateClock();
+    layoutStage();
   };
 
   // -- panel 3: stage F results --------------------------------------------------------------
@@ -726,6 +1334,7 @@
     // Carry the language to the stage 1 exhibit, which shares the 'abm-lang' preference.
     for (const element of document.querySelectorAll('[data-lang-link]')) element.setAttribute('href', `${element.dataset.langLink}?lang=${lang}`);
     $('lang-toggle').setAttribute('lang', lang === 'zh' ? 'en' : 'zh');
+    $('play').setAttribute('aria-label', t(play.playing ? 'pauseLabel' : 'playLabel'));
     renderHero();
   };
   // Coalesce slider events into one render per frame; the timer covers hidden tabs, where
@@ -735,6 +1344,8 @@
     if (!pending) return;
     pending = false;
     renderDecision();
+    replay = computeReplay();
+    renderDesk();
     renderDynamics();
   };
   const update = () => {
@@ -744,11 +1355,16 @@
     requestAnimationFrame(flush);
     setTimeout(flush, 120);
   };
-  const setDomain = key => {
+  const setDomain = (key, preset = null) => {
     state.domain = key;
     const d = domain();
-    state.levers = { ...policyLevers(d), decay: d.natural_decay };
+    state.levers = { ...(preset ? presetLevers(preset) : policyLevers(d)), decay: d.natural_decay };
     state.firm = defaultFirm(d);
+    const groups = sizeGroups(d);
+    const caps = d.firms.market_cap, low = Math.min(...caps);
+    sphere.setFirms(groups, caps.map(c => clamp(2.1 + 1.3 * Math.log10(c / low), 2.1, 5.8)));
+    sphere.select(state.firm);
+    ticketChart = null;
     renderResults();
     update();
   };
@@ -769,5 +1385,9 @@
 
   applyText();
   renderCost();
-  setDomain('esg');
+  // The desk opens on the information policy a few periods before the switch, so the first
+  // replay reaches it within seconds; without motion it rests on the finished run instead.
+  play.day = reduced ? domains.esg.market.trading_days : domains.esg.market.burn_in_days - 360;
+  setDomain('esg', 'I');
+  setPlaying(play.playing);
 })();

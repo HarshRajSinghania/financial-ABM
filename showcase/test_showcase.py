@@ -116,8 +116,11 @@ class ShowcaseTests(unittest.TestCase):
 
     # -- greenwashing policy sandbox (home page) -------------------------------------
     def test_sandbox_is_offline_and_self_contained(self):
-        for marker in ("/* SANDBOX_CSS */", "/* SANDBOX_CORE */", "/* SANDBOX_TEXT */", "/* SANDBOX_APP */", '{"sandbox":null}'):
+        for marker in ("/* SANDBOX_CSS */", "/* SANDBOX_CORE */", "/* SANDBOX_DESK */", "/* SANDBOX_TEXT */", "/* SANDBOX_APP */", '{"sandbox":null}'):
             self.assertNotIn(marker, self.sandbox_html)
+        self.assertIn("SandboxDesk", self.sandbox_html)
+        for element in ('id="sphere"', 'id="spectro"', 'id="wire-feed"', 'id="trace-body"', 'id="ticket-select"'):
+            self.assertIn(element, self.sandbox_html)
         self.assertNotIn("fetch(", self.sandbox_html)
         self.assertIsNone(re.search(r'<(?:script|link|img)[^>]+(?:src|href)=["\']https?://', self.sandbox_html))
         self.assertIn('href="stage1/"', self.sandbox_html)
@@ -125,6 +128,20 @@ class ShowcaseTests(unittest.TestCase):
         self.assertIn('prefers-reduced-motion', self.sandbox_html)
         exported = json.loads((self.output / "sandbox-data.json").read_text(encoding="utf-8"))
         self.assertEqual(exported, self.data["sandbox"])
+
+    def test_pages_open_in_english_unless_chinese_was_chosen(self):
+        self.assertIn('<html lang="en">', (HERE / "sandbox" / "index.html").read_text(encoding="utf-8"))
+        for page in ("sandbox", "stage1"):
+            app = (HERE / page / "app.js").read_text(encoding="utf-8")
+            self.assertIn("storage.get() === 'zh' ? 'zh' : 'en'", app, page)
+
+    def test_desk_replay_is_labelled_as_simplified_dynamics(self):
+        template = (HERE / "sandbox" / "index.html").read_text(encoding="utf-8")
+        self.assertIn('data-i18n="wireTag"', template)
+        self.assertIn('data-i18n="p2Tag"', template.split('id="decision"')[0])
+        text = (HERE / "sandbox" / "i18n.js").read_text(encoding="utf-8")
+        self.assertIn("回放 · 简化动态 · 非研究结果", text)
+        self.assertIn("Replay · simplified dynamics · not a research result", text)
 
     def test_sandbox_labels_simplified_dynamics_and_ai_washing(self):
         zh = (HERE / "sandbox" / "i18n.js").read_text(encoding="utf-8")
