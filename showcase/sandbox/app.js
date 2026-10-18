@@ -184,6 +184,54 @@
   });
   const LEVERS = ['tau', 'fixed', 'prop', 'audit', 'decay'];
 
+  // -- shareable links -----------------------------------------------------------------
+  // The address carries the domain, the levers and the selected firm, so a copied link opens
+  // the same desk. Values that are missing, malformed or outside a slider's range are ignored.
+  const LINK_DOMAINS = { esg: 'esg', ai: 'ai_washing' };
+  const linkNumber = (name, lo, hi) => {
+    const raw = query.get(name);
+    if (raw === null || raw.trim() === '') return null;
+    const v = Number(raw);
+    return Number.isFinite(v) && v >= lo && v <= hi ? v : null;
+  };
+  const linkedState = () => {
+    const range = id => [Number($(id).min), Number($(id).max)];
+    const levers = {};
+    for (const key of ['tau', 'fixed', 'audit', 'decay']) {
+      const v = linkNumber(key, ...range(`lever-${key}`));
+      if (v !== null) levers[key] = v;
+    }
+    // The proportional fine travels in basis points per SD and snaps to the slider's steps.
+    const bp = linkNumber('prop', 0, propFromPosition(Number($('lever-prop').max)) / BP);
+    if (bp !== null) levers.prop = propFromPosition(positionFromProp(bp * BP));
+    const firm = linkNumber('firm', 1, 200);
+    return { domain: LINK_DOMAINS[query.get('d')] ?? null, levers, firm: firm !== null && firm % 1 === 0 ? firm - 1 : null };
+  };
+  const linkParams = () => {
+    const l = state.levers, text = leverText(l), d = domain();
+    const opening = { ...presetLevers('I'), decay: d.natural_decay };
+    const params = new URLSearchParams();
+    if (query.has('lang')) params.set('lang', lang);
+    const untouched = state.domain === 'esg' && sameLevers(l, opening) && Math.abs(l.decay - opening.decay) < 1e-12
+      && state.firm === defaultFirm(d);
+    if (!untouched) {
+      params.set('d', state.domain === 'esg' ? 'esg' : 'ai');
+      params.set('tau', text.tau); params.set('fixed', text.fixed); params.set('prop', text.prop);
+      params.set('audit', String(Number(l.audit.toFixed(4)))); params.set('decay', text.decay);
+      params.set('firm', String(state.firm + 1));
+    }
+    return params;
+  };
+  const shareUrl = () => {
+    const search = linkParams().toString();
+    return `${location.href.split(/[?#]/)[0]}${search ? `?${search}` : ''}`;
+  };
+  const writeLink = () => {
+    const search = linkParams().toString();
+    if (`?${search}` === location.search || (!search && !location.search)) return;
+    try { history.replaceState(null, '', `${location.pathname}${search ? `?${search}` : ''}${location.hash}`); } catch (e) { /* file:// may refuse */ }
+  };
+
   const syncLevers = () => {
     const l = state.levers, text = leverText(l);
     $('lever-tau').value = l.tau; $('lever-fixed').value = l.fixed; $('lever-prop').value = positionFromProp(l.prop);
@@ -501,6 +549,7 @@
     renderScatter(domain(), decision.choices);
     renderFirm(domain(), decision.choices, decision.factors, decision.room, decision.probability);
     if (replay) { renderTicket(); drawSpectro(); }
+    writeLink();
   };
   $('firm-select').addEventListener('change', event => selectFirm(Number(event.target.value)));
   $('ticket-select').addEventListener('change', event => selectFirm(Number(event.target.value)));
@@ -1347,6 +1396,7 @@
     replay = computeReplay();
     renderDesk();
     renderDynamics();
+    writeLink();
   };
   const update = () => {
     syncLevers();
@@ -1355,11 +1405,11 @@
     requestAnimationFrame(flush);
     setTimeout(flush, 120);
   };
-  const setDomain = (key, preset = null) => {
+  const setDomain = (key, preset = null, linked = { levers: {}, firm: null }) => {
     state.domain = key;
     const d = domain();
-    state.levers = { ...(preset ? presetLevers(preset) : policyLevers(d)), decay: d.natural_decay };
-    state.firm = defaultFirm(d);
+    state.levers = { ...(preset ? presetLevers(preset) : policyLevers(d)), decay: d.natural_decay, ...linked.levers };
+    state.firm = linked.firm ?? defaultFirm(d);
     const groups = sizeGroups(d);
     const caps = d.firms.market_cap, low = Math.min(...caps);
     sphere.setFirms(groups, caps.map(c => clamp(2.1 + 1.3 * Math.log10(c / low), 2.1, 5.8)));
@@ -1372,6 +1422,20 @@
     lang = lang === 'zh' ? 'en' : 'zh';
     storage.set(lang);
     applyText(); renderCost(); renderResults(); update();
+  });
+  $('share-link').addEventListener('click', async () => {
+    const url = shareUrl(), status = $('share-status');
+    const field = $('share-field');
+    field.value = url;
+    let copied = false;
+    try { await navigator.clipboard.writeText(url); copied = true; } catch (e) {
+      // Embedded or file:// pages may refuse the clipboard API; fall back to a selected field.
+      field.hidden = false; field.select();
+      try { copied = document.execCommand('copy'); } catch (error) { copied = false; }
+    }
+    status.textContent = copied ? t('shareCopied') : t('shareManual');
+    clearTimeout(status.timer);
+    status.timer = setTimeout(() => { status.textContent = ''; }, 4000);
   });
   document.querySelectorAll('.segmented').forEach(group => group.addEventListener('keydown', event => {
     if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
@@ -1388,6 +1452,8 @@
   // The desk opens on the information policy a few periods before the switch, so the first
   // replay reaches it within seconds; without motion it rests on the finished run instead.
   play.day = reduced ? domains.esg.market.trading_days : domains.esg.market.burn_in_days - 360;
-  setDomain('esg', 'I');
+  // A shared link opens on its own policy; without one the desk opens on the information policy.
+  const linked = linkedState();
+  setDomain(linked.domain ?? 'esg', 'I', linked);
   setPlaying(play.playing);
 })();

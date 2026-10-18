@@ -1,0 +1,29 @@
+name: Bug report
+description: Something crashes, gives a wrong number, or the page misbehaves.
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: How to reproduce
+      description: The exact command and spec file, or a link from the policy desk ("Copy a link to this policy").
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Error message or output
+      render: text
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, Python version, browser if relevant, and the commit (git rev-parse --short HEAD).

@@ -8,16 +8,56 @@
 </p>
 
 <p align="center">
-  <b>Why do firms greenwash, and which policies actually drive real ESG transition?</b><br>
-  Multi-agent artificial market · evolving investor types · firm disclosure game · policy experiments · auditable evidence
+  <b>Turn a regulator's dial and watch 200 firms decide: improve for real, or greenwash?</b><br>
+  An open-source agent-based market where investors, firms and a regulator learn and react, built to compare ESG policies that were never tried.
 </p>
 
-<p align="center"><a href="README.zh-CN.md"><b>中文</b></a> · <a href="https://kanzaler123.github.io/financial-ABM/"><b>Live policy desk</b></a> · <a href="#stage-f-findings"><b>Stage F findings</b></a> · <a href="docs/README.md"><b>Docs index (Chinese)</b></a></p>
+<p align="center"><a href="https://kanzaler123.github.io/financial-ABM/"><b>Try the live policy desk</b></a> · <a href="#quick-start"><b>Run it locally</b></a> · <a href="#what-we-found"><b>What we found</b></a> · <a href="CONTRIBUTING.md"><b>Contribute</b></a> · <a href="README.zh-CN.md"><b>中文</b></a></p>
 
----
+<p align="center">
+  <a href="https://kanzaler123.github.io/financial-ABM/"><img src=".github/assets/policy-desk-demo.gif" alt="The policy desk as transparency rises from 0.10 to 0.70: orange firms, which inflate their reports, thin out and disappear near the threshold, and the sphere turns blue, improving for real." width="88%"></a><br>
+  <sub>Transparency rises from 0.10 to 0.70; orange firms (greenwashing) thin out and vanish near the threshold. Simplified replay in the browser, not a research result. <a href="https://kanzaler123.github.io/financial-ABM/">Open it and move the levers yourself.</a></sub>
+</p>
+
+## What we found
+
+In a pre-registered experiment on 1,770 simulated markets, conditional on the model's assumptions:
+
+- **Clearer sight beats heavier fines.** Raising transparency moves firms toward real improvement more than raising the fixed fine, at the doses tested.
+- **Transparency has a tipping point.** Above a threshold, firms stop greenwashing altogether; below it, fines have diminishing bite.
+- **Big firms greenwash more,** because a capped fine is negligible next to a large market cap, not because improving costs them more.
+- **Nothing works without investors who care.** Without impact investors' taste for ESG, none of the policies has any effect.
+
+Numbers, intervals and caveats are in [Stage F findings](#stage-f-findings) below.
 
 > [!NOTE]
-> **Research in progress.** The stage F confirmatory experiment is complete; see [Stage F findings](#stage-f-findings). Its conclusions are conditional on the model's assumptions, and policy-effect magnitudes depend on an uncalibrated natural decay, so they are reported as a range. Other items carry an evidence label.
+> **Research in progress.** The stage F confirmatory experiment is complete. Its conclusions are conditional on the model's assumptions, and policy-effect magnitudes depend on an uncalibrated natural decay, so they are reported as a range. Other items carry an evidence label.
+
+## Quick start
+
+**No install:** open the [live policy desk](https://kanzaler123.github.io/financial-ABM/), move a lever, then use **Copy a link to this policy** to share exactly what you see.
+
+**Run the model** (Python 3.12+; a few minutes including install):
+
+```sh
+python -m venv .venv
+# Windows: .venv\Scripts\activate    macOS / Linux: source .venv/bin/activate
+python -m pip install -c requirements-lock.txt -e ".[plot,research]"
+python -m abm.disclosure.experiments --spec configs/disclosure_quickstart_v1.json --output runs/quickstart --workers 2
+```
+
+The run takes about 10–30 seconds: three policies (baseline, transparency 0.6, a proportional fine) on a small market of 40 firms and 4 seeds. Open `runs/quickstart/report.md` for paired contrasts with intervals and `policy_effects.png` for the chart.
+
+**Change one thing and see it move.** In [`configs/disclosure_quickstart_v1.json`](configs/disclosure_quickstart_v1.json), set scenario `I` to `"transparency": 0.3` and run again with `--output runs/quickstart_tau03`. Transparency is now below the threshold: the information policy's gain over baseline falls from about +0.37 SD to about +0.07 SD, and the fine now does better. The quickstart uses the bundled, uncalibrated ESG domain at small scale, so it demonstrates the pipeline; it does not reproduce stage F.
+
+Developers: `python -m pip install -c requirements-lock.txt -e ".[all,dev]"` then `python -m pytest`. The single-asset Stage 1–3 application (web and desktop observatory, SEC 8-K information factors) is described in the [Chinese README](README.zh-CN.md) and [OPERATIONS.md](OPERATIONS.md).
+
+## Build on it
+
+- **A new domain is a JSON file.** The disclosure game, a true attribute versus a reported one, is not specific to ESG: copy [`configs/domains/esg.json`](configs/domains/esg.json) and model carbon claims, earnings management or AI-washing.
+- **A new policy experiment is a spec.** Copy the quickstart spec, add scenarios and paired comparisons, and the runner reports intervals.
+- **Start small.** [CONTRIBUTING.md](CONTRIBUTING.md) explains the setup, the research rules and where to begin; issues labelled [`good first issue`](https://github.com/kanzaler123/financial-ABM/labels/good%20first%20issue) are scoped for newcomers.
+- **Cite it:** [CITATION.cff](CITATION.cff).
 
 ## The question
 
@@ -59,9 +99,10 @@ The disclosure game, a true attribute versus a reported attribute, is not specif
 
 **Limits.** Only NPV firms: the learning firms did not pass stage D. Audit intensity, targeted audits and the implementation costs of policy are not modelled. 37 runs hit the price cap; they stay in the statistics, and excluding them changes nothing. Full tables: [stage F report (Chinese)](reports/disclosure_stage_f_20261014/README.md).
 
-**In-browser policy desk.** [`showcase/`](showcase/README.md) brings the firm decision layer into the browser. The home page opens in English (one click switches to Chinese) on a light policy desk: key stage F results and a live wire across the top, policy levers on the left, a firm sphere of the 200 synthetic firms in the middle, a decision ticket for one firm on the right, and below them agent cards (regulator, firm size classes, investors, the threshold τ*), a decision spectrogram and an audit trace. The desk replays panel ②, a 14-year simplified dynamic without market feedback, and is labelled as not a research result. Further down, panel ① shows how the 200 firms would choose this period under the selected policy, and panel ③ shows the stage F results above with their sources. The decision rule matches the Python model term by term (1,200 random inputs, relative error at most 10⁻¹²), and the page states how far the simplified dynamics are from the full model. An AI-washing switch shows the same mechanism in another domain. The stage 1 exhibit (`stage1/`) uses the same light style. Live: [https://kanzaler123.github.io/financial-ABM/](https://kanzaler123.github.io/financial-ABM/); to preview locally: `python showcase/build.py --output _site`, then open `_site/index.html`.
+**In-browser policy desk.** [`showcase/`](showcase/README.md) brings the firm decision layer into the browser. The home page opens in English (one click switches to Chinese) on a light policy desk: key stage F results and a live wire across the top, policy levers on the left, a firm sphere of the 200 synthetic firms in the middle, a decision ticket for one firm on the right, and below them agent cards (regulator, firm size classes, investors, the threshold τ*), a decision spectrogram and an audit trace. The desk replays panel ②, a 14-year simplified dynamic without market feedback, and is labelled as not a research result. Further down, panel ① shows how the 200 firms would choose this period under the selected policy, and panel ③ shows the stage F results above with their sources. The decision rule matches the Python model term by term (1,200 random inputs, relative error at most 10⁻¹²), and the page states how far the simplified dynamics are from the full model. An AI-washing switch shows the same mechanism in another domain. The page address carries the policy and the selected firm, so a copied link reopens the same desk. The stage 1 exhibit (`stage1/`) uses the same light style. Live: [https://kanzaler123.github.io/financial-ABM/](https://kanzaler123.github.io/financial-ABM/); to preview locally: `python showcase/build.py --output _site`, then open `_site/index.html`.
 
-## Early diagnostics (before stage B)
+<details>
+<summary><b>Early diagnostics (before stage B)</b></summary>
 
 **[Fact]** checked against primary sources · **[Diagnosis]** reproducible analysis of model behaviour · **[Dev]** small-scale, few-seed observation · **[Open]** identified but unresolved
 
@@ -70,6 +111,8 @@ The disclosure game, a true attribute versus a reported attribute, is not specif
 - **[Diagnosis] The transparency threshold is all-or-nothing.** With no fine, every firm washes below transparency ≈ 0.565 and none does above it, a consequence of homogeneous discounting and timing that the formal design must address. Later tested (contract 20.21, group W): with wash costs that differ across firms, the decline becomes gradual.
 - **[Dev] Impact investors push real improvement.** Across three initialization settings, the market-preference effect is positive: about +1.7 to +2.5 score points over the measurement window (3 seeds, wide intervals).
 - **[Diagnosis, fixed in stage C] With zero taste the impact-investor share still rose, because of the imitation rule.** The rule lacked the random draw of a comparison partner; with Schlag's original rule there is no drift at zero taste. [Stage C report (Chinese)](reports/disclosure_imitation_diagnosis_20261013/README.md)
+
+</details>
 
 ## Roadmap
 
@@ -87,19 +130,6 @@ The disclosure game, a true attribute versus a reported attribute, is not specif
 ## Research standards
 
 Key settings are fixed in a [research contract](docs/disclosure_research_contract.md) before any policy experiment that uses them. Failures are kept, not deleted. Evidence directories are stored byte for byte, so the recorded SHA-256 values can be checked directly. Every empirical parameter cites its source and evidence level. Vendor data (Huazheng, Eastmoney and others) has no open redistribution licence and is not included; collection scripts and hash manifests are.
-
-**Build on it.** Write a domain JSON for another disclosure problem (carbon, earnings management, AI-washing), or a spec in [`configs/`](configs) with your own scenarios and paired comparisons. Citation: [CITATION.cff](CITATION.cff).
-
-## Quick start
-
-```sh
-python -m venv .venv
-python -m pip install -c requirements-lock.txt -e ".[all,dev]"
-python -m pytest
-python -m abm.disclosure.experiments --spec configs/disclosure_financing_development_v1.json --output runs/financing_dev --workers 4
-```
-
-The single-asset Stage 1–3 application (web and desktop observatory, SEC 8-K information factors, interactive showcase) is described in the [Chinese README](README.zh-CN.md) and [OPERATIONS.md](OPERATIONS.md).
 
 ---
 

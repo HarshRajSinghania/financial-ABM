@@ -8,24 +8,62 @@
 </p>
 
 <p align="center">
-  <b>当监管遇上市场：企业为什么会漂绿？哪种政策最能推动真实的 ESG 转型？</b><br>
-  多智能体人工市场 · 异质投资者演化 · 企业披露博弈 · 政策计算实验 · 证据可追溯
+  <b>调一调监管旋钮，看 200 家企业怎么选：真实改善，还是漂绿？</b><br>
+  一个开源的多智能体人工市场：投资者、企业和监管者在其中互动、学习、演化，用来比较现实中没有试过的 ESG 政策。
 </p>
 
 <p align="center">
-  <a href="README.md"><b>English</b></a> ·
-  <a href="#研究问题"><b>研究问题</b></a> ·
-  <a href="https://kanzaler123.github.io/financial-ABM/"><b>在线政策作战台</b></a> ·
-  <a href="#阶段-f-发现"><b>阶段 F 发现</b></a> ·
-  <a href="#路线图"><b>路线图</b></a> ·
-  <a href="docs/README.md"><b>文档索引</b></a> ·
-  <a href="#快速开始"><b>快速开始</b></a>
+  <a href="https://kanzaler123.github.io/financial-ABM/"><b>在线试玩政策作战台</b></a> ·
+  <a href="#快速开始"><b>本地跑起来</b></a> ·
+  <a href="#主要发现"><b>主要发现</b></a> ·
+  <a href="CONTRIBUTING.md"><b>参与贡献</b></a> ·
+  <a href="README.md"><b>English</b></a>
 </p>
 
----
+<p align="center">
+  <a href="https://kanzaler123.github.io/financial-ABM/"><img src=".github/assets/policy-desk-demo.gif" alt="透明度从 0.10 提高到 0.70 时的政策作战台：代表虚报的橙色企业逐渐变少，接近门槛时消失，企业球变成代表真实改善的蓝色。" width="88%"></a><br>
+  <sub>透明度从 0.10 提高到 0.70，橙色（漂绿）企业逐渐变少，接近门槛时消失。这是浏览器里的简化回放，不是研究结果。<a href="https://kanzaler123.github.io/financial-ABM/">打开页面，自己拖动杠杆。</a></sub>
+</p>
+
+## 主要发现
+
+在一个事先登记设计的实验中（1770 个模拟市场），以模型假设为条件：
+
+- **看得清比罚得重更有效。** 在测试剂量下，提高透明度比提高定额罚款更能推动企业真实改善。
+- **透明度有临界点。** 超过门槛，企业完全停止漂绿；继续加罚款的边际效果递减。
+- **大企业更爱漂绿**，原因是有上限的罚款相对大市值微不足道，而不是改善成本更高。
+- **没有在乎 ESG 的投资者，政策就不起作用。** 去掉影响力投资者的偏好，三种政策都没有效果。
+
+数值、区间和限定条件见下文[阶段 F 发现](#阶段-f-发现)。
 
 > [!NOTE]
-> **研究进行中。** 阶段 F 的确认性实验已经完成，结论见[阶段 F 发现](#阶段-f-发现)：它们以模型假设为条件，政策效应的量级依赖未经校准的自然衰减，按区间报告。其余条目标注了证据层级。
+> **研究进行中。** 阶段 F 的确认性实验已经完成：结论以模型假设为条件，政策效应的量级依赖未经校准的自然衰减，按区间报告。其余条目标注了证据层级。
+
+## 快速开始
+
+**不用安装：** 打开[在线政策作战台](https://kanzaler123.github.io/financial-ABM/)，拖动杠杆，再点 **复制当前政策的链接**，就能把你看到的结果原样分享出去。
+
+**在本地跑模型**（Python 3.12+，从仓库根目录执行）：
+
+```sh
+python -m venv .venv
+# Windows: .venv\Scripts\activate    macOS / Linux: source .venv/bin/activate
+python -m pip install -c requirements-lock.txt -e ".[plot,research]"
+python -m abm.disclosure.experiments --spec configs/disclosure_quickstart_v1.json --output runs/quickstart --workers 2
+```
+
+运行约 10–30 秒：在 40 家企业、4 个种子的小市场上比较三种政策（基准、透明度 0.6、比例罚款）。结果在 `runs/quickstart/report.md`（带区间的配对对比）和 `policy_effects.png`。
+
+**改一个参数，看结果怎么变。** 把 [`configs/disclosure_quickstart_v1.json`](configs/disclosure_quickstart_v1.json) 中场景 `I` 的透明度改成 `"transparency": 0.3`，换一个输出目录 `--output runs/quickstart_tau03` 再跑一次。此时透明度低于门槛：信息政策相对基准的提升从约 +0.37 SD 降到约 +0.07 SD，罚款反而更有效。快速示例使用仓库自带、未经校准的 ESG 领域和小规模市场，用来演示流程，不复现阶段 F。
+
+开发者：`python -m pip install -c requirements-lock.txt -e ".[all,dev]"`，然后 `python -m pytest`。单资产主应用的界面和其他命令见下文[单资产主应用的本地界面](#单资产主应用的本地界面)和 [OPERATIONS.md](OPERATIONS.md)。
+
+## 在这个项目上做研究
+
+- **换一个领域，只需一份 JSON。** “真实属性 vs 披露属性”的信号博弈不只出现在 ESG 中：复制 [`configs/domains/esg.json`](configs/domains/esg.json)，就可以研究碳排放声明、盈余管理或 AI-washing。
+- **新的政策实验是一份配置。** 复制快速示例的配置，增加场景和配对比较，运行器会输出带区间的报告。
+- **从小处开始。** [CONTRIBUTING.md](CONTRIBUTING.md) 说明环境、研究规则和入手点；标记为 [`good first issue`](https://github.com/kanzaler123/financial-ABM/labels/good%20first%20issue) 的议题适合第一次参与。
+- **引用**：见 [CITATION.cff](CITATION.cff)。
 
 ## 研究问题
 
@@ -91,9 +129,10 @@ flowchart LR
 
 **限制。** 只研究 NPV 企业，学习型企业没有通过阶段 D 的验收；核查强度、定向核查和政策的实施成本都没有建模；37 个运行有价格截断，保留在统计中，剔除后结论不变。完整表格见[阶段 F 报告](reports/disclosure_stage_f_20261014/README.md)。
 
-**浏览器政策沙盘。** [`showcase/`](showcase/README.md) 把企业决策层搬进浏览器。首页默认英文，一键切换中文，打开就是浅色的漂绿政策作战台：顶部是阶段 F 的要点和事件流，左侧是政策杠杆，中间是 200 家合成企业组成的企业球，右侧是单家企业的决策单，下方是智能体卡片（监管者、三档规模的企业、投资者、门槛 τ*）、决策频谱和核查日志。作战台回放的是面板 ②：没有市场反馈的 14 年简化动态，标注为非研究结果。再往下，面板 ① 展示所选政策下 200 家企业这一期会怎样选择，面板 ③ 展示上面的阶段 F 结果并附出处。决策规则与 Python 模型逐项一致（1200 组随机输入，相对误差不超过 10⁻¹²），简化动态与完整模型的差距写在页面上。可以切换到 AI-washing 领域，演示同一机制换一个领域。阶段 1 展厅（`stage1/`）使用同一套浅色风格。在线访问：[https://kanzaler123.github.io/financial-ABM/](https://kanzaler123.github.io/financial-ABM/)；本地预览见[快速开始](#快速开始)。
+**浏览器政策沙盘。** [`showcase/`](showcase/README.md) 把企业决策层搬进浏览器。首页默认英文，一键切换中文，打开就是浅色的漂绿政策作战台：顶部是阶段 F 的要点和事件流，左侧是政策杠杆，中间是 200 家合成企业组成的企业球，右侧是单家企业的决策单，下方是智能体卡片（监管者、三档规模的企业、投资者、门槛 τ*）、决策频谱和核查日志。作战台回放的是面板 ②：没有市场反馈的 14 年简化动态，标注为非研究结果。再往下，面板 ① 展示所选政策下 200 家企业这一期会怎样选择，面板 ③ 展示上面的阶段 F 结果并附出处。决策规则与 Python 模型逐项一致（1200 组随机输入，相对误差不超过 10⁻¹²），简化动态与完整模型的差距写在页面上。可以切换到 AI-washing 领域，演示同一机制换一个领域。页面地址会记录当前政策和所选企业，复制链接即可让别人打开同一个作战台。阶段 1 展厅（`stage1/`）使用同一套浅色风格。在线访问：[https://kanzaler123.github.io/financial-ABM/](https://kanzaler123.github.io/financial-ABM/)；本地预览见[单资产主应用的本地界面](#单资产主应用的本地界面)末尾。
 
-## 早期诊断（阶段 B 之前）
+<details>
+<summary><b>早期诊断（阶段 B 之前）</b></summary>
 
 证据层级：**[事实]** 已核对原文的法规或数据 · **[诊断]** 对模型行为的可复核分析 · **[开发观察]** 小规模、少种子的结果 · **[待查]** 已发现、尚未查清的问题
 
@@ -102,6 +141,8 @@ flowchart LR
 - **[诊断] 透明度门槛是“全有或全无”的。** 没有罚金时，透明度低于约 0.565，所有企业都选择漂绿；高于它，则全部转向真实改善。这来自同质的贴现和时间结构，正式实验需要处理这一点。后来已检验（契约第 20.21 条 W 组）：企业漂绿成本不同时，变成渐进下降。
 - **[开发观察] ESG 偏好投资者会推动真实改善。** 在三种初始化设定下，市场偏好效应都为正，测量窗口内约 +1.7 到 +2.5 个评分点（3 个种子，区间较宽）。[比较报告](reports/disclosure_csi300_variants_20261012/README.md)
 - **[诊断，阶段 C 已修正] 零偏好时影响力投资者占比仍会上升，原因在模仿规则。** 原规则缺少随机抽取比较对象这一步；按 Schlag 的原意修正后，零偏好时没有漂移。[阶段 C 报告](reports/disclosure_imitation_diagnosis_20261013/README.md)
+
+</details>
 
 ## 路线图
 
@@ -125,12 +166,6 @@ flowchart LR
 - **证据可核对。** 研究证据目录按原始字节存储，报告中记录的 SHA-256 可以直接核对；重放和插桩诊断都与归档结果逐位比对。
 - **参数有出处。** 每个经验参数都在[证据表](docs/disclosure_empirical_magnitudes_20261012.md)中标注来源和可信度（原文 / 摘要 / 二手）。
 - **数据边界。** 华证、东方财富等供应商数据没有开放再分发许可，不放入仓库；采集脚本和 hash 清单保留，可以重新取数逐项核对。
-
-### 在这个项目上做研究
-
-- **换一个领域**：写一份领域 JSON，指定方向、量表、经验分布和机制参数，例如碳排放、盈余管理、AI-washing。
-- **跑你自己的政策实验**：参照 [`configs/disclosure_*_v1.json`](configs) 写一份实验配置，指定场景、种子和配对比较，运行器会输出带区间的报告。
-- **引用**：见 [CITATION.cff](CITATION.cff)。
 
 ## 地基：单资产人工市场（Stage 1–3）
 
@@ -169,26 +204,7 @@ flowchart LR
 
 </details>
 
-## 快速开始
-
-使用 Python 3.12+，从仓库根目录执行。这是本地研究工具，不是公网部署说明。
-
-```sh
-python -m venv .venv
-# Windows PowerShell: .\.venv\Scripts\Activate.ps1
-# macOS / Linux: source .venv/bin/activate
-python -m pip install -c requirements-lock.txt -e ".[all,dev]"
-python -m pytest
-```
-
-**披露博弈实验**：
-
-```sh
-# 一个开发网格：B/I/F/IF 政策 × 市场偏好 × 规模成本 × 融资对照，3 个种子
-python -m abm.disclosure.experiments --spec configs/disclosure_financing_development_v1.json --output runs/financing_dev --workers 4
-```
-
-**单资产主应用的本地界面**：
+## 单资产主应用的本地界面
 
 ```sh
 cd web

@@ -129,6 +129,9 @@ class ShowcaseTests(unittest.TestCase):
         exported = json.loads((self.output / "sandbox-data.json").read_text(encoding="utf-8"))
         self.assertEqual(exported, self.data["sandbox"])
 
+    def test_sandbox_has_share_link(self):
+        self.assertIn('id="share-link"', self.sandbox_html)
+
     def test_pages_open_in_english_unless_chinese_was_chosen(self):
         self.assertIn('<html lang="en">', (HERE / "sandbox" / "index.html").read_text(encoding="utf-8"))
         for page in ("sandbox", "stage1"):
