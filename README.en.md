@@ -1,5 +1,5 @@
 <p align="center">
-  <img src=".github/assets/disclosure-cover.svg" alt="Financial ABM: policy meets markets. A multi-agent artificial market for ESG transition and greenwashing. The right side is a structural schematic, not live data." width="100%">
+  <img src=".github/assets/disclosure-cover.svg" alt="Financial ABM policy desk: policy meets markets. Who greenwashes, and why? A multi-agent artificial market for ESG transition and greenwashing. The firm sphere on the right is a structural schematic, not live data." width="100%">
 </p>
 
 <p align="center">
@@ -12,7 +12,7 @@
   Multi-agent artificial market · evolving investor types · firm disclosure game · policy experiments · auditable evidence
 </p>
 
-<p align="center"><a href="README.md"><b>中文</b></a> · <a href="https://kanzaler123.github.io/financial-ABM/"><b>Policy sandbox</b></a> · <a href="#stage-f-findings"><b>Stage F findings</b></a> · <a href="docs/README.md"><b>Docs index (Chinese)</b></a></p>
+<p align="center"><a href="README.md"><b>中文</b></a> · <a href="https://kanzaler123.github.io/financial-ABM/"><b>Live policy desk</b></a> · <a href="#stage-f-findings"><b>Stage F findings</b></a> · <a href="docs/README.md"><b>Docs index (Chinese)</b></a></p>
 
 ---
 
@@ -59,7 +59,7 @@ The disclosure game, a true attribute versus a reported attribute, is not specif
 
 **Limits.** Only NPV firms: the learning firms did not pass stage D. Audit intensity, targeted audits and the implementation costs of policy are not modelled. 37 runs hit the price cap; they stay in the statistics, and excluding them changes nothing. Full tables: [stage F report (Chinese)](reports/disclosure_stage_f_20261014/README.md).
 
-**In-browser policy sandbox.** [`showcase/`](showcase/README.md) brings the firm decision layer into the browser: move transparency, fines and audits to see how 200 synthetic firms choose (panel ①) and a 14-year simplified dynamic without market feedback (panel ②); panel ③ shows the stage F results above with their sources. The opening desk replays panel ② over 14 years as a firm sphere, a decision spectrogram, a live wire and an audit trace, labelled as not a research result. The decision rule matches the Python model term by term (1,200 random inputs, relative error at most 10⁻¹²), and the page states how far the simplified dynamics are from the full model. An AI-washing switch shows the same mechanism in another domain. Live: [https://kanzaler123.github.io/financial-ABM/](https://kanzaler123.github.io/financial-ABM/); to preview locally: `python showcase/build.py --output _site`, then open `_site/index.html`.
+**In-browser policy desk.** [`showcase/`](showcase/README.md) brings the firm decision layer into the browser. The home page opens in English (one click switches to Chinese) on a light policy desk: key stage F results and a live wire across the top, policy levers on the left, a firm sphere of the 200 synthetic firms in the middle, a decision ticket for one firm on the right, and below them agent cards (regulator, firm size classes, investors, the threshold τ*), a decision spectrogram and an audit trace. The desk replays panel ②, a 14-year simplified dynamic without market feedback, and is labelled as not a research result. Further down, panel ① shows how the 200 firms would choose this period under the selected policy, and panel ③ shows the stage F results above with their sources. The decision rule matches the Python model term by term (1,200 random inputs, relative error at most 10⁻¹²), and the page states how far the simplified dynamics are from the full model. An AI-washing switch shows the same mechanism in another domain. The stage 1 exhibit (`stage1/`) uses the same light style. Live: [https://kanzaler123.github.io/financial-ABM/](https://kanzaler123.github.io/financial-ABM/); to preview locally: `python showcase/build.py --output _site`, then open `_site/index.html`.
 
 ## Early diagnostics (before stage B)
 
@@ -82,7 +82,7 @@ The disclosure game, a true attribute versus a reported attribute, is not specif
 - [x] Learning firms: compared; they did not pass acceptance and are excluded from the formal experiment (stage D)
 - [ ] New agents: risk-based regulator, assurance providers, rating disagreement
 - [x] Formal experiments: information vs enforcement, phase diagrams, size divide (fresh seeds, design frozen before running; stage F)
-- [x] In-browser policy sandbox: [GitHub Pages](https://kanzaler123.github.io/financial-ABM/), v0.2.0 (2026-10-16)
+- [x] In-browser policy sandbox: [GitHub Pages](https://kanzaler123.github.io/financial-ABM/), v0.2.0 (2026-10-16); redesigned as a light policy desk, English first (2026-10-18)
 
 ## Research standards
 

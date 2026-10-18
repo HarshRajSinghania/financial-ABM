@@ -1,5 +1,5 @@
 <p align="center">
-  <img src=".github/assets/disclosure-cover.svg" alt="Financial ABM · 政策与市场双轮驱动下的 ESG 转型：一个可审计的多智能体人工市场。右侧为结构示意，不是实时数据。" width="100%">
+  <img src=".github/assets/disclosure-cover.svg" alt="Financial ABM 政策作战台 · Policy meets markets. Who greenwashes, and why? 政策与市场双轮驱动下的 ESG 转型：一个可审计的多智能体人工市场。右侧企业球为结构示意，不是实时数据。" width="100%">
 </p>
 
 <p align="center">
@@ -15,7 +15,7 @@
 <p align="center">
   <a href="README.en.md"><b>English</b></a> ·
   <a href="#研究问题"><b>研究问题</b></a> ·
-  <a href="https://kanzaler123.github.io/financial-ABM/"><b>政策沙盘</b></a> ·
+  <a href="https://kanzaler123.github.io/financial-ABM/"><b>在线政策作战台</b></a> ·
   <a href="#阶段-f-发现"><b>阶段 F 发现</b></a> ·
   <a href="#路线图"><b>路线图</b></a> ·
   <a href="docs/README.md"><b>文档索引</b></a> ·
@@ -49,9 +49,9 @@ flowchart LR
     FIRM -->|披露的 ESG| INV
     REG["监管者<br/>透明度 · 核查 · 罚款"] -->|核查与罚款| FIRM
     REG -->|透明度| INV
-    classDef info fill:#122a30,stroke:#75d8df,color:#d9f5ef
-    classDef agent fill:#202b1c,stroke:#c6f590,color:#e8f8d7
-    classDef policy fill:#251f31,stroke:#bca5eb,color:#eee3ff
+    classDef info fill:#f6f5f1,stroke:#898781,color:#0b0b0b
+    classDef agent fill:#fcfcfb,stroke:#2a78d6,color:#0b0b0b
+    classDef policy fill:#f0eefb,stroke:#6250d6,color:#0b0b0b
     class MKT info
     class INV,FIRM agent
     class REG policy
@@ -91,7 +91,7 @@ flowchart LR
 
 **限制。** 只研究 NPV 企业，学习型企业没有通过阶段 D 的验收；核查强度、定向核查和政策的实施成本都没有建模；37 个运行有价格截断，保留在统计中，剔除后结论不变。完整表格见[阶段 F 报告](reports/disclosure_stage_f_20261014/README.md)。
 
-**浏览器政策沙盘。** [`showcase/`](showcase/README.md) 把企业决策层搬进浏览器：调节透明度、罚款和核查，看 200 家合成企业怎样选择（面板 ①），以及没有市场反馈的 14 年简化动态（面板 ②）；面板 ③ 展示上面的阶段 F 结果并附出处。首屏作战台把面板 ② 做成 14 年回放：企业球、决策频谱、事件流和核查日志，标注为非研究结果。决策规则与 Python 模型逐项一致（1200 组随机输入，相对误差不超过 10⁻¹²），简化动态与完整模型的差距写在页面上。可以切换到 AI-washing 领域，演示同一机制换一个领域。在线访问：[https://kanzaler123.github.io/financial-ABM/](https://kanzaler123.github.io/financial-ABM/)；本地预览见[快速开始](#快速开始)。
+**浏览器政策沙盘。** [`showcase/`](showcase/README.md) 把企业决策层搬进浏览器。首页默认英文，一键切换中文，打开就是浅色的漂绿政策作战台：顶部是阶段 F 的要点和事件流，左侧是政策杠杆，中间是 200 家合成企业组成的企业球，右侧是单家企业的决策单，下方是智能体卡片（监管者、三档规模的企业、投资者、门槛 τ*）、决策频谱和核查日志。作战台回放的是面板 ②：没有市场反馈的 14 年简化动态，标注为非研究结果。再往下，面板 ① 展示所选政策下 200 家企业这一期会怎样选择，面板 ③ 展示上面的阶段 F 结果并附出处。决策规则与 Python 模型逐项一致（1200 组随机输入，相对误差不超过 10⁻¹²），简化动态与完整模型的差距写在页面上。可以切换到 AI-washing 领域，演示同一机制换一个领域。阶段 1 展厅（`stage1/`）使用同一套浅色风格。在线访问：[https://kanzaler123.github.io/financial-ABM/](https://kanzaler123.github.io/financial-ABM/)；本地预览见[快速开始](#快速开始)。
 
 ## 早期诊断（阶段 B 之前）
 
@@ -114,7 +114,7 @@ flowchart LR
 - [x] **强化学习企业**：已比较，学习型企业未通过验收，不进入正式实验（阶段 D）
 - [ ] **新智能体**：基于风险的监管者、鉴证方与评级分歧
 - [x] **正式实验**：信息型 vs 惩罚型、相图、规模鸿沟，按正式规模、用新种子、对比事先冻结（阶段 F）
-- [x] **浏览器政策沙盘**：[GitHub Pages](https://kanzaler123.github.io/financial-ABM/)，v0.2.0（2026-10-16）
+- [x] **浏览器政策沙盘**：[GitHub Pages](https://kanzaler123.github.io/financial-ABM/)，v0.2.0（2026-10-16）；改版为浅色政策作战台，默认英文（2026-10-18）
 
 详细计划与验收标准见[现行计划](docs/plan_20261013.md)。
 
@@ -208,7 +208,7 @@ python showcase/build.py --output _site
 python -m http.server 8080 --directory _site
 ```
 
-打开 `http://localhost:8080`，或直接打开 `_site/index.html`。首页是漂绿政策沙盘，阶段 1 展厅在 `stage1/`。纯静态、离线可用；没有运行控制按钮冒充后端模拟。线上版本：[https://kanzaler123.github.io/financial-ABM/](https://kanzaler123.github.io/financial-ABM/)，由 **GitHub showcase** 工作流在 master 更新时部署。详见[展示层文档](showcase/README.md)。
+打开 `http://localhost:8080`，或直接打开 `_site/index.html`。首页是漂绿政策作战台（默认英文，可切换中文），阶段 1 展厅在 `stage1/`，两页使用同一套浅色风格。纯静态、离线可用；没有运行控制按钮冒充后端模拟。线上版本：[https://kanzaler123.github.io/financial-ABM/](https://kanzaler123.github.io/financial-ABM/)，由 **GitHub showcase** 工作流在 master 更新时部署。详见[展示层文档](showcase/README.md)。
 
 </details>
 
