@@ -1,0 +1,439 @@
+{
+  "name": "disclosure_robustness_check_v1",
+  "purpose": "development",
+  "archive": "compact",
+  "_note": "Exploratory robustness checks written after the stage F results (research contract 20.21); not confirmatory. The runner only accepts development or confirmatory, so purpose is development. Group R: block E with natural_reversion 0.32 and 0.5; group P: fixed_fine_basis report from day 0; group W: wash_cost_log_sd ln 2. No primary comparisons, so no Holm adjustment.",
+  "domain": "domains/csi300_huazheng_esg_quantile_copula_fixed_fine_saturated.json",
+  "market": {
+    "n_investors": 1000,
+    "n_firms": 200,
+    "trading_days": 3500,
+    "burn_in_days": 1200,
+    "initial_impact_share": 0.2,
+    "taste_median": 0.0724,
+    "imitation_rule": "pairwise",
+    "financing_exposure_fraction": 0.5,
+    "financing_spread": 0.05,
+    "financing_repricing_interval": 60,
+    "financing_horizon_days": 1260,
+    "firm_discount_rate": 0.05,
+    "intrinsic_value_log_sd": 0.9151544344205937
+  },
+  "seeds": [
+    33001,
+    33002
+  ],
+  "scenarios": [
+    {
+      "name": "rev0p32_B",
+      "domain": {
+        "natural_decay": 0.0,
+        "natural_reversion": 0.32
+      }
+    },
+    {
+      "name": "rev0p32_I",
+      "domain": {
+        "natural_decay": 0.0,
+        "natural_reversion": 0.32
+      },
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "transparency": 0.6
+        }
+      }
+    },
+    {
+      "name": "rev0p32_F",
+      "domain": {
+        "natural_decay": 0.0,
+        "natural_reversion": 0.32
+      },
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "fixed_fine": 0.00018245963214655838
+        }
+      }
+    },
+    {
+      "name": "rev0p32_IF",
+      "domain": {
+        "natural_decay": 0.0,
+        "natural_reversion": 0.32
+      },
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "transparency": 0.6,
+          "fixed_fine": 0.00018245963214655838
+        }
+      }
+    },
+    {
+      "name": "rev0p5_B",
+      "domain": {
+        "natural_decay": 0.0,
+        "natural_reversion": 0.5
+      }
+    },
+    {
+      "name": "rev0p5_I",
+      "domain": {
+        "natural_decay": 0.0,
+        "natural_reversion": 0.5
+      },
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "transparency": 0.6
+        }
+      }
+    },
+    {
+      "name": "rev0p5_F",
+      "domain": {
+        "natural_decay": 0.0,
+        "natural_reversion": 0.5
+      },
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "fixed_fine": 0.00018245963214655838
+        }
+      }
+    },
+    {
+      "name": "rev0p5_IF",
+      "domain": {
+        "natural_decay": 0.0,
+        "natural_reversion": 0.5
+      },
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "transparency": 0.6,
+          "fixed_fine": 0.00018245963214655838
+        }
+      }
+    },
+    {
+      "name": "rep_B",
+      "policy": {
+        "baseline": {
+          "fixed_fine_basis": "report"
+        }
+      }
+    },
+    {
+      "name": "rep_I",
+      "policy": {
+        "baseline": {
+          "fixed_fine_basis": "report"
+        },
+        "start_day": 1201,
+        "changes": {
+          "transparency": 0.6
+        }
+      }
+    },
+    {
+      "name": "rep_F",
+      "policy": {
+        "baseline": {
+          "fixed_fine_basis": "report"
+        },
+        "start_day": 1201,
+        "changes": {
+          "fixed_fine": 0.00018245963214655838
+        }
+      }
+    },
+    {
+      "name": "rep_IF",
+      "policy": {
+        "baseline": {
+          "fixed_fine_basis": "report"
+        },
+        "start_day": 1201,
+        "changes": {
+          "transparency": 0.6,
+          "fixed_fine": 0.00018245963214655838
+        }
+      }
+    },
+    {
+      "name": "rep_F_0x",
+      "policy": {
+        "baseline": {
+          "fixed_fine_basis": "report"
+        },
+        "start_day": 1201,
+        "changes": {
+          "fixed_fine": 0.0
+        }
+      }
+    },
+    {
+      "name": "rep_F_2x",
+      "policy": {
+        "baseline": {
+          "fixed_fine_basis": "report"
+        },
+        "start_day": 1201,
+        "changes": {
+          "fixed_fine": 9.122981607327919e-05
+        }
+      }
+    },
+    {
+      "name": "rep_F_8x",
+      "policy": {
+        "baseline": {
+          "fixed_fine_basis": "report"
+        },
+        "start_day": 1201,
+        "changes": {
+          "fixed_fine": 0.00036491926429311675
+        }
+      }
+    },
+    {
+      "name": "wlog_B",
+      "domain": {
+        "wash_cost_log_sd": 0.6931471805599453
+      }
+    },
+    {
+      "name": "wlog_I_0p3",
+      "domain": {
+        "wash_cost_log_sd": 0.6931471805599453
+      },
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "transparency": 0.3
+        }
+      }
+    },
+    {
+      "name": "wlog_I",
+      "domain": {
+        "wash_cost_log_sd": 0.6931471805599453
+      },
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "transparency": 0.6
+        }
+      }
+    },
+    {
+      "name": "wlog_I_0p8",
+      "domain": {
+        "wash_cost_log_sd": 0.6931471805599453
+      },
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "transparency": 0.8
+        }
+      }
+    },
+    {
+      "name": "wlog_F",
+      "domain": {
+        "wash_cost_log_sd": 0.6931471805599453
+      },
+      "policy": {
+        "start_day": 1201,
+        "changes": {
+          "fixed_fine": 0.00018245963214655838
+        }
+      }
+    }
+  ],
+  "comparisons": [
+    {
+      "name": "rev0p32_I_minus_rev0p32_B",
+      "weights": {
+        "rev0p32_I": 1,
+        "rev0p32_B": -1
+      }
+    },
+    {
+      "name": "rev0p32_F_minus_rev0p32_B",
+      "weights": {
+        "rev0p32_F": 1,
+        "rev0p32_B": -1
+      }
+    },
+    {
+      "name": "rev0p32_I_minus_rev0p32_F",
+      "weights": {
+        "rev0p32_I": 1,
+        "rev0p32_F": -1
+      }
+    },
+    {
+      "name": "rev0p5_I_minus_rev0p5_B",
+      "weights": {
+        "rev0p5_I": 1,
+        "rev0p5_B": -1
+      }
+    },
+    {
+      "name": "rev0p5_F_minus_rev0p5_B",
+      "weights": {
+        "rev0p5_F": 1,
+        "rev0p5_B": -1
+      }
+    },
+    {
+      "name": "rev0p5_I_minus_rev0p5_F",
+      "weights": {
+        "rev0p5_I": 1,
+        "rev0p5_F": -1
+      }
+    },
+    {
+      "name": "rep_I_minus_rep_B",
+      "weights": {
+        "rep_I": 1,
+        "rep_B": -1
+      }
+    },
+    {
+      "name": "rep_F_minus_rep_B",
+      "weights": {
+        "rep_F": 1,
+        "rep_B": -1
+      }
+    },
+    {
+      "name": "rep_I_minus_rep_F",
+      "weights": {
+        "rep_I": 1,
+        "rep_F": -1
+      }
+    },
+    {
+      "name": "wlog_I_minus_wlog_B",
+      "weights": {
+        "wlog_I": 1,
+        "wlog_B": -1
+      }
+    },
+    {
+      "name": "wlog_F_minus_wlog_B",
+      "weights": {
+        "wlog_F": 1,
+        "wlog_B": -1
+      }
+    },
+    {
+      "name": "wlog_I_minus_wlog_F",
+      "weights": {
+        "wlog_I": 1,
+        "wlog_F": -1
+      }
+    },
+    {
+      "name": "rev0p32_IF_minus_rev0p32_B",
+      "weights": {
+        "rev0p32_IF": 1,
+        "rev0p32_B": -1
+      }
+    },
+    {
+      "name": "rev0p5_IF_minus_rev0p5_B",
+      "weights": {
+        "rev0p5_IF": 1,
+        "rev0p5_B": -1
+      }
+    },
+    {
+      "name": "rep_IF_minus_rep_B",
+      "weights": {
+        "rep_IF": 1,
+        "rep_B": -1
+      }
+    },
+    {
+      "name": "rep_F_0x_minus_rep_B",
+      "weights": {
+        "rep_F_0x": 1,
+        "rep_B": -1
+      }
+    },
+    {
+      "name": "rep_F_2x_minus_rep_B",
+      "weights": {
+        "rep_F_2x": 1,
+        "rep_B": -1
+      }
+    },
+    {
+      "name": "rep_F_8x_minus_rep_B",
+      "weights": {
+        "rep_F_8x": 1,
+        "rep_B": -1
+      }
+    },
+    {
+      "name": "rep_F_2x_minus_rep_F_0x",
+      "weights": {
+        "rep_F_2x": 1,
+        "rep_F_0x": -1
+      }
+    },
+    {
+      "name": "rep_F_minus_rep_F_2x",
+      "weights": {
+        "rep_F": 1,
+        "rep_F_2x": -1
+      }
+    },
+    {
+      "name": "rep_F_8x_minus_rep_F",
+      "weights": {
+        "rep_F_8x": 1,
+        "rep_F": -1
+      }
+    },
+    {
+      "name": "wlog_I_0p3_minus_wlog_B",
+      "weights": {
+        "wlog_I_0p3": 1,
+        "wlog_B": -1
+      }
+    },
+    {
+      "name": "wlog_I_0p8_minus_wlog_B",
+      "weights": {
+        "wlog_I_0p8": 1,
+        "wlog_B": -1
+      }
+    }
+  ],
+  "analysis": {
+    "primary_metric": "true_change.equal_weight_sd",
+    "metrics": [
+      "true_change.equal_weight_sd",
+      "true_change.fixed_start_cap_weight_sd",
+      "decay_adjusted_gain.equal_weight_sd",
+      "full_period_change.equal_weight_sd",
+      "inflation.mean_sd",
+      "size.large_minus_small_sd",
+      "terminal_year.change_from_initial_sd",
+      "terminal_year.decay_adjusted_from_initial_sd",
+      "terminal_year.inflation_mean_sd",
+      "costs.resource_cost_fraction_initial_cap",
+      "costs.private_net_outflow_fraction_initial_cap",
+      "costs.fine_transfer_fraction_initial_cap",
+      "impact.final_share"
+    ],
+    "confidence_level": 0.95
+  }
+}

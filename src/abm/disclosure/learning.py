@@ -52,16 +52,24 @@ class CandidateSet:
 
 def discrete_candidates(
     *, improve_capacity: FloatArray, inflate_capacity: FloatArray, marginal_cost: FloatArray,
-    max_change_per_period: float, wash_cost_ratio: float, subsidy: float,
+    max_change_per_period: float, wash_cost_ratio: float | FloatArray, subsidy: float,
     real_value_per_sd: FloatArray, displaced_real_value_per_sd: FloatArray,
     wash_value_per_sd: FloatArray, fine_value_per_sd: FloatArray,
     amplitude_fraction: float = CANDIDATE_FRACTION,
     amplitude_fractions: tuple[float, ...] | None = None,
     fixed_fine_value: FloatArray | float = 0.0,
 ) -> CandidateSet:
-    """Candidate values; ``fixed_fine_value`` is a lump sum on every positive wash amplitude."""
+    """Candidate values; ``fixed_fine_value`` is a lump sum on every positive wash amplitude.
+
+    ``wash_cost_ratio`` is one ratio or one per firm.
+    """
     fractions = (amplitude_fraction,) if amplitude_fractions is None else amplitude_fractions
-    if (not all(math.isfinite(value) and value > 0 for value in (max_change_per_period, wash_cost_ratio))
+    firm_ratios = np.ndim(wash_cost_ratio) > 0
+    if firm_ratios:
+        ratios = np.asarray(wash_cost_ratio, dtype=np.float64)
+        if ratios.ndim != 1 or ratios.size != np.size(marginal_cost) or not np.isfinite(ratios).all() or np.any(ratios <= 0):
+            raise ValueError("firm wash cost ratios must be positive, finite and one per firm")
+    if (not all(math.isfinite(value) and value > 0 for value in (max_change_per_period, 1.0 if firm_ratios else wash_cost_ratio))
             or not fractions or any(not math.isfinite(value) or not 0 < value <= 1 for value in fractions)
             or any(left >= right for left, right in zip(fractions, fractions[1:]))):
         raise ValueError("candidate scale and cost ratio must be positive; amplitude fraction must lie in (0,1]")
@@ -80,7 +88,10 @@ def discrete_candidates(
     costs, subsidies, values = np.zeros_like(amounts), np.zeros_like(amounts), np.zeros_like(amounts)
     amounts[:, real_columns], amounts[:, wash_columns] = real_amount, wash_amount
     costs[:, real_columns] = c[:, None] * real_amount**2
-    costs[:, wash_columns] = wash_cost_ratio * c[:, None] * wash_amount**2
+    if firm_ratios:
+        costs[:, wash_columns] = ratios[:, None] * c[:, None] * wash_amount**2
+    else:
+        costs[:, wash_columns] = wash_cost_ratio * c[:, None] * wash_amount**2
     subsidies[:, real_columns] = s[:, None] * real_amount
     report_room = np.maximum(wash_cap[:, None], 0)
     values[:, real_columns] = real[:, None] * np.minimum(real_amount, report_room) + displaced[:, None] * np.maximum(real_amount - report_room, 0)
