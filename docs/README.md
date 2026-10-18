@@ -44,7 +44,7 @@
 
 | 文档 | 内容 | 状态 |
 |---|---|---|
-| [../README.md](../README.md)、[../OPERATIONS.md](../OPERATIONS.md) | 仓库入口与完整操作手册 | 现行 |
+| [../README.md](../README.md)（英文，GitHub 首页）、[../README.zh-CN.md](../README.zh-CN.md)（中文）、[../OPERATIONS.md](../OPERATIONS.md) | 仓库入口与完整操作手册 | 现行 |
 | [ABM三阶段开发计划_渐进式学习版.md](ABM三阶段开发计划_渐进式学习版.md) | 主应用的三阶段路线 | 参考 |
 | [technical_report.md](technical_report.md) | Stage 1 矩估计校准技术报告（英文） | 参考 |
 | [阶段1验收报告.md](阶段1验收报告.md) | Stage 1 状态报告（2026-08） | 历史 |

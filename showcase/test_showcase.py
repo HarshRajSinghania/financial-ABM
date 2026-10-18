@@ -207,7 +207,7 @@ class ShowcaseTests(unittest.TestCase):
                   (s["decay0_F_minus_B"]["mean"], s["F_minus_B"]["mean"], 3, 2),
                   (s["decay0_I_minus_F"]["mean"], p2["mean"], 3, 2)]
         tau = next(row["tau_star"] for row in stage_f["tau_star_check"] if row["w"] == 0.2)
-        for path, joiner in (("README.md", " 到 "), ("README.en.md", " to ")):
+        for path, joiner in (("README.zh-CN.md", " 到 "), ("README.md", " to ")):
             text = (build_module.ROOT / path).read_text(encoding="utf-8")
             for low, high, low_digits, high_digits in ranges:
                 self.assertIn(f"+{low:.{low_digits}f}{joiner}+{high:.{high_digits}f} SD", text, path)
