@@ -3,6 +3,7 @@
   _site/index.html         greenwashing policy sandbox (plan stage G): exported synthetic firms, the
                            browser decision core and stage F results, each traced to a committed file
   _site/stage1/index.html  the archived stage 1 exhibit (historical v13/v14 mechanism reports)
+  _site/social-card.png    link preview image (og:image) of both pages, copied from showcase/social/
 """
 from __future__ import annotations
 
@@ -11,6 +12,8 @@ import hashlib
 import json
 import math
 import re
+import shutil
+import struct
 import subprocess
 from pathlib import Path
 
@@ -28,6 +31,8 @@ CONFIG_FIELDS = (
     "population_size", "trading_days", "burn_in_days", "strategy_shares",
     "learning_enabled",
 )
+# Declared by og:image:width / og:image:height in both page templates; render with showcase/social/render.py.
+SOCIAL_CARD_SIZE = (1200, 630)
 
 
 def read_json(path: Path) -> dict:
@@ -99,6 +104,15 @@ SANDBOX_FIRM_FIELDS = {"size_class", "market_cap", "cost_scale", "benefit", "ini
 
 def sha256_file(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def png_size(path: Path) -> tuple[int, int]:
+    """Width and height from the PNG header."""
+    with path.open("rb") as handle:
+        head = handle.read(24)
+    if len(head) < 24 or head[:8] != b"\x89PNG\r\n\x1a\n" or head[12:16] != b"IHDR":
+        raise ValueError(f"Not a PNG file: {path}")
+    return struct.unpack(">II", head[16:24])
 
 
 def sandbox_payload(root: Path, revision: str) -> dict:
@@ -176,11 +190,15 @@ def build(output: Path, root: Path = ROOT) -> dict:
         "/* SANDBOX_APP */": (sandbox / "app.js").read_text(encoding="utf-8"),
         '{"sandbox":null}': serialize(payload),
     })
+    card = root / "showcase" / "social" / "social-card.png"
+    if png_size(card) != SOCIAL_CARD_SIZE:
+        raise ValueError(f"{card.name} is {png_size(card)}, but the pages declare {SOCIAL_CARD_SIZE}")
     (output / "stage1").mkdir(parents=True, exist_ok=True)
     (output / "index.html").write_text(sandbox_html, encoding="utf-8")
     (output / "sandbox-data.json").write_text(json.dumps(payload, ensure_ascii=False, allow_nan=False) + "\n", encoding="utf-8")
     (output / "stage1" / "index.html").write_text(stage1_html, encoding="utf-8")
     (output / "stage1" / "data.json").write_text(json.dumps(snapshot, indent=2, ensure_ascii=False, allow_nan=False) + "\n", encoding="utf-8")
+    shutil.copyfile(card, output / card.name)
     (output / ".nojekyll").touch()
     print(f"Built {output / 'index.html'}: {len(sandbox_html.encode()):,} bytes (sandbox); "
           f"{output / 'stage1' / 'index.html'}: {len(stage1_html.encode()):,} bytes; no simulation executed")
